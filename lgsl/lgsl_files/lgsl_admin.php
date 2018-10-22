@@ -13,6 +13,8 @@
   if (!defined("LGSL_ADMIN")) { exit("DIRECT ACCESS ADMIN FILE NOT ALLOWED"); }
 
   require "lgsl_class.php";
+	
+	global $lgsl_database;
 
   lgsl_database();
   $lgsl_type_list     = lgsl_type_list(); asort($lgsl_type_list);
@@ -40,13 +42,13 @@
 
   if ($_POST && get_magic_quotes_gpc()) { $_POST = lgsl_stripslashes_deep($_POST); }
 
-  if (function_exists("mysql_set_charset"))
+  if (function_exists("mysqli_set_charset"))
   {
-    @mysql_set_charset("utf8");
+    @mysqli_set_charset("utf8");
   }
   else
   {
-    @mysql_query("SET NAMES 'utf8'");
+    @mysqli_query("SET NAMES 'utf8'");
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -57,15 +59,15 @@
     {
       // LOAD SERVER CACHE INTO MEMORY
       $db = array();
-      $mysql_result = mysql_query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`");
-      while($mysql_row = mysql_fetch_array($mysql_result, MYSQL_ASSOC))
+      $mysqli_result = mysqli_query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`");
+      while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
       {
-        $db["{$mysql_row['type']}:{$mysql_row['ip']}:{$mysql_row['q_port']}"] = array($mysql_row['status'], $mysql_row['cache'], $mysql_row['cache_time']);
+        $db["{$mysqli_row['type']}:{$mysqli_row['ip']}:{$mysqli_row['q_port']}"] = array($mysqli_row['status'], $mysqli_row['cache'], $mysqli_row['cache_time']);
       }
     }
 
     // EMPTY SQL TABLE
-    $mysql_result = mysql_query("TRUNCATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`") or die(mysql_error());
+    $mysqli_result = mysqli_query("TRUNCATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`") or die(mysqli_error());
 
     // CONVERT ADVANCED TO NORMAL DATA FORMAT
     if (!empty($_POST['lgsl_management']))
@@ -90,21 +92,21 @@
       // COMMENTS LEFT IN THEIR NATIVE ENCODING WITH JUST HTML SPECIAL CHARACTERS CONVERTED
       $_POST['form_comment'][$form_key] = lgsl_htmlspecialchars($_POST['form_comment'][$form_key]);
 
-      $type       = mysql_real_escape_string(               strtolower(trim($_POST['form_type']    [$form_key])));
-      $ip         = mysql_real_escape_string(                          trim($_POST['form_ip']      [$form_key]));
-      $c_port     = mysql_real_escape_string(                   intval(trim($_POST['form_c_port']  [$form_key])));
-      $q_port     = mysql_real_escape_string(                   intval(trim($_POST['form_q_port']  [$form_key])));
-      $s_port     = mysql_real_escape_string(                   intval(trim($_POST['form_s_port']  [$form_key])));
-      $zone       = mysql_real_escape_string(                          trim($_POST['form_zone']    [$form_key]));
+      $type       = mysqli_real_escape_string(               strtolower(trim($_POST['form_type']    [$form_key])));
+      $ip         = mysqli_real_escape_string(                          trim($_POST['form_ip']      [$form_key]));
+      $c_port     = mysqli_real_escape_string(                   intval(trim($_POST['form_c_port']  [$form_key])));
+      $q_port     = mysqli_real_escape_string(                   intval(trim($_POST['form_q_port']  [$form_key])));
+      $s_port     = mysqli_real_escape_string(                   intval(trim($_POST['form_s_port']  [$form_key])));
+      $zone       = mysqli_real_escape_string(                          trim($_POST['form_zone']    [$form_key]));
       $disabled   = isset($_POST['form_disabled'][$form_key]) ? intval(trim($_POST['form_disabled'][$form_key])) : "0";
-      $comment    = mysql_real_escape_string(                          trim($_POST['form_comment'] [$form_key]));
+      $comment    = mysqli_real_escape_string(                          trim($_POST['form_comment'] [$form_key]));
 
       // CACHE INDEXED BY TYPE:IP:Q_PORT SO IF THEY CHANGE THE CACHE IS IGNORED
       list($status, $cache, $cache_time) = isset($db["{$type}:{$ip}:{$q_port}"]) ? $db["{$type}:{$ip}:{$q_port}"] : array("0", "", "");
 
-      $status     = mysql_real_escape_string($status);
-      $cache      = mysql_real_escape_string($cache);
-      $cache_time = mysql_real_escape_string($cache_time);
+      $status     = mysqli_real_escape_string($status);
+      $cache      = mysqli_real_escape_string($cache);
+      $cache_time = mysqli_real_escape_string($cache_time);
 
       // THIS PREVENTS PORTS OR WHITESPACE BEING PUT IN THE IP WHILE ALLOWING IPv6
       if     (preg_match("/(\[[0-9a-z\:]+\])/iU", $ip, $match)) { $ip = $match[1]; }
@@ -118,8 +120,8 @@
       elseif ($q_port < 1 || $q_port > 99999)     { $disabled = 1; $q_port = 0; }
       elseif (!isset($lgsl_protocol_list[$type])) { $disabled = 1; }
 
-      $mysql_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`zone`,`disabled`,`comment`,`status`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','{$zone}','{$disabled}','{$comment}','{$status}','{$cache}','{$cache_time}')";
-      $mysql_result = mysql_query($mysql_query) or die(mysql_error());
+      $mysqli_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`zone`,`disabled`,`comment`,`status`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','{$zone}','{$disabled}','{$comment}','{$status}','{$cache}','{$cache_time}')";
+      $mysqli_result = mysqli_query($mysqli_query) or die(mysqli_error());
     }
   }
 
@@ -171,19 +173,19 @@
         <textarea name='form_list' cols='90' rows='30' wrap='off' spellcheck='false' style='width:95%; height:500px; font-size:1.2em; font-family:courier new, monospace'>\r\n";
 
 //---------------------------------------------------------+
-        $mysql_result = mysql_query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
+        $mysqli_result = mysqli_query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
 
-        while($mysql_row = mysql_fetch_array($mysql_result, MYSQL_ASSOC))
+        while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
         {
           $output .=
-          lgsl_string_html(str_pad($mysql_row['type'],     15, " ")).":".
-          lgsl_string_html(str_pad($mysql_row['ip'],       30, " ")).":".
-          lgsl_string_html(str_pad($mysql_row['c_port'],   6,  " ")).":".
-          lgsl_string_html(str_pad($mysql_row['q_port'],   6,  " ")).":".
-          lgsl_string_html(str_pad($mysql_row['s_port'],   7,  " ")).":".
-          lgsl_string_html(str_pad($mysql_row['zone'],     7,  " ")).":".
-          lgsl_string_html(str_pad($mysql_row['disabled'], 2,  " ")).":".
-                                   $mysql_row['comment']            ."\r\n";
+          lgsl_string_html(str_pad($mysqli_row['type'],     15, " ")).":".
+          lgsl_string_html(str_pad($mysqli_row['ip'],       30, " ")).":".
+          lgsl_string_html(str_pad($mysqli_row['c_port'],   6,  " ")).":".
+          lgsl_string_html(str_pad($mysqli_row['q_port'],   6,  " ")).":".
+          lgsl_string_html(str_pad($mysqli_row['s_port'],   7,  " ")).":".
+          lgsl_string_html(str_pad($mysqli_row['zone'],     7,  " ")).":".
+          lgsl_string_html(str_pad($mysqli_row['disabled'], 2,  " ")).":".
+                                   $mysqli_row['comment']            ."\r\n";
         }
 //---------------------------------------------------------+
         $output .= "
@@ -227,11 +229,11 @@
 
 //---------------------------------------------------------+
 
-      $mysql_result = mysql_query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
+      $mysqli_result = mysqli_query($lgsl_database, "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
 
-      while($mysql_row = mysql_fetch_array($mysql_result, MYSQL_ASSOC))
+      while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
       {
-        $id = $mysql_row['id']; // ID USED AS [] ONLY RETURNS TICKED CHECKBOXES
+        $id = $mysqli_row['id']; // ID USED AS [] ONLY RETURNS TICKED CHECKBOXES
 
         $output .= "
         <tr>
@@ -244,46 +246,46 @@
             foreach ($lgsl_type_list as $type => $description)
             {
               $output .= "
-              <option ".($type == $mysql_row['type'] ? "selected='selected'" : "")." value='{$type}'>{$description}</option>";
+              <option ".($type == $mysqli_row['type'] ? "selected='selected'" : "")." value='{$type}'>{$description}</option>";
             }
 
-            if (!isset($lgsl_type_list[$mysql_row['type']]))
+            if (!isset($lgsl_type_list[$mysqli_row['type']]))
             {
               $output .= "
-              <option selected='selected' value='".lgsl_string_html($mysql_row['type'])."'>".lgsl_string_html($mysql_row['type'])."</option>";
+              <option selected='selected' value='".lgsl_string_html($mysqli_row['type'])."'>".lgsl_string_html($mysqli_row['type'])."</option>";
             }
 //---------------------------------------------------------+
             $output .= "
             </select>
           </td>
-          <td style='text-align:center'><input type='text' name='form_ip[{$id}]'     value='".lgsl_string_html($mysql_row['ip'])."'     size='15' maxlength='255' /></td>
-          <td style='text-align:center'><input type='text' name='form_c_port[{$id}]' value='".lgsl_string_html($mysql_row['c_port'])."' size='5'  maxlength='5'   /></td>
-          <td style='text-align:center'><input type='text' name='form_q_port[{$id}]' value='".lgsl_string_html($mysql_row['q_port'])."' size='5'  maxlength='5'   /></td>
-          <td style='text-align:center'><input type='text' name='form_s_port[{$id}]' value='".lgsl_string_html($mysql_row['s_port'])."' size='5'  maxlength='5'   /></td>
+          <td style='text-align:center'><input type='text' name='form_ip[{$id}]'     value='".lgsl_string_html($mysqli_row['ip'])."'     size='15' maxlength='255' /></td>
+          <td style='text-align:center'><input type='text' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' size='5'  maxlength='5'   /></td>
+          <td style='text-align:center'><input type='text' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' size='5'  maxlength='5'   /></td>
+          <td style='text-align:center'><input type='text' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' size='5'  maxlength='5'   /></td>
           <td>
             <select name='form_zone[$id]'>";
 //---------------------------------------------------------+
             foreach ($zone_list as $zone)
             {
               $output .= "
-              <option ".($zone == $mysql_row['zone'] ? "selected='selected'" : "")." value='{$zone}'>{$zone}</option>";
+              <option ".($zone == $mysqli_row['zone'] ? "selected='selected'" : "")." value='{$zone}'>{$zone}</option>";
             }
 
-            if (!isset($zone_list[$mysql_row['zone']]))
+            if (!isset($zone_list[$mysqli_row['zone']]))
             {
               $output .= "
-              <option selected='selected' value='".lgsl_string_html($mysql_row['zone'])."'>".lgsl_string_html($mysql_row['zone'])."</option>";
+              <option selected='selected' value='".lgsl_string_html($mysqli_row['zone'])."'>".lgsl_string_html($mysqli_row['zone'])."</option>";
             }
 //---------------------------------------------------------+
 //---------------------------------------------------------+
             $output .= "
             </select>
           </td>
-          <td style='text-align:center'><input type='checkbox' name='form_disabled[{$id}]' value='1' ".(empty($mysql_row['disabled']) ? "" : "checked='checked'")." /></td>
-          <td style='text-align:center'><input type='text'     name='form_comment[{$id}]'  value='{$mysql_row['comment']}' size='20' maxlength='255' /></td>
+          <td style='text-align:center'><input type='checkbox' name='form_disabled[{$id}]' value='1' ".(empty($mysqli_row['disabled']) ? "" : "checked='checked'")." /></td>
+          <td style='text-align:center'><input type='text'     name='form_comment[{$id}]'  value='{$mysqli_row['comment']}' size='20' maxlength='255' /></td>
         </tr>";
 
-        $last_type = $mysql_row['type']; // SET LAST TYPE ( $mysql_row EXISTS ONLY WITHIN THE LOOP )
+        $last_type = $mysqli_row['type']; // SET LAST TYPE ( $mysqli_row EXISTS ONLY WITHIN THE LOOP )
       }
 //---------------------------------------------------------+
         $id ++; // NEW SERVER ID CONTINUES ON FROM LAST
