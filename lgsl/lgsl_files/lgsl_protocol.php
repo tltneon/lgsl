@@ -67,6 +67,7 @@
     "jediknightja"  => "JediKnight: Jedi Academy",
     "killingfloor"  => "Killing Floor",
     "kingpin"       => "Kingpin: Life of Crime",
+    "minecraft"     => "Minecraft",
     "mohaa"         => "Medal of Honor: Allied Assault",
     "mohaab"        => "Medal of Honor: Allied Assault Breakthrough",
     "mohaas"        => "Medal of Honor: Allied Assault Spearhead",
@@ -109,6 +110,8 @@
     "tribes"        => "Tribes ( Starsiege )",
     "tribes2"       => "Tribes 2",
     "tribesv"       => "Tribes Vengeance",
+		"ts"						=> "Teamspeak",
+		"ts3"						=> "Teamspeak 3",
     "urbanterror"   => "UrbanTerror",
     "ut"            => "Unreal Tournament",
     "ut2003"        => "Unreal Tournament 2003",
@@ -179,6 +182,7 @@
     "jediknightja"  => "02",
     "killingfloor"  => "13",
     "kingpin"       => "03",
+    "minecraft"     => "06",
     "mohaa"         => "03",
     "mohaab"        => "03",
     "mohaas"        => "03",
@@ -226,6 +230,8 @@
     "tribes"        => "23",
     "tribes2"       => "25",
     "tribesv"       => "09",
+		"ts"						=> "33",
+		"ts3"						=> "33",
     "warsow"        => "02",
     "warsowold"     => "02",
     "urbanterror"   => "02",
@@ -299,6 +305,7 @@
     "jediknightja"  => "qtracker://{IP}:{S_PORT}?game=JediKnightJediAcademy&action=show",
     "killingfloor"  => "qtracker://{IP}:{S_PORT}?game=KillingFloor&action=show",
     "kingpin"       => "qtracker://{IP}:{S_PORT}?game=Kingpin&action=show",
+    "minecraft"     => "http://en.wikipedia.org/wiki/Minecraft",
     "mohaa"         => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssault&action=show",
     "mohaab"        => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssaultBreakthrough&action=show",
     "mohaas"        => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssaultSpearhead&action=show",
@@ -328,7 +335,7 @@
     "shatteredh"    => "http://en.wikipedia.org/wiki/Shattered_Horizon",
     "sof2"          => "qtracker://{IP}:{S_PORT}?game=SoldierOfFortune2&action=show",
     "soldat"        => "http://www.soldat.pl",
-    "source"        => "qtracker://{IP}:{S_PORT}?game=HalfLife2&action=show",
+    "source"        => "steam://connect/{IP}:{S_PORT}",
     "stalker"       => "qtracker://{IP}:{S_PORT}?game=STALKER_ShadowChernobyl&action=show",
     "stalkercs"     => "qtracker://{IP}:{S_PORT}?game=STALKER_ClearSky&action=show",
     "startrekef"    => "http://en.wikipedia.org/wiki/Star_Trek:_Voyager:_Elite_Force",
@@ -341,6 +348,8 @@
     "tribes"        => "qtracker://{IP}:{S_PORT}?game=Tribes&action=show",
     "tribes2"       => "qtracker://{IP}:{S_PORT}?game=Tribes2&action=show",
     "tribesv"       => "qtracker://{IP}:{S_PORT}?game=TribesVengeance&action=show",
+    "ts"						=> "http://www.teamspeak.com",
+    "ts3" 					=> "ts3server://{IP}?port={C_PORT}",
     "urbanterror"   => "qtracker://{IP}:{S_PORT}?game=UrbanTerror&action=show",
     "ut"            => "qtracker://{IP}:{S_PORT}?game=UnrealTournament&action=show",
     "ut2003"        => "qtracker://{IP}:{S_PORT}?game=UnrealTournament2003&action=show",
@@ -406,6 +415,8 @@
       case "starwarsrc"    : $c_to_q = 0;     $c_def = 7777;    $q_def = 11138;   $c_to_s = 0;   break;
       case "swat4"         : $c_to_q = 1;     $c_def = 10780;   $q_def = 10781;   $c_to_s = 0;   break;
       case "tribesv"       : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
+			case "ts"						 : $c_to_q = 0;     $c_def = 8767;		$q_def = 51234;		$c_to_s = 0; 	 break;
+			case "ts3"					 : $c_to_q = 0; 		$c_def = 9987;		$q_def = 10011; 	$c_to_s = 0; 	 break;
       case "ut"            : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
       case "ut2003"        : $c_to_q = 1;     $c_def = 7757;    $q_def = 7758;    $c_to_s = 10;  break;
       case "ut2003_"       : $c_to_q = 10;    $c_def = 7757;    $q_def = 7767;    $c_to_s = 0;   break;
@@ -486,7 +497,7 @@
     {
       $response = lgsl_query_feed($server, $request, $lgsl_config['feed']['method'], $lgsl_config['feed']['url']);
     }
-    elseif ($lgsl_function == "lgsl_query_30")
+    elseif ($lgsl_function == "lgsl_query_30" || $lgsl_function == "lgsl_query_33")
     {
       $response = lgsl_query_direct($server, $request, $lgsl_function, "tcp");
     }
@@ -1206,7 +1217,7 @@
     do
     {
       $packet_count ++;
-      $packet = fread($lgsl_fp, 4096);
+      $packet = fread($lgsl_fp, 8192);
 
       if (!$packet) { return FALSE; }
 
@@ -1220,6 +1231,7 @@
       }
 
       $buffer[$packet_order] = $packet;
+			if ($server['b']['type'] == "minecraft") { $packet_total = 1; }
     }
     while ($packet_count < $packet_total);
 
@@ -1268,10 +1280,22 @@
       $server['e'][$key] = lgsl_cut_string($buffer);
     }
 
-    $lgsl_conversion = array("name"=>"hostname", "game"=>"gamename", "map"=>"mapname", "players"=>"numplayers", "playersmax"=>"maxplayers", "password"=>"password");
-    foreach ($lgsl_conversion as $s => $e) { if (isset($server['e'][$e])) { $server['s'][$s] = $server['e'][$e]; unset($server['e'][$e]); } } // LGSL STANDARD
+		$lgsl_conversion = array("hostname"=>"name", "gamename"=>"game", "mapname"=>"map", "map"=>"map", "numplayers"=>"players", "maxplayers"=>"playersmax", "password"=>"password");
+		foreach ($lgsl_conversion as $e => $s) { if (isset($server['e'][$e])) { $server['s'][$s] = $server['e'][$e]; unset($server['e'][$e]); } }
 
-    if ($server['b']['type'] == "bf2" || $server['b']['type'] == "bf2142") { $server['s']['map'] = ucwords(str_replace("_", " ", $server['s']['map'])); } // MAP NAME CONSISTENCY
+		if ($server['b']['type'] == "bf2" || $server['b']['type'] == "bf2142") { $server['s']['map'] = ucwords(str_replace("_", " ", $server['s']['map'])); } // MAP NAME CONSISTENCY
+		elseif ($server['b']['type'] == "minecraft") {
+			if (isset($server['e']['gametype'])) { $server['s']['game'] = $server['e']['gametype']; }
+			$server['s']['name'] = lgsl_parse_color($server['s']['name'], "minecraft");
+			foreach ($server['e'] as $key=>$val) { if (($key != 'version') && ($key != 'plugins')) { unset($server['e'][$key]); } }
+
+			$plugins = explode(": ",$server['e']['plugins'], 2);
+			if ($plugins[0]) { $server['e']['plugins'] = $plugins[0]; } else { $server['e']['plugins'] = 'none (Vanilla)'; }
+			if (count($plugins) == 2) {
+				while ($key = lgsl_cut_string($plugins[1],0," ")) { $server['e'][$key] = lgsl_cut_string($plugins[1],0,"; "); }
+			}
+			$buffer = $buffer."\x00";	// Needed to correctly terminate the players list
+		}
 
     if ($server['s']['players'] == "0") { return TRUE; } // IF SERVER IS EMPTY SKIP THE PLAYER CODE
 
@@ -3588,6 +3612,81 @@
 
     return TRUE;
   }
+
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
+{
+	if (strpos(fread($lgsl_fp, 4096), 'TS') === FALSE) { return FALSE; }
+	$ver = $server['b']['type'] == 'ts3' ? 1 : 0;
+	$param[0] = array('sel ','si',"\r\n",'pl');
+	$param[1] = array('use port=','serverinfo',' ','clientlist -country');
+	if ($ver) { fread($lgsl_fp, 4096); }
+	fwrite($lgsl_fp, $param[$ver][0].$server['b']['c_port']."\n");	// select virtualserver
+	if (strtoupper(substr(fread($lgsl_fp, 4096), -4, -2)) != 'OK') { return FALSE; }
+
+	fwrite($lgsl_fp, $param[$ver][1]."\n");	// request serverinfo
+	$buffer = fread($lgsl_fp, 4096);
+	if (!$buffer || substr($buffer, 0, 5) == 'error') { return FALSE; }
+	while (strtoupper(substr($buffer, -4, -2)) != 'OK') {
+		$part = fread($lgsl_fp, 4096);
+		if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
+	}
+
+	while ($val = lgsl_cut_string($buffer, 7+7*$ver, $param[$ver][2])) {
+		$key = lgsl_cut_string($val, 0, '='); $items[$key] = $val;
+	}
+	if (!isset($items['name'])) { return FALSE; }
+	$server['s']['name']	= $ver ? lgsl_unescape($items['name']) : $items['name'];
+	$server['s']['map']	= "Teamspeak";
+	$server['s']['players']	= intval($items[$ver ? 'clientsonline' : 'currentusers']) - $ver;
+	$server['s']['playersmax']	= intval($items[$ver ? 'maxclients' : 'maxusers']);
+	$server['s']['password']	= intval($items[$ver ? 'flag_password' : 'password']);
+	$server['e']['platform']	= $items['platform'];
+	$server['e']['motd']	= $ver ? lgsl_unescape($items['welcomemessage']) : $items['welcomemessage'];
+	$server['e']['uptime']	= lgsl_time($items['uptime']);
+	$server['e']['channels']	= $items[$ver ? 'channelsonline' : 'currentchannels'];
+	if ($ver) { $server['e']['version'] = lgsl_unescape($items['version']); }
+	if (!$lgsl_need['p'] || $server['s']['players'] < 1) { return TRUE; }
+
+	fwrite($lgsl_fp, $param[$ver][3]."\n");	// request playerlist
+	$buffer = fread($lgsl_fp, 4096);
+	while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") { 
+		$part = fread($lgsl_fp, 4096);
+		if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
+	}
+
+	$i = 0;
+	if ($ver) {
+		while ($items = lgsl_cut_string($buffer, 0, '|')) {
+			lgsl_cut_string($items, 0, 'e='); $name = lgsl_cut_string($items, 0, ' ');
+			if (substr($name, 0, 15) == 'Unknown\sfrom\s') { continue; }
+			$server['p'][$i]['name'] = lgsl_unescape($name); lgsl_cut_string($items, 0, 'ry');
+			$server['p'][$i]['country'] = substr($items, 0, 1) == '=' ? substr($items, 1, 2) : ''; $i++;
+		}
+	}
+	else {
+		$buffer = substr($buffer, 89, -4);
+		while ($items = lgsl_cut_string($buffer, 0, "\r\n")) {
+			$items = explode("\t", $items);
+			$server['p'][$i]['name'] = substr($items[14], 1, -1);
+			$server['p'][$i]['ping'] = $items[7];
+			$server['p'][$i]['time'] = lgsl_time($items[8]); $i++;
+		}
+	}
+	return TRUE;
+}
+
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+function lgsl_unescape($text) {
+	$escaped = array('\t', '\v', '\r', '\n', '\f', '\s', '\p', '\/');
+	$unescaped = array(' ', ' ', ' ', ' ', ' ', ' ', '|', '/');
+	$text = str_replace($escaped, $unescaped, $text);
+	return $text;
+}
 
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
