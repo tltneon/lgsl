@@ -24,6 +24,7 @@
     "arcasimracing" => "Arca Sim Racing",
     "arma"          => "ArmA: Armed Assault",
     "arma2"         => "ArmA 2",
+    "arma3"         => "ArmA 3",
     "avp2"          => "Aliens VS. Predator 2",
     "avp2010"       => "Aliens VS. Predator ( 2010 By Rebellion )",
     "bfbc2"         => "Battlefield Bad Company 2",
@@ -139,6 +140,7 @@
     "arcasimracing" => "16",
     "arma"          => "09",
     "arma2"         => "09",
+    "arma3"         => "05",
     "avp2"          => "03",
     "avp2010"       => "31",
     "bfbc2"         => "30",
@@ -262,6 +264,7 @@
     "arcasimracing" => "http://en.wikipedia.org/wiki/ARCA_Sim_Racing",
     "arma"          => "qtracker://{IP}:{S_PORT}?game=ArmedAssault&action=show",
     "arma2"         => "http://en.wikipedia.org/wiki/ARMA_2",
+    "arma3"         => "http://en.wikipedia.org/wiki/ARMA_3",
     "avp2"          => "qtracker://{IP}:{S_PORT}?game=AliensversusPredator2&action=show",
     "avp2010"       => "http://en.wikipedia.org/wiki/Aliens_vs._Predator_%28video_game%29",
     "bfbc2"         => "http://en.wikipedia.org/wiki/Battlefield_bad_company_2",
@@ -384,6 +387,7 @@
       case "aarmy"         : $c_to_q = 1;     $c_def = 1716;    $q_def = 1717;    $c_to_s = 0;   break;
       case "aarmy3"        : $c_to_q = 0;     $c_def = 8777;    $q_def = 39300;   $c_to_s = 0;   break;
       case "arcasimracing" : $c_to_q = -100;  $c_def = 34397;   $q_def = 34297;   $c_to_s = 0;   break;
+      case "arma3"				 : $c_to_q = 0;		  $c_def = 2302; 		$q_def = 2303;	 	$c_to_s = 0; 	 break;
       case "bfbc2"         : $c_to_q = 0;     $c_def = 19567;   $q_def = 48888;   $c_to_s = 0;   break;
       case "bfvietnam"     : $c_to_q = 0;     $c_def = 15567;   $q_def = 23000;   $c_to_s = 0;   break;
       case "bf1942"        : $c_to_q = 0;     $c_def = 14567;   $q_def = 23000;   $c_to_s = 0;   break;
@@ -998,16 +1002,16 @@
     if ($server['b']['type'] == "halflifewon")
     {
       if     ($lgsl_need['s']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFdetails\x00"); }
-      elseif ($lgsl_need['p']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFplayers\x00"); }
-      elseif ($lgsl_need['e']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFrules\x00");   }
-    }
-    else
-    {
-      $challenge_code = isset($lgsl_need['challenge']) ? $lgsl_need['challenge'] : "\x00\x00\x00\x00";
+			elseif ($lgsl_need['e']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFrules\x00"); }
+			elseif ($lgsl_need['p']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFplayers\x00"); }
+		}
+		else
+		{
+			$challenge_code = isset($lgsl_need['challenge']) ? $lgsl_need['challenge'] : "\x00\x00\x00\x00";
 
-      if     ($lgsl_need['s']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x54Source Engine Query\x00"); }
-      elseif ($lgsl_need['p']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x55{$challenge_code}");       }
-      elseif ($lgsl_need['e']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x56{$challenge_code}");       }
+			if ($lgsl_need['s']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x54Source Engine Query\x00"); }
+			elseif ($lgsl_need['e']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x56{$challenge_code}"); }
+			elseif ($lgsl_need['p']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x55{$challenge_code}"); }
     }
 
 //---------------------------------------------------------+
@@ -1021,15 +1025,19 @@
 
     do
     {
-      $packet = fread($lgsl_fp, 4096); if (!$packet) { return FALSE; }
+			if (!($packet = fread($lgsl_fp, 4096))) {
+				if ($lgsl_need['s']) { return FALSE; }
+				elseif ($lgsl_need['e']) { $lgsl_need['e'] = FALSE; return TRUE; }
+				else { return TRUE; }
+			}
 
       //---------------------------------------------------------------------------------------------------------------------------------+
       // NEWER HL1 SERVERS REPLY TO A2S_INFO WITH 3 PACKETS ( HL1 FORMAT INFO, SOURCE FORMAT INFO, PLAYERS )
       // THIS DISCARDS UN-EXPECTED PACKET FORMATS ON THE GO ( AS READING IN ADVANCE CAUSES TIMEOUT DELAYS FOR OTHER SERVER VERSIONS )
       // ITS NOT PERFECT AS [s] CAN FLIP BETWEEN HL1 AND SOURCE FORMATS DEPENDING ON ARRIVAL ORDER ( MAYBE FIX WITH RETURN ON HL1 APPID )
       if     ($lgsl_need['s']) { if ($packet[4] == "D")                                           { continue; } }
-      elseif ($lgsl_need['p']) { if ($packet[4] == "m" || $packet[4] == "I")                      { continue; } }
-      elseif ($lgsl_need['e']) { if ($packet[4] == "m" || $packet[4] == "I" || $packet[4] == "D") { continue; } }
+			elseif ($lgsl_need['e']) { if ($packet[4] == "m" || $packet[4] == "I" || $packet[4] == "D") { continue; } }
+			elseif ($lgsl_need['p']) { if ($packet[4] == "m" || $packet[4] == "I") { continue; } }
       //---------------------------------------------------------------------------------------------------------------------------------+
 
       if     (substr($packet, 0,  5) == "\xFF\xFF\xFF\xFF\x41") { $lgsl_need['challenge'] = substr($packet, 5,  4); return TRUE; } // REPEAT WITH GIVEN CHALLENGE CODE
@@ -1143,7 +1151,7 @@
 
       while ($buffer)
       {
-        $server['p'][$player_key]['pid']   = ord(lgsl_cut_byte($buffer, 1));
+        lgsl_cut_byte($buffer, 1);
         $server['p'][$player_key]['name']  = lgsl_cut_string($buffer);
         $server['p'][$player_key]['score'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "l");
         $server['p'][$player_key]['time']  = lgsl_time(lgsl_unpack(lgsl_cut_byte($buffer, 4), "f"));
@@ -1171,8 +1179,8 @@
     if ($lgsl_need['s'] && !$lgsl_need['e']) { $server['e'] = array(); }
 
     if     ($lgsl_need['s']) { $lgsl_need['s'] = FALSE; }
-    elseif ($lgsl_need['p']) { $lgsl_need['p'] = FALSE; }
-    elseif ($lgsl_need['e']) { $lgsl_need['e'] = FALSE; }
+		elseif ($lgsl_need['e']) { $lgsl_need['e'] = FALSE; }
+		elseif ($lgsl_need['p']) { $lgsl_need['p'] = FALSE; }
 
 //---------------------------------------------------------+
 
