@@ -1,9 +1,9 @@
-# LGSL v5.8 (Live Game Server List) for PHP 7.0-7.x
+# LGSL v5.8.2 (Live Game Server List) for PHP 7.0-7.x
 Based-off LGSL v5.8 (SA)
 
-This is original version of LGSL and there is no extra changes except transition to PHP 7 (7.0-7.3) functions.
+This is almost original version of LGSL except adding new game types and transition to PHP 7 (7.0-7.3) functions.
 
-# Supported games:
+## Supported games:
 <pre>
 function lgsl_type_list()
   {
@@ -112,5 +112,16 @@ function lgsl_type_list()
     "wolf2009"      => "Wolfenstein ( 2009 By Raven )");
   }
  </pre>
+ 
+## Changelog
+#### v5.8.2
+- **LGSL now using PHP 7**
+- **Added game types:**
+  - Arma 3
+  - Counter-Strike: Global Offensive
+  - Minecraft
+  - Teamspeak and Teamspeak 3
+ 
+*Thanks to @Wussie*
 
 All rights goes to Richard Perry (www.greycube.com)
