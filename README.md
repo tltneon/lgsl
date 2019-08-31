@@ -112,12 +112,20 @@ function lgsl_type_list()
     "wolf2009"      => "Wolfenstein ( 2009 By Raven )");
   }
  </pre>
+ ## Breeze Style:
+ ### Server List
+ ![alt text](https://i.imgur.com/Rq1BoY0.png)
+ ### Details of server
+ ![alt text](https://i.imgur.com/vB2PVHI.png)
+ ### Admin Panel
+ ![alt text](https://i.imgur.com/oQC1hkX.png)
  
 ## Changelog
 #### v5.9.2
 - **Now LGSL can use custom styles**
 - **Default style was changed to: Breeze**
 	- *Suggest your custom styles!*
+	- *Classic style is still exists to use*
 #### v5.8.2
 - **LGSL now using PHP 7**
 - **Added game types:**
