@@ -14,7 +14,8 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ BACKGROUND COLORS: TEXT HARD TO READ ? CHANGE THESE TO CONTRAST THE FONT COLOR / www.colorpicker.com ]
 
-  $lgsl_config['background'][1] = "background-color:#e4eaf2";
+  $lgsl_config['style'] = "breeze_style.css";
+	$lgsl_config['background'][1] = "background-color:#e4eaf2";
   $lgsl_config['background'][2] = "background-color:#f4f7fa";
 
 //------------------------------------------------------------------------------------------------------------+
@@ -177,5 +178,14 @@
   $lgsl_config['text']['asc'] = "SUCCESS - PLEASE CONFIRM ITS THE CORRECT SERVER";
   $lgsl_config['text']['aas'] = "Add Server";
   $lgsl_config['text']['loc'] = "Location:";
+	$lgsl_config['text']['umn'] = "USERNAME";
+	$lgsl_config['text']['pwd'] = "PASSWORD";
+	$lgsl_config['text']['lgn'] = "Login";
+	$lgsl_config['text']['skc'] = "Save - Keep Cache";
+	$lgsl_config['text']['srh'] = "Save - Reset Cache";
+	$lgsl_config['text']['mip'] = "Map Image Paths";
+	$lgsl_config['text']['avm'] = "Advanced Management";
+	$lgsl_config['text']['nrm'] = "Normal Management";
+	$lgsl_config['text']['bak'] = "BACK TO SERVERS LIST";
 
 //------------------------------------------------------------------------------------------------------------+

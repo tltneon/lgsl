@@ -38,14 +38,10 @@
     <title>Live Game Server List</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta http-equiv='content-style-type' content='text/css' />
-    <link rel='stylesheet' href='lgsl_style.css' type='text/css' />
+    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style'];?>' type='text/css' />
   </head>
 
   <body>
-    <div style='height:30px'><br /></div>
-
-
-
 
 <?php
 //------------------------------------------------------------------------------------------------------------+
@@ -61,12 +57,12 @@
     echo "
     <form method='post' action=''>
       <table style='margin:auto; text-align:center'>
-        <tr><td> USERNAME: </td><td> <input type='text'     name='lgsl_user' value='' /> </td></tr>
-        <tr><td> PASSWORD: </td><td> <input type='password' name='lgsl_pass' value='' /> </td></tr>
+        <tr><td> ".$lgsl_config['text']['umn'].": </td><td> <input type='text'     name='lgsl_user' value='' /> </td></tr>
+        <tr><td> ".$lgsl_config['text']['pwd'].": </td><td> <input type='password' name='lgsl_pass' value='' /> </td></tr>
         <tr>
           <td colspan='2'>
             <br />
-            <input type='submit' name='lgsl_admin_login' value='Login' />
+            <input type='submit' name='lgsl_admin_login' value='".$lgsl_config['text']['lgn']."' />
           </td>
         </tr>
       </div>
@@ -74,7 +70,6 @@
   }
 //------------------------------------------------------------------------------------------------------------+
 ?>
-
 
 
   </body>

@@ -26,7 +26,8 @@
 
   $server = lgsl_query_cached("", "", "", "", "", "sep", $lgsl_server_id);
 
-  if (!$server) { $output .= "<div style='margin:auto; text-align:center'> {$lgsl_config['text']['mid']} </div>"; return; }
+  if (!$server) { $output .= "<div id='invalid_server_id'> {$lgsl_config['text']['mid']} </div>"; return; }
+	if ($lgsl_config['cms'] == "sa") { $output .= "<div id='back_to_servers_list'><a href='./'> {$lgsl_config['text']['bak']} </a></div>"; }
 
   $fields = lgsl_sort_fields($server, $fields_show, $fields_hide, $fields_other);
   $server = lgsl_sort_players($server);
@@ -39,31 +40,21 @@
   $output .= "
   <div style='margin:auto; text-align:center'>";
 
-  $output .="
-  <div style='".lgsl_bg(TRUE)."; width:90%; margin:auto; text-align:center; height:6px; border:1px solid'><br /></div>
-  <div style='height:10px'><br /></div>";
+  $output .="<div class='spacer'></div>";
 
 //------------------------------------------------------------------------------------------------------------+
 // SHOW THE STANDARD INFO
 
   $output .= "
-  <table cellpadding='2' cellspacing='2' style='margin:auto'>
-    <tr>
-      <td colspan='3' style='text-align:center'>
-        <b> {$server['s']['name']} </b><br /><br />
-      </td>
-    </tr>
-  </table>
+	<div id='servername'> {$server['s']['name']} </div>
   <table cellpadding='2' cellspacing='2' style='margin:auto'>
     <tr>
       <td colspan='2' style='text-align:center'>
-        <table cellpadding='4' cellspacing='2' style='width:100%; margin:auto'>
-          <tr><td style='".lgsl_bg(TRUE)."; text-align:center'><a href='{$misc['software_link']}'>{$lgsl_config['text']['slk']}</a></td></tr>
-        </table>
+        <div id='gamelink'><a href='{$misc['software_link']}'>{$lgsl_config['text']['slk']}</a></div>
       </td>
       <td rowspan='2' style='text-align:center; vertical-align:top'>
         <div style='width:{$lgsl_config['zone']['width']}px; padding:2px; position:relative; margin:auto'>
-          <img alt='' src='{$misc['image_map']}'                                            style='vertical-align:middle' />
+          <img alt='' src='{$misc['image_map']}' 					id='image_map'          			    style='vertical-align:middle' />
           <img alt='' src='{$misc['image_map_password']}'                                   style='position:absolute; z-index:2; top:0px; left:0px;' />
           <img alt='' src='{$misc['icon_game']}'          title='{$misc['text_type_game']}' style='position:absolute; z-index:2; top:6px; left:6px;' />
           <img alt='' src='{$misc['icon_location']}'      title='{$misc['text_location']}'  style='position:absolute; z-index:2; top:6px; right:6px;' />
@@ -92,10 +83,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $output .= "
-  <div style='height:10px'><br /></div>
-  <div style='".lgsl_bg(TRUE)."; width:90%; margin:auto; text-align:center; height:6px; border:1px solid'><br /></div>
-  <div style='height:10px'><br /></div>";
+  $output .= "<div class='spacer'></div>";
 
 //------------------------------------------------------------------------------------------------------------+
 // SHOW THE PLAYERS
@@ -105,12 +93,7 @@
 
   if (empty($server['p']) || !is_array($server['p']))
   {
-    $output .= "
-    <table cellpadding='4' cellspacing='2' style='margin:auto'>
-      <tr style='".lgsl_bg(FALSE)."'>
-        <td> {$lgsl_config['text']['npi']} </td>
-      </tr>
-    </table>";
+    $output .= "<div class='noinfo'>{$lgsl_config['text']['npi']}</div>";
   }
   else
   {
@@ -151,22 +134,14 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $output .= "
-  <div style='height:10px'><br /></div>
-  <div style='".lgsl_bg(TRUE)."; width:90%; margin:auto; text-align:center; height:6px; border:1px solid'><br /></div>
-  <div style='height:20px'><br /></div>";
+  $output .= "<div class='spacer'></div>";
 
 //------------------------------------------------------------------------------------------------------------+
 // SHOW THE SETTINGS
 
   if (empty($server['e']) || !is_array($server['e']))
   {
-    $output .= "
-    <table cellpadding='4' cellspacing='2' style='margin:auto'>
-      <tr style='".lgsl_bg(FALSE)."'>
-        <td> {$lgsl_config['text']['nei']} </td>
-      </tr>
-    </table>";
+    $output .= "<div class='noinfo'>{$lgsl_config['text']['nei']} </div>";
   }
   else
   {
@@ -194,14 +169,11 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $output .= "
-  <div style='height:10px'><br /></div>
-  <div style='".lgsl_bg(TRUE)."; width:90%; margin:auto; text-align:center; height:6px; border:1px solid'><br /></div>
-  <div style='height:20px'><br /></div>";
+  $output .= "<div class='spacer'></div>";
 
   $output .= "
   </div>";
-
+	
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
   $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px'><br /><br /><br /><a href='http://www.greycube.com' style='text-decoration:none'>".lgsl_version()."</a><br /></div>";

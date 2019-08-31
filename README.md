@@ -1,7 +1,7 @@
-# LGSL v5.8.2 (Live Game Server List) for PHP 7.0-7.x
+# LGSL v5.9.2 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (SA)
 
-This is almost original version of LGSL except adding new game types and transition to PHP 7 (7.0-7.3) functions.
+This is almost original version of LGSL except adding new game types and transition to PHP 7+ functions.
 
 ## Supported games:
 <pre>
@@ -114,6 +114,10 @@ function lgsl_type_list()
  </pre>
  
 ## Changelog
+#### v5.9.2
+- **Now LGSL can use custom styles**
+- **Default style was changed to: Breeze**
+	- *Suggest your custom styles!*
 #### v5.8.2
 - **LGSL now using PHP 7**
 - **Added game types:**

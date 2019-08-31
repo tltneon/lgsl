@@ -195,10 +195,10 @@
         <input type='hidden' name='lgsl_management' value='1' />
         <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
           <tr>
-            <td><input type='submit' name='lgsl_save_1'          value='Save - Keep Cache' />  </td>
-            <td><input type='submit' name='lgsl_save_2'          value='Save - Reset Cache' /> </td>
-            <td><input type='submit' name='lgsl_map_image_paths' value='Map Image Paths' />    </td>
-            <td><input type='submit' name='lgsl_switch'          value='Normal Management' />  </td>
+            <td><input type='submit' name='lgsl_save_1'          value='".$lgsl_config['text']['skc']."' />  </td>
+            <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' /> </td>
+            <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' />    </td>
+            <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['nrm']."' />  </td>
           </tr>
         </table>
       </div>
@@ -329,10 +329,10 @@
       <input type='hidden' name='lgsl_management' value='0' />
       <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
         <tr>
-          <td><input type='submit' name='lgsl_save_1'          value='Save - Keep Cache' />  </td>
-          <td><input type='submit' name='lgsl_save_2'          value='Save - Reset Cache' /> </td>
-          <td><input type='submit' name='lgsl_map_image_paths' value='Map Image Paths' />    </td>
-          <td><input type='submit' name='lgsl_switch'          value='Advanced Management' /></td>
+          <td><input type='submit' name='lgsl_save_1'          value='".$lgsl_config['text']['skc']."' />  </td>
+          <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' /> </td>
+          <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' />    </td>
+          <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['avm']."' /></td>
         </tr>
       </table>
     </div>

@@ -1,9 +1,10 @@
 <?php
 //------------------------------------------------------------------------------------------------------------+
   header("Content-Type:text/html; charset=utf-8");
+	
+	require "lgsl_files/lgsl_config.php";
 //------------------------------------------------------------------------------------------------------------+
 ?>
-
 
 
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
@@ -13,14 +14,11 @@
     <title>Live Game Server List</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta http-equiv='content-style-type' content='text/css' />
-    <link rel='stylesheet' href='lgsl_style.css' type='text/css' />
+    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style'];?>' type='text/css' />
   </head>
 
   <body>
-    <div style='height:30px'><br /></div>
-
-
-
+	
 <?php
 //------------------------------------------------------------------------------------------------------------+
   global $output, $lgsl_server_id;
@@ -38,8 +36,6 @@
   unset($output);
 //------------------------------------------------------------------------------------------------------------+
 ?>
-
-
 
   </body>
 </html>

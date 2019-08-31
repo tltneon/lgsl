@@ -1,0 +1,48 @@
+/*-------------------------------
+>	LGSL Classic Style	<
+>	RICHARD PERRY		<
+>	GREYCUBE.COM		<
+-------------------------------*/
+
+body
+{
+  background-color:#ccd5e2;
+  font-size:11px;
+  font-family:verdana,tahoma,arial;
+  word-wrap:break-word;
+}
+
+a:link
+{
+  text-decoration:none;
+  color:#c00000;
+}
+
+a:visited
+{
+  text-decoration:none;
+  color:#c00000;
+}
+
+a:hover
+{
+  color:#7500c0;
+}
+
+a:active
+{
+  color:#7500c0;
+}
+
+img.list_icon {vertical-align:middle; border:none};
+
+.spacer {background-color: #e4eaf2; height:10px; width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border:1px solid;}
+.noinfo{	margin:auto; text-align:center; background-color: #f4f7fa; display: inline-block; padding: 4px; }
+#invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
+#servername {	margin:auto; text-align:center; font-weight:bold; }
+#gamelink {width:100%; margin:auto; background-color: #e4eaf2; text-align: center; padding-top:4px; padding-bottom:4px;}
+
+#server_list_table{margin:auto;}
+#server_list_table tr:nth-child(n){background-color: #e4eaf2;}
+#server_list_table tr:nth-child(2n){background-color: #f4f7fa;}
+#totals {width: fit-content; margin-top: 20px; background-color: #e4eaf2;}
