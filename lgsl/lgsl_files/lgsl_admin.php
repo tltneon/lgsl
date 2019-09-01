@@ -219,11 +219,11 @@
           <td style='text-align:center; white-space:nowrap'>[ ID ]             </td>
           <td style='text-align:center; white-space:nowrap'>[ Game Type ]      </td>
           <td style='text-align:center; white-space:nowrap'>[ IP ]             </td>
-          <td style='text-align:center; white-space:nowrap'>[ Connection Port ]</td>
-          <td style='text-align:center; white-space:nowrap'>[ Query Port ]     </td>
+          <td style='text-align:center; white-space:nowrap'>[ {$lgsl_config['text']['cpt']} ]</td>
+          <td style='text-align:center; white-space:nowrap'>[ {$lgsl_config['text']['qpt']} ]     </td>
           <td style='text-align:center; white-space:nowrap'>[ Software Port ]  </td>
           <td style='text-align:center; white-space:nowrap'>[ Zones ]          </td>
-          <td style='text-align:center; white-space:nowrap'>[ Disabled ]       </td>
+          <td style='text-align:center; white-space:nowrap'>[ {$lgsl_config['text']['dsb']} ]       </td>
           <td style='text-align:center; white-space:nowrap'>[ Comment ]        </td>
         </tr>";
 
@@ -238,7 +238,7 @@
         $output .= "
         <tr>
           <td>
-            <a href='".lgsl_link($id)."' style='text-decoration:none'>{$id}</a>
+            <a href='".lgsl_link($id)."' style='text-decoration:none' target='_blank'>{$id}</a>
           </td>
           <td>
             <select name='form_type[{$id}]'>";
@@ -259,9 +259,9 @@
             </select>
           </td>
           <td style='text-align:center'><input type='text' name='form_ip[{$id}]'     value='".lgsl_string_html($mysqli_row['ip'])."'     size='15' maxlength='255' /></td>
-          <td style='text-align:center'><input type='text' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' size='5'  maxlength='5'   /></td>
-          <td style='text-align:center'><input type='text' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' size='5'  maxlength='5'   /></td>
-          <td style='text-align:center'><input type='text' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' size='5'  maxlength='5'   /></td>
+          <td style='text-align:center'><input type='number' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536'   /></td>
+          <td style='text-align:center'><input type='number' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536'   /></td>
+          <td style='text-align:center'><input type='number' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536'   /></td>
           <td>
             <select name='form_zone[$id]'>";
 //---------------------------------------------------------+
@@ -306,9 +306,9 @@
             </select>
           </td>
           <td style='text-align:center'><input type='text' name='form_ip[{$id}]'     value=''  size='15' maxlength='255' /></td>
-          <td style='text-align:center'><input type='text' name='form_c_port[{$id}]' value=''  size='5'  maxlength='5'   /></td>
-          <td style='text-align:center'><input type='text' name='form_q_port[{$id}]' value=''  size='5'  maxlength='5'   /></td>
-          <td style='text-align:center'><input type='text' name='form_s_port[{$id}]' value='0' size='5'  maxlength='5'   /></td>
+          <td style='text-align:center'><input type='number' name='form_c_port[{$id}]' value=''  min='0' max='65536'   /></td>
+          <td style='text-align:center'><input type='number' name='form_q_port[{$id}]' value=''  min='0' max='65536'   /></td>
+          <td style='text-align:center'><input type='number' name='form_s_port[{$id}]' value='0' min='0' max='65536'   /></td>
           <td>
             <select name='form_zone[{$id}]'>";
 //---------------------------------------------------------+
@@ -344,10 +344,11 @@
 
   function lgsl_help_info()
   {
+		global $lgsl_config;
     return "
     <div style='text-align:center; line-height:1em; font-size:1em;'>
       <br /><br />
-      <a href='http://www.greycube.com/help/readme/lgsl/'>[ LGSL ONLINE README ]</a>  <br /><br />
+      <a href='http://www.greycube.com/help/readme/lgsl/'>[ LGSL ONLINE README ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB (UPDATE) ]</a>  <br /><br />
       - To remove a server, delete the IP, then click Save.                           <br /><br />
       - Leave the query port blank to have LGSL try to fill it in for you.            <br /><br />
       - Software port is only needed for a few games so it being set 0 is normal.     <br /><br />
@@ -355,27 +356,27 @@
       <table cellspacing='10' cellpadding='0' style='border:1px solid; margin:auto; text-align:left'>
         <tr>
           <td> <a href='http://php.net/fsockopen'>FSOCKOPEN</a>           </td>
-          <td> Enabled: ".(function_exists("fsockopen") ? "YES" : "NO")." </td>
+          <td> {$lgsl_config['text']['enb']}: ".(function_exists("fsockopen") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
           <td> ( Required for direct querying of servers )                </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/curl'>CURL</a>                                                                                         </td>
-          <td> Enabled: ".((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) ? "YES" : "NO")." </td>
+          <td> {$lgsl_config['text']['enb']}: ".((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
           <td> ( Used for the feed when fsockopen is disabled )                                                                               </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/mbstring'>MBSTRING</a>                       </td>
-          <td> Enabled: ".(function_exists("mb_convert_encoding") ? "YES" : "NO")." </td>
+          <td> {$lgsl_config['text']['enb']}: ".(function_exists("mb_convert_encoding") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
           <td> ( Used to show UTF-8 server and player names correctly )             </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/bzip2'>BZIP2</a>                      </td>
-          <td> Enabled: ".(function_exists("bzdecompress") ? "YES" : "NO")." </td>
+          <td> {$lgsl_config['text']['enb']}: ".(function_exists("bzdecompress") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
           <td> ( Used to show Source server settings over a certain size )   </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/zlib'>ZLIB</a>                        </td>
-          <td> Enabled: ".(function_exists("gzuncompress") ? "YES" : "NO")." </td>
+          <td> {$lgsl_config['text']['enb']}: ".(function_exists("gzuncompress") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
           <td> ( Required for America's Army 3 )                             </td>
         </tr>
       </table>

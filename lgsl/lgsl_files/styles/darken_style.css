@@ -20,11 +20,15 @@ a:hover{ color:#adcef1; }
 a:active{ color:#adcef1; }
 
 /* details */
+.details_table { margin: auto; border-spacing: 0px 5px; }
+.details_table tr { background-color: #282828; white-space:nowrap; }
+.details_table td { padding: 4px; }
+.table_head { font-weight: bold; }
 .spacer { background-color: #282828; height:6px; width:90%; margin:auto; margin-top: 10px; margin-bottom: 10px; border:1px dotted black; }
 .noinfo { margin:auto; text-align:center; background-color: #282828; display: inline-block; padding:15px; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
 #servername {	margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
-#gamelink {width:100%; margin:auto; background-color: #e4eaf2; text-align: center; padding-top:4px; padding-bottom:4px; }
+#gamelink {width:100%; margin:auto; background-color: #282828; text-align: center; padding-top:4px; padding-bottom:4px; }
 
 /* list */
 img.list_icon { vertical-align:middle; border:none; }

@@ -54,28 +54,28 @@
       </td>
       <td rowspan='2' style='text-align:center; vertical-align:top'>
         <div style='width:{$lgsl_config['zone']['width']}px; padding:2px; position:relative; margin:auto'>
-          <img alt='' src='{$misc['image_map']}' 					id='image_map'          			    style='vertical-align:middle' />
-          <img alt='' src='{$misc['image_map_password']}'                                   style='position:absolute; z-index:2; top:0px; left:0px;' />
-          <img alt='' src='{$misc['icon_game']}'          title='{$misc['text_type_game']}' style='position:absolute; z-index:2; top:6px; left:6px;' />
-          <img alt='' src='{$misc['icon_location']}'      title='{$misc['text_location']}'  style='position:absolute; z-index:2; top:6px; right:6px;' />
+          <img alt='{$server['s']['map']}'	src='{$misc['image_map']}' 					id='image_map'          			     													style='vertical-align:middle' />
+          <img alt='' 											src='{$misc['image_map_password']}' title='{$lgsl_config['text']['map']} {$server['s']['map']}'	style='position:absolute; z-index:2; top:0px; left:0px;' />
+          <img alt='' 											src='{$misc['icon_game']}'          title='{$misc['text_type_game']}' 													style='position:absolute; z-index:2; top:6px; left:6px;' />
+          <img alt='' 											src='{$misc['icon_location']}'      title='{$misc['text_location']}' 														style='position:absolute; z-index:2; top:6px; right:6px;' />
         </div>
       </td>
     </tr>
     <tr>
       <td style='text-align:center'>
-        <table cellpadding='4' cellspacing='2' style='margin:auto'>
-          <tr style='".lgsl_bg().";white-space:nowrap'><td> <b> {$lgsl_config['text']['sts']} </b></td><td style='white-space:nowrap'> {$misc['text_status']}                                   </td></tr>
-          <tr style='".lgsl_bg().";white-space:nowrap'><td> <b> {$lgsl_config['text']['adr']} </b></td><td style='white-space:nowrap'> {$server['b']['ip']}                                     </td></tr>
-          <tr style='".lgsl_bg().";white-space:nowrap'><td> <b> {$lgsl_config['text']['cpt']} </b></td><td style='white-space:nowrap'> {$server['b']['c_port']}                                 </td></tr>
-          <tr style='".lgsl_bg().";white-space:nowrap'><td> <b> {$lgsl_config['text']['qpt']} </b></td><td style='white-space:nowrap'> {$server['b']['q_port']}                                 </td></tr>
+        <table class='details_table'>
+          <tr><td> <b> {$lgsl_config['text']['sts']} </b></td><td> {$misc['text_status']}                                   </td></tr>
+          <tr><td> <b> {$lgsl_config['text']['adr']} </b></td><td> {$server['b']['ip']}                                     </td></tr>
+          <tr><td> <b> {$lgsl_config['text']['cpt']} </b></td><td> {$server['b']['c_port']}                                 </td></tr>
+          <tr><td> <b> {$lgsl_config['text']['qpt']} </b></td><td> {$server['b']['q_port']}                                 </td></tr>
         </table>
       </td>
       <td style='text-align:center'>
-        <table cellpadding='4' cellspacing='2' style='margin:auto'>
-          <tr style='".lgsl_bg().";white-space:nowrap'><td> <b> {$lgsl_config['text']['typ']} </b></td><td style='white-space:nowrap'> {$server['b']['type']}                                   </td></tr>
-          <tr style='".lgsl_bg().";white-space:nowrap'><td> <b> {$lgsl_config['text']['gme']} </b></td><td style='white-space:nowrap'> {$server['s']['game']}                                   </td></tr>
-          <tr style='".lgsl_bg().";white-space:nowrap'><td> <b> {$lgsl_config['text']['map']} </b></td><td style='white-space:nowrap'> {$server['s']['map']}                                    </td></tr>
-          <tr style='".lgsl_bg().";white-space:nowrap'><td> <b> {$lgsl_config['text']['plr']} </b></td><td style='white-space:nowrap'> {$server['s']['players']} / {$server['s']['playersmax']} </td></tr>
+        <table class='details_table'>
+          <tr><td> <b> {$lgsl_config['text']['typ']} </b></td><td > {$server['b']['type']}                                   </td></tr>
+          <tr><td> <b> {$lgsl_config['text']['gme']} </b></td><td> {$server['s']['game']}                                   </td></tr>
+          <tr><td> <b> {$lgsl_config['text']['map']} </b></td><td> {$server['s']['map']}                                    </td></tr>
+          <tr><td> <b> {$lgsl_config['text']['plr']} </b></td><td> {$server['s']['players']} / {$server['s']['playersmax']} </td></tr>
         </table>
       </td>
     </tr>
@@ -98,14 +98,13 @@
   else
   {
     $output .= "
-    <table cellpadding='4' cellspacing='2' style='margin:auto'>
-      <tr style='".lgsl_bg(FALSE)."'>";
+    <table class='details_table'>
+      <tr class='table_head'>";
 
       foreach ($fields as $field)
       {
         $field = ucfirst($field);
-        $output .= "
-        <td> <b>{$field}</b> </td>";
+        $output .= "<td> {$field} </td>";
       }
 
       $output .= "
@@ -114,7 +113,7 @@
       foreach ($server['p'] as $player_key => $player)
       {
         $output .= "
-        <tr style='".lgsl_bg()."'>";
+        <tr>";
 
         foreach ($fields as $field)
         {
@@ -146,20 +145,18 @@
   else
   {
     $output .= "
-    <table cellpadding='4' cellspacing='2' style='margin:auto'>
-      <tr style='".lgsl_bg(FALSE)."'>
-        <td> <b>{$lgsl_config['text']['ehs']}</b> </td>
-        <td> <b>{$lgsl_config['text']['ehv']}</b> </td>
+    <table class='details_table'>
+      <tr class='table_head'>
+        <td> {$lgsl_config['text']['ehs']} </td>
+        <td> {$lgsl_config['text']['ehv']} </td>
       </tr>";
 
     foreach ($server['e'] as $field => $value)
     {
-      $color = lgsl_bg();
-
       $output .= "
       <tr>
-        <td style='{$color}'> {$field} </td>
-        <td style='{$color}'> {$value} </td>
+        <td> {$field} </td>
+        <td> {$value} </td>
       </tr>";
     }
 

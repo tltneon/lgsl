@@ -19,6 +19,11 @@ a:hover { color:#7500c0; }
 a:active { color:#7500c0; }
 
 /* details */
+.details_table { margin: auto; border-spacing: 2px 4px; }
+.details_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; }
+.details_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; }
+.details_table td { padding: 4px; }
+.table_head { font-weight: bold; }
 .spacer { background-color: #e4eaf2; height:6px; width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border:1px solid; }
 .noinfo { margin:auto; text-align:center; background-color: #f4f7fa; display: inline-block; padding: 4px; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }

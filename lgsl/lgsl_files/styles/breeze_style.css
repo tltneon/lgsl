@@ -21,6 +21,12 @@ a:hover { color:#8298b9;}
 a:active { color:#8298b9;}
 
 /* details */
+.details_table { margin: auto; border-spacing: 0px 5px; }
+.details_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; }
+.details_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; }
+.details_table tr:not(.table_head):hover td { background-color: #ecf9ff; border: 1px solid #e0f2f4; padding:3px; }
+.details_table td { padding: 4px; }
+.table_head { font-weight: bold; background-color: #e0edff !important; }
 .spacer {background-color: #f6feff; border-radius: 6px; height:10px; width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border:1px solid #cee3e6; }
 .noinfo{ margin:auto; text-align:center; background-color: #f4f7fa; display: inline-block; padding: 6px; border-radius: 6px; border: 1px solid #e0f2f4; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
@@ -55,7 +61,7 @@ input[type='submit']:hover, input[type='submit']:focus {
 	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
 	outline: 0 none;
 }
-input[type='text'], select {
+input[type='text'], input[type='number'], select {
 	display: block;
 	border: none;
 	border-radius: 6px;
@@ -63,7 +69,7 @@ input[type='text'], select {
 	color: #333;
 	box-shadow: inset 0 1px 0 rgba(0,0,0,.2), 0 0 4px rgba(0,0,0,0.1);
 }
-input[type='text']:focus {
+input[type='text']:focus, input[type='number']:focus {
 	outline: none;
 	box-shadow: inset 0 2px 0 rgba(0,0,0,.2), 0 0 4px rgba(0,0,0,0.1), 0 0 5px 1px #51CBEE;
 }
