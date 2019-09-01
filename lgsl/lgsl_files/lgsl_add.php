@@ -17,12 +17,7 @@
   if (!$lgsl_config['public_add'])
   {
     $output .= "
-    <div style='text-align:center;".lgsl_bg()."'>
-      <br />
-      {$lgsl_config['text']['asd']}
-      <br />
-      <br />
-    </div>";
+    <div id='annotation'> {$lgsl_config['text']['asd']} </div>";
 
     return;
   }
@@ -52,10 +47,10 @@
 
   $output .= "
   <form method='post' action=''>
-    <div style='text-align:center'>
-      <table cellpadding='4' cellspacing='2' style='margin:auto; text-align:left'>
+    <div>
+      <table class='details_table'>
 
-        <tr style='".lgsl_bg()."'>
+        <tr>
           <td colspan='2' style='text-align:center'>
             <br />
             {$lgsl_config['text']['awm']}
@@ -64,7 +59,7 @@
           </td>
         </tr>
 
-        <tr style='".lgsl_bg()."'>
+        <tr>
           <td> {$lgsl_config['text']['typ']} </td>
           <td>
             <select name='form_type'>";
@@ -80,27 +75,24 @@
           </td>
         </tr>
 
-        <tr style='".lgsl_bg()."'>
+        <tr>
           <td> {$lgsl_config['text']['adr']} </td>
           <td> <input type='text' name='form_ip' value='".lgsl_string_html($ip)."' size='15' maxlength='128' /> </td>
         </tr>
 
-        <tr style='".lgsl_bg()."'>
+        <tr>
           <td> {$lgsl_config['text']['cpt']} </td>
-          <td> <input type='text' name='form_c_port' value='".lgsl_string_html($c_port)."' size='5' maxlength='5' /> </td>
+          <td> <input type='number' name='form_c_port' value='".lgsl_string_html($c_port)."' min='1' max='65536' /> </td>
         </tr>
 
-        <tr style='".lgsl_bg()."'>
+        <tr>
           <td> {$lgsl_config['text']['qpt']} </td>
-          <td> <input type='text' name='form_q_port' value='".lgsl_string_html($q_port)."' size='5' maxlength='5' /> </td>
+          <td> <input type='number' name='form_q_port' value='".lgsl_string_html($q_port)."' min='1' max='65536' /> </td>
         </tr>
 
-        <tr style='".lgsl_bg()."'>
-          <td colspan='2' style='text-align:center'>
-            <br />
+        <tr>
+          <td colspan='2' class='annotation'>
             <input type='submit' name='lgsl_submit_test' value='{$lgsl_config['text']['ats']}' />
-            <br />
-            <br />
           </td>
         </tr>
 
@@ -133,13 +125,12 @@
   $ip_check     = gethostbyname($ip);
   $mysql_result = mysqli_query($lgsl_database, "SELECT `ip`,`disabled` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `type`='{$type}' AND `q_port`='{$q_port}'");
 
-  while ($mysql_row = mysqli_fetch_array($mysql_result, MYSQL_ASSOC))
+  while ($mysql_row = mysqli_fetch_array($mysql_result, MYSQLI_ASSOC))
   {
     if ($ip_check == gethostbyname($mysql_row['ip']))
     {
       $output .= "
-      <div style='text-align:center;".lgsl_bg()."'>
-        <br />";
+      <div class='annotation'>";
 
         if ($mysql_row['disabled'])
         {
@@ -151,8 +142,6 @@
         }
 
         $output .="
-        <br />
-        <br />
       </div>
 
       <div>
@@ -171,12 +160,7 @@
   if (!$server['b']['status'])
   {
     $output .= "
-    <div style='text-align:center;".lgsl_bg()."'>
-      <br />
-      {$lgsl_config['text']['anr']}
-      <br />
-      <br />
-    </div>
+    <div class='annotation'> {$lgsl_config['text']['anr']} </div>
 
     <div>
     <br />
@@ -195,8 +179,7 @@
     $mysql_result = mysqli_query($lgsl_database, $mysql_query) or die(mysqli_error($lgsl_database));
 
     $output .= "
-    <div style='text-align:center;".lgsl_bg()."'>
-      <br />";
+    <div class='annotation'>";
 
       if ($disabled)
       {
@@ -208,8 +191,6 @@
       }
 
       $output .="
-      <br />
-      <br />
     </div>
 
     <div>
@@ -223,37 +204,29 @@
 
 	$output .= "
   <form method='post' action=''>
-    <div style='text-align:center;".lgsl_bg()."'>
-      <br />
-      {$lgsl_config['text']['asc']}
-      <br />
-      <br />
-    </div>
+    <div class='annotation'> {$lgsl_config['text']['asc']} </div>
 
     <div>
     <br />
     </div>
 
-    <table cellpadding='4' cellspacing='2' style='margin:auto; text-align:left'>
-      <tr style='".lgsl_bg()."'> <td> <b> Name:                         </b> </td> <td style='white-space:nowrap'> {$server['s']['name']}                                   </td> </tr>
-      <tr style='".lgsl_bg()."'> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td style='white-space:nowrap'> {$server['s']['game']}                                   </td> </tr>
-      <tr style='".lgsl_bg()."'> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td style='white-space:nowrap'> {$server['s']['map']}                                    </td> </tr>
-      <tr style='".lgsl_bg()."'> <td> <b> {$lgsl_config['text']['plr']} </b> </td> <td style='white-space:nowrap'> {$server['s']['players']} / {$server['s']['playersmax']} </td> </tr>
+    <table class='details_table'>
+      <tr> <td> <b> Name:                         </b> </td> <td style='white-space:nowrap'> {$server['s']['name']}                                   </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td style='white-space:nowrap'> {$server['s']['game']}                                   </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td style='white-space:nowrap'> {$server['s']['map']}                                    </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['plr']} </b> </td> <td style='white-space:nowrap'> {$server['s']['players']} / {$server['s']['playersmax']} </td> </tr>
     </table>
 
     <div>
     <br />
     </div>
 
-    <div style='text-align:center;".lgsl_bg()."'>
-      <br />
+    <div class='annotation'>
       <input type='hidden' name='form_type'       value='".lgsl_string_html($type)."'   />
       <input type='hidden' name='form_ip'         value='".lgsl_string_html($ip)."'     />
       <input type='hidden' name='form_c_port'     value='".lgsl_string_html($c_port)."' />
       <input type='hidden' name='form_q_port'     value='".lgsl_string_html($q_port)."' />
       <input type='submit' name='lgsl_submit_add' value='{$lgsl_config['text']['aas']}' />
-      <br />
-      <br />
     </div>
 
     <div>

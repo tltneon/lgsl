@@ -18,6 +18,9 @@ a:visited { text-decoration:none; color:#c00000; }
 a:hover { color:#7500c0; }
 a:active { color:#7500c0; }
 
+/* add */
+.annotation { text-align: center; background-color: #e4eaf2; padding-top:17px; padding-bottom:17px; } 
+
 /* details */
 .details_table { margin: auto; border-spacing: 2px 4px; }
 .details_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; }

@@ -19,6 +19,9 @@ a:link, a:visited { text-decoration:none; color:#0088DD; }
 a:hover{ color:#adcef1; }
 a:active{ color:#adcef1; }
 
+/* add */
+.annotation { text-align: center; background-color: #282828; padding-top:17px; padding-bottom:17px; } 
+
 /* details */
 .details_table { margin: auto; border-spacing: 0px 5px; }
 .details_table tr { background-color: #282828; white-space:nowrap; }

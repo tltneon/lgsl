@@ -20,6 +20,9 @@ a:link, a:visited { text-decoration:none; color:#6f65a2; }
 a:hover { color:#8298b9;}
 a:active { color:#8298b9;}
 
+/* add */
+.annotation { text-align: center; background-color: #feffff; border: 1px solid #e5fbff; padding-top:17px; padding-bottom:17px; } 
+
 /* details */
 .details_table { margin: auto; border-spacing: 0px 5px; }
 .details_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; }

@@ -275,6 +275,8 @@
     "bfvietnam"     => "qtracker://{IP}:{S_PORT}?game=BattlefieldVietnam&action=show",
     "bf1942"        => "qtracker://{IP}:{S_PORT}?game=Battlefield1942&action=show",
     "bf2"           => "qtracker://{IP}:{S_PORT}?game=Battlefield2&action=show",
+    "bf3"           => "https://en.wikipedia.org/wiki/Battlefield_3",
+    "bf4"           => "https://en.wikipedia.org/wiki/Battlefield_4",
     "bf2142"        => "qtracker://{IP}:{S_PORT}?game=Battlefield2142&action=show",
     "callofduty"    => "qtracker://{IP}:{S_PORT}?game=CallOfDuty&action=show",
     "callofdutyuo"  => "qtracker://{IP}:{S_PORT}?game=CallOfDutyUnitedOffensive&action=show",
