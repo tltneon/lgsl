@@ -4,6 +4,7 @@
 >			https://github.com/tltneon	<
 ---------------------------------------*/
 
+/* global */
 body
 {
   background-image: linear-gradient(rgba(220, 249, 255, 0.8), rgb(244, 251, 249));
@@ -13,64 +14,58 @@ body
   font-family:helvetica,verdana,tahoma,arial;
   word-wrap:break-word;
 }
-td {border-radius: 6px;}
+td { border-radius: 6px; }
 
-a:link{ text-decoration:none; color:#6f65a2; }
-a:hover{ color:#8298b9;}
-a:active{ color:#8298b9;}
+a:link, a:visited { text-decoration:none; color:#6f65a2; }
+a:hover { color:#8298b9;}
+a:active { color:#8298b9;}
 
 /* details */
 .spacer {background-color: #f6feff; border-radius: 6px; height:10px; width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border:1px solid #cee3e6; }
-#invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
-#servername {	margin:auto; text-align:center; font-weight:bold; }
-#image_map {border-radius: 6px;}
-#gamelink {width:100%; margin:auto; background-color: #f3fbff; text-align: center; padding-top:4px; padding-bottom:4px; border-radius: 6px; border: 1px solid #e0f2f4; }
 .noinfo{ margin:auto; text-align:center; background-color: #f4f7fa; display: inline-block; padding: 6px; border-radius: 6px; border: 1px solid #e0f2f4; }
+#invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
+#servername {	margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
+#image_map { border-radius: 6px; }
+#gamelink {width:100%; margin:auto; background-color: #f3fbff; text-align: center; padding-top:4px; padding-bottom:4px; border-radius: 6px; border: 1px solid #e0f2f4; }
 
 /* list */
-#server_list_table{margin:auto; width:85%; background-color: #f6feff; border-radius: 12px; }
-#server_list_table td {border: 1px solid #e5fbff; border-radius: 12px;}
-#server_list_table tr:nth-child(n){background-color: #f3fbff;}
-#server_list_table tr:nth-child(2n){background-color: #feffff;}
-#server_list_table td:hover, #server_list_table tr:hover td {background-color: #ecf9ff;}
 img.list_icon {vertical-align:middle; border:none;}
+#server_list_table { margin:auto; width:85%; background-color: #f6feff; border-radius: 12px; }
+#server_list_table td {border: 1px solid #e5fbff; border-radius: 12px;}
+#server_list_table tr:nth-child(n) {background-color: #f3fbff;}
+#server_list_table tr:nth-child(2n) {background-color: #feffff;}
+#server_list_table td:hover, #server_list_table tr:hover td {background-color: #ecf9ff;}
 #totals {width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
-#totals > div{ border: 1px solid #e5fbff; padding: 10px; }
+#totals > div { border: 1px solid #e5fbff; padding: 10px; }
 
 /* admin */
 input[type='submit'] {
-  background-color: #FFFFFF;
-    border: 1px solid #CCCCCC;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
-    transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-        border-radius: 4px;
-    color: #555555;
-        text-align:center;
-    vertical-align: middle;
-        text-decoration:none;
+	background-color: #FFFFFF;
+	border: 1px solid #CCCCCC;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+	border-radius: 4px;
+	color: #555555;
+	text-align:center;
+	vertical-align: middle;
+	text-decoration:none;
 }
 input[type='submit']:hover, input[type='submit']:focus {
-   border-color: rgba(82, 168, 236, 0.8);
-   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
-   outline: 0 none;
+	border-color: rgba(82, 168, 236, 0.8);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	outline: 0 none;
 }
 input[type='text'], select {
-    display: block;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 8px;
-    color: #333;
-    box-shadow: 
-        inset 0 1px 0 rgba(0,0,0,.2), 
-        0 0 4px rgba(0,0,0,0.1);
+	display: block;
+	border: none;
+	border-radius: 6px;
+	padding: 5px 8px;
+	color: #333;
+	box-shadow: inset 0 1px 0 rgba(0,0,0,.2), 0 0 4px rgba(0,0,0,0.1);
 }
- 
 input[type='text']:focus {
-    outline: none;
-    box-shadow: 
-        inset 0 2px 0 rgba(0,0,0,.2), 
-        0 0 4px rgba(0,0,0,0.1), 
-        0 0 5px 1px #51CBEE;
+	outline: none;
+	box-shadow: inset 0 2px 0 rgba(0,0,0,.2), 0 0 4px rgba(0,0,0,0.1), 0 0 5px 1px #51CBEE;
 }
 
 /* */
