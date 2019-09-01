@@ -84,7 +84,7 @@ function lgsl_type_list()
     "shatteredh"    => "Shattered Horizon",
     "sof2"          => "Soldier of Fortune 2",
     "soldat"        => "Soldat",
-    "source"        => "Source Games (+ Killing Floor 2, Rust)",
+    "source"        => "Source Games + Killing Floor 2, Rust, Unturned",
     "stalker"       => "S.T.A.L.K.E.R.",
     "stalkercs"     => "S.T.A.L.K.E.R. Clear Sky",
     "startrekef"    => "StarTrek Elite-Force",
