@@ -84,7 +84,7 @@ function lgsl_type_list()
     "shatteredh"    => "Shattered Horizon",
     "sof2"          => "Soldier of Fortune 2",
     "soldat"        => "Soldat",
-    "source"        => "Source Games (Half-Life 2, CS: GO, GMOD, etc.)",
+    "source"        => "Source Games (+ Killing Floor 2, Rust)",
     "stalker"       => "S.T.A.L.K.E.R.",
     "stalkercs"     => "S.T.A.L.K.E.R. Clear Sky",
     "startrekef"    => "StarTrek Elite-Force",
@@ -119,10 +119,18 @@ function lgsl_type_list()
  ![alt text](https://i.imgur.com/vB2PVHI.png)
  ### Admin Panel
  ![alt text](https://i.imgur.com/oQC1hkX.png)
+ ## Darken Style:
+ ### Server List
+ ![alt text](https://i.imgur.com/hnPcDSr.png)
+ ### Details of server
+ ![alt text](https://i.imgur.com/LM3sBVM.png)
  
 ## Changelog
 #### v5.9.3
 - **Added Darken Style**
+- **Added favicon to \lgsl_files\other\favicon.ico**
+- **Added translations**
+	- *You can help to translate LGSL to your language!*
 #### v5.9.2
 - **Now LGSL can use custom styles**
 - **Added Breeze Style**
