@@ -38,6 +38,7 @@
     <title>Live Game Server List</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta http-equiv='content-style-type' content='text/css' />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style'];?>' type='text/css' />
   </head>
 

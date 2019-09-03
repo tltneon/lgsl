@@ -12,8 +12,9 @@
 <html xmlns='http://www.w3.org/1999/xhtml'>
   <head>
     <title><?php echo $lgsl_config['text']['ttl']; ?></title>
-		<link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
-		<link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
+	<link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta http-equiv='content-style-type' content='text/css' />
     <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style']; ?>' type='text/css' />

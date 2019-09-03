@@ -1,6 +1,8 @@
 # LGSL v5.9.3 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (SA)
-This is almost original version of LGSL with new features such as new game types, new looks and working with PHP 7+ functions.
+
+This is almost original version of LGSL with new features and working with PHP 7+.
+
 Live Demo: http://lgsl-demo.freesite.vip/
 
 ## Supported games:
@@ -55,7 +57,7 @@ Live Demo: http://lgsl-demo.freesite.vip/
 "jediknight2"   => "JediKnight 2: Jedi Outcast",
 "jediknightja"  => "JediKnight: Jedi Academy",
 "killingfloor"  => "Killing Floor",
-"source"				=> "Killing Floor 2",
+"source"		=> "Killing Floor 2",
 "kingpin"       => "Kingpin: Life of Crime",
 "minecraft"     => "Minecraft", /* Supported partially */
 "mohaa"         => "Medal of Honor: Allied Assault",
@@ -133,6 +135,7 @@ Live Demo: http://lgsl-demo.freesite.vip/
 - **Added Darken Style**
 - **Added favicon to \lgsl_files\other\favicon.ico**
 - **Added translations**
+	- *Russian, French, Spanish: Thanks to @own3mall**
 	- *You can help to translate LGSL to your language!*
 #### v5.9.2
 - **Now LGSL can use custom styles**
@@ -147,7 +150,6 @@ Live Demo: http://lgsl-demo.freesite.vip/
   - Counter-Strike: Global Offensive
   - Minecraft
   - Teamspeak and Teamspeak 3
- 
-*Thanks to @Wussie*
+  - *Thanks to @Wussie*
 
 All rights goes to Richard Perry (www.greycube.com)
