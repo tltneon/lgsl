@@ -1,4 +1,4 @@
-# LGSL v5.9.3 (Live Game Server List) for PHP 7+
+# LGSL v5.9.4 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (SA)
 
 This is almost original version of LGSL with new features and working with PHP 7+.
@@ -131,12 +131,19 @@ Live Demo: http://lgsl-demo.freesite.vip/
  ![alt text](https://i.imgur.com/LM3sBVM.png)
  
 ## Changelog
+#### v5.9.4
+- **More custom CSS classes for changing styles**
+- **Added OGP Style**
+	- *Author @oNdsen**
+- **Added a few game icons**
+- **Added French and Spanish languages**
+	- *Thanks to @own3mall**
 #### v5.9.3
 - **Added Darken Style**
 - **Added favicon to \lgsl_files\other\favicon.ico**
-- **Added translations**
-	- *Russian, French, Spanish: Thanks to @own3mall**
+- **Added translation feature**
 	- *You can help to translate LGSL to your language!*
+- **Added Russian language**
 #### v5.9.2
 - **Now LGSL can use custom styles**
 - **Added Breeze Style**
@@ -144,7 +151,7 @@ Live Demo: http://lgsl-demo.freesite.vip/
 	- *Suggest your custom styles!*
 	- *Classic style is still exists to use*
 #### v5.8.2
-- **LGSL now using PHP 7**
+- **LGSL now working with PHP 7+**
 - **Added game types:**
   - Arma 3
   - Counter-Strike: Global Offensive

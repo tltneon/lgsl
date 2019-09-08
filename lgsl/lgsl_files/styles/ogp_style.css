@@ -37,7 +37,7 @@ a:hover, a:active { color:#fff; }
 .spacer { display: none; }
 .noinfo { margin:auto; text-align:center; background-color: rgba(26, 28, 34, 0.2); display: inline-block; padding:15px; border: 1px solid #22252f; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
-#servername { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; border: 1px solid #22252f; background-color: rgba(26, 28, 34, 0.2); padding: 8px; margin-top:5px; margin-bottom:5px; }
+#servername { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; border: 1px solid #22252f; background-color: rgba(26, 28, 34, 0.2); padding: 8px; margin-top:15px; margin-bottom:15px; }
 #gamelink {width:100%; margin:auto; background-color: rgba(26, 28, 34, 0.2); text-align: center; padding-top:4px; padding-bottom:4px; }
 
 /* list */

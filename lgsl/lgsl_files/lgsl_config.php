@@ -14,7 +14,7 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ BACKGROUND COLORS: TEXT HARD TO READ ? CHANGE THESE TO CONTRAST THE FONT COLOR / www.colorpicker.com ]
 
-  $lgsl_config['style'] = "breeze_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css
+  $lgsl_config['style'] = "breeze_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css
 	$lgsl_config['background'][1] = "background-color:#e4eaf2";
   $lgsl_config['background'][2] = "background-color:#f4f7fa";
 
