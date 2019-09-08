@@ -64,7 +64,7 @@
     <tr>
       <td style='text-align:center'>
         <table class='details_table'>
-          <tr><td> <b> {$lgsl_config['text']['sts']} </b></td><td> {$misc['text_status']}                                   </td></tr>
+          <tr><td> <b> {$lgsl_config['text']['sts']} </b></td><td> {$lgsl_config['text'][$misc['text_status']]}             </td></tr>
           <tr><td> <b> {$lgsl_config['text']['adr']} </b></td><td> {$server['b']['ip']}                                     </td></tr>
           <tr><td> <b> {$lgsl_config['text']['cpt']} </b></td><td> {$server['b']['c_port']}                                 </td></tr>
           <tr><td> <b> {$lgsl_config['text']['qpt']} </b></td><td> {$server['b']['q_port']}                                 </td></tr>

@@ -29,25 +29,30 @@ a:hover, a:active { color:#fff; }
 
 /* details */
 .details_table { margin: auto; border: 1px solid #22252f; border-spacing: 0px 0px; border-collapse: collapse; }
-.details_table tr { white-space:nowrap; border: 1px solid #22252f; }
+.details_table tr { white-space:nowrap; border: 1px solid #22252f; table-layout:fixed; }
 .details_table tr:nth-child(n) { background-color: rgba(26, 28, 34, 0.2); }
 .details_table tr:nth-child(2n) { background-color: rgba(26, 28, 34, 0.1); }
 .details_table td { padding: 8px; border-top: 1px solid #22252f; }
+
 .table_head { font-weight: bold; }
 .spacer { display: none; }
 .noinfo { margin:auto; text-align:center; background-color: rgba(26, 28, 34, 0.2); display: inline-block; padding:15px; border: 1px solid #22252f; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
 #servername { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; border: 1px solid #22252f; background-color: rgba(26, 28, 34, 0.2); padding: 8px; margin-top:15px; margin-bottom:15px; }
-#gamelink {width:100%; margin:auto; background-color: rgba(26, 28, 34, 0.2); text-align: center; padding-top:4px; padding-bottom:4px; }
+#gamelink { width:100%; margin:auto; background-color: rgba(26, 28, 34, 0.2); text-align: center; padding-top:4px; padding-bottom:4px; }
 
 /* list */
-img.list_icon { vertical-align:middle; border:none; }
-.details_icon { background-image: url(/lgsl_files/other/icon_details.gif) !important; width: 16px; height: 16px; display: block; } /* not used at that moment */
+.contry_icon { border:none; width: 16px; height: 16px; }
+a.details_icon { background-image: url(../other/icon_details.gif) !important; width: 16px; height: 16px; display: inline-block; }
+.status_icon_onl { background-image: url(../other/icon_online.gif) !important; width: 16px; height: 16px; display: inline-block; }
+.status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; width: 16px; height: 16px; display: inline-block; }
+.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; }
+
 #server_list_table { margin:auto; width:95%; border-radius: 12px; }
 #server_list_table tr { background-color: rgba(26, 28, 34, 0.2); }
 #server_list_table td { padding:13px; }
 #totals { width: 95%; margin:auto; margin-top: 16px; background-color: rgba(26, 28, 34, 0.2); border: 1px solid #22252f; }
-#totals > div {width: 30%;  padding:15px; text-align: center; }
+#totals > div { width: 30%;  padding:15px; text-align: center; }
 
 /* */
 .inline{ display:inline-block; }

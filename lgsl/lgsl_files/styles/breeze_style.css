@@ -25,26 +25,32 @@ a:active { color:#8298b9;}
 
 /* details */
 .details_table { margin: auto; border-spacing: 0px 5px; }
-.details_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; }
-.details_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; }
+.details_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; table-layout:fixed; }
+.details_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; table-layout:fixed; }
 .details_table tr:not(.table_head):hover td { background-color: #ecf9ff; border: 1px solid #e0f2f4; padding:3px; }
 .details_table td { padding: 4px; }
+
 .table_head { font-weight: bold; background-color: #e0edff !important; }
-.spacer {background-color: #f6feff; border-radius: 6px; height:10px; width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border:1px solid #cee3e6; }
+.spacer { background-color: #f6feff; border-radius: 6px; height:10px; width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border:1px solid #cee3e6; }
 .noinfo{ margin:auto; text-align:center; background-color: #f4f7fa; display: inline-block; padding: 6px; border-radius: 6px; border: 1px solid #e0f2f4; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
-#servername {	margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
+#servername { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
 #image_map { border-radius: 6px; }
-#gamelink {width:100%; margin:auto; background-color: #f3fbff; text-align: center; padding-top:4px; padding-bottom:4px; border-radius: 6px; border: 1px solid #e0f2f4; }
+#gamelink { width:100%; margin:auto; background-color: #f3fbff; text-align: center; padding-top:4px; padding-bottom:4px; border-radius: 6px; border: 1px solid #e0f2f4; }
 
 /* list */
-img.list_icon {vertical-align:middle; border:none;}
+.contry_icon { border:none; width: 16px; height: 16px; }
+a.details_icon { background-image: url(../other/icon_details.gif) !important; width: 16px; height: 16px; display: inline-block; }
+.status_icon_onl { background-image: url(../other/icon_online.gif) !important; width: 16px; height: 16px; display: inline-block; }
+.status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; width: 16px; height: 16px; display: inline-block; }
+.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; }
+
 #server_list_table { margin:auto; width:85%; background-color: #f6feff; border-radius: 12px; }
-#server_list_table td {border: 1px solid #e5fbff; border-radius: 12px;}
-#server_list_table tr:nth-child(n) {background-color: #f3fbff;}
-#server_list_table tr:nth-child(2n) {background-color: #feffff;}
-#server_list_table td:hover, #server_list_table tr:hover td {background-color: #ecf9ff;}
-#totals {width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
+#server_list_table td { border: 1px solid #e5fbff; border-radius: 12px; }
+#server_list_table tr:nth-child(n) { background-color: #f3fbff; }
+#server_list_table tr:nth-child(2n) { background-color: #feffff; }
+#server_list_table td:hover, #server_list_table tr:hover td {background-color: #ecf9ff; }
+#totals { width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
 #totals > div { border: 1px solid #e5fbff; padding: 10px; }
 
 /* admin */

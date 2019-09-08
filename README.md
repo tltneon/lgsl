@@ -133,23 +133,23 @@ Live Demo: http://lgsl-demo.freesite.vip/
 ## Changelog
 #### v5.9.4
 - **More custom CSS classes for changing styles**
-- **Added OGP Style**
-	- *Author @oNdsen**
+- **Added OGP Style** [Live Demo](http://lgsl-demo.freesite.vip/lgsl4/index.php)
+	- *Author @oNdsen*
 - **Added a few game icons**
 - **Added French and Spanish languages**
-	- *Thanks to @own3mall**
+	- *Thanks to @own3mall*
 #### v5.9.3
-- **Added Darken Style**
+- **Added Darken Style** [Live Demo](http://lgsl-demo.freesite.vip/lgsl2/index.php)
 - **Added favicon to \lgsl_files\other\favicon.ico**
 - **Added translation feature**
 	- *You can help to translate LGSL to your language!*
 - **Added Russian language**
 #### v5.9.2
 - **Now LGSL can use custom styles**
-- **Added Breeze Style**
+- **Added Breeze Style** [Live Demo](http://lgsl-demo.freesite.vip/lgsl/index.php)
 - **Default style was changed to: Breeze**
 	- *Suggest your custom styles!*
-	- *Classic style is still exists to use*
+	- *Classic style is still exists to use* http://lgsl-demo.freesite.vip/lgsl3/index.php
 #### v5.8.2
 - **LGSL now working with PHP 7+**
 - **Added game types:**

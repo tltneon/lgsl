@@ -604,13 +604,11 @@
 
   function lgsl_text_status($status, $password, $pending = 0)
   {
-    global $lgsl_config;
+    if ($pending)  { return 'pen'; }
+    if (!$status)  { return 'nrs'; }
+    if ($password) { return 'onp'; }
 
-    if ($pending)  { return $lgsl_config['text']['pen']; }
-    if (!$status)  { return $lgsl_config['text']['nrs']; }
-    if ($password) { return $lgsl_config['text']['onp']; }
-
-    return $lgsl_config['text']['onl'];
+    return 'onl';
   }
 
 //------------------------------------------------------------------------------------------------------------+

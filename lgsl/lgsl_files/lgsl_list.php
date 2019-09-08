@@ -27,15 +27,15 @@
       $server = lgsl_server_html($server);
 
       $output .= "
-      <tr style='table-layout:fixed'>
+      <tr class='server_{$misc['text_status']}'>
 
         <td style='white-space:nowrap; text-align:center'>
-          <img alt='' src='{$misc['icon_status']}' title='{$misc['text_status']}'    class='list_icon' />
-          <img alt='' src='{$misc['icon_game']}'   title='{$misc['text_type_game']}' class='list_icon' />
+          <span title='{$lgsl_config['text'][$misc['text_status']]}' class='status_icon_{$misc['text_status']}'></span>
+          <img alt='' src='{$misc['icon_game']}'   title='{$misc['text_type_game']}' class='game_icon' />
         </td>
 
         <td title='{$lgsl_config['text']['slk']}' style='text-align:right'>
-          <a href='{$misc['software_link']}' style='text-decoration:none'>
+          <a href='{$misc['software_link']}'>
             {$server['b']['ip']}:{$server['b']['c_port']}
           </a>
         </td>
@@ -60,14 +60,12 @@
         {
           $output .= "
           <a href='".lgsl_location_link($server['o']['location'])."' style='text-decoration:none'>
-            <img alt='' src='{$misc['icon_location']}' title='{$misc['text_location']}' class='list_icon' />
+            <img alt='' src='{$misc['icon_location']}' title='{$misc['text_location']}' class='contry_icon' />
           </a>";
         }
 
         $output .= "
-          <a href='".lgsl_link($server['o']['id'])."' style='text-decoration:none'>
-            <img alt='' src='{$misc['icon_details']}' title='{$lgsl_config['text']['vsd']}' class='list_icon' />
-          </a>
+          <a href='".lgsl_link($server['o']['id'])."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
         </td>
 
       </tr>";
