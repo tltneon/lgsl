@@ -144,5 +144,6 @@
 	// Russian language: "languages/russian.php"  //Neon
   // French language: "languages/french.php"    //own3mall
   // Spanish language: "languages/spanish.php"  //own3mall
+	// Czech language: "languages/czech.php"			//Neon
 
 //------------------------------------------------------------------------------------------------------------+

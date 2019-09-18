@@ -138,6 +138,8 @@ Live Demo: http://lgsl-demo.freesite.vip/
 - **Added a few game icons**
 - **Added French and Spanish languages**
 	- *Thanks to @own3mall*
+- **Added Czech language**
+- **Changed HL Game Links to steam:// protocol**
 #### v5.9.3
 - **Added Darken Style** [Live Demo](http://lgsl-demo.freesite.vip/lgsl2/index.php)
 - **Added favicon to \lgsl_files\other\favicon.ico**
