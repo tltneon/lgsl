@@ -139,11 +139,12 @@
   $lgsl_config['retry_offline'] = 0;         // 1=repeats query when there is no response but adds loading delay
   $lgsl_config['cms']           = "sa";      // sets which CMS specific code to use
 	
-	include("languages/english.php");						// sets LGSL language
-	// English language: "languages/english.php"  //Richard Perry
-	// Russian language: "languages/russian.php"  //Neon
-  // French language: "languages/french.php"    //own3mall
-  // Spanish language: "languages/spanish.php"  //own3mall
-	// Czech language: "languages/czech.php"			//Neon
+	include("languages/english.php");									// sets LGSL language
+	// English language: "languages/english.php"  		// Richard Perry
+	// Russian language: "languages/russian.php"  		// Neon
+  // French language: "languages/french.php"    		// own3mall
+  // Spanish language: "languages/spanish.php"  		// own3mall
+	// Czech language: "languages/czech.php"					// Neon
+	// Bulgarian language: "languages/bulgarian.php"	// Neon
 
 //------------------------------------------------------------------------------------------------------------+
