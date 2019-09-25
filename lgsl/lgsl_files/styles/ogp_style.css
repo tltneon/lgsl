@@ -48,9 +48,17 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; width: 16px; height: 16px; display: inline-block; }
 .status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; }
 
-#server_list_table { margin:auto; width:95%; border-radius: 12px; }
+#server_list_table { margin:auto; width:95%; border-radius: 12px; margin-top:30px; }
 #server_list_table tr { background-color: rgba(26, 28, 34, 0.2); }
 #server_list_table td { padding:13px; }
+#server_list_table_top { display:none; }
+.connectlink_cell { text-align:right; }
+.servername_cell { text-align:left; }
+.servername_cell > div { width:100%; overflow:hidden; height:1.3em; line-height:1.3em; }
+.map_cell { white-space:nowrap; text-align:left; }
+.players_cell { white-space:nowrap; text-align:right; }
+.details_cell, .status_cell { white-space:nowrap; text-align:center; }
+.details_cell > a { text-decoration: none; }
 #totals { width: 95%; margin:auto; margin-top: 16px; background-color: rgba(26, 28, 34, 0.2); border: 1px solid #22252f; }
 #totals > div { width: 30%;  padding:15px; text-align: center; }
 
