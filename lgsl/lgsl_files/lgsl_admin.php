@@ -217,7 +217,7 @@
       <table cellspacing='5' cellpadding='0' style='margin:auto'>
         <tr>
           <td style='text-align:center; white-space:nowrap'>[ ID ]             </td>
-          <td style='text-align:center; white-space:nowrap'>[ Game Type ]      </td>
+          <td style='text-align:center; white-space:nowrap'>[ Game Type | Query Protocol ]      </td>
           <td style='text-align:center; white-space:nowrap'>[ IP ]             </td>
           <td style='text-align:center; white-space:nowrap'>[ {$lgsl_config['text']['cpt']} ]</td>
           <td style='text-align:center; white-space:nowrap'>[ {$lgsl_config['text']['qpt']} ]     </td>

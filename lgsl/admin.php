@@ -29,8 +29,6 @@
 //------------------------------------------------------------------------------------------------------------+
 ?>
 
-
-
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 
 <html xmlns='http://www.w3.org/1999/xhtml'>
@@ -41,8 +39,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style'];?>' type='text/css' />
   </head>
-
   <body>
+	<div id='back_to_servers_list'><a href='./'><?php echo $lgsl_config['text']['bak'];?></a></div>
 
 <?php
 //------------------------------------------------------------------------------------------------------------+
@@ -62,7 +60,6 @@
         <tr><td> ".$lgsl_config['text']['pwd'].": </td><td> <input type='password' name='lgsl_pass' value='' /> </td></tr>
         <tr>
           <td colspan='2'>
-            <br />
             <input type='submit' name='lgsl_admin_login' value='".$lgsl_config['text']['lgn']."' />
           </td>
         </tr>
@@ -71,7 +68,6 @@
   }
 //------------------------------------------------------------------------------------------------------------+
 ?>
-
 
   </body>
 </html>
