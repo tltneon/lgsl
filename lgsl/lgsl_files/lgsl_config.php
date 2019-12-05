@@ -143,7 +143,7 @@
   // English language: "languages/english.php"  		// Richard Perry
   // Russian language: "languages/russian.php"  		// Neon
   // French language: "languages/french.php"    		// own3mall
-  // French language: "languages/german.php"    		// ctannurella
+  // German language: "languages/german.php"    		// ctannurella
   // Spanish language: "languages/spanish.php"  		// own3mall
   // Czech language: "languages/czech.php"					// Neon
   // Bulgarian language: "languages/bulgarian.php"	// Neon
