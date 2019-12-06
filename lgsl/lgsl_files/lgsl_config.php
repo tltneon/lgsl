@@ -140,11 +140,12 @@
   $lgsl_config['cms']           = "sa";      // sets which CMS specific code to use
 	
 	include("languages/english.php");									// sets LGSL language
-	// English language: "languages/english.php"  		// Richard Perry
-	// Russian language: "languages/russian.php"  		// Neon
+  // English language: "languages/english.php"  		// Richard Perry
+  // Russian language: "languages/russian.php"  		// Neon
   // French language: "languages/french.php"    		// own3mall
+  // German language: "languages/german.php"    		// ctannurella
   // Spanish language: "languages/spanish.php"  		// own3mall
-	// Czech language: "languages/czech.php"					// Neon
-	// Bulgarian language: "languages/bulgarian.php"	// Neon
+  // Czech language: "languages/czech.php"					// Neon
+  // Bulgarian language: "languages/bulgarian.php"	// Neon
 
 //------------------------------------------------------------------------------------------------------------+
