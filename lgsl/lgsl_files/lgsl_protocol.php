@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -4153,7 +4153,7 @@ function lgsl_unescape($text) {
 
   function lgsl_version()
   {
-    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.9.4"; // little dirty trick
+    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.9.6"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+
