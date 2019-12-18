@@ -14,8 +14,9 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ BACKGROUND COLORS: TEXT HARD TO READ ? CHANGE THESE TO CONTRAST THE FONT COLOR / www.colorpicker.com ]
 
-  $lgsl_config['style'] = "breeze_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css
-	$lgsl_config['background'][1] = "background-color:#e4eaf2";
+  $lgsl_config['style'] = "darken_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css
+  $lgsl_config['scripts'] = ['parallax.js'];
+  $lgsl_config['background'][1] = "background-color:#e4eaf2";
   $lgsl_config['background'][2] = "background-color:#f4f7fa";
 
 //------------------------------------------------------------------------------------------------------------+
@@ -139,13 +140,13 @@
   $lgsl_config['retry_offline'] = 0;         // 1=repeats query when there is no response but adds loading delay
   $lgsl_config['cms']           = "sa";      // sets which CMS specific code to use
 	
-	include("languages/english.php");									// sets LGSL language
+  include("languages/english.php");									// sets LGSL language
   // English language: "languages/english.php"  		// Richard Perry
   // Russian language: "languages/russian.php"  		// Neon
   // French language: "languages/french.php"    		// own3mall
   // German language: "languages/german.php"    		// ctannurella
   // Spanish language: "languages/spanish.php"  		// own3mall
-  // Czech language: "languages/czech.php"					// Neon
-  // Bulgarian language: "languages/bulgarian.php"	// Neon
+  // Czech language: "languages/czech.php"			// Neon
+  // Bulgarian language: "languages/bulgarian.php"		// Neon
 
 //------------------------------------------------------------------------------------------------------------+
