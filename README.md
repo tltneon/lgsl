@@ -1,4 +1,4 @@
-# LGSL v5.9.4 (Live Game Server List) for PHP 7+
+# LGSL v5.9.6 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (SA)
 
 This is almost original version of LGSL with new features and working with PHP 7+.
@@ -131,6 +131,12 @@ Live Demo: http://lgsl-demo.freesite.vip/
  ![alt text](https://i.imgur.com/LM3sBVM.png)
  
 ## Changelog
+#### v5.9.6
+- **Added Parallax Style** [Live Demo](http://lgsl-demo.freesite.vip/lgsl5/index.php)
+- **Added German languages**
+	- *Thanks to @ctannurella*
+- **Default style was changed to: Darken**
+- **Added support to including js files in lgsl_config.php**
 #### v5.9.4
 - **More custom CSS classes for changing styles**
 - **Added OGP Style** [Live Demo](http://lgsl-demo.freesite.vip/lgsl4/index.php)
