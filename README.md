@@ -5,14 +5,18 @@ Based-off LGSL v5.8 (SA)
 
 This is almost original version of LGSL with new features and working with PHP 7+.
 
-Wiki: https://github.com/tltneon/lgsl/wiki
+## Wiki:
+https://github.com/tltneon/lgsl/wiki
 
-Live Demos: http://lgsl-demo.freesite.vip/
+## Live Demos:
+http://lgsl-demo.freesite.vip/
 
-List of supported games: https://github.com/tltneon/lgsl/wiki/Supported-Games
+## List of supported games:
+https://github.com/tltneon/lgsl/wiki/Supported-Games
 
-Custom styles: https://github.com/tltneon/lgsl/wiki/Styles
- ![alt text](https://i.imgur.com/fSo29JB.jpg)
+## Custom styles:
+https://github.com/tltneon/lgsl/wiki/Styles
+ ![lgsl custom styles](https://i.imgur.com/fSo29JB.jpg)
  
 ## Changelog
 #### v5.9.6
