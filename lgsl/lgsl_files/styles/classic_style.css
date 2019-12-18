@@ -33,6 +33,7 @@ a:active { color:#7500c0; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
 #servername { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; }
 #gamelink {width:100%; margin:auto; background-color: #e4eaf2; text-align: center; padding-top:4px; padding-bottom:4px; }
+#details_playerlist {margin:auto; overflow:auto; text-align:center; padding:10px}
 
 /* list */
 .contry_icon { border:none; width: 16px; height: 16px; }
@@ -53,7 +54,8 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell > a { text-decoration: none; }
 #totals { width: fit-content; margin:auto; margin-top: 16px; }
-#totals > div {width: fit-content;  background-color: #e4eaf2; padding:4px; }
+#totals > div {width: fit-content;  background-color: #e4eaf2; padding:4px; display:inline-block;}
 
 /* */
 .inline{ display:inline-block; }
+.center {text-align: center;}

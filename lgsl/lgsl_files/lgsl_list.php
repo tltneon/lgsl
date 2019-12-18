@@ -16,16 +16,20 @@
   $server_list = lgsl_sort_servers($server_list);
 
 //------------------------------------------------------------------------------------------------------------+
-
+	if(count($server_list) == 0)
+	{
+		$output .= "<div id='back_to_servers_list'><a href='./admin.php'>TO ADMIN PANEL</a></div>";
+	}
+	
   $output .= "
 	<table id='server_list_table'>
 		<tr id='server_list_table_top'>
-			<th>{$lgsl_config['text']['sts']}</th>
-			<th>{$lgsl_config['text']['adr']}</th>
-			<th>{$lgsl_config['text']['tns']}</th>
-			<th>{$lgsl_config['text']['map']}</th>
-			<th>{$lgsl_config['text']['plr']}</th>
-			<th>{$lgsl_config['text']['vsd']}</th>
+			<th class='status_cell'>{$lgsl_config['text']['sts']}</th>
+			<th class='connectlink_cell'>{$lgsl_config['text']['adr']}</th>
+			<th class='servername_cell'>{$lgsl_config['text']['tns']}</th>
+			<th class='map_cell'>{$lgsl_config['text']['map']}</th>
+			<th class='players_cell'>{$lgsl_config['text']['plr']}</th>
+			<th class='details_cell'>{$lgsl_config['text']['vsd']}</th>
 		</tr>";
 
 	foreach ($server_list as $server)
@@ -89,9 +93,9 @@
 
     $output .= "
     <div id='totals'>
-          <div class='inline'> {$lgsl_config['text']['tns']} {$total['servers']}    </div>
-          <div class='inline'> {$lgsl_config['text']['tnp']} {$total['players']}    </div>
-          <div class='inline'> {$lgsl_config['text']['tmp']} {$total['playersmax']} </div>
+		<div> {$lgsl_config['text']['tns']} {$total['servers']}    </div>
+		<div> {$lgsl_config['text']['tnp']} {$total['players']}    </div>
+		<div> {$lgsl_config['text']['tmp']} {$total['playersmax']} </div>
     </div>";
   }
 

@@ -37,6 +37,7 @@ a:active { color:#8298b9;}
 #servername { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
 #image_map { border-radius: 6px; }
 #gamelink { width:100%; margin:auto; background-color: #f3fbff; text-align: center; padding-top:4px; padding-bottom:4px; border-radius: 6px; border: 1px solid #e0f2f4; }
+#details_playerlist {margin:auto; overflow:auto; text-align:center; padding:10px}
 
 /* list */
 .contry_icon { border:none; width: 16px; height: 16px; }
@@ -46,7 +47,7 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; }
 
 #server_list_table { margin:auto; width:85%; background-color: #f6feff; border-radius: 12px; margin-top:30px; }
-#server_list_table td { border: 1px solid #e5fbff; border-radius: 12px; }
+#server_list_table td { border: 1px solid #e5fbff; border-radius: 12px; padding: 10px; }
 #server_list_table tr:nth-child(n) { background-color: #f3fbff; }
 #server_list_table tr:nth-child(2n) { background-color: #feffff; }
 #server_list_table td:hover, #server_list_table tr:hover td {background-color: #ecf9ff; }
@@ -59,7 +60,7 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell > a { text-decoration: none; }
 #totals { width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
-#totals > div { border: 1px solid #e5fbff; padding: 10px; }
+#totals > div { border: 1px solid #e5fbff; padding: 10px; display:inline-block; }
 
 /* admin */
 input[type='submit'] {
@@ -92,4 +93,5 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 }
 
 /* */
-.inline{display:inline-block;}
+.inline {display:inline-block;}
+.center {text-align: center;}
