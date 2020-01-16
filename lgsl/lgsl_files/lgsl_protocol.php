@@ -4153,7 +4153,7 @@ function lgsl_unescape($text) {
 
   function lgsl_version()
   {
-    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.9.6"; // little dirty trick
+    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.10.0"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+
