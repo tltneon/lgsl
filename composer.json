@@ -14,7 +14,7 @@
 		"dayz",
 		"ark",
 		"samp",
-		"minecraft",
+		"minecraft"
 	],
 	"authors": [
 		{
@@ -30,7 +30,7 @@
 	],
 	"support": {
 		"wiki": "https://github.com/tltneon/lgsl/wiki",
-		"source": "https://github.com/tltneon/lgsl"
+		"source": "https://github.com/tltneon/lgsl",
 		"issues": "https://github.com/tltneon/lgsl/issues"
 	},
 	"require":
