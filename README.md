@@ -1,6 +1,6 @@
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
-[![Generic badge](https://img.shields.io/badge/Version-v5.9.6-green.svg)](https://github.com/tltneon/lgsl)
-# LGSL v5.9.6 (Live Game Server List) for PHP 7+
+[![Generic badge](https://img.shields.io/badge/Version-v5.10.0-green.svg)](https://github.com/tltneon/lgsl)
+# LGSL v5.10.0 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (SA)
 
 This is almost original version of LGSL with new features and working with PHP 7+.
