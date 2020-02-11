@@ -17,6 +17,7 @@ This is almost original version of LGSL with new features and working with PHP 7
 #### v5.10.0
 - **Added installation script** [How to install LGSL](https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL)
 - **Styles now has better view on mobile devices**
+- **Most popular game icons changed to 64x64 resolution**
 #### v5.9.6
 - **Added Parallax Style** [Live Demo](http://lgsl-demo.freesite.vip/lgsl5/index.php)
 - **Added German languages**

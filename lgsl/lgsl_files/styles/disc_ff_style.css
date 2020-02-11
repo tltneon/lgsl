@@ -25,7 +25,7 @@ a:active{ color:#adcef1; }
 /* details */
 .details_table { margin: auto; border-spacing: 0px 5px; }
 .details_table tr { background-color: #282828; white-space:nowrap; table-layout:fixed; }
-.details_table td { padding: 8px; }
+.details_table td { padding: 8px; white-space: pre-wrap; }
 
 .table_head { font-weight: bold; }
 .spacer { background-color: #282828; height:6px; width:90%; margin:auto; margin-top: 10px; margin-bottom: 10px; border:1px dotted black; }
@@ -50,12 +50,13 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .connectlink_cell { }
 .servername_cell { text-align:left; }
 .servername_cell > div { width:100%; overflow:hidden; height:1.3em; line-height:1.3em; }
+div.servername_nolink { display: none; }
 .map_cell { white-space:nowrap; text-align:left; }
 .players_cell { white-space:nowrap; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell { display: none; }
-#totals { width: fit-content; margin:auto; margin-top: 16px; background-color: #282828; }
-#totals > div { width: fit-content; padding:15px; }
+#totals { width: fit-content; margin:auto; margin-top: 16px; }
+#totals > div { width: fit-content;  background-color: #282828; padding:15px; display:inline-block; }
 
 /* */
 .inline{ display:inline-block; }

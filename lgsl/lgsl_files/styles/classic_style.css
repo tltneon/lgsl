@@ -25,7 +25,7 @@ a:active { color:#7500c0; }
 .details_table { margin: auto; border-spacing: 2px 4px; }
 .details_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; table-layout:fixed; }
 .details_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; table-layout:fixed; }
-.details_table td { padding: 4px; }
+.details_table td { padding: 4px; white-space: pre-wrap; }
 
 .table_head { font-weight: bold; }
 .spacer { background-color: #e4eaf2; height:6px; width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border:1px solid; }
@@ -41,6 +41,7 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .status_icon_onl { background-image: url(../other/icon_online.gif) !important; width: 16px; height: 16px; display: inline-block; }
 .status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; width: 16px; height: 16px; display: inline-block; }
 .status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; }
+img.game_icon {width: 16px;}
 
 #server_list_table { margin:auto; margin-top:30px; }
 #server_list_table tr:nth-child(n) { background-color: #e4eaf2; }
@@ -49,6 +50,7 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .connectlink_cell { text-align:right; }
 .servername_cell { text-align:left; }
 .servername_cell > div { width:100%; overflow:hidden; height:1.3em; line-height:1.3em; }
+div.servername_link { display: none; }
 .map_cell { white-space:nowrap; text-align:left; }
 .players_cell { white-space:nowrap; text-align:right; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }

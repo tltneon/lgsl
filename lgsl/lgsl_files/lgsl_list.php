@@ -52,8 +52,13 @@
 			</td>
 
 			<td title='{$server['s']['name']}' class='servername_cell'>
-				<div>
+				<div class='servername_nolink'>
 					{$misc['name_filtered']}
+				</div>
+				<div class='servername_link'>
+					<a href='".lgsl_link($server['o']['id'])."'>
+						{$misc['name_filtered']}
+					</a>
 				</div>
 			</td>
 
