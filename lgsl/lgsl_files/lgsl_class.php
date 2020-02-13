@@ -700,7 +700,7 @@
   {
     if ($server_a['s']['players'] == $server_b['s']['players']) { return 0; }
 
-    return ($server_a['s']['players'] < $server_b['s']['players']) ? 1 : -1;
+    return ($server_a['s']['players'] < $server_b['s']['players'] || $server_a['b']['status'] < $server_b['b']['status']) ? 1 : -1;
   }
 
 //------------------------------------------------------------------------------------------------------------+

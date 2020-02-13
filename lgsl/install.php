@@ -105,7 +105,7 @@
 	
 	<p>
 		Select style:
-		<select type="text" name="style" onChange="changeStyle(event)" />
+		<select type="text" name="style" onChange="changeValue(event, true)" />
 			<option value="darken_style.css">Darken</option>
 			<option value="ogp_style.css">OGP</option>
 			<option value="breeze_style.css">Breeze</option>
@@ -113,10 +113,10 @@
 			<option value="parallax_style.css">Parallax</option>
 			<option value="disc_ff_style.css">Disc FF</option>
 		</select>
-	</p>	
+	</p>
 	<p>
 		Select language:
-		<select type="text" name="language" onChange="changeLanguage(event)" />
+		<select type="text" name="language" onChange="changeValue(event)" />
 			<option value="english">English</option>
 			<option value="russian">Русский</option>
 			<option value="french">Français</option>
@@ -125,17 +125,34 @@
 			<option value="czech">Čeština</option>
 			<option value="bulgarian">български</option>
 		</select>
-	</p>	
+	</p>
 	
 	<hr />
 	
 	<p>
+		Sort servers by:
+		<select type="text" name="sort_servers_by" onChange="changeValue(event)" />
+			<option value="id">ID</option>
+			<option value="type">Type</option>
+			<option value="zone">Zone</option>
+			<option value="players">Players</option>
+			<option value="status">Status</option>
+		</select>
+	</p>
+	<p>
+		Sort players by:
+		<select type="text" name="sort_players_by" onChange="changeValue(event)" />
+			<option value="name">Name</option>
+			<option value="score">Score</option>
+		</select>
+	</p>
+	<p>
 		Show totals:
-		<input type="checkbox" name="totals" onChange="selectTotals(event)" />
+		<input type="checkbox" name="totals" onChange="changeCheckbox(event)" />
 	</p>	
 	<p>
 		Show locations:
-		<input type="checkbox" name="locations" onChange="selectLocations(event)" />
+		<input type="checkbox" name="locations" onChange="changeCheckbox(event)" />
 	</p>	
 	
 	<input type="submit" value="Generate config" onClick="generateConfig()" / >
@@ -165,21 +182,18 @@
 		//
 		style: "darken_style.css",
 		language: "english",
+		sort_servers_by: "id",
+		sort_players_by: "name",
 		totals: false,
 		locations: false
 	}
-	function changeStyle(event) {
-		document.getElementsByTagName("link")[0].href = href='lgsl_files/styles/'+event.target.value;
-		vars.style = event.target.value;
+	function changeValue(event, isStyleChanged = false) {
+		if(isStyleChanged)
+			document.getElementsByTagName("link")[0].href = href='lgsl_files/styles/'+event.target.value;
+		vars[event.target.name] = event.target.value;
 	}
-	function changeLanguage(event) {
-		vars.language = event.target.value;
-	}
-	function selectTotals(event) {
-		vars.totals = event.target.checked;
-	}
-	function selectLocations(event) {
-		vars.locations = event.target.checked;
+	function changeCheckbox(event) {
+		vars[event.target.name] = event.target.checked;
 	}
 	
 	function generateConfig()
@@ -195,8 +209,8 @@
 		"$lgsl_config['scripts'] = ['parallax.js']; \n" +
 		"$lgsl_config['locations'] = "+ vars.locations +"; \n" +
 		"$lgsl_config['list']['totals'] = "+ vars.totals +"; \n" +
-		"$lgsl_config['sort']['servers'] = \"id\";   // OPTIONS: id  type  zone  players  status \n" +
-		"$lgsl_config['sort']['players'] = \"name\"; // OPTIONS: name  score \n" +
+		"$lgsl_config['sort']['servers'] = \""+ vars.sort_servers_by +"\";   // OPTIONS: id  type  zone  players  status \n" +
+		"$lgsl_config['sort']['players'] = \""+ vars.sort_players_by +"\"; // OPTIONS: name  score \n" +
 		"$lgsl_config['zone']['width']     = \"160\"; // images will be cropped unless also resized to match \n" +
 		"$lgsl_config['zone']['line_size'] = \"19\";  // player box height is this number multiplied by player names \n" +
 		"$lgsl_config['zone']['height']    = \"100\"; // player box height limit \n" +
