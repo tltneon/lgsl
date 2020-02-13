@@ -16,8 +16,6 @@
 
   $lgsl_config['style'] = "darken_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css
   $lgsl_config['scripts'] = ['parallax.js'];
-  $lgsl_config['background'][1] = "background-color:#e4eaf2";
-  $lgsl_config['background'][2] = "background-color:#f4f7fa";
 
 //------------------------------------------------------------------------------------------------------------+
 //[ SHOW LOCATION FLAGS: 0=OFF 1=GEO-IP "GB"=MANUALLY SET COUNTRY CODE FOR SPEED ]
