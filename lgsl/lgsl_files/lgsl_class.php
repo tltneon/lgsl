@@ -596,7 +596,7 @@
   {
     global $lgsl_config;
 
-    return "[ {$lgsl_config['text']['typ']} {$type} ] [ {$lgsl_config['text']['gme']} {$game} ]";
+    return "[ {$lgsl_config['text']['typ']}: {$type} ] [ {$lgsl_config['text']['gme']}: {$game} ]";
   }
 
 //------------------------------------------------------------------------------------------------------------+

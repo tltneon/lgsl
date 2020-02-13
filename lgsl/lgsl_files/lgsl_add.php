@@ -60,7 +60,7 @@
         </tr>
 
         <tr>
-          <td> {$lgsl_config['text']['typ']} </td>
+          <td> {$lgsl_config['text']['typ']}: </td>
           <td>
             <select name='form_type'>";
   //---------------------------------------------------------+
