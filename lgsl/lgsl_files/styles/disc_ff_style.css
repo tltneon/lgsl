@@ -19,25 +19,41 @@ a:link, a:visited { text-decoration:none; color:#0088DD; }
 a:hover{ color:#adcef1; }
 a:active{ color:#adcef1; }
 
+#adminlink {margin: 0;position: fixed;width: 25px;right: 0;top: 0;background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #ff000061);height: 25px;}
+#adminlink:hover {background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #f30606);}
+#topmenu {padding: 1em; border-bottom: 2px dashed black;}
+#topmenu > li {display: inline-block;padding: 0px 10px;}
+
 /* add */
 .annotation { text-align: center; background-color: #282828; padding-top:17px; padding-bottom:17px; } 
 
 /* details */
-.details_table { margin: auto; border-spacing: 0px 5px; }
-.details_table tr { background-color: #282828; white-space:nowrap; table-layout:fixed; }
-.details_table td { padding: 8px; white-space: pre-wrap; }
+.details_table, .players_table { margin: auto;  border-spacing: 0px 5px; }
+.settings_table { margin: auto; border: 1px solid #22252f; border-spacing: 0px 0px; border-collapse: collapse; max-width: 600px; }
+.details_table tr, .players_table tr, .settings_table tr { white-space:nowrap; background-color: #282828; table-layout:fixed; }
+.details_table td, .players_table td { padding: 8px; }
+.settings_table td { padding: 8px; white-space: pre-wrap; }
+
+.details_table tr td:first-child { font-weight: 600; }
+#image_map { vertical-align:middle; border-radius: 5px; }
+#icon_game { position:absolute; z-index:2; top:6px; left:6px; width:32px; height: 32px;opacity: 0.4; border-radius: 16px; }
+#icon_game:hover { opacity: 1; transition-duration: 500ms; }
+#icon_location { position:absolute; z-index:2; top:6px; right:6px; }
+#image_map_password { position:absolute; z-index:2; top:0px; left:0px; }
+#details_maininfo { margin:auto; border-spacing: 2px; border-collapse: separate; }
+#details_maininfo td { padding:6px; }
+img[title='Location: XX'] { display: none; }
 
 .table_head { font-weight: bold; }
 .spacer { background-color: #282828; height:6px; width:90%; margin:auto; margin-top: 10px; margin-bottom: 10px; border:1px dotted black; }
 .noinfo { margin:auto; text-align:center; background-color: #282828; display: inline-block; padding:15px; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
-#servername { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
+div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
 #gamelink { width:100%; margin:auto; background-color: #282828; text-align: center; padding-top:4px; padding-bottom:4px; }
 
 /* list */
 .contry_icon { border:none; width: 16px; height: 16px; }
-.game_icon { border:none; width: 32px; height: 32px; }
-.game_icon { border:none; width: 32px; height: 32px; }
+.game_icon { border:none; width: 32px; height: 32px; border-radius: 2px; }
 a.details_icon { background-image: url(../other/icon_details.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
 .status_icon_onl { background-image: url(../other/icon_online.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
 .status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
@@ -60,3 +76,53 @@ div.servername_nolink { display: none; }
 
 /* */
 .inline{ display:inline-block; }
+
+/* adaptiveness */
+
+@media(max-width: 990px){
+	.map_cell {
+		display: none;
+	}
+}
+
+@media(max-width: 414px){
+	body
+	{
+		margin: 0;
+	}
+	.servername_cell > div {
+    width: 100%;
+    overflow: hidden;
+    line-height: 1em;
+    font-size: larger;
+    font-family: cursive;
+		height:3em;
+	}
+	.connectlink_cell,
+	td.details_cell, 
+	.map_cell, 
+	div.servername_nolink,
+	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
+			display: none;
+	}
+	div.servername_link a { color: #d5f2ff; }
+	div.servername_link { display: block; }
+	#server_list_table td {
+			padding: 3px;
+	}
+	#server_list_table td:not(.status_cell) {
+			padding: 10px;
+	}
+	#server_list_table tr.server_nrs {
+    background-color: rgba(148, 0, 0, 0.2);
+	}
+	
+	/*details*/
+	#gamelink {display: none;}
+	#details_maininfo tr td:nth-child(2) {display: contents;}
+	#details_maininfo td {
+			position: relative;
+			display: inline-table;
+			margin: 9px;
+	}
+}

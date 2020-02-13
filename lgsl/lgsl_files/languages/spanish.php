@@ -6,14 +6,15 @@
 
 	$lgsl_config['text']['vsd'] = "PULSE AQUI PARA VER LOS DETALLES DEL SERVIDOR";
 	$lgsl_config['text']['slk'] = "CONECTAR AL SERVIDOR";
-	$lgsl_config['text']['sts'] = "Estado:";
-	$lgsl_config['text']['adr'] = "Dirección:";
-	$lgsl_config['text']['cpt'] = "Puerto:";
-	$lgsl_config['text']['qpt'] = "Peticiones:";
-	$lgsl_config['text']['typ'] = "Tipo:";
-	$lgsl_config['text']['gme'] = "Juego:";
-	$lgsl_config['text']['map'] = "Mapa:";
-	$lgsl_config['text']['plr'] = "Jugadores:";
+	$lgsl_config['text']['sts'] = "Estado";
+	$lgsl_config['text']['adr'] = "Dirección";
+	$lgsl_config['text']['cpt'] = "Puerto";
+	$lgsl_config['text']['qpt'] = "Peticiones";
+	$lgsl_config['text']['typ'] = "Tipo";
+	$lgsl_config['text']['gme'] = "Juego";
+	$lgsl_config['text']['map'] = "Mapa";
+	$lgsl_config['text']['plr'] = "Jugadores";
+  $lgsl_config['text']['dtl'] = "DETALLES";
 	$lgsl_config['text']['npi'] = "NO HAY INFO DE JUGADORES";
 	$lgsl_config['text']['nei'] = "NO HAY INFO EXTRA";
 	$lgsl_config['text']['ehs'] = "Configuración";
@@ -26,9 +27,9 @@
 	$lgsl_config['text']['mid'] = "IDENTIFICADOR INVALIDO";
 	$lgsl_config['text']['nnm'] = "--";
 	$lgsl_config['text']['nmp'] = "--";
-	$lgsl_config['text']['tns'] = "Servidores:";
-	$lgsl_config['text']['tnp'] = "Jugadores:";
-	$lgsl_config['text']['tmp'] = "Max Jugadores:";
+	$lgsl_config['text']['tns'] = "Servidores";
+	$lgsl_config['text']['tnp'] = "Jugadores";
+	$lgsl_config['text']['tmp'] = "Max Jugadores";
 	$lgsl_config['text']['asd'] = "LA ADICION DE SERVIDORES PUBLICA ESTA DEHABILITADA";
 	$lgsl_config['text']['awm'] = "ESTE AREA TE PERMITE PROBAR Y AÑADIR SERVIDORES DE JUEGOS A LA LISTA";
 	$lgsl_config['text']['ats'] = "Probar servidor";

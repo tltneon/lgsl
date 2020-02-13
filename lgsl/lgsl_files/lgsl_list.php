@@ -21,15 +21,20 @@
 		$output .= "<div id='back_to_servers_list'><a href='./admin.php'>TO ADMIN PANEL</a></div>";
 	}
 	
+	if(file_exists("install.php"))
+	{
+		$output .= "<div id='back_to_servers_list'><a href='./install.php'>INSTALLATION PAGE</a></div>";
+	}
+	
   $output .= "
 	<table id='server_list_table'>
 		<tr id='server_list_table_top'>
-			<th class='status_cell'>{$lgsl_config['text']['sts']}</th>
-			<th class='connectlink_cell'>{$lgsl_config['text']['adr']}</th>
-			<th class='servername_cell'>{$lgsl_config['text']['tns']}</th>
-			<th class='map_cell'>{$lgsl_config['text']['map']}</th>
-			<th class='players_cell'>{$lgsl_config['text']['plr']}</th>
-			<th class='details_cell'>{$lgsl_config['text']['vsd']}</th>
+			<th class='status_cell'>{$lgsl_config['text']['sts']}:</th>
+			<th class='connectlink_cell'>{$lgsl_config['text']['adr']}:</th>
+			<th class='servername_cell'>{$lgsl_config['text']['tns']}:</th>
+			<th class='map_cell'>{$lgsl_config['text']['map']}:</th>
+			<th class='players_cell'>{$lgsl_config['text']['plr']}:</th>
+			<th class='details_cell'>{$lgsl_config['text']['dtl']}:</th>
 		</tr>";
 
 	foreach ($server_list as $server)
@@ -98,13 +103,13 @@
 
     $output .= "
     <div id='totals'>
-		<div> {$lgsl_config['text']['tns']} {$total['servers']}    </div>
-		<div> {$lgsl_config['text']['tnp']} {$total['players']}    </div>
-		<div> {$lgsl_config['text']['tmp']} {$total['playersmax']} </div>
+		<div> {$lgsl_config['text']['tns']}: {$total['servers']}    </div>
+		<div> {$lgsl_config['text']['tnp']}: {$total['players']}    </div>
+		<div> {$lgsl_config['text']['tmp']}: {$total['playersmax']} </div>
     </div>";
   }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
-  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px'><br /><br /><br /><a href='http://www.greycube.com' style='text-decoration:none'>".lgsl_version()."</a><br /></div>";
+  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='http://www.greycube.com' style='text-decoration:none'>".lgsl_version()."</a></div>";
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+

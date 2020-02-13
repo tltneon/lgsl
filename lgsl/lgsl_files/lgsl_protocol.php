@@ -24,7 +24,7 @@
     "arcasimracing" => "Arca Sim Racing",
     "arma"          => "ArmA: Armed Assault",
     "arma2"         => "ArmA 2",
-    "arma3"         => "ArmA 3",
+    "arma3"         => "ArmA 3, DayZ",
     "avp2"          => "Aliens VS. Predator 2",
     "avp2010"       => "Aliens VS. Predator ( 2010 By Rebellion )",
     "bfbc2"         => "Battlefield Bad Company 2",
@@ -62,8 +62,8 @@
     "graw2"         => "Ghost Recon: Advanced Warfighter 2",
     "gtr2"          => "GTR 2",
     "had2"          => "Hidden and Dangerous 2",
-    "halflife"      => "Half-Life - Steam",
-    "halflifewon"   => "Half-Life - WON",
+    "halflife"      => "Half-Life - Steam Protocol",
+    "halflifewon"   => "Half-Life - WON Protocol",
     "halo"          => "Halo",
     "il2"           => "IL-2 Sturmovik",
     "jediknight2"   => "JediKnight 2: Jedi Outcast",
@@ -100,7 +100,7 @@
     "shatteredh"    => "Shattered Horizon",
     "sof2"          => "Soldier of Fortune 2",
     "soldat"        => "Soldat",
-    "source"        => "Source ( Half-Life 2 )",
+    "source"        => "Source Protocol ( Half-Life 2, etc. )",
     "stalker"       => "S.T.A.L.K.E.R.",
     "stalkercs"     => "S.T.A.L.K.E.R. Clear Sky",
     "startrekef"    => "StarTrek Elite-Force",
@@ -4153,7 +4153,7 @@ function lgsl_unescape($text) {
 
   function lgsl_version()
   {
-    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.10.0"; // little dirty trick
+    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.10.1"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+

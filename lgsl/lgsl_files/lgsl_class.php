@@ -16,27 +16,6 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_bg($rotation_overide = "no")
-  {
-    global $lgsl_config;
-    global $lgsl_bg_rotate;
-
-    if ($rotation_overide !== "no")
-    {
-      $lgsl_bg_rotate = $rotation_overide ? TRUE : FALSE;
-    }
-    else
-    {
-      $lgsl_bg_rotate = $lgsl_bg_rotate ? FALSE : TRUE;
-    }
-
-    $background = $lgsl_bg_rotate ? $lgsl_config['background'][1] : $lgsl_config['background'][2];
-
-    return $background;
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
   function lgsl_link($s = "")
   {
     global $lgsl_config, $lgsl_url_path;

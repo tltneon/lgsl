@@ -46,37 +46,37 @@
 // SHOW THE STANDARD INFO
 
   $output .= "
-	<div id='servername'> {$server['s']['name']} </div>
-	<table cellpadding='2' cellspacing='2' style='margin:auto'>
+	<div id='servername_{$misc['text_status']}'> {$server['s']['name']} </div>
+	<table id='details_maininfo'>
 		<tr>
-		  <td colspan='2' style='text-align:center'>
-			<div id='gamelink'><a href='{$misc['software_link']}'>{$lgsl_config['text']['slk']}</a></div>
+		  <td colspan='2' class='center'>
+				<div id='gamelink'><a href='{$misc['software_link']}'>{$lgsl_config['text']['slk']}</a></div>
 		  </td>
-		  <td rowspan='2' style='text-align:center; vertical-align:top'>
+		  <td rowspan='2' class='center' style='vertical-align:top'>
 			<div style='width:{$lgsl_config['zone']['width']}px; padding:2px; position:relative; margin:auto'>
-			  <img alt='{$server['s']['map']}'	src='{$misc['image_map']}' 					id='image_map'          			     													style='vertical-align:middle' />
-			  <img alt='' 											src='{$misc['image_map_password']}' title='{$lgsl_config['text']['map']} {$server['s']['map']}'	style='position:absolute; z-index:2; top:0px; left:0px;' />
-			  <img alt='' 											src='{$misc['icon_game']}'          title='{$misc['text_type_game']}' 													style='position:absolute; z-index:2; top:6px; left:6px;' />
-			  <img alt='' 											src='{$misc['icon_location']}'      title='{$misc['text_location']}' 														style='position:absolute; z-index:2; top:6px; right:6px;' />
+			  <img src='{$misc['image_map']}'						alt='{$server['s']['map']}'																	id='image_map' />
+			  <img src='{$misc['image_map_password']}'	title='{$lgsl_config['text']['map']} {$server['s']['map']}'	id='image_map_password' />
+			  <img src='{$misc['icon_game']}'						title='{$misc['text_type_game']}' 													id='icon_game' />
+			  <img src='{$misc['icon_location']}'				title='{$misc['text_location']}' 														id='icon_location' />
 			</div>
 		  </td>
 		</tr>
 		<tr>
-		  <td style='text-align:center'>
-			<table class='details_table'>
-			  <tr><td> <b> {$lgsl_config['text']['sts']} </b></td><td> {$lgsl_config['text'][$misc['text_status']]}             </td></tr>
-			  <tr><td> <b> {$lgsl_config['text']['adr']} </b></td><td> {$server['b']['ip']}                                     </td></tr>
-			  <tr><td> <b> {$lgsl_config['text']['cpt']} </b></td><td> {$server['b']['c_port']}                                 </td></tr>
-			  <tr><td> <b> {$lgsl_config['text']['qpt']} </b></td><td> {$server['b']['q_port']}                                 </td></tr>
-			</table>
+		  <td class='center'>
+				<table class='details_table'>
+					<tr><td> {$lgsl_config['text']['sts']}: </td><td> {$lgsl_config['text'][$misc['text_status']]}             </td></tr>
+					<tr><td> {$lgsl_config['text']['adr']}: </td><td> {$server['b']['ip']}                                     </td></tr>
+					<tr><td> {$lgsl_config['text']['cpt']}: </td><td> {$server['b']['c_port']}                                 </td></tr>
+					<tr><td> {$lgsl_config['text']['qpt']}: </td><td> {$server['b']['q_port']}                                 </td></tr>
+				</table>
 		  </td>
-		  <td style='text-align:center'>
-			<table class='details_table'>
-			  <tr><td> <b> {$lgsl_config['text']['typ']} </b></td><td > {$server['b']['type']}                                   </td></tr>
-			  <tr><td> <b> {$lgsl_config['text']['gme']} </b></td><td> {$server['s']['game']}                                   </td></tr>
-			  <tr><td> <b> {$lgsl_config['text']['map']} </b></td><td> {$server['s']['map']}                                    </td></tr>
-			  <tr><td> <b> {$lgsl_config['text']['plr']} </b></td><td> {$server['s']['players']} / {$server['s']['playersmax']} </td></tr>
-			</table>
+		  <td class='center'>
+				<table class='details_table'>
+					<tr><td> {$lgsl_config['text']['typ']}: </td><td> {$server['b']['type']}                                   </td></tr>
+					<tr><td> {$lgsl_config['text']['gme']}: </td><td> {$server['s']['game']}                                   </td></tr>
+					<tr><td> {$lgsl_config['text']['map']}: </td><td> {$server['s']['map']}                                    </td></tr>
+					<tr><td> {$lgsl_config['text']['plr']}: </td><td> {$server['s']['players']} / {$server['s']['playersmax']} </td></tr>
+				</table>
 		  </td>
 		</tr>
 	</table>";
@@ -98,7 +98,7 @@
   else
   {
     $output .= "
-    <table class='details_table'>
+    <table class='players_table'>
       <tr class='table_head'>";
 
       foreach ($fields as $field)
@@ -145,10 +145,10 @@
   else
   {
     $output .= "
-    <table class='details_table'>
+    <table class='settings_table'>
       <tr class='table_head'>
-        <td> {$lgsl_config['text']['ehs']} </td>
-        <td> {$lgsl_config['text']['ehv']} </td>
+        <th> {$lgsl_config['text']['ehs']} </th>
+        <th> {$lgsl_config['text']['ehv']} </th>
       </tr>";
 
     foreach ($server['e'] as $field => $value)
@@ -173,5 +173,5 @@
 	
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
-  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px'><br /><br /><br /><a href='http://www.greycube.com' style='text-decoration:none'>".lgsl_version()."</a><br /></div>";
+  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='http://www.greycube.com' style='text-decoration:none'>".lgsl_version()."</a></div>";
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+

@@ -139,6 +139,7 @@
 	</p>	
 	
 	<input type="submit" value="Generate config" onClick="generateConfig()" / >
+	<span style="color: red; font-size: 9pt; float: left;">* Remember to remove the install.php after install LGSL!</span>
 	<hr />
 	
 	';
@@ -192,8 +193,6 @@
 		"$lgsl_config['feed']['url']    = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"; \n" +
 		"$lgsl_config['style'] = \""+ vars.style +"\"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css \n" +
 		"$lgsl_config['scripts'] = ['parallax.js']; \n" +
-		"$lgsl_config['background'][1] = \"background-color:#e4eaf2\"; \n" +
-		"$lgsl_config['background'][2] = \"background-color:#f4f7fa\"; \n" +
 		"$lgsl_config['locations'] = "+ vars.locations +"; \n" +
 		"$lgsl_config['list']['totals'] = "+ vars.totals +"; \n" +
 		"$lgsl_config['sort']['servers'] = \"id\";   // OPTIONS: id  type  zone  players  status \n" +

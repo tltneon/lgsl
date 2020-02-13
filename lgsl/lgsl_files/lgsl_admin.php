@@ -139,7 +139,7 @@
 
       $output .= "
       <div>
-        <a href='{$image_map}'> {$image_map} </a>
+        <a href='{$image_map}' target='_blank'> {$image_map} <img src='{$image_map}' width='32' height='32' /> </a>
       </div>";
     }
 
@@ -158,6 +158,21 @@
     return;
   }
 
+//------------------------------------------------------------------------------------------------------------+
+
+  if (!empty($_POST['lgsl_backup']))
+	{
+		$mysqli_result = mysqli_query($lgsl_database, "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
+		$content = "";
+		while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
+		{
+			$content .= $mysqli_row['ip'] . ':' . $mysqli_row['c_port'] . "\r\n";
+		}
+		$fp = fopen("lgslBackup.txt", "wb");
+		fwrite($fp,$content);
+		fclose($fp);
+	}	
+	
 //------------------------------------------------------------------------------------------------------------+
 
   if ((!empty($_POST['lgsl_management']) && empty($_POST['lgsl_switch'])) || (empty($_POST['lgsl_management']) && !empty($_POST['lgsl_switch'])) || (!isset($_POST['lgsl_management']) && $lgsl_config['management']))
@@ -195,10 +210,11 @@
         <input type='hidden' name='lgsl_management' value='1' />
         <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
           <tr>
-            <td><input type='submit' name='lgsl_save_1'          value='".$lgsl_config['text']['skc']."' />  </td>
-            <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' /> </td>
-            <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' />    </td>
-            <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['nrm']."' />  </td>
+            <td><input type='submit' name='lgsl_save_1'          value='".$lgsl_config['text']['skc']."' />	</td>
+            <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' />	</td>
+            <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' />	</td>
+            <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['nrm']."' />	</td>
+            <td><input type='submit' name='lgsl_backup'          value='Backup' />	</td>
           </tr>
         </table>
       </div>
@@ -348,11 +364,11 @@
     return "
     <div style='text-align:center; line-height:1em; font-size:1em;'>
       <br /><br />
-      <a href='http://www.greycube.com/help/readme/lgsl/'>[ LGSL ONLINE README ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB (UPDATE) ]</a>  <br /><br />
+      <a href='https://github.com/tltneon/lgsl/wiki'>[ LGSL ONLINE WIKI ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB (UPDATES) ]</a>  <br /><br />
       - To remove a server, delete the IP, then click Save.                           <br /><br />
       - Leave the query port blank to have LGSL try to fill it in for you.            <br /><br />
       - Software port is only needed for a few games so it being set 0 is normal.     <br /><br />
-      - Edit the lgsl_config.php to set the background colors and other options.      <br /><br />
+      - Edit the lgsl_config.php to set the style and other options.      						<br /><br />
       <table cellspacing='10' cellpadding='0' style='border:1px solid; margin:auto; text-align:left'>
         <tr>
           <td> <a href='http://php.net/fsockopen'>FSOCKOPEN</a>           </td>

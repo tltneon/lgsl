@@ -20,6 +20,12 @@
 	</head>
 
 	<body>
+	
+		<div id="topmenu">
+			<li><a href="../../">BACK TO MAIN PAGE</a></li>
+		</div>
+		<a id="adminlink" href="admin.php"></a>
+		
 		<div id="container">
 <?php
 //------------------------------------------------------------------------------------------------------------+

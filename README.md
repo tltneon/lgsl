@@ -14,6 +14,10 @@ This is almost original version of LGSL with new features and working with PHP 7
 ## Custom styles: https://github.com/tltneon/lgsl/wiki/Styles
  
 ## Changelog
+#### v5.10.1
+- **Menu in the top of page**
+- **Further adaptiveness to different resolutions**
+- **More CSS classes for style customization**
 #### v5.10.0
 - **Added installation script** [How to install LGSL](https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL)
 - **Styles now has better view on mobile devices**

@@ -14,7 +14,8 @@
   $lgsl_config['text']['typ'] = "Тип:";
   $lgsl_config['text']['gme'] = "Игра:";
   $lgsl_config['text']['map'] = "Карта:";
-  $lgsl_config['text']['plr'] = "Играчи:";
+  $lgsl_config['text']['plr'] = "Играчи";
+  $lgsl_config['text']['dtl'] = "Данните";
   $lgsl_config['text']['npi'] = "НЯМА ИНФОРМАЦИЯ ЗА ИГРАЧА";
   $lgsl_config['text']['nei'] = "НЯМА ДОПЪЛНИТЕЛНА ИНФОРМАЦИЯ";
   $lgsl_config['text']['ehs'] = "Настройка";
@@ -27,9 +28,9 @@
   $lgsl_config['text']['mid'] = "ИНВАЛИДЕН идентификатор на сървъра";
   $lgsl_config['text']['nnm'] = "--";
   $lgsl_config['text']['nmp'] = "--";
-  $lgsl_config['text']['tns'] = "Общо сървъри:";
-  $lgsl_config['text']['tnp'] = "Общо играчи:";
-  $lgsl_config['text']['tmp'] = "Общо слотове:";
+  $lgsl_config['text']['tns'] = "Общо сървъри";
+  $lgsl_config['text']['tnp'] = "Общо играчи";
+  $lgsl_config['text']['tmp'] = "Общо слотове";
   $lgsl_config['text']['asd'] = "ПУБЛИЧНОТО ДОБАВЯНЕ НА СЪРВЪРИТЕ Е ОТКРИТО";
   $lgsl_config['text']['awm'] = "НАСТОЯЩАТА ОБЛАСТ Ви позволява да изпробвате и след това да добавяте онлайн списъци със сървъри за игри";
   $lgsl_config['text']['ats'] = "Тестов сървър";

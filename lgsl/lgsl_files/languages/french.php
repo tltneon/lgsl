@@ -6,14 +6,15 @@
 
 	$lgsl_config['text']['vsd'] = "CLIQUER POUR VOIR LES DETAILS";
 	$lgsl_config['text']['slk'] = "REJOINDRE LE SERVEUR";
-	$lgsl_config['text']['sts'] = "Statut:";
-	$lgsl_config['text']['adr'] = "Adresse:";
-	$lgsl_config['text']['cpt'] = "Connection Port:";
-	$lgsl_config['text']['qpt'] = "Query Port:";
-	$lgsl_config['text']['typ'] = "Type:";
-	$lgsl_config['text']['gme'] = "Jeu:";
-	$lgsl_config['text']['map'] = "Carte:";
-	$lgsl_config['text']['plr'] = "Joueurs:";
+	$lgsl_config['text']['sts'] = "Statut";
+	$lgsl_config['text']['adr'] = "Adresse";
+	$lgsl_config['text']['cpt'] = "Connection Port";
+	$lgsl_config['text']['qpt'] = "Query Port";
+	$lgsl_config['text']['typ'] = "Type";
+	$lgsl_config['text']['gme'] = "Jeu";
+	$lgsl_config['text']['map'] = "Carte";
+	$lgsl_config['text']['plr'] = "Joueurs";
+  $lgsl_config['text']['dtl'] = "Details";
 	$lgsl_config['text']['npi'] = "PAS D'INFO JOUEUR";
 	$lgsl_config['text']['nei'] = "PAS D'INFO EXTRA";
 	$lgsl_config['text']['ehs'] = "Paramètres";
@@ -26,9 +27,9 @@
 	$lgsl_config['text']['mid'] = "ID SERVEUR INVALIDE";
 	$lgsl_config['text']['nnm'] = "--";
 	$lgsl_config['text']['nmp'] = "--";
-	$lgsl_config['text']['tns'] = "Serveurs:";
-	$lgsl_config['text']['tnp'] = "Joueurs:";
-	$lgsl_config['text']['tmp'] = "Joueurs Max:";
+	$lgsl_config['text']['tns'] = "Serveurs";
+	$lgsl_config['text']['tnp'] = "Joueurs";
+	$lgsl_config['text']['tmp'] = "Joueurs Max";
 	$lgsl_config['text']['asd'] = "AJOUT PUBLIQUE DE SERVEUR DÉSACTIVÉ";
 	$lgsl_config['text']['awm'] = "CETTE ZONE VOUS PERMET DE TESTER ET ENSUITE D'AJOUTER DES SERVEURS EN LIGNE À LA LISTE";
 	$lgsl_config['text']['ats'] = "Tester Serveur";
