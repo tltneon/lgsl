@@ -1,6 +1,6 @@
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 [![Generic badge](https://img.shields.io/badge/Version-v5.10.0-green.svg)](https://github.com/tltneon/lgsl)
-# LGSL v5.10.0 (Live Game Server List) for PHP 7+
+# LGSL v5.10.1 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (SA)
 
 This is almost original version of LGSL with new features and working with PHP 7+.
@@ -12,10 +12,16 @@ This is almost original version of LGSL with new features and working with PHP 7
 ## How to install: https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL
 ## Supported games: https://github.com/tltneon/lgsl/wiki/Supported-Games
 ## Custom styles: https://github.com/tltneon/lgsl/wiki/Styles
+
+Feel free to make pull request with your custom styles!
+
+ ### Server List on mobile device
+ ![lgsl Server List on mobile device](https://i.imgur.com/jfFMhyK.png)
+ ![lgsl Server List on mobile device](https://i.imgur.com/wOvyZHV.png)
  
 ## Changelog
 #### v5.10.1
-- **Menu in the top of page**
+- **Menu in the top of page** (also now you can enter the admin page thru the clicking on top right corner of the page)
 - **Further adaptiveness to different resolutions**
 - **More CSS classes for style customization**
 #### v5.10.0
