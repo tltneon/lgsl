@@ -147,6 +147,10 @@
 		</select>
 	</p>
 	<p>
+		Hide offline servers:
+		<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)" />
+	</p>	
+	<p>
 		Show totals:
 		<input type="checkbox" name="totals" onChange="changeCheckbox(event)" />
 	</p>	
@@ -184,6 +188,7 @@
 		language: "english",
 		sort_servers_by: "id",
 		sort_players_by: "name",
+		hide_offline: false,
 		totals: false,
 		locations: false
 	}
@@ -239,7 +244,7 @@
 		"$lgsl_config['random'][6] = 0; \n" +
 		"$lgsl_config['random'][7] = 0; \n" +
 		"$lgsl_config['random'][8] = 0; \n" +
-		"$lgsl_config['hide_offline'][0] = 0; \n" +
+		"$lgsl_config['hide_offline'][0] = "+ vars.hide_offline +"; \n" +
 		"$lgsl_config['hide_offline'][1] = 0; \n" +
 		"$lgsl_config['hide_offline'][2] = 0; \n" +
 		"$lgsl_config['hide_offline'][3] = 0; \n" +
