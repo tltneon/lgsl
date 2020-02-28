@@ -14,6 +14,7 @@
 
 //-----------------------------------------------------------------------------------------------------------+
 
+	if ($lgsl_config['cms'] == "sa") { $output .= "<div id='back_to_servers_list'><a href='./'> {$lgsl_config['text']['bak']} </a></div>"; }
   if (!$lgsl_config['public_add'])
   {
     $output .= "

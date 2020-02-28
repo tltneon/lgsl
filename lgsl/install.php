@@ -8,30 +8,45 @@
 	$mysql_password = empty($_POST["password"]) ? "" : $_POST["password"];
 	$mysql_database = empty($_POST["database"]) ? "lgsl" : $_POST["database"];
 	$mysql_table = empty($_POST["table"]) ? "lgsl" : $_POST["table"];
+	$installed = "";
 		
 	if(!empty($_POST["server"]) && !empty($_POST["login"]) && !empty($_POST["database"]) && !empty($_POST["table"])){
 		$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
-		$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
-		$mysqli_result = mysqli_query($lgsl_database, "
-			CREATE TABLE `".$_POST["table"]."` (
+			
+		if (!$lgsl_database) {
+				printf("Connect failed: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
+		}
+		else {
+			$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
+			if(mysqli_query($lgsl_database, "
+				CREATE TABLE `".$_POST["table"]."` (
 
-				`id`         INT     (11)  NOT NULL auto_increment,
-				`type`       VARCHAR (50)  NOT NULL DEFAULT '',
-				`ip`         VARCHAR (255) NOT NULL DEFAULT '',
-				`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-				`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-				`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-				`zone`       VARCHAR (255) NOT NULL DEFAULT '',
-				`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
-				`comment`    VARCHAR (255) NOT NULL DEFAULT '',
-				`status`     TINYINT (1)   NOT NULL DEFAULT '0',
-				`cache`      TEXT          NOT NULL,
-				`cache_time` TEXT          NOT NULL,
+					`id`         INT     (11)  NOT NULL auto_increment,
+					`type`       VARCHAR (50)  NOT NULL DEFAULT '',
+					`ip`         VARCHAR (255) NOT NULL DEFAULT '',
+					`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+					`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+					`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+					`zone`       VARCHAR (255) NOT NULL DEFAULT '',
+					`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
+					`comment`    VARCHAR (255) NOT NULL DEFAULT '',
+					`status`     TINYINT (1)   NOT NULL DEFAULT '0',
+					`cache`      TEXT          NOT NULL,
+					`cache_time` TEXT          NOT NULL,
 
-				PRIMARY KEY (`id`)
+					PRIMARY KEY (`id`)
 
-			) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;");
+				) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;") === TRUE){
+					printf("LGSL table created successfully\n");
+					$installed = "disabled";
+				}
+				else {
+					printf("LGSL table wasn't created: wrong database name or table ".$_POST["table"]." already exists\n");
+				}
+			mysqli_close($lgsl_database);
+		}
 	}
+	
 ?>
 
 
@@ -66,31 +81,35 @@
 //------------------------------------------------------------------------------------------------------------+
 
 	$output = '
+	<h4>Step 1: Install LGSL Tables</h4>
+	<h6><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL">Online Wiki: How to</a></h6>
 	<form method="post" action="">
 		<p>
 			MySQL Server:
-			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" />
+			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" '.$installed.' />
 		</p>
 		<p>
 			MySQL Login:
-			<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" />
+			<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" '.$installed.' />
 		</p>
 		<p>
 			MySQL Password:
-			<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" />
+			<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" '.$installed.' />
 		</p>
 		<p>
 			MySQL Database:
-			<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" />
+			<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" '.$installed.' />
 		</p>
 		<p>
 			MySQL Table:
-			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" />
+			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" '.$installed.' />
 		</p>
-		<input type="submit" value="Install tables">
+		<input type="submit" value="Create tables" '.$installed.'>
 	</form>
 	
-	<hr />
+	<br />
+	
+	<h4>Step 2: Configurating LGSL</h4>
 	
 	<p>
 		LGSL Admin Login:
@@ -151,6 +170,10 @@
 		<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)" />
 	</p>	
 	<p>
+		Public add servers:
+		<input type="checkbox" name="public_add" onChange="changeCheckbox(event)" />
+	</p>	
+	<p>
 		Show totals:
 		<input type="checkbox" name="totals" onChange="changeCheckbox(event)" />
 	</p>	
@@ -189,6 +212,7 @@
 		sort_servers_by: "id",
 		sort_players_by: "name",
 		hide_offline: false,
+		public_add: false,
 		totals: false,
 		locations: false
 	}
@@ -274,7 +298,7 @@
 		"$lgsl_config['url_path']     = \"\"; // full url to /lgsl_files/ for when auto detection fails \n" +
 		"$lgsl_config['management']    = 0;         // 1=show advanced management in the admin by default \n" +
 		"$lgsl_config['host_to_ip']    = 0;         // 1=show the servers ip instead of its hostname \n" +
-		"$lgsl_config['public_add']    = 0;         // 1=servers require approval OR 2=servers shown instantly \n" +
+		"$lgsl_config['public_add']    = "+ vars.public_add +";         // 1=servers require approval OR 2=servers shown instantly \n" +
 		"$lgsl_config['public_feed']   = 0;         // 1=feed requests can add new servers to your list \n" +
 		"$lgsl_config['cache_time']    = 60;        // seconds=time before a server needs updating \n" +
 		"$lgsl_config['live_time']     = 3;         // seconds=time allowed for updating servers per page load \n" +

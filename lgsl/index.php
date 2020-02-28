@@ -23,6 +23,7 @@
 	
 		<div id="topmenu">
 			<li><a href="../../">BACK TO MAIN PAGE</a></li>
+			<?php if($lgsl_config['public_add']) echo '<li><a href="?s=add">'.$lgsl_config["text"]["aas"].'</a></li>';?>
 		</div>
 		<a id="adminlink" href="admin.php"></a>
 		
@@ -30,6 +31,11 @@
 <?php
 //------------------------------------------------------------------------------------------------------------+
   global $output, $lgsl_server_id;
+	
+	if(file_exists("install.php"))
+	{
+		$output .= "<div id='back_to_servers_list'><a href='./install.php'>INSTALLATION PAGE</a></div>";
+	}
 
   $s = isset($_GET['s']) ? $_GET['s'] : "";
 
@@ -38,8 +44,8 @@
   else                    {                       require "lgsl_files/lgsl_list.php";    }
    
   if(isset($lgsl_config['scripts']))
-	foreach($lgsl_config['scripts'] as $script)
-		$output .= "<script src='lgsl_files/scripts/".$script."'></script>";
+		foreach($lgsl_config['scripts'] as $script)
+			$output .= "<script src='lgsl_files/scripts/".$script."'></script>";
   
   echo $output;
   unset($output);

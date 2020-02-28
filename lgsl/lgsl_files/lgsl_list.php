@@ -21,11 +21,6 @@
 		$output .= "<div id='back_to_servers_list'><a href='./admin.php'>TO ADMIN PANEL</a></div>";
 	}
 	
-	if(file_exists("install.php"))
-	{
-		$output .= "<div id='back_to_servers_list'><a href='./install.php'>INSTALLATION PAGE</a></div>";
-	}
-	
   $output .= "
 	<table id='server_list_table'>
 		<tr id='server_list_table_top'>
