@@ -71,6 +71,11 @@
 				max-width: 375px;
 				margin: auto;
 			}
+			h5 {
+				float: right;
+				margin: 0;
+				text-decoration: underline;
+			}
 		</style>
 	</head>
 
@@ -81,8 +86,8 @@
 //------------------------------------------------------------------------------------------------------------+
 
 	$output = '
+	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL">Online Wiki: How to</a></h5>
 	<h4>Step 1: Install LGSL Tables</h4>
-	<h6><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL">Online Wiki: How to</a></h6>
 	<form method="post" action="">
 		<p>
 			MySQL Server:
@@ -131,6 +136,7 @@
 			<option value="classic_style.css">Classic</option>
 			<option value="parallax_style.css">Parallax</option>
 			<option value="disc_ff_style.css">Disc FF</option>
+			<option value="material_style.css">Material Design</option>
 		</select>
 	</p>
 	<p>
@@ -183,7 +189,7 @@
 	</p>	
 	
 	<input type="submit" value="Generate config" onClick="generateConfig()" / >
-	<span style="color: red; font-size: 9pt; float: left;">* Remember to remove the install.php after install LGSL!</span>
+	<p style="color: red; font-size: 9pt;">* Remember to remove the install.php after install LGSL!</p>
 	<hr />
 	
 	';

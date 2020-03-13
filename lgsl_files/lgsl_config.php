@@ -14,7 +14,7 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ BACKGROUND COLORS: TEXT HARD TO READ ? CHANGE THESE TO CONTRAST THE FONT COLOR / www.colorpicker.com ]
 
-  $lgsl_config['style'] = "darken_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css
+  $lgsl_config['style'] = "darken_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, material_style.css
   $lgsl_config['scripts'] = ['parallax.js'];
 
 //------------------------------------------------------------------------------------------------------------+
@@ -30,7 +30,7 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ SORTING OPTIONS ]
 
-  $lgsl_config['sort']['servers'] = "players";   // OPTIONS: id  type  zone  players  status
+  $lgsl_config['sort']['servers'] = "id";   // OPTIONS: id  type  zone  players  status
   $lgsl_config['sort']['players'] = "name"; // OPTIONS: name  score
 
 //------------------------------------------------------------------------------------------------------------+
@@ -106,8 +106,8 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ STAND-ALONE VERSION: LGSL ADMIN LOGON ]
 
-  $lgsl_config['admin']['user'] = "1";
-  $lgsl_config['admin']['pass'] = "1";
+  $lgsl_config['admin']['user'] = "lgsladmin";
+  $lgsl_config['admin']['pass'] = "changeme";
 
 //------------------------------------------------------------------------------------------------------------+
 //[ DATABASE SETTINGS: FOR STAND-ALONE OR TO OVERRIDE CMS DEFAULTS ]
@@ -130,7 +130,7 @@
 
   $lgsl_config['management']    = 0;         // 1=show advanced management in the admin by default
   $lgsl_config['host_to_ip']    = 0;         // 1=show the servers ip instead of its hostname
-  $lgsl_config['public_add']    = true;         // 1=servers require approval OR 2=servers shown instantly
+  $lgsl_config['public_add']    = 0;         // 1=servers require approval OR 2=servers shown instantly
   $lgsl_config['public_feed']   = 0;         // 1=feed requests can add new servers to your list
   $lgsl_config['cache_time']    = 60;        // seconds=time before a server needs updating
   $lgsl_config['live_time']     = 3;         // seconds=time allowed for updating servers per page load

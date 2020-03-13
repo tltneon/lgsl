@@ -24,17 +24,13 @@
 		<div id="topmenu">
 			<li><a href="../../">BACK TO MAIN PAGE</a></li>
 			<?php if($lgsl_config['public_add']) echo '<li><a href="?s=add">'.$lgsl_config["text"]["aas"].'</a></li>';?>
+			<?php if(file_exists("install.php")) echo '<li><a href="./install.php">INSTALLATION PAGE</a></li>';?>
 		</div>
 		<a id="adminlink" href="admin.php"></a>
 		
 		<div id="container">
 <?php
 //------------------------------------------------------------------------------------------------------------+
-	if(file_exists("install.php"))
-	{
-		$output .= "<div id='back_to_servers_list'><a href='./install.php'>INSTALLATION PAGE</a></div>";
-	}
-	
   global $output, $lgsl_server_id;
 	
 

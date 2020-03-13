@@ -1,0 +1,244 @@
+/*--------------------------------------
+>			Breeze Style				<
+>			Neon						<
+>			https://github.com/tltneon	<
+---------------------------------------*/
+
+/* global */
+body
+{
+  word-wrap: break-word;
+	font-family: "Roboto", sans-serif;
+  font-weight: 300;
+}
+table{
+	border-collapse: collapse;
+}
+table td {
+	font-size: .9rem;
+	font-weight: 300;
+}
+table th {
+    font-size: .9rem;
+    font-weight: 400;
+}
+table tr:nth-of-type(even) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+table th, table td {
+    padding-top: 1.1rem;
+    padding-bottom: 1rem;
+}
+table th, table td {
+    padding: 0.75rem;
+    vertical-align: middle;
+    border-top: 1px solid #dee2e6;
+}
+
+a:link, a:visited { text-decoration:none; color: #007bff; }
+a:hover { color: #007bff; }
+a:active { color: #007bff; }
+
+#adminlink { margin: 0; position: fixed; width: 25px; right: 0; top: 0; background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #6f65a261); height: 25px; }
+#adminlink:hover { background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #6f65a2); }
+#topmenu { box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important; background-color: #33b5e5 !important; }
+#topmenu > li { display: inline-block; padding: 0px 10px; }
+#topmenu > li > a { display: block;
+	padding: 20px 24px;
+	font-size: 13px;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.8);
+	text-align: center;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+	font-weight: 500;
+	border-bottom: 3px solid #33b5e5;
+}
+#topmenu > li > a:hover { border-bottom: 3px solid white !important;  color: #fff; }
+
+/* add */
+.annotation { text-align: center; background-color: #feffff; border: 1px solid #e5fbff; padding-top:17px; padding-bottom:17px; } 
+
+/* details */
+.details_table, .players_table { margin: auto; border-spacing: 0px 5px; }
+.settings_table { margin: auto; border-spacing: 0px 0px; border-collapse: collapse; max-width: 600px; }
+.details_table tr:nth-child(n), .players_table tr:nth-child(n), .settings_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; table-layout:fixed; }
+.details_table tr:nth-child(2n), .players_table tr:nth-child(2n), .settings_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; table-layout:fixed; }
+.players_table tr:not(.table_head):hover td { background-color: #ecf9ff; outline: auto; }
+.details_table td, .players_table td { padding: 4px; }
+.settings_table td { padding: 4px; white-space: pre-wrap; }
+
+.details_table tr td:first-child { font-weight: 600; }
+#image_map { vertical-align:middle; border-radius: 6px; }
+#icon_game { position:absolute; z-index:2; top:6px; left:6px; width:32px; height: 32px;opacity: 0.4; border-radius: 16px; }
+#icon_game:hover { opacity: 1; transition-duration: 500ms; }
+#icon_location { position:absolute; z-index:2; top:6px; right:6px; }
+#image_map_password { position:absolute; z-index:2; top:0px; left:0px; }
+#details_maininfo { margin:auto; border-spacing: 2px; border-collapse: separate; }
+#details_maininfo td { padding:6px; }
+img[title='Location: XX'] { display: none; }
+
+.table_head { font-weight: bold; background-color: #e0edff !important; }
+.spacer { width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border: .5px solid #dee2e6; }
+.noinfo{ margin:auto; text-align:center; background-color: #f4f7fa; display: inline-block; padding: 6px; border-radius: 6px; border: 1px solid #e0f2f4; }
+#invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
+div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
+#gamelink { width:100%; margin:auto; background-color: #f3fbff; text-align: center; padding-top:4px; padding-bottom:4px; border-radius: 6px; border: 1px solid #e0f2f4; }
+#details_playerlist {margin:auto; overflow:auto; text-align:center; padding:10px}
+
+/* list */
+.contry_icon { border:none; width: 16px; height: 16px; }
+.status_icon_onl {
+	background-color: #8ee683;
+	width: 0.25rem;
+	height: 2rem;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	border-radius: .125rem 0rem 0rem .125rem;
+}
+.status_icon_nrs { 
+	background-color: #f1abab;
+	width: 0.25rem;
+	height: 2rem;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	border-radius: .125rem 0rem 0rem .125rem;
+}
+.status_icon_onp { 
+	background-color: #f8bc85;
+	width: 0.25rem;
+	height: 2rem;
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	border-radius: .125rem 0rem 0rem .125rem;
+}
+
+#server_list_table { margin:auto; width:85%; margin-top:30px; }
+tr#server_list_table_top th { border-top: none !important; }
+
+img.game_icon { 
+	height: 2rem;
+	margin-left: -4px;
+	padding: 0;
+	border-radius: 0rem .125rem .125rem 0rem;
+}
+a.details_icon {
+	padding-top: .38rem;
+	padding-bottom: .38rem;
+	border: 2px solid #4285f4 !important;
+	transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+	transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out;
+	transition: color 0.15s ease-in-out,background-color 0.15s ease-in-out,border-color 0.15s ease-in-out,box-shadow 0.15s ease-in-out,-webkit-box-shadow 0.15s ease-in-out;
+	box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+	border-radius: .125rem;
+	color: #4285f4 !important;
+	padding: .5rem 1.6rem;
+	font-size: .64rem;
+}
+a.details_icon:after {
+	content: '►';
+}
+a.details_icon:hover, a.details_icon:focus, a.details_icon:active {
+	outline: 0;
+	-webkit-box-shadow: 0 5px 11px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15);
+	box-shadow: 0 5px 11px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15);
+}
+td.players_cell { color: #e83e8c; }
+div.servername_link { display: none; }
+/*#server_list_table td { border: 1px solid #e5fbff; border-radius: 12px; padding: 10px; }
+#server_list_table tr:nth-child(n) { background-color: #f3fbff; }
+#server_list_table tr:nth-child(2n) { background-color: #feffff; }
+#server_list_table td:hover, #server_list_table tr:hover td {background-color: #ecf9ff; }
+#server_list_table_top { display:none; }
+.connectlink_cell { text-align:right; }
+.servername_cell { text-align:left; }
+.servername_cell > div { width:100%; overflow:hidden; height:1.3em; line-height:1.3em; }
+div.servername_link { display: none; }
+.map_cell { white-space:nowrap; text-align:left; }
+.players_cell { white-space:nowrap; text-align:right; }
+.details_cell, .status_cell { white-space:nowrap; text-align:center; }
+.details_cell > a { text-decoration: none; }
+#totals { width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
+#totals > div { border: 1px solid #e5fbff; padding: 10px; display:inline-block; }*/
+
+/* admin */
+input[type='submit'] {
+	background-color: #FFFFFF;
+	border: 1px solid #CCCCCC;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+	border-radius: 4px;
+	color: #555555;
+	text-align:center;
+	vertical-align: middle;
+	text-decoration:none;
+}
+input[type='submit']:hover, input[type='submit']:focus {
+	border-color: rgba(82, 168, 236, 0.8);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	outline: 0 none;
+}
+input[type='text'], input[type='number'], input[type='password'], select {
+	display: block;
+	border: none;
+	border-radius: 6px;
+	padding: 5px 8px;
+	color: #333;
+	box-shadow: inset 0 1px 0 rgba(0,0,0,.2), 0 0 4px rgba(0,0,0,0.1);
+}
+input[type='text']:focus, input[type='number']:focus, input[type='password']:focus {
+	outline: none;
+	box-shadow: inset 0 2px 0 rgba(0,0,0,.2), 0 0 4px rgba(0,0,0,0.1), 0 0 5px 1px #51CBEE;
+}
+
+/* */
+.inline {display:inline-block;}
+.center {text-align: center;}
+
+/* adaptiveness */
+
+@media(max-width: 990px){
+	.map_cell {
+		display: none;
+	}
+}
+
+@media(max-width: 414px){
+	body
+	{
+		margin: 0;
+	}
+	.servername_cell > div {
+    width: 100%;
+    overflow: hidden;
+    line-height: 1em;
+    font-size: larger;
+    font-family: cursive;
+		height:3em;
+	}
+	.connectlink_cell,
+	.details_cell, 
+	.map_cell, 
+	div.servername_nolink {
+			display: none;
+	}
+	div.servername_link { display: block; }
+	#server_list_table td {
+			padding: 3px;
+	}
+	#server_list_table td:not(.status_cell) {
+			padding: 10px;
+	}
+	
+	/*details*/
+	#gamelink {display: none;}
+	#details_maininfo tr td:nth-child(2) {display: contents;}
+	#details_maininfo td {
+			position: relative;
+			display: inline-table;
+			margin: 9px;
+	}
+}
