@@ -30,12 +30,13 @@
 		<div id="container">
 <?php
 //------------------------------------------------------------------------------------------------------------+
-  global $output, $lgsl_server_id;
-	
 	if(file_exists("install.php"))
 	{
 		$output .= "<div id='back_to_servers_list'><a href='./install.php'>INSTALLATION PAGE</a></div>";
 	}
+	
+  global $output, $lgsl_server_id;
+	
 
   $s = isset($_GET['s']) ? $_GET['s'] : "";
 
