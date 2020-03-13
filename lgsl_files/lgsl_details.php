@@ -26,7 +26,6 @@
 
   $server = lgsl_query_cached("", "", "", "", "", "sep", $lgsl_server_id);
 
-	if ($lgsl_config['cms'] == "sa") { $output .= "<div id='back_to_servers_list'><a href='./'> {$lgsl_config['text']['bak']} </a></div>"; }
 	if (!$server) { $output .= "<div id='invalid_server_id'> {$lgsl_config['text']['mid']} </div>"; return; }
 
 	$fields = lgsl_sort_fields($server, $fields_show, $fields_hide, $fields_other);
