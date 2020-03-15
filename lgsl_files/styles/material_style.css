@@ -62,20 +62,20 @@ a:active { color: #007bff; }
 /* details */
 .details_table, .players_table { margin: auto; border-spacing: 0px 5px; }
 .settings_table { margin: auto; border-spacing: 0px 0px; border-collapse: collapse; max-width: 600px; }
-.details_table tr:nth-child(n), .players_table tr:nth-child(n), .settings_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; table-layout:fixed; }
-.details_table tr:nth-child(2n), .players_table tr:nth-child(2n), .settings_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; table-layout:fixed; }
+.details_table tr:nth-child(n), .players_table tr:nth-child(n), .settings_table tr:nth-child(n) { white-space:nowrap; table-layout:fixed; }
+.details_table tr:nth-child(2n), .players_table tr:nth-child(2n), .settings_table tr:nth-child(2n) { white-space:nowrap; table-layout:fixed; }
 .players_table tr:not(.table_head):hover td { background-color: #ecf9ff; outline: auto; }
-.details_table td, .players_table td { padding: 4px; }
-.settings_table td { padding: 4px; white-space: pre-wrap; }
+.details_table td, .players_table td { }
+.settings_table td { white-space: pre-wrap; }
 
 .details_table tr td:first-child { font-weight: 600; }
-#image_map { vertical-align:middle; border-radius: 6px; }
+#image_map { vertical-align:middle; border-radius: 6px; box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important; }
 #icon_game { position:absolute; z-index:2; top:6px; left:6px; width:32px; height: 32px;opacity: 0.4; border-radius: 16px; }
 #icon_game:hover { opacity: 1; transition-duration: 500ms; }
 #icon_location { position:absolute; z-index:2; top:6px; right:6px; }
 #image_map_password { position:absolute; z-index:2; top:0px; left:0px; }
 #details_maininfo { margin:auto; border-spacing: 2px; border-collapse: separate; }
-#details_maininfo td { padding:6px; }
+#details_maininfo td { }
 img[title='Location: XX'] { display: none; }
 
 .table_head { font-weight: bold; background-color: #e0edff !important; }
@@ -83,7 +83,7 @@ img[title='Location: XX'] { display: none; }
 .noinfo{ margin:auto; text-align:center; background-color: #f4f7fa; display: inline-block; padding: 6px; border-radius: 6px; border: 1px solid #e0f2f4; }
 #invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
 div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
-#gamelink { width:100%; margin:auto; background-color: #f3fbff; text-align: center; padding-top:4px; padding-bottom:4px; border-radius: 6px; border: 1px solid #e0f2f4; }
+#gamelink { width:100%; margin:auto; text-align: center; padding-top:4px; padding-bottom:4px; border: 1px solid #e0f2f4; }
 #details_playerlist {margin:auto; overflow:auto; text-align:center; padding:10px}
 
 /* list */
@@ -148,21 +148,24 @@ a.details_icon:hover, a.details_icon:focus, a.details_icon:active {
 }
 td.players_cell { color: #e83e8c; }
 div.servername_link { display: none; }
-/*#server_list_table td { border: 1px solid #e5fbff; border-radius: 12px; padding: 10px; }
-#server_list_table tr:nth-child(n) { background-color: #f3fbff; }
-#server_list_table tr:nth-child(2n) { background-color: #feffff; }
-#server_list_table td:hover, #server_list_table tr:hover td {background-color: #ecf9ff; }
-#server_list_table_top { display:none; }
-.connectlink_cell { text-align:right; }
-.servername_cell { text-align:left; }
-.servername_cell > div { width:100%; overflow:hidden; height:1.3em; line-height:1.3em; }
-div.servername_link { display: none; }
-.map_cell { white-space:nowrap; text-align:left; }
-.players_cell { white-space:nowrap; text-align:right; }
-.details_cell, .status_cell { white-space:nowrap; text-align:center; }
-.details_cell > a { text-decoration: none; }
-#totals { width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
-#totals > div { border: 1px solid #e5fbff; padding: 10px; display:inline-block; }*/
+
+a {
+  position: relative;
+  display: inline-block;
+  font-weight: 800;
+  color: royalblue;
+  overflow: hidden;
+  background: linear-gradient(to right, midnightblue, midnightblue 50%, royalblue 50%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 100%;
+  background-position: 100%;
+  transition: background-position 275ms ease;
+}
+a:hover {
+  background-position: 0 100%;
+}
 
 /* admin */
 input[type='submit'] {

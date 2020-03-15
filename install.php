@@ -10,42 +10,60 @@
 	$mysql_table = empty($_POST["table"]) ? "lgsl" : $_POST["table"];
 	$installed = "";
 		
-	if(!empty($_POST["server"]) && !empty($_POST["login"]) && !empty($_POST["database"]) && !empty($_POST["table"])){
-		$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
-			
-		if (!$lgsl_database) {
-				printf("Connect failed: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
+	// if(!empty($_POST["server"]) && !empty($_POST["login"]) && !empty($_POST["database"]) && !empty($_POST["table"])){
+	if(isset($_POST["_createtables"])){
+		if(empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])){
+			printf("You need to fill inputs (step 1) correctly.\n");
 		}
-		else {
-			$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
-			if(mysqli_query($lgsl_database, "
-				CREATE TABLE `".$_POST["table"]."` (
+		else { 
+			$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
+				
+			if (!$lgsl_database) {
+				printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
+			}
+			else {
+				$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
+				if(mysqli_query($lgsl_database, "
+					CREATE TABLE `".$_POST["table"]."` (
 
-					`id`         INT     (11)  NOT NULL auto_increment,
-					`type`       VARCHAR (50)  NOT NULL DEFAULT '',
-					`ip`         VARCHAR (255) NOT NULL DEFAULT '',
-					`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-					`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-					`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-					`zone`       VARCHAR (255) NOT NULL DEFAULT '',
-					`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
-					`comment`    VARCHAR (255) NOT NULL DEFAULT '',
-					`status`     TINYINT (1)   NOT NULL DEFAULT '0',
-					`cache`      TEXT          NOT NULL,
-					`cache_time` TEXT          NOT NULL,
+						`id`         INT     (11)  NOT NULL auto_increment,
+						`type`       VARCHAR (50)  NOT NULL DEFAULT '',
+						`ip`         VARCHAR (255) NOT NULL DEFAULT '',
+						`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+						`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+						`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+						`zone`       VARCHAR (255) NOT NULL DEFAULT '',
+						`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
+						`comment`    VARCHAR (255) NOT NULL DEFAULT '',
+						`status`     TINYINT (1)   NOT NULL DEFAULT '0',
+						`cache`      TEXT          NOT NULL,
+						`cache_time` TEXT          NOT NULL,
 
-					PRIMARY KEY (`id`)
+						PRIMARY KEY (`id`)
 
-				) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;") === TRUE){
-					printf("LGSL table created successfully\n");
-					$installed = "disabled";
-				}
-				else {
-					printf("LGSL table wasn't created: wrong database name or table ".$_POST["table"]." already exists\n");
-				}
-			mysqli_close($lgsl_database);
+					) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;") === TRUE){
+						printf("LGSL table created <span style='color: green;'>successfully</span>.\n");
+						$installed = "disabled";
+					}
+					else {
+						printf("LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table ".$_POST["table"]." already exists.\n");
+					}
+				mysqli_close($lgsl_database);
+			}
 		}
 	}
+    if(isset($_GET['test_udp'])){
+        $fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
+        if (!$fp) {
+            echo "ERROR: $errno - $errstr<br />\n";
+            echo "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).\n";
+        } else {
+            fwrite($fp, "\n");
+            echo fread($fp, 26);
+            echo "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.";
+            fclose($fp);
+        }
+    }
 	
 ?>
 
@@ -76,6 +94,11 @@
 				margin: 0;
 				text-decoration: underline;
 			}
+			input[type="submit"]{
+				margin: auto;
+				display: block;
+				width: 50%;
+			}
 		</style>
 	</head>
 
@@ -86,9 +109,10 @@
 //------------------------------------------------------------------------------------------------------------+
 
 	$output = '
-	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL">Online Wiki: How to</a></h5>
+	<h6><a href="?test_udp">Test UDP</a></h6>
+	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank">Online Wiki: How to</a></h5>
 	<h4>Step 1: Install LGSL Tables</h4>
-	<form method="post" action="">
+	<form method="post" action="?">
 		<p>
 			MySQL Server:
 			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" '.$installed.' />
@@ -109,7 +133,8 @@
 			MySQL Table:
 			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" '.$installed.' />
 		</p>
-		<input type="submit" value="Create tables" '.$installed.'>
+		<input type="hidden" name="_createtables" value="1" />
+		<input type="submit" value="Create tables" '.$installed.' />
 	</form>
 	
 	<br />
