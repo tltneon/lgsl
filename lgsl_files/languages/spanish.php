@@ -54,5 +54,6 @@
 	$lgsl_config['text']['nno'] = "NO";
 	$lgsl_config['text']['enb'] = "Habilitado";
 	$lgsl_config['text']['dsb'] = "Discapacitado";
+	$lgsl_config['text']['mpg'] = "TO MAIN PAGE";
 
 //------------------------------------------------------------------------------------------------------------+

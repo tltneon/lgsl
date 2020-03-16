@@ -8,7 +8,7 @@
 body
 {
   background-color:#191919;
-  font-size:11px;
+  font-size: 12px;
   font-family:verdana,tahoma,arial;
   word-wrap:break-word;
 	color: white;
@@ -55,8 +55,8 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .contry_icon { border:none; width: 16px; height: 16px; }
 .game_icon { border:none; width: 32px; height: 32px; border-radius: 2px; }
 a.details_icon { background-image: url(../other/icon_details.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
-.status_icon_onl { background-image: url(../other/icon_online.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
-.status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
+.status_icon_onl { background: #8ee683; width: 30px; height: 30px; display: inline-block; }
+.status_icon_nrs { background: #f1abab; width: 30px; height: 30px; display: inline-block; }
 .status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
 
 #server_list_table { margin:auto; width: 100%; border-radius: 12px; margin-top:30px; border-collapse: collapse; }

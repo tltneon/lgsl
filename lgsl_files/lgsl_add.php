@@ -38,8 +38,8 @@
   elseif (preg_match("/([0-9a-z\.\-]+)/i", $ip, $match))    { $ip = $match[1]; }
   else                                                      { $ip = ""; }
 
-  if ($c_port > 99999 || $q_port < 1024) { $c_port = 0; }
-  if ($q_port > 99999 || $q_port < 1024) { $q_port = 0; }
+  if ($c_port > 65535 || $c_port < 1024) { $c_port = 0; }
+  if ($q_port > 65535 || $q_port < 1024) { $q_port = 0; }
 
   list($c_port, $q_port, $s_port) = lgsl_port_conversion($type, $c_port, $q_port, $s_port);
 
@@ -48,7 +48,7 @@
   $output .= "
   <form method='post' action=''>
     <div>
-      <table class='details_table'>
+      <table class='addserver_table'>
 
         <tr>
           <td colspan='2' style='text-align:center'>

@@ -55,5 +55,6 @@
   $lgsl_config['text']['nno'] = "NEIN";
   $lgsl_config['text']['enb'] = "Aktiviert";
   $lgsl_config['text']['dsb'] = "Deaktviert";
+  $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
 
 //------------------------------------------------------------------------------------------------------------+

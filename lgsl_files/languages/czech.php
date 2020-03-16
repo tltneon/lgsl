@@ -55,5 +55,6 @@
 	$lgsl_config['text']['nno'] = "NE";
 	$lgsl_config['text']['enb'] = "Povoleno";
 	$lgsl_config['text']['dsb'] = "Zakázáno";
+  $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
 
 //------------------------------------------------------------------------------------------------------------+

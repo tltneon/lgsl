@@ -67,7 +67,7 @@
 			</td>
 
 			<td class='players_cell'>
-				{$server['s']['players']} / <span class='maxplayers'>{$server['s']['playersmax']}</span>
+				<span class='players'>{$server['s']['players']}</span>/<span class='maxplayers'>{$server['s']['playersmax']}</span>
 			</td>
 
 			<td class='details_cell'>";

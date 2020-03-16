@@ -22,7 +22,7 @@
 	<body>
 	
 		<div id="topmenu">
-			<li><a href="../../">TO MAIN PAGE</a></li>
+			<li><a href="../../"><?php echo $lgsl_config['text']['mpg']; ?></a></li>
 			<?php if($lgsl_config['public_add']) echo '<li><a href="?s=add">'.$lgsl_config["text"]["aas"].'</a></li>';?>
 			<?php if(file_exists("install.php")) echo '<li><a href="./install.php">INSTALLATION PAGE</a></li>';?>
 			<?php if(isset($_GET['s'])) echo '<li><a href="./">'.$lgsl_config['text']['bak'].'</a></li>';?>

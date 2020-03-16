@@ -10,7 +10,6 @@
 	$mysql_table = empty($_POST["table"]) ? "lgsl" : $_POST["table"];
 	$installed = "";
 		
-	// if(!empty($_POST["server"]) && !empty($_POST["login"]) && !empty($_POST["database"]) && !empty($_POST["table"])){
 	if(isset($_POST["_createtables"])){
 		if(empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])){
 			printf("You need to fill inputs (step 1) correctly.\n");
@@ -248,8 +247,9 @@
 		locations: false
 	}
 	function changeValue(event, isStyleChanged = false) {
-		if(isStyleChanged)
+		if(isStyleChanged){
 			document.getElementsByTagName("link")[0].href = href='lgsl_files/styles/'+event.target.value;
+		}
 		vars[event.target.name] = event.target.value;
 	}
 	function changeCheckbox(event) {
@@ -264,7 +264,7 @@
 		textarea.innerHTML = "&lt;?php \n" +
 		"global $lgsl_config; $lgsl_config = array(); \n" +
 		"$lgsl_config['feed']['method'] = 0; \n" +
-		"$lgsl_config['feed']['url']    = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"; \n" +
+		"$lgsl_config['feed']['url'] = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"; \n" +
 		"$lgsl_config['style'] = \""+ vars.style +"\"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css \n" +
 		"$lgsl_config['scripts'] = ['parallax.js']; \n" +
 		"$lgsl_config['locations'] = "+ vars.locations +"; \n" +
