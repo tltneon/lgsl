@@ -96,13 +96,23 @@ div.servername_link { display: none; }
 	{
 		margin: 0;
 	}
+	#topmenu > li {
+	    padding: 10px 10px;
+	    font-size: 14px;
+	}
+	#server_list_table {
+	    width: 100%;
+	}
 	.servername_cell > div {
-    width: 100%;
-    overflow: hidden;
-    line-height: 1em;
-    font-size: larger;
-    font-family: cursive;
+	    width: 100%;
+	    overflow: hidden;
+	    line-height: 1em;
+	    font-size: larger;
+	    font-family: cursive;
 		height:3em;
+	}
+	img.game_icon {
+	    width: 32px;
 	}
 	.connectlink_cell,
 	td.details_cell, 
@@ -112,7 +122,7 @@ div.servername_link { display: none; }
 			display: none;
 	}
 	div.servername_link a { color: #d5f2ff; }
-	div.servername_link { display: block; }
+	div.servername_link { display: inherit; vertical-align: middle; }
 	#server_list_table td {
 			padding: 3px;
 	}

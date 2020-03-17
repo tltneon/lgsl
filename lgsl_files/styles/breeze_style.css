@@ -20,8 +20,8 @@ a:link, a:visited { text-decoration:none; color:#6f65a2; }
 a:hover { color:#8298b9;}
 a:active { color:#8298b9;}
 
-#adminlink { margin: 0; position: fixed; width: 25px; right: 0; top: 0; background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #ff000061); height: 25px; }
-#adminlink:hover { background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #f30606); }
+#adminlink { margin: 0; position: fixed; width: 25px; right: 0; top: 0; background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #6f65a261); height: 25px; }
+#adminlink:hover { background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #6f65a2); }
 #topmenu { padding: 1em; border-bottom: 2px dashed black; }
 #topmenu > li { display: inline-block; padding: 0px 10px; }
 #topmenu > li:before { content: '► '; }
@@ -64,11 +64,11 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; }
 img.game_icon { width: 16px; }
 
-#server_list_table { margin:auto; width:85%; background-color: #f6feff; border-radius: 12px; margin-top:30px; }
-#server_list_table td { border: 1px solid #e5fbff; border-radius: 12px; padding: 10px; }
+#server_list_table { margin:auto; width:85%; background-color: #f6feff; border-radius: 12px; margin-top:30px; padding: 3px; }
+#server_list_table td { border: 1px solid #c2d1d4; border-radius: 2px; padding: 10px; }
 #server_list_table tr:nth-child(n) { background-color: #f3fbff; }
 #server_list_table tr:nth-child(2n) { background-color: #feffff; }
-#server_list_table td:hover, #server_list_table tr:hover td {background-color: #ecf9ff; }
+#server_list_table td:hover, #server_list_table tr:hover td { background-color: #f3f3f3; }
 #server_list_table_top { display:none; }
 .connectlink_cell { text-align:right; }
 .servername_cell { text-align:left; }
@@ -77,6 +77,8 @@ div.servername_link { display: none; }
 .map_cell { white-space:nowrap; text-align:left; }
 .players_cell { white-space:nowrap; text-align:right; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
+.status_cell { border-radius: 12px 0px 0px 12px !important; }
+.details_cell { border-radius: 0px 12px 12px 0px !important; }
 .details_cell > a { text-decoration: none; }
 #totals { width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
 #totals > div { border: 1px solid #e5fbff; padding: 10px; display:inline-block; }
@@ -128,6 +130,13 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 	{
 		margin: 0;
 	}
+	#topmenu > li {
+	    display: inline-block;
+	    padding: 10px 0px;
+	}
+	#server_list_table { width:100%; }
+	.players_cell { border-radius: 0px 12px 12px 0px !important; }
+	img.game_icon { width: 32px; }
 	.servername_cell > div {
     width: 100%;
     overflow: hidden;

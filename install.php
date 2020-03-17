@@ -108,7 +108,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
 	$output = '
-	<h6><a href="?test_udp">Test UDP</a></h6>
+	<h6><a href="./">< Back</a> | <a href="?test_udp">Test UDP</a></h6>
 	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank">Online Wiki: How to</a></h5>
 	<h4>Step 1: Install LGSL Tables</h4>
 	<form method="post" action="?">
@@ -213,9 +213,9 @@
 	</p>	
 	
 	<input type="submit" value="Generate config" onClick="generateConfig()" / >
-	<p style="color: red; font-size: 9pt;">* Remember to remove the install.php after install LGSL!</p>
+	<p style="color: red; font-size: 12pt;">* Remember to remove the install.php after install LGSL!</p>
 	<hr />
-	
+	<p style="font-size: 9pt;">After you make config, replace it into lgsl_files/lgsl_config.php</p>
 	';
   
   echo $output;
@@ -265,15 +265,15 @@
 		"global $lgsl_config; $lgsl_config = array(); \n" +
 		"$lgsl_config['feed']['method'] = 0; \n" +
 		"$lgsl_config['feed']['url'] = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"; \n" +
-		"$lgsl_config['style'] = \""+ vars.style +"\"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css \n" +
+		"$lgsl_config['style'] = \""+ vars.style +"\"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, materials_style.css \n" +
 		"$lgsl_config['scripts'] = ['parallax.js']; \n" +
 		"$lgsl_config['locations'] = "+ vars.locations +"; \n" +
 		"$lgsl_config['list']['totals'] = "+ vars.totals +"; \n" +
-		"$lgsl_config['sort']['servers'] = \""+ vars.sort_servers_by +"\";   // OPTIONS: id  type  zone  players  status \n" +
-		"$lgsl_config['sort']['players'] = \""+ vars.sort_players_by +"\"; // OPTIONS: name  score \n" +
-		"$lgsl_config['zone']['width']     = \"160\"; // images will be cropped unless also resized to match \n" +
+		"$lgsl_config['sort']['servers'] = \""+ vars.sort_servers_by +"\";	// OPTIONS: id  type  zone  players  status \n" +
+		"$lgsl_config['sort']['players'] = \""+ vars.sort_players_by +"\";	// OPTIONS: name  score \n" +
+		"$lgsl_config['zone']['width'] = \"160\"; // images will be cropped unless also resized to match \n" +
 		"$lgsl_config['zone']['line_size'] = \"19\";  // player box height is this number multiplied by player names \n" +
-		"$lgsl_config['zone']['height']    = \"100\"; // player box height limit \n" +
+		"$lgsl_config['zone']['height'] = \"100\"; // player box height limit \n" +
 		"$lgsl_config['grid'][1] = 1; \n" +
 		"$lgsl_config['grid'][2] = 1; \n" +
 		"$lgsl_config['grid'][3] = 1; \n" +
@@ -324,20 +324,21 @@
 		"$lgsl_config['db']['pass']   = \""+ vars.mysql_password +"\"; \n" +
 		"$lgsl_config['db']['db']     = \""+ vars.mysql_database +"\"; \n" +
 		"$lgsl_config['db']['table']  = \""+ vars.mysql_table +"\"; \n" +
-		"$lgsl_config['direct_index'] = 0;  // 1=link to index.php instead of the folder \n" +
-		"$lgsl_config['no_realpath']  = 0;  // 1=do not use the realpath function \n" +
-		"$lgsl_config['url_path']     = \"\"; // full url to /lgsl_files/ for when auto detection fails \n" +
-		"$lgsl_config['management']    = 0;         // 1=show advanced management in the admin by default \n" +
-		"$lgsl_config['host_to_ip']    = 0;         // 1=show the servers ip instead of its hostname \n" +
-		"$lgsl_config['public_add']    = "+ vars.public_add +";         // 1=servers require approval OR 2=servers shown instantly \n" +
-		"$lgsl_config['public_feed']   = 0;         // 1=feed requests can add new servers to your list \n" +
-		"$lgsl_config['cache_time']    = 60;        // seconds=time before a server needs updating \n" +
-		"$lgsl_config['live_time']     = 3;         // seconds=time allowed for updating servers per page load \n" +
-		"$lgsl_config['timeout']       = 0;         // 1=gives more time for servers to respond but adds loading delay \n" +
-		"$lgsl_config['retry_offline'] = 0;         // 1=repeats query when there is no response but adds loading delay \n" +
-		"$lgsl_config['cms']           = \"sa\";      // sets which CMS specific code to use \n" +
-		"include(\"languages/"+ vars.language +".php\");									// sets LGSL language";
+		"$lgsl_config['direct_index'] = 0;					// 1=link to index.php instead of the folder \n" +
+		"$lgsl_config['no_realpath']  = 0; 					// 1=do not use the realpath function \n" +
+		"$lgsl_config['url_path']     = \"\";				// full url to /lgsl_files/ for when auto detection fails \n" +
+		"$lgsl_config['management']    = 0;         		// 1=show advanced management in the admin by default \n" +
+		"$lgsl_config['host_to_ip']    = 0;         		// 1=show the servers ip instead of its hostname \n" +
+		"$lgsl_config['public_add']    = "+ vars.public_add +";         		// 1=servers require approval OR 2=servers shown instantly \n" +
+		"$lgsl_config['public_feed']   = 0;         		// 1=feed requests can add new servers to your list \n" +
+		"$lgsl_config['cache_time']    = 60;        		// seconds=time before a server needs updating \n" +
+		"$lgsl_config['live_time']     = 3;         		// seconds=time allowed for updating servers per page load \n" +
+		"$lgsl_config['timeout']       = 0;         		// 1=gives more time for servers to respond but adds loading delay \n" +
+		"$lgsl_config['retry_offline'] = 0;         		// 1=repeats query when there is no response but adds loading delay \n" +
+		"$lgsl_config['cms']           = \"sa\";      		// sets which CMS specific code to use \n" +
+		"include(\"languages/"+ vars.language +".php\");	// sets LGSL language";
 		textarea.style.width = "100%";
-		textarea.style.height = "100vh";
+		textarea.style.height = "90vh";
+		window.scrollTo(0, document.body.scrollHeight);
 	}
 </script>

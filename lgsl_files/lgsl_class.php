@@ -447,7 +447,7 @@
 
   function lgsl_server_misc($server)
   {
-    global $lgsl_config, $lgsl_url_path;
+    global $lgsl_url_path;
 
     $misc['icon_details']       = $lgsl_url_path."other/icon_details.gif";
     $misc['icon_game']          = lgsl_icon_game($server['b']['type'], $server['s']['game']);
@@ -505,13 +505,13 @@
 
   function lgsl_icon_location($location)
   {
-    global $lgsl_file_path, $lgsl_url_path;
+    global $lgsl_config, $lgsl_file_path, $lgsl_url_path;
 
-    if (!$location) { return "{$lgsl_url_path}locations/OFF.png"; }
+    if (!$location || !$lgsl_config["locations"]) { return "{$lgsl_url_path}locations/OFF.png"; }
 
     if ($location)
     {
-      $location = "locations/".preg_replace("/[^a-zA-Z0-9_]/", "_", $location).".png";
+      $location = "locations/".strtoupper(preg_replace("/[^a-zA-Z0-9_]/", "_", $location)).".png";
 
       if (file_exists($lgsl_file_path.$location)) { return $lgsl_url_path.$location; }
     }
@@ -893,7 +893,7 @@
   {
     global $lgsl_config;
 
-    if ($lgsl_config['locations'] !== 1) { return $lgsl_config['locations']; }
+    if ($lgsl_config['locations'] !== 1 || $lgsl_config['locations'] !== true) { return $lgsl_config['locations']; }
 
     $ip = gethostbyname($ip);
 
