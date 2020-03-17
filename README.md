@@ -1,28 +1,28 @@
-[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
-[![Generic badge](https://img.shields.io/badge/Version-v5.10.1-green.svg)](https://github.com/tltneon/lgsl)
-[![GitHub stars](https://img.shields.io/github/stars/tltneon/lgsl)](https://github.com/tltneon/lgsl/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl)](https://github.com/tltneon/lgsl/fork)
-[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl)](https://github.com/tltneon/lgsl/archive/master.zip)
+[![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
+![PHP](https://img.shields.io/badge/PHP-5.6--7.4-brightgreen?style=for-the-badge&logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-5.5.27-8.0.x-brightgreen?style=for-the-badge&logo=mysql)
+![MariaDB](https://img.shields.io/badge/MariaDB-5.5-10.5.x-brightgreen?style=for-the-badge&logo=mariadb)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/tltneon/lgsl?color=green&style=for-the-badge)](https://github.com/tltneon/lgsl/releases)
+
+[![GitHub followers](https://img.shields.io/github/followers/tltneon?style=for-the-badge)](https://github.com/tltneon?tab=followers)
+[![GitHub stars](https://img.shields.io/github/stars/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 # LGSL v5.10.1 (Live Game Server List) for PHP 7+
-Based-off LGSL v5.8 (stand-alone version) from www.greycube.com
+Based-off LGSL v5.8 (stand-alone version) from www.greycube.com. This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4-7.x and MySQL 5.5.27-8.0.x or MariaDB 5.5-10.5.x
 
-This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working with PHP 7+.
+## [Live Demos](http://lgsl-demo.freesite.vip/) | [Wiki](https://github.com/tltneon/lgsl/wiki) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games) | [Custom styles](https://github.com/tltneon/lgsl/wiki/Styles)
 
- ![lgsl custom styles](https://i.imgur.com/fSo29JB.jpg)
+Feel free to make [pull request](https://github.com/tltneon/lgsl) with your custom styles or languages! Also you can suggest any [features](https://github.com/tltneon/lgsl/issues).
 
-## Live Demos: http://lgsl-demo.freesite.vip/
-## Wiki: https://github.com/tltneon/lgsl/wiki
-## How to install: https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL
-## Supported games: https://github.com/tltneon/lgsl/wiki/Supported-Games
-## Custom styles: https://github.com/tltneon/lgsl/wiki/Styles
+### Server List on laptop
+![lgsl Server List on laptop](https://i.imgur.com/fSo29JB.jpg)
 
-Feel free to make [pull request](https://github.com/tltneon/lgsl) with your custom styles!
-
- ### Server List on mobile device
- ![lgsl Server List on mobile device](https://i.imgur.com/jfFMhyK.png)
- ![lgsl Server List on mobile device](https://i.imgur.com/wOvyZHV.png)
+### Server List on mobile device
+![lgsl Server List on mobile device](https://i.imgur.com/jfFMhyK.png)
+![lgsl Server List on mobile device](https://i.imgur.com/wOvyZHV.png)
  
-## Changelog
+## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
 #### v5.10.1
 - **Menu in the top of page** (_also now you can enter the admin page thru the clicking on top right corner of the page_)
 - **Further adaptiveness to different resolutions**
