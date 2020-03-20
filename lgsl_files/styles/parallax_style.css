@@ -14,7 +14,7 @@ body
 	font-family: Roboto,Arial,sans-serif;
 	word-wrap: break-word;
 	color: white;
-	text-shadow: 0 1px 3px rgba(0,0,0,.5);
+	text-shadow: 1px 1px 0px black;
 	background-color: #03060e;
 	background-size: cover !important;
 	background-repeat: no-repeat;

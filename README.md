@@ -8,7 +8,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
-# LGSL v5.10.1 (Live Game Server List) for PHP 7+
+# LGSL v5.10.2 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (stand-alone version) from www.greycube.com. This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4-7.x and MySQL 5.5.27-8.0.x or MariaDB 5.5-10.5.x
 
 ## [Live Demos](http://lgsl-demo.freesite.vip/) | [Wiki](https://github.com/tltneon/lgsl/wiki) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games) | [Custom styles](https://github.com/tltneon/lgsl/wiki/Styles)
@@ -23,6 +23,12 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 ![lgsl Server List on mobile device](https://i.imgur.com/wOvyZHV.png)
  
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
+#### v5.10.2
+- **LGSL now with IMG Mod!**
+	- *Author playzone46@yandex.ru*
+- **Added Material Style**  [[Live Demo](http://lgsl-demo.freesite.vip/lgsl6/index.php)]
+- **Improvements to all styles**
+- **Better installation page with various settings**
 #### v5.10.1
 - **Menu in the top of page** (_also now you can enter the admin page thru the clicking on top right corner of the page_)
 - **Further adaptiveness to different resolutions**

@@ -112,28 +112,12 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 
 /* list */
 .contry_icon { border:none; width: 16px; height: 16px; }
-.status_icon_onl {
-	background-color: #8ee683;
+.status_icon_onl { background-color: #8ee683; }
+.status_icon_nrs { background-color: #f1abab; }
+.status_icon_onp { background-color: #f8bc85; }
+.status_icon_onl, .status_icon_nrs, .status_icon_onp {
 	width: 0.25rem;
-	height: 2rem;
-	display: inline-block;
-	padding: 0;
-	margin: 0;
-	border-radius: .125rem 0rem 0rem .125rem;
-}
-.status_icon_nrs { 
-	background-color: #f1abab;
-	width: 0.25rem;
-	height: 2rem;
-	display: inline-block;
-	padding: 0;
-	margin: 0;
-	border-radius: .125rem 0rem 0rem .125rem;
-}
-.status_icon_onp { 
-	background-color: #f8bc85;
-	width: 0.25rem;
-	height: 2rem;
+	height: 3rem;
 	display: inline-block;
 	padding: 0;
 	margin: 0;
@@ -144,7 +128,7 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 tr#server_list_table_top th { border-top: none !important; }
 
 img.game_icon { 
-	height: 2rem;
+	height: 3rem;
 	margin-left: -4px;
 	padding: 0;
 	border-radius: 0rem .125rem .125rem 0rem;
@@ -249,6 +233,13 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 		margin: 0;
 	}
 	select { width: 100%; }
+	#server_list_table {
+	    width: 100%;
+	}
+	#topmenu, div#totals {
+	    text-align: center;
+	    background-color: #33b5e5 !important;
+	}
 	#topmenu > li > a {
 		position: inherit;
 		display: block;

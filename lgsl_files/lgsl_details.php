@@ -85,6 +85,22 @@
   $output .= "<div class='spacer'></div>";
 
 //------------------------------------------------------------------------------------------------------------+
+
+  if($lgsl_config['image_mod']){
+    $output .= '<img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
+    <textarea style="width: 500px; height: 40px;">[url='.lgsl_link(intval($_GET['s'])).'][img]'.lgsl_link().'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
+    <style>
+      @media (max-width: 414px){
+        textarea { width: 98.5% !important; }
+      }
+    </style>';
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+
+  $output .= "<div class='spacer'></div>";
+
+//------------------------------------------------------------------------------------------------------------+
 // SHOW THE PLAYERS
 
   $output .= "

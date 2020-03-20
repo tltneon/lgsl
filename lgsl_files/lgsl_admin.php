@@ -391,6 +391,11 @@
           <td> ( Used to show Source server settings over a certain size )   </td>
         </tr>
         <tr>
+          <td> <a href='http://php.net/gd2'>GD2</a>                        </td>
+          <td> {$lgsl_config['text']['enb']}: ".(function_exists("gd2") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
+          <td> ( Required for Image Mod )                             </td>
+        </tr>
+        <tr>
           <td> <a href='http://php.net/zlib'>ZLIB</a>                        </td>
           <td> {$lgsl_config['text']['enb']}: ".(function_exists("gzuncompress") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
           <td> ( Required for America's Army 3 )                             </td>

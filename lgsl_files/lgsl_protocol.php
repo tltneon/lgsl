@@ -3653,7 +3653,7 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 	}
 	if (!isset($items['name'])) { return FALSE; }
 	$server['s']['name']	= $ver ? lgsl_unescape($items['name']) : $items['name'];
-	$server['s']['map']	= "Teamspeak";
+	$server['s']['map']	= "teamspeak";
 	$server['s']['players']	= intval($items[$ver ? 'clientsonline' : 'currentusers']) - $ver;
 	$server['s']['playersmax']	= intval($items[$ver ? 'maxclients' : 'maxusers']);
 	$server['s']['password']	= intval($items[$ver ? 'flag_password' : 'password']);
@@ -4153,7 +4153,7 @@ function lgsl_unescape($text) {
 
   function lgsl_version()
   {
-    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.10.1"; // little dirty trick
+    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.10.2"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+
