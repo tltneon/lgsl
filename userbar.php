@@ -26,6 +26,13 @@
 
 	$im = @imagecreatefromgif("lgsl_files/other/banner_thin.gif"); 
 	$on_id = imagecreatefromgif($misc['icon_status']);
+	list($width, $height) = getimagesize($misc['icon_status']);
+	if($width > 16){
+		$image_p = imagecreatetruecolor(16, 16);
+		$image = imagecreatefromgif($misc['icon_status']);
+		imagecopyresampled($image_p, $image, 0, 0, 0, 0, 16, 16, $width, $height);
+		$on_id = $image_p;
+	}
 	$game_id = imagecreatefromgif($misc['icon_game']);
 	list($width, $height) = getimagesize($misc['icon_game']);
 	if($width > 16){
@@ -41,14 +48,14 @@
 	$color_pl = imagecolorallocate($im, 0, 128, 0);
 	$color_time = imagecolorallocate($im, 66, 66, 66); 
 
-	imagecopy($im, $on_id, 10, 2, 0, 0, 16, 16);
-	imagecopy($im, $game_id, 30, 2, 0, 0, 16, 16);
+	imagecopy($im, $on_id, 8, 2, 0, 0, 16, 16);
+	imagecopy($im, $game_id, 26, 2, 0, 0, 16, 16);
 
-	imagettftext($im, 8, 0, 155, 10, $color_pz, "lgsl_files/other/verdana.ttf", 	$server['s']['name']);
-	imagettftext($im, 7, 0, 51, 17, $color_map, "lgsl_files/other/verdana.ttf", 	$lgsl_config['text']['map'].": ".$server['s']['map']);
-	imagettftext($im, 7, 0, 50, 9, 	$color_ip, 	"lgsl_files/other/verdana.ttf", 	$server['b']['ip'].":".$server['b']['c_port']);
-	imagettftext($im, 7, 0, 155, 18, $color_pl, "lgsl_files/other/verdana.ttf", 	$lgsl_config['text']['plr'].": ".$server['s']['players']."/".$server['s']['playersmax']);
-	imagettftext($im, 5, 0, 242, 18, $color_time, "lgsl_files/other/verdana.ttf", 	"upd: ".$time." | ".$server['s']['game']);
+	imagettftext($im, 7, 0, 44, 17, $color_map, "lgsl_files/other/verdana.ttf", 	$lgsl_config['text']['map'].": ".$server['s']['map']);
+	imagettftext($im, 7, 0, 44, 9, 	$color_ip, 	"lgsl_files/other/verdana.ttf", 	$server['b']['ip'].":".$server['b']['c_port']);
+	imagettftext($im, 8, 0, 150, 10, $color_pz, "lgsl_files/other/verdana.ttf", 	$server['s']['name']);
+	imagettftext($im, 7, 0, 150, 18, $color_pl, "lgsl_files/other/verdana.ttf", 	$lgsl_config['text']['plr'].": ".$server['s']['players']."/".$server['s']['playersmax']);
+	imagettftext($im, 5, 0, 238, 18, $color_time, "lgsl_files/other/verdana.ttf", 	"upd: ".$time." | ".$server['s']['game']);
 	 
 	imagegif($im); 
 	imagedestroy($im);

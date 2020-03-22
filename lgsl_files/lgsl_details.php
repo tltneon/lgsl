@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -37,48 +37,45 @@
 //------------------------------------------------------------------------------------------------------------+
 
   $output .= "
-  <div style='margin:auto; text-align:center'>";
-
-  $output .="<div class='spacer'></div>";
+  <div style='margin:auto; text-align:center'>
+    <div class='spacer'></div>";
 
 //------------------------------------------------------------------------------------------------------------+
 // SHOW THE STANDARD INFO
 
   $output .= "
 	<div id='servername_{$misc['text_status']}'> {$server['s']['name']} </div>
-	<table id='details_maininfo'>
-		<tr>
-		  <td colspan='2' class='center'>
-				<div id='gamelink'><a href='{$misc['software_link']}'>{$lgsl_config['text']['slk']}</a></div>
-		  </td>
-		  <td rowspan='2' class='center' style='vertical-align:top'>
-			<div style='width:{$lgsl_config['zone']['width']}px; padding:2px; position:relative; margin:auto'>
-			  <img src='{$misc['image_map']}'						alt='{$server['s']['map']}'																	id='image_map' />
-			  <img src='{$misc['image_map_password']}'	title='{$lgsl_config['text']['map']} {$server['s']['map']}'	id='image_map_password' />
-			  <img src='{$misc['icon_game']}'						title='{$misc['text_type_game']}' 													id='icon_game' />
-			  <img src='{$misc['icon_location']}'				title='{$misc['text_location']}' 														id='icon_location' />
-			</div>
-		  </td>
-		</tr>
-		<tr>
-		  <td class='center'>
-				<table class='details_table'>
-					<tr><td> {$lgsl_config['text']['sts']}: </td><td> {$lgsl_config['text'][$misc['text_status']]}             </td></tr>
-					<tr><td> {$lgsl_config['text']['adr']}: </td><td> {$server['b']['ip']}                                     </td></tr>
-					<tr><td> {$lgsl_config['text']['cpt']}: </td><td> {$server['b']['c_port']}                                 </td></tr>
-					<tr><td> {$lgsl_config['text']['qpt']}: </td><td> {$server['b']['q_port']}                                 </td></tr>
-				</table>
-		  </td>
-		  <td class='center'>
-				<table class='details_table'>
-					<tr><td> {$lgsl_config['text']['typ']}: </td><td> {$server['b']['type']}                                   </td></tr>
-					<tr><td> {$lgsl_config['text']['gme']}: </td><td> {$server['s']['game']}                                   </td></tr>
-					<tr><td> {$lgsl_config['text']['map']}: </td><td> {$server['s']['map']}                                    </td></tr>
-					<tr><td> {$lgsl_config['text']['plr']}: </td><td> {$server['s']['players']} / {$server['s']['playersmax']} </td></tr>
-				</table>
-		  </td>
-		</tr>
-	</table>";
+    <div class='details_info'>
+      <div class='details_info_column'>
+        <a id='gamelink' href='{$misc['software_link']}'>{$lgsl_config['text']['slk']}</a>
+        <div class='details_info_row'>
+          <div class='details_info_scolumn'>
+            <div class='details_info_srow'>
+              <div class='details_info_ceil'>{$lgsl_config['text']['sts']}:</div><div class='details_info_ceil'>{$lgsl_config['text'][$misc['text_status']]}</div></div>
+            <div class='details_info_srow'>
+              <div class='details_info_ceil'>{$lgsl_config['text']['adr']}:</div><div class='details_info_ceil'>{$server['b']['ip']} </div></div>
+            <div class='details_info_srow'>
+              <div class='details_info_ceil'>{$lgsl_config['text']['cpt']}:</div><div class='details_info_ceil'>{$server['b']['c_port']}</div></div>
+            <div class='details_info_srow'>
+              <div class='details_info_ceil'>{$lgsl_config['text']['qpt']}:</div><div class='details_info_ceil'>{$server['b']['q_port']}</div></div></div>
+          <div class='details_info_scolumn'>
+            <div class='details_info_srow'>
+              <div class='details_info_ceil'>{$lgsl_config['text']['typ']}:</div><div class='details_info_ceil'>{$server['b']['type']}</div></div>
+            <div class='details_info_srow'>
+              <div class='details_info_ceil'>{$lgsl_config['text']['gme']}:</div><div class='details_info_ceil'>{$server['s']['game']}</div></div>
+            <div class='details_info_srow'>
+              <div class='details_info_ceil'>{$lgsl_config['text']['map']}:</div><div class='details_info_ceil'>{$server['s']['map']}</div></div>
+            <div class='details_info_srow'>
+              <div class='details_info_ceil'>{$lgsl_config['text']['plr']}:</div><div class='details_info_ceil'>{$server['s']['players']} / {$server['s']['playersmax']}</div></div>
+          </div>
+        </div>
+      </div>
+      <div class='details_info_column zone{$server['o']['zone']}' style='background-image: url({$misc['image_map']});'>
+        <span class='details_location_image' style='background-image: url({$misc['icon_location']});' title='{$misc['text_location']}'></span>
+        <span class='details_password_image zone{$server['o']['zone']}' style='background-image: url({$misc['image_map_password']});'></span>
+        <span class='details_game_image' style='background-image: url({$misc['icon_game']});' title='{$misc['text_type_game']}'></span>
+      </div>
+    </div>";
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -89,16 +86,13 @@
   if($lgsl_config['image_mod']){
     $output .= '<img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
     <textarea style="width: 500px; height: 40px;">[url='.lgsl_link(intval($_GET['s'])).'][img]'.lgsl_link().'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
+    <div class="spacer"></div>
     <style>
       @media (max-width: 414px){
         textarea { width: 98.5% !important; }
       }
     </style>';
   }
-
-//------------------------------------------------------------------------------------------------------------+
-
-  $output .= "<div class='spacer'></div>";
 
 //------------------------------------------------------------------------------------------------------------+
 // SHOW THE PLAYERS

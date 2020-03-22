@@ -30,7 +30,7 @@ a:active { color:#8298b9;}
 .annotation { text-align: center; background-color: #feffff; border: 1px solid #e5fbff; padding-top:17px; padding-bottom:17px; } 
 
 /* details */
-.details_table, .players_table { margin: auto; border-spacing: 0px 5px; }
+.players_table { margin: auto; border-spacing: 0px 5px; }
 .settings_table { margin: auto; border-spacing: 0px 0px; border-collapse: collapse; max-width: 600px; }
 .details_table tr:nth-child(n), .players_table tr:nth-child(n), .settings_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; table-layout:fixed; }
 .details_table tr:nth-child(2n), .players_table tr:nth-child(2n), .settings_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; table-layout:fixed; }
@@ -38,14 +38,52 @@ a:active { color:#8298b9;}
 .details_table td, .players_table td { padding: 4px; }
 .settings_table td { padding: 4px; white-space: pre-wrap; }
 
-.details_table tr td:first-child { font-weight: 600; }
-#image_map { vertical-align:middle; border-radius: 6px; }
-#icon_game { position:absolute; z-index:2; top:6px; left:6px; width:32px; height: 32px;opacity: 0.4; border-radius: 16px; }
-#icon_game:hover { opacity: 1; transition-duration: 500ms; }
-#icon_location { position:absolute; z-index:2; top:6px; right:6px; }
-#image_map_password { position:absolute; z-index:2; top:0px; left:0px; }
-#details_maininfo { margin:auto; border-spacing: 2px; border-collapse: separate; }
-#details_maininfo td { padding:6px; }
+.details_info_row { margin-top: 14px; }
+.details_info, .details_info_column:nth-child(2) { vertical-align: top; }
+.details_info_ceil, .details_info_column, .details_info_scolumn { display: inline-block; }
+.details_info_column { margin-right: 12px; }
+.details_info_srow { padding: 4px; background-color: #f4f7fa; border-radius: 6px; }
+.details_info_srow:nth-child(2n) { background-color: #e4eaf2; }
+.details_info_ceil:first-child { font-weight: 600; padding-right: 4px; }
+#gamelink { vertical-align: middle; display: block; margin-bottom: 6px; width: calc(100% - 2px); }
+.details_info_column:nth-child(2), .details_password_image {
+  background-size: cover;
+  width: 250px;
+  height: 188px;
+}
+.details_password_image, .details_game_image, .details_location_image {
+  display: block;
+  z-index: 5;
+  background-size: cover;
+}
+.details_info_column:nth-child(2) {
+  border-radius: 4px; 
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+}
+.details_password_image {
+  background-position: 100% 100%;
+  position: absolute;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+.details_location_image {
+  width: 16px;
+  height: 11px;
+  position: relative;
+  right: 4px;
+  float: right;
+  top: 4px;
+}
+.details_game_image {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  left: 4px;
+  top: 4px;
+  opacity: .4;
+  border-radius: 6px;
+}
+.details_game_image:hover { opacity: 1; transition-duration: 500ms; }
 img[title='Location: XX'] { display: none; }
 
 .table_head { font-weight: bold; background-color: #e0edff !important; }
@@ -165,10 +203,8 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 	
 	/*details*/
 	#gamelink {display: none;}
-	#details_maininfo tr td:nth-child(2) {display: contents;}
-	#details_maininfo td {
-			position: relative;
-			display: inline-table;
-			margin: 9px;
-	}
+  .details_info { display: flex; flex-flow: column; }
+  .details_info_column { margin: auto; order: 2; margin-top: 6px; }
+  .details_info_column:nth-child(2) { order: 1; }
+	#details_playerlist { overflow: auto;	}
 }

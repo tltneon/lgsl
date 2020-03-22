@@ -26,9 +26,13 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 #### v5.10.2
 - **LGSL now with IMG Mod!**
 	- *Author playzone46@yandex.ru*
-- **Added Material Style**  [[Live Demo](http://lgsl-demo.freesite.vip/lgsl6/index.php)]
+- **Added Material Style** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl6/index.php)]
 - **Improvements to all styles**
 - **Better installation page with various settings**
+- **Rewrited main info table**
+- **Default icons now has bigger resolution**
+	- *Now you can use bigger map images*
+- **Added Wallpaper Style** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl8/index.php)]
 #### v5.10.1
 - **Menu in the top of page** (_also now you can enter the admin page thru the clicking on top right corner of the page_)
 - **Further adaptiveness to different resolutions**
@@ -56,7 +60,7 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 - **Added Darken Style** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl2/index.php)]
 - **Added favicon to _\lgsl_files\other\favicon.ico_**
 - **Added translation feature**
-	- [*You can help to translate LGSL to your language!*](https://github.com/tltneon/lgsl/tree/master/lgsl/lgsl_files/languages)
+	- [*You can help to translate LGSL to your language!*](https://github.com/tltneon/lgsl/tree/master/lgsl_files/languages)
 - **Added Russian language**
 #### v5.9.2
 - **Now LGSL can use custom styles**
