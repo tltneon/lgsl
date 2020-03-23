@@ -85,7 +85,7 @@
 
   if($lgsl_config['image_mod']){
     $output .= '<img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
-    <textarea style="width: 500px; height: 40px;">[url='.lgsl_link(intval($_GET['s'])).'][img]'.lgsl_link().'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
+    <textarea style="width: 500px; height: 40px;">[url='.str_replace("lgsl_files/", "", lgsl_url_path()).($lgsl_config['direct_index'] ? "index.php" : "").'?s='.intval($_GET['s']).'][img]'.str_replace("lgsl_files/", "", lgsl_url_path()).'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
     <div class="spacer"></div>
     <style>
       @media (max-width: 414px){
