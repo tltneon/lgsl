@@ -161,6 +161,7 @@
 			<option value="parallax_style.css">Parallax</option>
 			<option value="disc_ff_style.css">Disc FF</option>
 			<option value="material_style.css">Material Design</option>
+			<option value="wallpaper_style.css">Wallpaper</option>
 		</select>
 	</p>
 	<p>

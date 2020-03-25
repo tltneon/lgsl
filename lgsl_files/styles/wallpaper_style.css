@@ -7,7 +7,8 @@
 /* global */
 body
 {
-  background-color:#191919;
+  background: linear-gradient(180deg, #282828, #282828, transparent);
+  background-repeat: no-repeat;
   font-size: 12px;
   font-family:verdana,tahoma,arial;
   word-wrap:break-word;
@@ -15,9 +16,8 @@ body
 	font-weight: bold;
 }
 
-a:link, a:visited { text-decoration:none; color:#0088DD; }
-a:hover{ color:#adcef1; }
-a:active{ color:#adcef1; }
+a:link, a:visited { text-decoration:none; color: #dd0000; }
+a:hover, a:active { color:#adcef1; }
 
 textarea {background-color: rgba(26, 28, 34, 0.2); border: 1px solid rgba(26, 28, 34, 0.2); color: white;}
 
@@ -116,14 +116,24 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 
 /* list */
 .contry_icon { border:none; width: 16px; height: 16px; }
-.game_icon { border:none; width: 32px; height: 32px; border-radius: 2px; }
+.game_icon { width: 28px; height: 28px; border-radius: 10px; border: 1px solid black; margin: 5px; border-radius: 12px; }
 a.details_icon { background-image: url(../other/icon_details.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
-.status_icon_onl { background: #8ee683; width: 28px;height: 28px;border: 2px solid black; display: inline-block; }
-.status_icon_nrs { background: #f1abab; width: 28px;height: 28px;border: 2px solid black; display: inline-block; }
-.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
+.status_icon_onl, .status_icon_nrs, .status_icon_onp
+{ background: #f1abab; 
+  width: 36px;
+  height: 36px;
+  border: 2px solid black; 
+  display: inline-block;
+  position: absolute;
+  z-index: -1;
+  border-radius: 12px;
+}
+.status_icon_onl { background: #72ff60; }
+.status_icon_nrs { background: #ff6565; }
+.status_icon_onp { background: #fdb94a; }
 
 #server_list_table { margin:auto; width: 100%; border-radius: 12px; margin-top:30px; border-collapse: collapse; }
-#server_list_table tr:not(#server_list_table_top) { background-color: #282828; height: 59px; }
+#server_list_table tr:not(#server_list_table_top) { background-color: #28282894; height: 59px; border: 1px solid black; }
 #server_list_table td, #server_list_table th { padding:13px; border-bottom: 1px dotted black; }
 #server_list_table_top { text-align: left; }
 .connectlink_cell { }
@@ -147,6 +157,11 @@ div.servername_nolink { display: none; }
 		display: none;
 	}
 }
+@media(max-width: 690px){
+  #server_list_table td, #server_list_table th {
+    padding: 13px 1px;
+  }
+}
 
 @media(max-width: 414px){
 	body
@@ -164,17 +179,13 @@ div.servername_nolink { display: none; }
 	.connectlink_cell,
 	td.details_cell, 
 	.map_cell, 
-	div.servername_nolink,
-	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
+	div.servername_nolink, {
 			display: none;
 	}
 	div.servername_link a { color: #d5f2ff; }
 	div.servername_link { display: block; }
 	#server_list_table td {
 			padding: 3px;
-	}
-	#server_list_table td:not(.status_cell) {
-			padding: 10px;
 	}
 	#server_list_table tr.server_nrs {
     background-color: rgba(148, 0, 0, 0.2);
