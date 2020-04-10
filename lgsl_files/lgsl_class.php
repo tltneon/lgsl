@@ -882,9 +882,7 @@
   {
     if (!$location) { return "#"; }
 
-    if (strlen($location) == 2) { return "http://www.wipmania.com/map/{$location}"; }
-
-    return "http://www.google.com/search?q=".urlencode($location);
+    return "https://www.google.com/maps/search/COUNTRY+{$location}/";
   }
 
 //------------------------------------------------------------------------------------------------------------+

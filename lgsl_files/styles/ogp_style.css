@@ -114,9 +114,10 @@ div#servername_onp { background-image: linear-gradient(to right, #ffffff00 0%, #
 .contry_icon { border: 1px solid black; width: 15px; height: 15px; border-radius: 2px; }
 a.details_icon { width: 15px; height: 15px; display: inline-block; background: url(../other/magnifier.svg) no-repeat top left; background-size: contain; border-radius: 2px; border: 1px solid #848484; background-color: #c4c4c4; }
 a.details_icon:hover { background-color: #c0e0ec; }
-.status_icon_onl { width: 15px; height: 15px; display: inline-block; background-color: #8ee683; border: 1px solid black; border-radius: 2px; }
-.status_icon_nrs { width: 15px; height: 15px; display: inline-block; background-color: #f1abab; border: 1px solid black; border-radius: 2px; }
-.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; }
+.status_icon_onl, .status_icon_nrs { width: 15px; height: 15px; display: inline-block; border: 1px solid black; border-radius: 2px; }
+.status_icon_onl { background-color: #8ee683; }
+.status_icon_nrs { background-color: #f1abab; }
+.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; background-size: cover; }
 img.game_icon { width: 16px; border-radius: 2px; }
 
 #server_list_table { margin:auto; width:95%; border-radius: 12px; margin-top:30px; }
@@ -129,6 +130,7 @@ img.game_icon { width: 16px; border-radius: 2px; }
 div.servername_link { display: none; }
 .map_cell { white-space:nowrap; text-align:left; }
 .players_cell { white-space:nowrap; text-align:right; }
+.server_nrs td.players_cell { color: black; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell > a { text-decoration: none; }
 #totals { width: 95%; margin:auto; margin-top: 16px; background-color: rgba(26, 28, 34, 0.2); border: 1px solid #22252f; }
@@ -164,15 +166,17 @@ div.servername_link { display: none; }
 	.map_cell, 
 	div.servername_nolink,
 	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
-			display: none;
+		display: none;
 	}
+	img.game_icon { width: 48px; }
+	#server_list_table { margin: 0px; width: 100%; }
 	div.servername_link a { color: #d5f2ff; }
 	div.servername_link { display: block; }
 	#server_list_table td {
-			padding: 3px;
+		padding: 3px;
 	}
 	#server_list_table td:not(.status_cell) {
-			padding: 10px;
+		padding: 10px;
 	}
 	#server_list_table tr.server_nrs {
     background-color: rgba(148, 0, 0, 0.2);

@@ -166,7 +166,7 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 	border-radius: .125rem 0rem 0rem .125rem;
 }
 
-#server_list_table { text-align: center; margin:auto; width:85%; margin-top:30px; }
+#server_list_table { margin:auto; width:85%; margin-top:30px; }
 tr#server_list_table_top th { border-top: none !important; }
 
 img.game_icon { 
@@ -196,23 +196,25 @@ a.details_icon:hover, a.details_icon:focus, a.details_icon:active {
 	-webkit-box-shadow: 0 5px 11px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15);
 	box-shadow: 0 5px 11px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15);
 }
+.server_nrs td.players_cell { color: black; }
 td.players_cell { color: #e83e8c; }
+.status_cell { min-width: 52px; }
 div.servername_link { display: none; }
 
 div#totals {
-    margin: 16px auto 0;
-    display: table;
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+  margin: 16px auto 0;
+  display: table;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
 }
 #totals > div {
-    display: inline-block;
-    background: #33b5e5;
-    padding: 20px 24px;
-    font-size: 13px;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.8) !important;
-    text-align: center;
-    font-weight: 500;
+  display: inline-block;
+  background: #33b5e5;
+  padding: 20px 24px;
+  font-size: 13px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-align: center;
+  font-weight: 500;
 }
 
 /* admin */
@@ -258,8 +260,8 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 }
 
 /* */
-.inline {display:inline-block;}
-.center {text-align: center;}
+.inline { display:inline-block; }
+.center { text-align: center; }
 
 /* adaptiveness */
 
@@ -275,12 +277,10 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 		margin: 0;
 	}
 	select { width: 100%; }
-	#server_list_table {
-	    width: 100%;
-	}
+	#server_list_table { margin: 0px; width: 100%; }
 	#topmenu, div#totals {
-	    text-align: center;
-	    background-color: #33b5e5 !important;
+    text-align: center;
+    background-color: #33b5e5 !important;
 	}
 	#topmenu > li > a {
 		position: inherit;
@@ -311,14 +311,14 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 	.details_cell, 
 	.map_cell, 
 	div.servername_nolink {
-			display: none;
+		display: none;
 	}
 	div.servername_link { display: block; }
 	#server_list_table td {
-			padding: 3px;
+		padding: 3px;
 	}
 	#server_list_table td:not(.status_cell) {
-			padding: 10px;
+		padding: 10px;
 	}
 	
 	/*details*/

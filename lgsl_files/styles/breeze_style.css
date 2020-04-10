@@ -96,11 +96,18 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 
 /* list */
 .contry_icon { border:none; width: 16px; height: 16px; }
-a.details_icon { background-image: url(../other/icon_details.gif) !important; width: 16px; height: 16px; display: inline-block; }
-.status_icon_onl { background-image: url(../other/icon_online.gif) !important; width: 16px; height: 16px; display: inline-block; }
-.status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; width: 16px; height: 16px; display: inline-block; }
-.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; }
+.details_icon, .status_icon_onl, .status_icon_nrs, .status_icon_onp {
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	background-size: cover;
+}
+.details_icon { background-image: url(../other/icon_details.gif) !important; }
+.status_icon_onl { background-image: url(../other/icon_online.gif) !important; }
+.status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; }
+.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; }
 img.game_icon { width: 16px; }
+a.details_icon:hover { opacity: 0.6; }
 
 #server_list_table { margin:auto; width:85%; background-color: #f6feff; border-radius: 12px; margin-top:30px; padding: 3px; }
 #server_list_table td { border: 1px solid #c2d1d4; border-radius: 2px; padding: 10px; }
@@ -172,17 +179,9 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 	    display: inline-block;
 	    padding: 10px 0px;
 	}
-	#server_list_table { width:100%; }
+	#server_list_table { width:100%; margin: 0px; }
 	.players_cell { border-radius: 0px 12px 12px 0px !important; }
-	img.game_icon { width: 32px; }
-	.servername_cell > div {
-    width: 100%;
-    overflow: hidden;
-    line-height: 1em;
-    font-size: larger;
-    font-family: cursive;
-		height:3em;
-	}
+	img.game_icon { width: 32px; border-radius: 8px 0px; }
 	.connectlink_cell,
 	td.details_cell, 
 	.map_cell, 
@@ -190,15 +189,33 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
 			display: none;
 	}
-	div.servername_link { display: block; }
-	#server_list_table td {
-			padding: 3px;
+	.servername_cell { padding: 0px; } 
+	.servername_cell > .servername_link {
+    width: 100%;
+    overflow: hidden;
+    line-height: 1em;
+    font-size: larger;
+    font-family: cursive;
+		height: 3.5em;
+		display: block;
+		text-align: justify;
 	}
-	#server_list_table td:not(.status_cell) {
-			padding: 10px;
+	.servername_link > a {
+    display: block;
+    margin: 0.5em 0.5em 0em 0.5em;
+    height: 100%;
 	}
+	#server_list_table td { padding: 10px; }
+	#server_list_table .status_cell {	padding: 2px;	}
+	#server_list_table .servername_cell {	padding: 0px;	}
 	#server_list_table tr.server_nrs {
     background-color: rgba(148, 0, 0, 0.2);
+	}
+	#totals { margin: 0px; }
+	#totals > div {
+		border-radius: 8px 0px;
+		padding: 10px 1px;
+		border: 1px solid #d5d9da;
 	}
 	
 	/*details*/

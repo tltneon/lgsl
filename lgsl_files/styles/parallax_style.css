@@ -145,6 +145,7 @@ img.game_icon { width: 16px; }
 div.servername_link { display: none; }
 .map_cell { white-space:nowrap; text-align:left; }
 .players_cell { white-space:nowrap; text-align:right; }
+.server_nrs td.players_cell { color: black; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell > a { text-decoration: none; }
 #totals { width: 95%; margin:auto; margin-top: 16px; background-color: rgba(0, 0, 0, 0.5); border: 1px solid #22252f; }
@@ -176,22 +177,22 @@ div.servername_link { display: none; }
 		margin: 0;
 	}
 	th {
-	    padding: 6px;
+	  padding: 6px;
 	}
-	#topmenu > li {
-	    padding: 16px 10px;
-	}
+	#topmenu { padding: 0px; }
+	#topmenu > li { padding: 16px 10px;	}
+	#server_list_table { padding: 0px; width: 100%; }
 	.servername_cell > div {
-	    width: 100%;
-	    overflow: hidden;
-	    line-height: 1em;
-	    font-size: larger;
-	    font-family: cursive;
+    width: 100%;
+    overflow: hidden;
+    line-height: 1em;
+    font-size: larger;
+    font-family: cursive;
 		height:3em;
 	}
 	img.game_icon {
-	    width: 40px;
-	    border-radius: 4px;
+    width: 40px;
+    border-radius: 4px;
 	}
 	.connectlink_cell,
 	.details_cell, 
