@@ -153,7 +153,7 @@
 	
 	<p>
 		Select style:
-		<select type="text" name="style" onChange="changeValue(event, true)" />
+		<select type="text" name="style" onChange="changeValue(event, {styleChanged: true})" />
 			<option value="darken_style.css">Darken</option>
 			<option value="ogp_style.css">OGP</option>
 			<option value="breeze_style.css">Breeze</option>
@@ -166,7 +166,7 @@
 	</p>
 	<p>
 		Select language:
-		<select type="text" name="language" onChange="changeValue(event)" />
+		<select type="text" name="language" onChange="changeValue(event, {translationInput: true})" />
 			<option value="english">English</option>
 			<option value="russian">Русский</option>
 			<option value="french">Français</option>
@@ -174,6 +174,7 @@
 			<option value="spanish">Español</option>
 			<option value="czech">Čeština</option>
 			<option value="bulgarian">български</option>
+			<option value="help">Help to translate --></option>
 		</select>
 	</p>
 	
@@ -261,9 +262,13 @@
 		totals: false,
 		locations: false
 	}
-	function changeValue(event, isStyleChanged = false) {
-		if(isStyleChanged){
+	function changeValue(event, options = {}) {
+		if(options.styleChanged){
 			document.getElementsByTagName("link")[0].href = href='lgsl_files/styles/'+event.target.value;
+		}
+		if(options.translationInput){
+			event.target.value = "english";
+			window.open("https://github.com/tltneon/lgsl/wiki#how-do-i-change-language");
 		}
 		vars[event.target.name] = event.target.value;
 	}

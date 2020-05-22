@@ -882,7 +882,7 @@
   {
     if (!$location) { return "#"; }
 
-    return "https://www.google.com/maps/search/COUNTRY+{$location}/";
+    return "https://www.google.com/maps/search/{$location}/";
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -891,7 +891,7 @@
   {
     global $lgsl_config;
 
-    if ($lgsl_config['locations'] !== 1 || $lgsl_config['locations'] !== true) { return $lgsl_config['locations']; }
+    if ($lgsl_config['locations'] !== 1 && $lgsl_config['locations'] !== true) { return $lgsl_config['locations']; }
 
     $ip = gethostbyname($ip);
 

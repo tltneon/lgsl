@@ -75,7 +75,7 @@
 			if ($lgsl_config['locations'])
 			{
 				$output .= "
-				<a href='".lgsl_location_link($server['o']['location'])."'>
+				<a href='".lgsl_location_link($server['o']['location'])."' target='_blank' class='contry_link'>
 					<img alt='' src='{$misc['icon_location']}' title='{$misc['text_location']}' class='contry_icon' />
 				</a>";
 			}
