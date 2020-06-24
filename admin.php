@@ -39,7 +39,7 @@
     <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style'];?>' type='text/css' />
   </head>
   <body>
-		<div id='admin_login_page'>
+		<div id='admin_page'>
 			<div id='back_to_servers_list'><a href='./'><?php echo $lgsl_config['text']['bak'];?></a></div>
 				<?php
 				//------------------------------------------------------------------------------------------------------------+
@@ -53,6 +53,7 @@
 					else
 					{
 						echo "
+						<div id='admin_login_page'>
 						<form method='post' action=''>
 							<table style='margin:auto; text-align:center'>
 								<tr><td> ".$lgsl_config['text']['umn'].": </td><td> <input type='text'     name='lgsl_user' value='' /> </td></tr>
@@ -63,7 +64,8 @@
 									</td>
 								</tr>
 							</div>
-						</form>";
+						</form>
+						</div>";
 					}
 				//------------------------------------------------------------------------------------------------------------+
 				?>

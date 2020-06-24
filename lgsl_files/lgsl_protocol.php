@@ -89,6 +89,7 @@
     "quake2"        => "Quake 2",
     "quake3"        => "Quake 3",
     "quake4"        => "Quake 4",
+    "ragemp"				=> "Rage:MP",
     "ravenshield"   => "Raven Shield",
     "redorchestra"  => "Red Orchestra",
     "rfactor"       => "RFactor",
@@ -113,8 +114,8 @@
     "tribes"        => "Tribes ( Starsiege )",
     "tribes2"       => "Tribes 2",
     "tribesv"       => "Tribes Vengeance",
-	"ts"			=> "Teamspeak",
-	"ts3"			=> "Teamspeak 3",
+		"ts"						=> "Teamspeak",
+		"ts3"						=> "Teamspeak 3",
     "urbanterror"   => "UrbanTerror",
     "ut"            => "Unreal Tournament",
     "ut2003"        => "Unreal Tournament 2003",
@@ -212,6 +213,7 @@
     "quake2"        => "02",
     "quake3"        => "02",
     "quake4"        => "10",
+		"ragemp"				=> "34",
     "ravenshield"   => "04",
     "redorchestra"  => "13",
     "rfactor"       => "16",
@@ -333,6 +335,7 @@
     "quake2"        => "qtracker://{IP}:{S_PORT}?game=Quake2&action=show",
     "quake3"        => "qtracker://{IP}:{S_PORT}?game=Quake3&action=show",
     "quake4"        => "qtracker://{IP}:{S_PORT}?game=Quake4&action=show",
+    "ragemp"   			=> "rage://v/connect?ip={IP}:{S_PORT}",
     "ravenshield"   => "http://en.wikipedia.org/wiki/Tom_Clancy's_Rainbow_Six_3",
     "redorchestra"  => "qtracker://{IP}:{S_PORT}?game=RedOrchestra&action=show",
     "rfactor"       => "rfactor://{IP}:{S_PORT}",
@@ -507,6 +510,10 @@
     {
       $response = lgsl_query_feed($server, $request, $lgsl_config['feed']['method'], $lgsl_config['feed']['url']);
     }
+    elseif ($lgsl_function == "lgsl_query_34" || $lgsl_function == "lgsl_query_35")
+    {
+      $response = lgsl_query_direct($server, $request, $lgsl_function, "http");
+    }
     elseif ($lgsl_function == "lgsl_query_30" || $lgsl_function == "lgsl_query_33")
     {
       $response = lgsl_query_direct($server, $request, $lgsl_function, "tcp");
@@ -559,19 +566,32 @@
   function lgsl_query_direct(&$server, $request, $lgsl_function, $scheme)
   {
 //---------------------------------------------------------+
+		
+		if ($scheme != 'http') {
+			
+			$lgsl_fp = @fsockopen("{$scheme}://{$server['b']['ip']}", $server['b']['q_port'], $errno, $errstr, 1);
 
-    $lgsl_fp = @fsockopen("{$scheme}://{$server['b']['ip']}", $server['b']['q_port'], $errno, $errstr, 1);
+			if (!$lgsl_fp) { return FALSE; }
 
-    if (!$lgsl_fp) { return FALSE; }
+			global $lgsl_config;
 
-//---------------------------------------------------------+
+			$lgsl_config['timeout'] = intval($lgsl_config['timeout']);
 
-    global $lgsl_config;
-
-    $lgsl_config['timeout'] = intval($lgsl_config['timeout']);
-
-    stream_set_timeout($lgsl_fp, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
-    stream_set_blocking($lgsl_fp, TRUE);
+			stream_set_timeout($lgsl_fp, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
+			stream_set_blocking($lgsl_fp, TRUE);
+			
+		}
+		else {			
+			if ($lgsl_function == "lgsl_query_34") //ragemp
+			{
+				$lgsl_fp = file_get_contents('https://cdn.rage.mp/master/');
+			}
+			/*elseif ($lgsl_function == "lgsl_query_35") //for fiveM
+			{
+				$lgsl_fp = array();
+				$file_get_contents("http://{$server['b']['ip']}:{$server['b']['q_port']}/info.json");
+			}*/
+		}
 
 //---------------------------------------------------------+
 //  CHECK WHAT IS NEEDED
@@ -3691,6 +3711,29 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 	}
 	return TRUE;
 }
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_query_34(&$server, &$lgsl_need, &$lgsl_fp) // Rage:MP
+  {
+		$buffer = json_decode($lgsl_fp, true);
+		$found = false;
+		foreach($buffer as $key => $value){
+			if($key == $server['b']['ip'].':'.$server['b']['c_port']){
+				$found = true;
+				$server['s']['name']       = $value['name'];
+				$server['s']['map']        = "Rage:MP";
+				$server['s']['players']    = $value['players'];
+				$server['s']['playersmax'] = $value['maxplayers'];
+				$server['e']['url']				 = $value['url'];
+				$server['e']['peak']			 = $value['peak'];
+				$server['e']['gamemode']	 = $value['gamemode'];
+				$server['e']['lang']			 = $value['lang'];
+				break;
+			}
+		}
+    return $found;
+  }
 
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
