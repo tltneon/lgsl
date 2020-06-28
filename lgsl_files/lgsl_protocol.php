@@ -50,6 +50,7 @@
     "dh2005"        => "Deer Hunter 2005",
     "farcry"        => "Far Cry",
     "fear"          => "F.E.A.R.",
+    "fivem"         => "FiveM",
     "flashpoint"    => "Operation Flashpoint",
     "freelancer"    => "Freelancer",
     "frontlines"    => "Frontlines: Fuel Of War",
@@ -174,6 +175,7 @@
     "il2"           => "03",
     "farcry"        => "08",
     "fear"          => "09",
+    "fivem"         => "35",
     "flashpoint"    => "03",
     "freelancer"    => "14",
     "frontlines"    => "20",
@@ -296,6 +298,7 @@
     "dh2005"        => "http://en.wikipedia.org/wiki/Deer_Hunter_(computer_game)",
     "farcry"        => "qtracker://{IP}:{S_PORT}?game=FarCry&action=show",
     "fear"          => "qtracker://{IP}:{S_PORT}?game=FEAR&action=show",
+    "fivem"         => "http://fivem.net/",
     "flashpoint"    => "qtracker://{IP}:{S_PORT}?game=OperationFlashpoint&action=show",
     "freelancer"    => "http://en.wikipedia.org/wiki/Freelancer_(computer_game)",
     "frontlines"    => "http://en.wikipedia.org/wiki/Frontlines:_Fuel_of_War",
@@ -510,7 +513,7 @@
     {
       $response = lgsl_query_feed($server, $request, $lgsl_config['feed']['method'], $lgsl_config['feed']['url']);
     }
-    elseif ($lgsl_function == "lgsl_query_34" || $lgsl_function == "lgsl_query_35")
+    elseif ($lgsl_function == "lgsl_query_34" || $lgsl_function == "lgsl_query_36")
     {
       $response = lgsl_query_direct($server, $request, $lgsl_function, "http");
     }
@@ -586,11 +589,6 @@
 			{
 				$lgsl_fp = file_get_contents('https://cdn.rage.mp/master/');
 			}
-			/*elseif ($lgsl_function == "lgsl_query_35") //for fiveM
-			{
-				$lgsl_fp = array();
-				$file_get_contents("http://{$server['b']['ip']}:{$server['b']['q_port']}/info.json");
-			}*/
 		}
 
 //---------------------------------------------------------+
@@ -3717,12 +3715,15 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
   function lgsl_query_34(&$server, &$lgsl_need, &$lgsl_fp) // Rage:MP
   {
 		$buffer = json_decode($lgsl_fp, true);
+		
+		if(!$buffer) return FALSE;
+		
 		$found = false;
 		foreach($buffer as $key => $value){
 			if($key == $server['b']['ip'].':'.$server['b']['c_port']){
 				$found = true;
 				$server['s']['name']       = $value['name'];
-				$server['s']['map']        = "Rage:MP";
+				$server['s']['map']        = "ragemp";
 				$server['s']['players']    = $value['players'];
 				$server['s']['playersmax'] = $value['maxplayers'];
 				$server['e']['url']				 = $value['url'];
@@ -3734,6 +3735,63 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 		}
     return $found;
   }
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_query_35(&$server, &$lgsl_need, &$lgsl_fp) // FiveM
+    {
+        fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo xxx");
+        $buffer = fread($lgsl_fp, 4096);
+ 
+        if (!$buffer) {
+            return false;
+        }
+ 
+        lgsl_cut_byte($buffer, 18);
+ 
+        $data = explode('\\', $buffer);
+ 
+        for ($i = 0; $i < count($data); $i += 2) {
+            if ($data[$i] == 'sv_maxclients') {
+                $server['s']['playersmax'] = $data[$i + 1];
+            }
+ 
+            if ($data[$i] == 'clients') {
+                $server['s']['players'] = $data[$i + 1];
+            }
+ 
+            if ($data[$i] == 'challenge') {
+                $server['e']['challenge'] = $data[$i + 1];
+            }
+ 
+            if ($data[$i] == 'gamename') {
+                $server['e']['gamename'] = $data[$i + 1];
+            }
+ 
+            if ($data[$i] == 'protocol') {
+                $server['e']['protocol'] = $data[$i + 1];
+            }
+ 
+            if ($data[$i] == 'hostname') {
+                $server['s']['name'] = lgsl_parse_color($data[$i + 1], "fivem");
+            }
+ 
+            if ($data[$i] == 'gametype') {
+                $server['s']['game'] = $data[$i + 1];
+            }
+ 
+            if ($data[$i] == 'mapname') {
+                $server['s']['map'] = $data[$i + 1];
+            }
+ 
+            if ($data[$i] == 'iv') {
+                $server['e']['iv'] = $data[$i + 1];
+            }
+ 
+        }
+ 
+        return true;
+    }
 
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
@@ -3929,6 +3987,10 @@ function lgsl_unescape($text) {
 
       case "farcry":
         $string = preg_replace("/\\$\d/", "", $string);
+      break;
+			
+      case "fivem":
+        $string = preg_replace("/\^\d/", "", $string);
       break;
 
       case "painkiller":

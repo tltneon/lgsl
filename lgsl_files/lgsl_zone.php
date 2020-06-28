@@ -83,9 +83,9 @@
             <td style='padding:0px; text-align:center'>
               <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; padding:0px; position:relative'>
                 <a href='".lgsl_link($server['o']['id'])."'>
-                  <img alt='' src='{$misc['image_map']}'          title='{$lgsl_config['text']['vsd']}' style='border:none; vertical-align:middle' />
+                  <img alt='' src='{$misc['image_map']}'          title='{$lgsl_config['text']['vsd']}' style='border:none; vertical-align:middle; width: 100%;' />
                   <img alt='' src='{$misc['image_map_password']}' title='{$lgsl_config['text']['vsd']}' style='border:none; position:absolute; z-index:2; top:0px; left:0px;' />
-                  <img alt='' src='{$misc['icon_game']}'          title='{$misc['text_type_game']}'     style='border:none; position:absolute; z-index:2; top:4px; left:4px;' />
+                  <img alt='' src='{$misc['icon_game']}'          title='{$misc['text_type_game']}'     style='border:none; position:absolute; z-index:2; top:4px; left:4px; width: 24px; border-radius: 4px;' />
                   <img alt='' src='{$misc['icon_location']}'      title='{$misc['text_location']}'      style='border:none; position:absolute; z-index:2; top:4px; right:4px;' />
                 </a>
               </div>
@@ -107,7 +107,7 @@
 
           $output .= "
           <tr>
-            <td style='padding:0px; border:1px solid'>
+            <td style='padding: 0px 5px; border: 1px solid gray;'>
               <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; height:{$zone_height}; overflow:auto; text-align:left'>
                 <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
                 <span style='padding:1px; float:right'> {$server['s']['players']} / {$server['s']['playersmax']} </span>
