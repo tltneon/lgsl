@@ -44,6 +44,7 @@
     "crysiswars"    => "Crysis Wars",
     "cs2d"          => "Counter-Strike 2D",
     "cube"          => "Cube Engine",
+    "discord"  			=> "Discord",
     "doomskulltag"  => "Doom - Skulltag",
     "doomzdaemon"   => "Doom - ZDaemon",
     "doom3"         => "Doom 3",
@@ -164,6 +165,7 @@
     "crysiswars"    => "06",
     "cs2d"          => "29",
     "cube"          => "24",
+    "discord"  			=> "36",
     "doomskulltag"  => "27",
     "doomzdaemon"   => "28",
     "doom3"         => "10",
@@ -292,6 +294,7 @@
     "crysiswars"    => "qtracker://{IP}:{S_PORT}?game=CrysisWars&action=show",
     "cs2d"          => "http://www.cs2d.com",
     "cube"          => "http://cubeengine.com",
+    "discord"  			=> "http://discord.gg",
     "doomskulltag"  => "http://skulltag.com",
     "doomzdaemon"   => "http://www.zdaemon.org",
     "doom3"         => "qtracker://{IP}:{S_PORT}?game=Doom3&action=show",
@@ -408,6 +411,7 @@
       case "cube"          : $c_to_q = 1;     $c_def = 28785;   $q_def = 28786;   $c_to_s = 0;   break;
       case "dh2005"        : $c_to_q = 0;     $c_def = 23459;   $q_def = 34567;   $c_to_s = 0;   break;
       case "farcry"        : $c_to_q = 123;   $c_def = 49001;   $q_def = 49124;   $c_to_s = 0;   break;
+      case "fivem"         : $c_to_q = 0;   	$c_def = 30120;   $q_def = 30120;   $c_to_s = 0;   break;
       case "flashpoint"    : $c_to_q = 1;     $c_def = 2302;    $q_def = 2303;    $c_to_s = 0;   break;
       case "frontlines"    : $c_to_q = 2;     $c_def = 5476;    $q_def = 5478;    $c_to_s = 0;   break;
       case "ghostrecon"    : $c_to_q = 2;     $c_def = 2346;    $q_def = 2348;    $c_to_s = 0;   break;
@@ -421,6 +425,7 @@
       case "mohpa"         : $c_to_q = 97;    $c_def = 13203;   $q_def = 13300;   $c_to_s = 0;   break;
       case "mta"           : $c_to_q = 123;   $c_def = 22003;   $q_def = 22126;   $c_to_s = 0;   break;
       case "painkiller"    : $c_to_q = 123;   $c_def = 3455;    $q_def = 3578;    $c_to_s = 0;   break;
+      case "ragemp"   		 : $c_to_q = 0;   	$c_def = 22005;   $q_def = 22005;   $c_to_s = 0;   break;
       case "ravenshield"   : $c_to_q = 1000;  $c_def = 7777;    $q_def = 8777;    $c_to_s = 0;   break;
       case "redorchestra"  : $c_to_q = 1;     $c_def = 7758;    $q_def = 7759;    $c_to_s = 0;   break;
       case "rfactor"       : $c_to_q = -100;  $c_def = 34397;   $q_def = 34297;   $c_to_s = 0;   break;
@@ -584,10 +589,21 @@
 			stream_set_blocking($lgsl_fp, TRUE);
 			
 		}
-		else {			
-			if ($lgsl_function == "lgsl_query_34") //ragemp
+		else {
+			if ($lgsl_function == "lgsl_query_34") // ragemp
 			{
-				$lgsl_fp = file_get_contents('https://cdn.rage.mp/master/');
+				$ch =  curl_init('https://cdn.rage.mp/master/');
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+				$lgsl_fp = curl_exec($ch);
+				curl_close($ch);
+			}
+			elseif ($lgsl_function == "lgsl_query_36") // discord
+			{
+				$lgsl_fp = file_get_contents("http://discordapp.com/api/guilds/438539061737685004/widget.json");
 			}
 		}
 
@@ -3739,59 +3755,57 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 //------------------------------------------------------------------------------------------------------------+
 
   function lgsl_query_35(&$server, &$lgsl_need, &$lgsl_fp) // FiveM
-    {
-        fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo xxx");
-        $buffer = fread($lgsl_fp, 4096);
- 
-        if (!$buffer) {
-            return false;
-        }
- 
-        lgsl_cut_byte($buffer, 18);
- 
-        $data = explode('\\', $buffer);
- 
-        for ($i = 0; $i < count($data); $i += 2) {
-            if ($data[$i] == 'sv_maxclients') {
-                $server['s']['playersmax'] = $data[$i + 1];
-            }
- 
-            if ($data[$i] == 'clients') {
-                $server['s']['players'] = $data[$i + 1];
-            }
- 
-            if ($data[$i] == 'challenge') {
-                $server['e']['challenge'] = $data[$i + 1];
-            }
- 
-            if ($data[$i] == 'gamename') {
-                $server['e']['gamename'] = $data[$i + 1];
-            }
- 
-            if ($data[$i] == 'protocol') {
-                $server['e']['protocol'] = $data[$i + 1];
-            }
- 
-            if ($data[$i] == 'hostname') {
-                $server['s']['name'] = lgsl_parse_color($data[$i + 1], "fivem");
-            }
- 
-            if ($data[$i] == 'gametype') {
-                $server['s']['game'] = $data[$i + 1];
-            }
- 
-            if ($data[$i] == 'mapname') {
-                $server['s']['map'] = $data[$i + 1];
-            }
- 
-            if ($data[$i] == 'iv') {
-                $server['e']['iv'] = $data[$i + 1];
-            }
- 
-        }
- 
-        return true;
-    }
+	{
+		fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo xxx");
+		$buffer = fread($lgsl_fp, 4096);
+
+		if(!$buffer) return FALSE;
+
+		lgsl_cut_byte($buffer, 18);
+
+		$data = explode('\\', $buffer);
+
+		for ($i = 0; $i < count($data); $i += 2) {
+			switch($data[$i]){
+				case 'sv_maxclients': $server['s']['playersmax'] = $data[$i + 1]; break;
+				case 'clients': $server['s']['players'] = $data[$i + 1]; break;
+				case 'hostname': $server['s']['name'] = lgsl_parse_color($data[$i + 1], "fivem"); break;
+				case 'mapname': $server['s']['map'] = $data[$i + 1]; break;
+				default: $server['e'][$data[$i]] = $data[$i + 1]; break;
+			}
+		}
+			return true;
+	}
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_query_36(&$server, &$lgsl_need, &$lgsl_fp) // Discord
+	{
+		$buffer = json_decode($lgsl_fp, true);
+		
+		if(!$buffer) return FALSE;
+		
+		$server['s']['name'] = $buffer['name'];
+		$server['s']['map'] = 'discord';
+		$server['s']['players'] = $buffer['presence_count'];
+		$server['s']['playersmax'] = 10000;
+		$server['e']['instant_invite'] = $buffer['instant_invite'];
+		$server['e']['id'] = $buffer['id'];
+		
+		if(isset($buffer['channels']))
+			foreach($buffer['channels'] as $key => $value){
+				$server['e']['channel'.$key] = $value['name'];
+			}
+			
+		if(isset($buffer['members']))
+			foreach($buffer['members'] as $key => $value){
+				$server['p'][$key]['name'] = $value['username'];
+				$server['p'][$key]['status'] = $value['status'];
+				$server['p'][$key]['game'] = isset($value['game']) ? $value['game']['name'] : '--';
+			}
+			
+		return true;
+	}
 
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
