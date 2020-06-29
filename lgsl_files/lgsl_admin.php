@@ -308,7 +308,7 @@
 
         $output .= "
         <tr>
-          <td>NEW</td>
+          <td>NEW <a href='https://github.com/tltneon/lgsl/wiki/Supported-Games' target='_blank' style='position: absolute' title='How to choose query protocol?'>[?]</a></td>
           <td>
             <select name='form_type[{$id}]'>";
 //---------------------------------------------------------+

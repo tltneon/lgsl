@@ -40,6 +40,7 @@
     "callofduty2"   => "Call Of Duty 2",
     "callofduty4"   => "Call Of Duty 4",
     "cncrenegade"   => "Command and Conquer: Renegade",
+    "conanexiles"   => "Conan Exiles",
     "crysis"        => "Crysis",
     "crysiswars"    => "Crysis Wars",
     "cs2d"          => "Counter-Strike 2D",
@@ -111,7 +112,6 @@
     "starwarsbf2"   => "Star Wars: Battlefront 2",
     "starwarsrc"    => "Star Wars: Republic Commando",
     "swat4"         => "SWAT 4",
-    "test"          => "Test ( For PHP Developers )",
     "teeworlds"     => "Teeworlds",
     "tribes"        => "Tribes ( Starsiege )",
     "tribes2"       => "Tribes 2",
@@ -130,7 +130,9 @@
     "warsowold"     => "Warsow ( 0.4.2 and older )",
     "wolfet"        => "Wolfenstein: Enemy Territory",
     "wolfrtcw"      => "Wolfenstein: Return To Castle Wolfenstein",
-    "wolf2009"      => "Wolfenstein ( 2009 By Raven )");
+    "wolf2009"      => "Wolfenstein ( 2009 By Raven )",
+    "test"          => "~ Test ( For PHP Developers )"
+		);
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -161,6 +163,7 @@
     "callofduty2"   => "02",
     "callofduty4"   => "02",
     "cncrenegade"   => "03",
+    "conanexiles"   => "05",
     "crysis"        => "06",
     "crysiswars"    => "06",
     "cs2d"          => "29",
@@ -290,11 +293,12 @@
     "callofduty2"   => "qtracker://{IP}:{S_PORT}?game=CallOfDuty2&action=show",
     "callofduty4"   => "qtracker://{IP}:{S_PORT}?game=CallOfDuty4&action=show",
     "cncrenegade"   => "qtracker://{IP}:{S_PORT}?game=CommandConquerRenegade&action=show",
+    "conanexiles"   => "steam://connect/{IP}:{S_PORT}",
     "crysis"        => "qtracker://{IP}:{S_PORT}?game=Crysis&action=show",
     "crysiswars"    => "qtracker://{IP}:{S_PORT}?game=CrysisWars&action=show",
     "cs2d"          => "http://www.cs2d.com",
     "cube"          => "http://cubeengine.com",
-    "discord"       => "http://discord.gg",
+    "discord"       => "http://discord.gg/invite/{IP}",
     "doomskulltag"  => "http://skulltag.com",
     "doomzdaemon"   => "http://www.zdaemon.org",
     "doom3"         => "qtracker://{IP}:{S_PORT}?game=Doom3&action=show",
@@ -387,6 +391,9 @@
 
     // TRY USING THE STANDARD LAUNCH LINK FOR ALTERNATE PROTOCOLS IF ONE IS NOT SET
     if (!isset($lgsl_software_link[$type])) { $type = str_replace("_", "", $type); }
+		
+		// ONLY FOR DISCORD
+		if ($type == "discord") { $ip = explode(".", $ip)[1]; }
 
     // INSERT DATA INTO STATIC LINK - CONVERT SPECIAL CHARACTERS - RETURN
     return htmlentities(str_replace(array("{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}"), array($ip, $c_port, $q_port, $s_port), $lgsl_software_link[$type]), ENT_QUOTES);
@@ -603,7 +610,8 @@
 			}
 			elseif ($lgsl_function == "lgsl_query_36") // discord
 			{
-				$lgsl_fp = file_get_contents("https://discordapp.com/api/guilds/{$server['b']['ip']}/widget.json");
+				$_ip = explode(".", $server['b']['ip'])[0];
+				$lgsl_fp = file_get_contents("https://discordapp.com/api/guilds/{$_ip}/widget.json");
 			}
 		}
 
