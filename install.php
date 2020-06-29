@@ -12,42 +12,47 @@
 		
 	if(isset($_POST["_createtables"])){
 		if(empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])){
-			printf("You need to fill inputs (step 1) correctly.\n");
+			echo('<l k="filli"></l>');
 		}
 		else { 
-			$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
-				
-			if (!$lgsl_database) {
-				printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
+			try {
+				$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
+
+				if (!$lgsl_database) {
+					printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
+				}
+				else {
+					$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
+					if(mysqli_query($lgsl_database, "
+						CREATE TABLE `".$_POST["table"]."` (
+
+							`id`         INT     (11)  NOT NULL auto_increment,
+							`type`       VARCHAR (50)  NOT NULL DEFAULT '',
+							`ip`         VARCHAR (255) NOT NULL DEFAULT '',
+							`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+							`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+							`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+							`zone`       VARCHAR (255) NOT NULL DEFAULT '',
+							`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
+							`comment`    VARCHAR (255) NOT NULL DEFAULT '',
+							`status`     TINYINT (1)   NOT NULL DEFAULT '0',
+							`cache`      TEXT          NOT NULL,
+							`cache_time` TEXT          NOT NULL,
+
+							PRIMARY KEY (`id`)
+
+						) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;") === TRUE){
+							printf("");
+							$installed = "disabled";
+						}
+						else {
+							printf('<l k="table"></l>');
+						}
+					mysqli_close($lgsl_database);
+				}
 			}
-			else {
-				$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
-				if(mysqli_query($lgsl_database, "
-					CREATE TABLE `".$_POST["table"]."` (
-
-						`id`         INT     (11)  NOT NULL auto_increment,
-						`type`       VARCHAR (50)  NOT NULL DEFAULT '',
-						`ip`         VARCHAR (255) NOT NULL DEFAULT '',
-						`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-						`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-						`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
-						`zone`       VARCHAR (255) NOT NULL DEFAULT '',
-						`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
-						`comment`    VARCHAR (255) NOT NULL DEFAULT '',
-						`status`     TINYINT (1)   NOT NULL DEFAULT '0',
-						`cache`      TEXT          NOT NULL,
-						`cache_time` TEXT          NOT NULL,
-
-						PRIMARY KEY (`id`)
-
-					) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;") === TRUE){
-						printf("LGSL table created <span style='color: green;'>successfully</span>.\n");
-						$installed = "disabled";
-					}
-					else {
-						printf("LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table ".$_POST["table"]." already exists.\n");
-					}
-				mysqli_close($lgsl_database);
+			catch (Error $e) {
+				printf('<l k="mysld"></l>');
 			}
 		}
 	}
@@ -55,11 +60,11 @@
         $fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
         if (!$fp) {
             echo "ERROR: $errno - $errstr<br />\n";
-            echo "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).\n";
+            echo "<l k='coutd'></l>\n";
         } else {
             fwrite($fp, "\n");
             echo fread($fp, 26);
-            echo "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.";
+            echo "<l k='consu'></l>";
             fclose($fp);
         }
     }
@@ -93,7 +98,7 @@
 				margin: 0;
 				text-decoration: underline;
 			}
-			input[type="submit"]{
+			button{
 				margin: auto;
 				display: block;
 				width: 50%;
@@ -108,16 +113,16 @@
 //------------------------------------------------------------------------------------------------------------+
 
 	$output = '
-	<h6><a href="./">< Back</a> | <a href="?test_udp">Test UDP</a></h6>
-	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank">Online Wiki: How to</a></h5>
-	<h4>Step 1: Install LGSL Tables</h4>
+	<h6><a href="./"><l k="back"></l></a> | <a href="?test_udp">Test UDP</a></h6>
+	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank"><l k="owiki"></l></a></h5>
+	<h4><l k="step1"></l></h4>
 	<form method="post" action="?">
 		<p>
-			MySQL Server:
+			MySQL Server*:
 			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" '.$installed.' />
 		</p>
 		<p>
-			MySQL Login:
+			MySQL Login*:
 			<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" '.$installed.' />
 		</p>
 		<p>
@@ -125,34 +130,36 @@
 			<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" '.$installed.' />
 		</p>
 		<p>
-			MySQL Database:
+			MySQL Database*:
 			<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" '.$installed.' />
 		</p>
 		<p>
-			MySQL Table:
+			MySQL Table*:
 			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" '.$installed.' />
 		</p>
 		<input type="hidden" name="_createtables" value="1" />
-		<input type="submit" value="Create tables" '.$installed.' />
+		<button type="submit" '.$installed.'>
+			<l k="creat"></l>
+		</button>
 	</form>
 	
 	<br />
 	
-	<h4>Step 2: Configurating LGSL</h4>
+	<h4><l k="step2"></l></h4>
 	
 	<p>
-		LGSL Admin Login:
+		LGSL Admin Login*:
 		<input type="text" onChange="vars.lgsl_user = event.target.value" />
 	</p>
 	<p>
-		LGSL Admin Password:
+		LGSL Admin Password*:
 		<input type="text" onChange="vars.lgsl_password = event.target.value" />
 	</p>
 	
 	<hr />
 	
 	<p>
-		Select style:
+		<l k="selst"></l>:
 		<select type="text" name="style" onChange="changeValue(event, {styleChanged: true})" />
 			<option value="darken_style.css">Darken</option>
 			<option value="ogp_style.css">OGP</option>
@@ -165,7 +172,7 @@
 		</select>
 	</p>
 	<p>
-		Select language:
+		<l k="sella"></l>:
 		<select type="text" name="language" onChange="changeValue(event, {translationInput: true})" />
 			<option value="english">English</option>
 			<option value="russian">Русский</option>
@@ -181,7 +188,7 @@
 	<hr />
 	
 	<p>
-		Sort servers by:
+		<l k="sorts"></l>:
 		<select type="text" name="sort_servers_by" onChange="changeValue(event)" />
 			<option value="id">ID</option>
 			<option value="type">Type</option>
@@ -191,22 +198,22 @@
 		</select>
 	</p>
 	<p>
-		Sort players by:
+		<l k="sortp"></l>:
 		<select type="text" name="sort_players_by" onChange="changeValue(event)" />
 			<option value="name">Name</option>
 			<option value="score">Score</option>
 		</select>
 	</p>
 	<p>
-		Enable image mod:
+		<l k="enaim"></l>:
 		<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)" />
 	</p>	
 	<p>
-		Hide offline servers:
+		<l k="hideo"></l>:
 		<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)" />
 	</p>	
 	<p>
-		Public add servers:
+		<l k="pubad"></l>:
 		<select type="text" name="public_add" onChange="changeValue(event)" />
 			<option value="0">Disabled</option>
 			<option value="1">Enabled (require approval)</option>
@@ -214,11 +221,11 @@
 		</select>
 	</p>	
 	<p>
-		Show totals:
+		<l k="showt"></l>:
 		<input type="checkbox" name="totals" onChange="changeCheckbox(event)" />
 	</p>	
 	<p>
-		Show locations:
+		<l k="showl"></l>:
 		<select type="text" name="locations" onChange="changeValue(event)" />
 			<option value="0">Disabled</option>
 			<option value="1">Auto-detect</option>
@@ -227,10 +234,13 @@
 		</select>
 	</p>	
 	
-	<input type="submit" value="Generate config" onClick="generateConfig()" / >
-	<p style="color: red; font-size: 12pt;">* Remember to remove the install.php after install LGSL!</p>
+	<button onClick="generateConfig()">
+		<l k="gener"></l>
+	</button>
+	
+	<p style="color: red; font-size: 12pt;"><l k="remem"></l></p>
 	<hr />
-	<p style="font-size: 9pt;">After you make config, replace it into lgsl_files/lgsl_config.php</p>
+	<p style="font-size: 9pt;"><l k="after"></l></p>
 	';
   
   echo $output;
@@ -243,6 +253,16 @@
 </html>
 
 <script>
+document.addEventListener("DOMContentLoaded", reloadLocale);
+document.addEventListener("reloadLocale", reloadLocale);
+	function reloadLocale(){
+		document.querySelectorAll("l").forEach(
+			(item, i, arr)=>{
+				updateLValue(item, item.getAttribute("k"));
+			}
+		);
+	}
+	var locale = "english";
 	let vars = {
 		mysql_server: "<?php echo $mysql_server; ?>",
 		mysql_user: "<?php echo $mysql_user; ?>",
@@ -267,18 +287,212 @@
 			document.getElementsByTagName("link")[0].href = href='lgsl_files/styles/'+event.target.value;
 		}
 		if(options.translationInput){
-			event.target.value = "english";
-			window.open("https://github.com/tltneon/lgsl/wiki#how-do-i-change-language");
+			if(event.target.value == "help"){
+				event.target.value = "english";
+				window.open("https://github.com/tltneon/lgsl/wiki#how-do-i-change-language");
+			}
+			locale = event.target.value;
+			document.dispatchEvent(new Event("reloadLocale"));
 		}
 		vars[event.target.name] = event.target.value;
 	}
 	function changeCheckbox(event) {
 		vars[event.target.name] = event.target.checked;
 	}
-	
+	function updateLValue(el, key){
+		el.innerText = "";
+		el.insertAdjacentHTML('beforeend', l(key));
+	}
+	function l(key){
+		let t = {
+			"english": {
+				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
+				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
+				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
+				"coutd": "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).",
+				"remem": "Remember to remove the install.php after install LGSL!",
+				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"selst": "Select style",
+				"sella": "Select language",
+				"sorts": "Sort servers by",
+				"sortp": "Sort players by",
+				"enaim": "Enable image mod",
+				"hideo": "Hide offline servers",
+				"pubad": "Public add servers",
+				"showt": "Show totals",
+				"showl": "Show locations",
+				"step1": "Step 1: Install LGSL Tables",
+				"step2": "Step 2: Configurating LGSL",
+				"back": "< Back",
+				"owiki": "Online Wiki: How to",
+				"gener": "Generate config",
+				"creat": "Create tables",
+				"filla": "You need to fill required* inputs (step 2).",
+				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+			},
+			"russian": {
+				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
+				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
+				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
+				"coutd": "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).",
+				"remem": "Remember to remove the install.php after install LGSL!",
+				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"selst": "Select style",
+				"sella": "Select language",
+				"sorts": "Sort servers by",
+				"sortp": "Sort players by",
+				"enaim": "Enable image mod",
+				"hideo": "Hide offline servers",
+				"pubad": "Public add servers",
+				"showt": "Show totals",
+				"showl": "Show locations",
+				"step1": "Step 1: Install LGSL Tables",
+				"step2": "Step 2: Configurating LGSL",
+				"back": "< Назад",
+				"owiki": "Online Wiki: How to",
+				"gener": "Generate config",
+				"creat": "Create tables",
+				"filla": "You need to fill required* inputs (step 2).",
+				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+			},
+			"french": {
+				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
+				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
+				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
+				"coutd": "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).",
+				"remem": "Remember to remove the install.php after install LGSL!",
+				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"selst": "Select style",
+				"sella": "Select language",
+				"sorts": "Sort servers by",
+				"sortp": "Sort players by",
+				"enaim": "Enable image mod",
+				"hideo": "Hide offline servers",
+				"pubad": "Public add servers",
+				"showt": "Show totals",
+				"showl": "Show locations",
+				"step1": "Step 1: Install LGSL Tables",
+				"step2": "Step 2: Configurating LGSL",
+				"back": "< Arrière",
+				"owiki": "Online Wiki: How to",
+				"gener": "Generate config",
+				"creat": "Create tables",
+				"filla": "You need to fill required* inputs (step 2).",
+				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+			},
+			"german": {
+				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
+				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
+				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
+				"coutd": "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).",
+				"remem": "Remember to remove the install.php after install LGSL!",
+				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"selst": "Select style",
+				"sella": "Select language",
+				"sorts": "Sort servers by",
+				"sortp": "Sort players by",
+				"enaim": "Enable image mod",
+				"hideo": "Hide offline servers",
+				"pubad": "Public add servers",
+				"showt": "Show totals",
+				"showl": "Show locations",
+				"step1": "Step 1: Install LGSL Tables",
+				"step2": "Step 2: Configurating LGSL",
+				"back": "< Zurück",
+				"owiki": "Online Wiki: How to",
+				"gener": "Generate config",
+				"creat": "Create tables",
+				"filla": "You need to fill required* inputs (step 2).",
+				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+			},
+			"spanish": {
+				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
+				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
+				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
+				"coutd": "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).",
+				"remem": "Remember to remove the install.php after install LGSL!",
+				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"selst": "Select style",
+				"sella": "Select language",
+				"sorts": "Sort servers by",
+				"sortp": "Sort players by",
+				"enaim": "Enable image mod",
+				"hideo": "Hide offline servers",
+				"pubad": "Public add servers",
+				"showt": "Show totals",
+				"showl": "Show locations",
+				"step1": "Step 1: Install LGSL Tables",
+				"step2": "Step 2: Configurating LGSL",
+				"back": "< Espalda",
+				"owiki": "Online Wiki: How to",
+				"gener": "Generate config",
+				"creat": "Create tables",
+				"filla": "You need to fill required* inputs (step 2).",
+				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+			},
+			"czech": {
+				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
+				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
+				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
+				"coutd": "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).",
+				"remem": "Remember to remove the install.php after install LGSL!",
+				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"selst": "Select style",
+				"sella": "Select language",
+				"sorts": "Sort servers by",
+				"sortp": "Sort players by",
+				"enaim": "Enable image mod",
+				"hideo": "Hide offline servers",
+				"pubad": "Public add servers",
+				"showt": "Show totals",
+				"showl": "Show locations",
+				"step1": "Step 1: Install LGSL Tables",
+				"step2": "Step 2: Configurating LGSL",
+				"back": "< Zadní",
+				"owiki": "Online Wiki: How to",
+				"gener": "Generate config",
+				"creat": "Create tables",
+				"filla": "You need to fill required* inputs (step 2).",
+				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+			},
+			"bulgarian": {
+				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
+				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
+				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
+				"coutd": "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).",
+				"remem": "Remember to remove the install.php after install LGSL!",
+				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"selst": "Select style",
+				"sella": "Select language",
+				"sorts": "Sort servers by",
+				"sortp": "Sort players by",
+				"enaim": "Enable image mod",
+				"hideo": "Hide offline servers",
+				"pubad": "Public add servers",
+				"showt": "Show totals",
+				"showl": "Show locations",
+				"step1": "Step 1: Install LGSL Tables",
+				"step2": "Step 2: Configurating LGSL",
+				"back": "< Обратно",
+				"owiki": "Online Wiki: How to",
+				"gener": "Generate config",
+				"creat": "Create tables",
+				"filla": "You need to fill required* inputs (step 2).",
+				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+			},
+		}
+		return t[locale][key];
+	}
 	function generateConfig()
 	{
-		if(vars.mysql_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert("You need to fill inputs");
+		if(vars.mysql_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
 		let textarea = document.body.getElementsByTagName("textarea")[0] ? document.body.getElementsByTagName("textarea")[0] : document.createElement("textarea");
 		document.body.getElementsByTagName("div")[0].appendChild(textarea);
 		textarea.innerHTML = "&lt;?php \n" +
