@@ -116,8 +116,8 @@
     "tribes"        => "Tribes ( Starsiege )",
     "tribes2"       => "Tribes 2",
     "tribesv"       => "Tribes Vengeance",
-		"ts"						=> "Teamspeak",
-		"ts3"						=> "Teamspeak 3",
+    "ts"            => "Teamspeak",
+    "ts3"           => "Teamspeak 3",
     "urbanterror"   => "UrbanTerror",
     "ut"            => "Unreal Tournament",
     "ut2003"        => "Unreal Tournament 2003",
@@ -165,7 +165,7 @@
     "crysiswars"    => "06",
     "cs2d"          => "29",
     "cube"          => "24",
-    "discord"  			=> "36",
+    "discord"       => "36",
     "doomskulltag"  => "27",
     "doomzdaemon"   => "28",
     "doom3"         => "10",
@@ -217,7 +217,7 @@
     "quake2"        => "02",
     "quake3"        => "02",
     "quake4"        => "10",
-		"ragemp"				=> "34",
+    "ragemp"        => "34",
     "ravenshield"   => "04",
     "redorchestra"  => "13",
     "rfactor"       => "16",
@@ -242,8 +242,8 @@
     "tribes"        => "23",
     "tribes2"       => "25",
     "tribesv"       => "09",
-		"ts"						=> "33",
-		"ts3"						=> "33",
+    "ts"            => "33",
+    "ts3"           => "33",
     "warsow"        => "02",
     "warsowold"     => "02",
     "urbanterror"   => "02",
@@ -294,7 +294,7 @@
     "crysiswars"    => "qtracker://{IP}:{S_PORT}?game=CrysisWars&action=show",
     "cs2d"          => "http://www.cs2d.com",
     "cube"          => "http://cubeengine.com",
-    "discord"  			=> "http://discord.gg",
+    "discord"       => "http://discord.gg",
     "doomskulltag"  => "http://skulltag.com",
     "doomzdaemon"   => "http://www.zdaemon.org",
     "doom3"         => "qtracker://{IP}:{S_PORT}?game=Doom3&action=show",
@@ -341,7 +341,7 @@
     "quake2"        => "qtracker://{IP}:{S_PORT}?game=Quake2&action=show",
     "quake3"        => "qtracker://{IP}:{S_PORT}?game=Quake3&action=show",
     "quake4"        => "qtracker://{IP}:{S_PORT}?game=Quake4&action=show",
-    "ragemp"   			=> "rage://v/connect?ip={IP}:{S_PORT}",
+    "ragemp"        => "rage://v/connect?ip={IP}:{S_PORT}",
     "ravenshield"   => "http://en.wikipedia.org/wiki/Tom_Clancy's_Rainbow_Six_3",
     "redorchestra"  => "qtracker://{IP}:{S_PORT}?game=RedOrchestra&action=show",
     "rfactor"       => "rfactor://{IP}:{S_PORT}",
@@ -366,8 +366,8 @@
     "tribes"        => "qtracker://{IP}:{S_PORT}?game=Tribes&action=show",
     "tribes2"       => "qtracker://{IP}:{S_PORT}?game=Tribes2&action=show",
     "tribesv"       => "qtracker://{IP}:{S_PORT}?game=TribesVengeance&action=show",
-    "ts"						=> "http://www.teamspeak.com",
-    "ts3" 					=> "ts3server://{IP}?port={C_PORT}",
+    "ts"            => "http://www.teamspeak.com",
+    "ts3"           => "ts3server://{IP}?port={C_PORT}",
     "urbanterror"   => "qtracker://{IP}:{S_PORT}?game=UrbanTerror&action=show",
     "ut"            => "qtracker://{IP}:{S_PORT}?game=UnrealTournament&action=show",
     "ut2003"        => "qtracker://{IP}:{S_PORT}?game=UnrealTournament2003&action=show",
@@ -402,7 +402,7 @@
       case "aarmy"         : $c_to_q = 1;     $c_def = 1716;    $q_def = 1717;    $c_to_s = 0;   break;
       case "aarmy3"        : $c_to_q = 0;     $c_def = 8777;    $q_def = 39300;   $c_to_s = 0;   break;
       case "arcasimracing" : $c_to_q = -100;  $c_def = 34397;   $q_def = 34297;   $c_to_s = 0;   break;
-      case "arma3"				 : $c_to_q = 0;		  $c_def = 2302; 		$q_def = 2303;	 	$c_to_s = 0; 	 break;
+      case "arma3"         : $c_to_q = 0;     $c_def = 2302;    $q_def = 2303;    $c_to_s = 0; 	 break;
       case "bfbc2"         : $c_to_q = 0;     $c_def = 19567;   $q_def = 48888;   $c_to_s = 0;   break;
       case "bfvietnam"     : $c_to_q = 0;     $c_def = 15567;   $q_def = 23000;   $c_to_s = 0;   break;
       case "bf1942"        : $c_to_q = 0;     $c_def = 14567;   $q_def = 23000;   $c_to_s = 0;   break;
@@ -411,7 +411,7 @@
       case "cube"          : $c_to_q = 1;     $c_def = 28785;   $q_def = 28786;   $c_to_s = 0;   break;
       case "dh2005"        : $c_to_q = 0;     $c_def = 23459;   $q_def = 34567;   $c_to_s = 0;   break;
       case "farcry"        : $c_to_q = 123;   $c_def = 49001;   $q_def = 49124;   $c_to_s = 0;   break;
-      case "fivem"         : $c_to_q = 0;   	$c_def = 30120;   $q_def = 30120;   $c_to_s = 0;   break;
+      case "fivem"         : $c_to_q = 0;     $c_def = 30120;   $q_def = 30120;   $c_to_s = 0;   break;
       case "flashpoint"    : $c_to_q = 1;     $c_def = 2302;    $q_def = 2303;    $c_to_s = 0;   break;
       case "frontlines"    : $c_to_q = 2;     $c_def = 5476;    $q_def = 5478;    $c_to_s = 0;   break;
       case "ghostrecon"    : $c_to_q = 2;     $c_def = 2346;    $q_def = 2348;    $c_to_s = 0;   break;
@@ -425,7 +425,7 @@
       case "mohpa"         : $c_to_q = 97;    $c_def = 13203;   $q_def = 13300;   $c_to_s = 0;   break;
       case "mta"           : $c_to_q = 123;   $c_def = 22003;   $q_def = 22126;   $c_to_s = 0;   break;
       case "painkiller"    : $c_to_q = 123;   $c_def = 3455;    $q_def = 3578;    $c_to_s = 0;   break;
-      case "ragemp"   		 : $c_to_q = 0;   	$c_def = 22005;   $q_def = 22005;   $c_to_s = 0;   break;
+      case "ragemp"        : $c_to_q = 0;     $c_def = 22005;   $q_def = 22005;   $c_to_s = 0;   break;
       case "ravenshield"   : $c_to_q = 1000;  $c_def = 7777;    $q_def = 8777;    $c_to_s = 0;   break;
       case "redorchestra"  : $c_to_q = 1;     $c_def = 7758;    $q_def = 7759;    $c_to_s = 0;   break;
       case "rfactor"       : $c_to_q = -100;  $c_def = 34397;   $q_def = 34297;   $c_to_s = 0;   break;
@@ -436,8 +436,8 @@
       case "starwarsrc"    : $c_to_q = 0;     $c_def = 7777;    $q_def = 11138;   $c_to_s = 0;   break;
       case "swat4"         : $c_to_q = 1;     $c_def = 10780;   $q_def = 10781;   $c_to_s = 0;   break;
       case "tribesv"       : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
-			case "ts"						 : $c_to_q = 0;     $c_def = 8767;		$q_def = 51234;		$c_to_s = 0; 	 break;
-			case "ts3"					 : $c_to_q = 0; 		$c_def = 9987;		$q_def = 10011; 	$c_to_s = 0; 	 break;
+      case "ts"	           : $c_to_q = 0;     $c_def = 8767;    $q_def = 51234;   $c_to_s = 0; 	 break;
+      case "ts3"           : $c_to_q = 0;     $c_def = 9987;    $q_def = 10011;   $c_to_s = 0; 	 break;
       case "ut"            : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
       case "ut2003"        : $c_to_q = 1;     $c_def = 7757;    $q_def = 7758;    $c_to_s = 10;  break;
       case "ut2003_"       : $c_to_q = 10;    $c_def = 7757;    $q_def = 7767;    $c_to_s = 0;   break;
@@ -603,7 +603,7 @@
 			}
 			elseif ($lgsl_function == "lgsl_query_36") // discord
 			{
-				$lgsl_fp = file_get_contents("http://discordapp.com/api/guilds/438539061737685004/widget.json");
+				$lgsl_fp = file_get_contents("https://discordapp.com/api/guilds/{$server['b']['ip']}/widget.json");
 			}
 		}
 
