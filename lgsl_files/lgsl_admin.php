@@ -127,6 +127,95 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
+  if (!empty($_POST['lgsl_check_updates']))
+  {
+		
+		$context = stream_context_create(
+				array(
+						"http" => array(
+								"header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+						)
+				)
+		);
+		$lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/branches/master", false, $context);
+		$buffer1 = json_decode($lgsl_fp, true);
+		 
+		$lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/releases/latest", false, $context);
+		$buffer2 = json_decode($lgsl_fp, true);
+ 
+		$output .= '
+			<div class="tt">
+				<div class="inlined">
+					<div>
+						<h4>Latest commit (beta)</h4>
+					</div>
+					<div>
+						<div>'.$buffer1["commit"]["commit"]["message"].'</div>
+						<tt>'.date("Y-m-d H:i:s", strtotime($buffer1["commit"]["commit"]["author"]["date"])).'</tt>
+						<div>
+							<a href="https://github.com/tltneon/lgsl/archive/master.zip">Download</a> or <a href="'.$buffer1["commit"]["html_url"].'">Changes</a>
+						</div>
+					</div>
+				</div>
+				<div  class="inlined">
+					<div>
+						<h4>Latest release (stable)</h4>
+					</div>
+					<div>
+						<div>'.$buffer2["name"].'</div>
+						<tt>'.date("Y-m-d H:i:s", strtotime($buffer2["published_at"])).'</tt>
+						<div>
+							<a href="'.$buffer2["assets"][0]["browser_download_url"].'">Download</a> or <a href="'.$buffer2["html_url"].'">Changelog</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<style>
+				.inlined {
+					display: inline-block; 
+					width: 300px;
+					vertical-align: top;
+				}
+				.tt{
+					margin: auto;
+					width: 610px;
+				}
+				.tt > .inlined:nth-child(2) {
+					text-align: end;
+				}
+				.inlined > div > div:first-child {
+					height: 50px;
+				}
+				@media(max-width: 414px){
+					.inlined {
+						display: block;
+						width: 100%;
+						vertical-align: top;
+					}
+					.tt{
+						width: auto;
+					}
+				}
+			</style>
+		';
+
+    $output .= "
+    <form method='post' action=''>
+      <div>
+        <br />
+        <br />
+        <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+        <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
+        <br />
+        <br />
+      </div>
+    </form>";
+
+    return;
+  }
+	
+//------------------------------------------------------------------------------------------------------------+
+
   if (!empty($_POST['lgsl_map_image_paths']))
   {
     $server_list = lgsl_query_cached_all("s");
@@ -349,6 +438,7 @@
           <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' /> </td>
           <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' />    </td>
           <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['avm']."' /></td>
+          <td><input type='submit' name='lgsl_check_updates'          value='Updates' /></td>
         </tr>
       </table>
     </div>
@@ -364,7 +454,7 @@
     return "
     <div style='text-align:center; line-height:1em; font-size:1em;'>
       <br /><br />
-      <a href='https://github.com/tltneon/lgsl/wiki'>[ LGSL ONLINE WIKI ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB (UPDATES) ]</a>  <br /><br />
+      <a href='https://github.com/tltneon/lgsl/wiki'>[ LGSL ONLINE WIKI ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB ]</a>  <br /><br />
       - To remove a server, delete the IP, then click Save.                           <br /><br />
       - Leave the query port blank to have LGSL try to fill it in for you.            <br /><br />
       - Software port is only needed for a few games so it being set 0 is normal.     <br /><br />

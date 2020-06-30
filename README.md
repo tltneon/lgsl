@@ -8,7 +8,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
-# LGSL v5.10.2 (Live Game Server List) for PHP 7+
+# LGSL v5.10.3 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (stand-alone version) from www.greycube.com. This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4-7.x and MySQL 5.5.27-8.0.x or MariaDB 5.5-10.5.x
 
 ## [Live Demos](http://lgsl-demo.freesite.vip/) | [Wiki](https://github.com/tltneon/lgsl/wiki) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games) | [Custom styles](https://github.com/tltneon/lgsl/wiki/Styles)
@@ -21,6 +21,15 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
  
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
+#### v5.10.3
+- **LGSL now has update page**
+- **Added Rage:MP protocol**
+- **Added FiveM protocol**
+- **Added Discord protocol**
+- **Added few game icons**
+- **Improvements for installation page**
+- **Major changes for Wallpaper style**
+- **Better view on mobile devices**
 #### v5.10.2
 - **LGSL now with IMG Mod!**
 	- *Author playzone46@yandex.ru*
@@ -60,19 +69,7 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 - **Added translation feature**
 	- [*You can help to translate LGSL to your language!*](https://github.com/tltneon/lgsl/tree/master/lgsl_files/languages)
 - **Added Russian language**
-#### v5.9.2
-- **Now LGSL can use custom styles**
-- **Added Breeze Style** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl/index.php)]
-- **Default style was changed to: Breeze**
-	- *Suggest your custom styles!*
-	- *Classic style is still exists to use* [[Live Demo](http://lgsl-demo.freesite.vip/lgsl3/index.php)]
-#### v5.8.2
-- **LGSL now working with PHP 7+**
-- **Added game types:**
-  - Arma 3, DayZ
-  - Counter-Strike: Global Offensive
-  - Minecraft
-  - Teamspeak, Teamspeak 3
-  - *Thanks to @Wussie*
+
+##### [:: Older versions](https://github.com/tltneon/lgsl/wiki/Changelog)
 
 Original author of LGSL - Richard Perry (www.greycube.com)
