@@ -31,7 +31,7 @@
 //[ SORTING OPTIONS ]
 
   $lgsl_config['sort']['servers'] = "id";   // OPTIONS: id  type  zone  players  status
-  $lgsl_config['sort']['players'] = "name"; // OPTIONS: name  score
+  $lgsl_config['sort']['players'] = "name"; // OPTIONS: name  score time
 
 //------------------------------------------------------------------------------------------------------------+
 //[ ZONE SIZING: HEIGHT OF PLAYER BOX DYNAMICALLY CHANGES WITH THE NUMBER OF PLAYERS ]
