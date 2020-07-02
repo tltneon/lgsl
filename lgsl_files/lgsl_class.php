@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -728,6 +728,7 @@
 
     if     ($lgsl_config['sort']['players'] == "name")  { usort($server['p'], "lgsl_sort_players_by_name");  }
     elseif ($lgsl_config['sort']['players'] == "score") { usort($server['p'], "lgsl_sort_players_by_score"); }
+    elseif ($lgsl_config['sort']['players'] == "time") { usort($server['p'], "lgsl_sort_players_by_time"); }
 
     return $server;
   }
@@ -739,6 +740,15 @@
     if ($player_a['score'] == $player_b['score']) { return 0; }
 
     return ($player_a['score'] < $player_b['score']) ? 1 : -1;
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+	 
+  function lgsl_sort_players_by_time($player_a, $player_b)
+  {
+    if ($player_a['time'] == $player_b['time']) { return 0; }
+
+    return ($player_a['time'] < $player_b['time']) ? 1 : -1;
   }
 
 //------------------------------------------------------------------------------------------------------------+
