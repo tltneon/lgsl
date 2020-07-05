@@ -202,6 +202,7 @@
 		<select type="text" name="sort_players_by" onChange="changeValue(event)" />
 			<option value="name">Name</option>
 			<option value="score">Score</option>
+			<option value="time">Time</option>
 		</select>
 	</p>
 	<p>
