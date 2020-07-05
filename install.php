@@ -181,6 +181,7 @@
 			<option value="spanish">Español</option>
 			<option value="czech">Čeština</option>
 			<option value="bulgarian">български</option>
+			<option value="slovak">Slovenčina</option>
 			<option value="help">Help to translate --></option>
 		</select>
 	</p>
@@ -481,6 +482,32 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"step1": "Step 1: Install LGSL Tables",
 				"step2": "Step 2: Configurating LGSL",
 				"back": "< Обратно",
+				"owiki": "Online Wiki: How to",
+				"gener": "Generate config",
+				"creat": "Create tables",
+				"filla": "You need to fill required* inputs (step 2).",
+				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+			},
+			"slovak": {
+				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
+				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
+				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
+				"coutd": "LGSL <span style='color: red;'>couldn't take data from game servers</span>, only teamspeak servers (UDP upflow is blocked on your hosting).",
+				"remem": "Remember to remove the install.php after install LGSL!",
+				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"selst": "Select style",
+				"sella": "Select language",
+				"sorts": "Sort servers by",
+				"sortp": "Sort players by",
+				"enaim": "Enable image mod",
+				"hideo": "Hide offline servers",
+				"pubad": "Public add servers",
+				"showt": "Show totals",
+				"showl": "Show locations",
+				"step1": "Step 1: Install LGSL Tables",
+				"step2": "Step 2: Configurating LGSL",
+				"back": "< späť",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create tables",

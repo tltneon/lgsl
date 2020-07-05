@@ -137,6 +137,7 @@
   $lgsl_config['timeout']       = 0;         // 1=gives more time for servers to respond but adds loading delay
   $lgsl_config['retry_offline'] = 0;         // 1=repeats query when there is no response but adds loading delay
   $lgsl_config['cms']           = "sa";      // sets which CMS specific code to use
+	$lgsl_config['image_mod']     = true;      // true = show userbar in server's details
 	
   include("languages/english.php");									// sets LGSL language
   // English language: "languages/english.php"  		// Richard Perry
@@ -146,5 +147,6 @@
   // Spanish language: "languages/spanish.php"  		// own3mall
   // Czech language: "languages/czech.php"			// Neon
   // Bulgarian language: "languages/bulgarian.php"		// Neon
+  // Slovak language: "languages/slovak.php"		// KristianP26
 
 //------------------------------------------------------------------------------------------------------------+
