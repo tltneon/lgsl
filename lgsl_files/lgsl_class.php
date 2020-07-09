@@ -25,7 +25,7 @@
     switch($lgsl_config['cms'])
     {
       case "e107":
-        $link = $s ? e_PLUGIN."lgsl/{$index}?s={$s}" : e_PLUGIN."lgsl/{$index}";
+        $link = $s ? e_PLUGIN_ABS."lgsl/{$index}?s={$s}" : e_PLUGIN_ABS."lgsl/{$index}";
       break;
 
       case "joomla":
