@@ -162,6 +162,9 @@
 
     foreach ($server['e'] as $field => $value)
     {
+			if(preg_match('/(https*:\/\/|www\.)([\w]*\.*)*\w+\/*([\w]*\/*)*/i', $value)){
+				$value = "<a href='".$value."' target='_blank'>".$value."</a>";
+			}
       $output .= "
       <tr>
         <td> {$field} </td>

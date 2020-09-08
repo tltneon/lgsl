@@ -755,7 +755,7 @@
 
     if (isset($server['e']['pswrd']))      { $server['s']['password'] = $server['e']['pswrd']; }              // CALL OF DUTY
     if (isset($server['e']['needpass']))   { $server['s']['password'] = $server['e']['needpass']; }           // QUAKE 2
-    if (isset($server['e']['g_needpass'])) { $server['s']['password'] = $server['e']['g_needpass']; }
+    if (isset($server['e']['g_needpass'])) { $server['s']['password'] = (int)$server['e']['g_needpass']; }
 
     array_shift($part); // REMOVE HEADER
     array_shift($part); // REMOVE SETTING

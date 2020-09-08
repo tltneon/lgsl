@@ -103,6 +103,20 @@
 				display: block;
 				width: 50%;
 			}
+			.hinfolink {
+				font-size: 10px;
+				color: blue;
+				text-decoration: none;
+				border: 1px solid blue;
+				border-radius: 32px;
+				margin-bottom: 0px;
+				vertical-align: super;
+				padding: 2px 2px 2px 3px;
+				line-height: 6px;
+				width: 6px;
+				height: 7px;
+				display: inline-block;
+			}
 		</style>
 	</head>
 
@@ -142,6 +156,8 @@
 			<l k="creat"></l>
 		</button>
 	</form>
+	
+	'.($installed == "disabled" ? '<div><l k="cretd"></l></div>' : '').'
 	
 	<br />
 	
@@ -207,7 +223,7 @@
 		</select>
 	</p>
 	<p>
-		<l k="enaim"></l>:
+		<l k="enaim"></l> <a href="https://github.com/tltneon/lgsl/wiki/LGSL-with-Image-Mod" target="_blank" class="hinfolink">?</a>:
 		<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)" />
 	</p>	
 	<p>
@@ -328,10 +344,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"back": "< Back",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
-				"creat": "Create tables",
+				"creat": "Create table",
 				"filla": "You need to fill required* inputs (step 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
 			},
 			"russian": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -354,10 +371,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"back": "< Назад",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
-				"creat": "Create tables",
+				"creat": "Create table",
 				"filla": "You need to fill required* inputs (step 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
 			},
 			"french": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -380,10 +398,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"back": "< Arrière",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
-				"creat": "Create tables",
+				"creat": "Create table",
 				"filla": "You need to fill required* inputs (step 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
 			},
 			"german": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -406,10 +425,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"back": "< Zurück",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
-				"creat": "Create tables",
+				"creat": "Create table",
 				"filla": "You need to fill required* inputs (step 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
 			},
 			"spanish": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -432,10 +452,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"back": "< Espalda",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
-				"creat": "Create tables",
+				"creat": "Create table",
 				"filla": "You need to fill required* inputs (step 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
 			},
 			"czech": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -458,10 +479,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"back": "< Zadní",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
-				"creat": "Create tables",
+				"creat": "Create table",
 				"filla": "You need to fill required* inputs (step 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
 			},
 			"bulgarian": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -484,10 +506,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"back": "< Обратно",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
-				"creat": "Create tables",
+				"creat": "Create table",
 				"filla": "You need to fill required* inputs (step 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
+				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
 			},
 			"slovak": {
 				"tablc": "LGSL tabuľka bola vytvorená <span style='color: green;'>úspešne</span>.",
@@ -514,6 +537,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"filla": "Musíš vyplniť povinné* údaje (krok 2).",
 				"mysld": "Pripojenie <span style='color: red;'>Zlyhalo</span>: PHP rozšírenie mysqli nie je aktívne.",
 				"table": "LGSL <span style='color: red;'>tabulka nebola vytvorená</span>: nesprávny názov databázy alebo tabuľka už existuje.",
+				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
 			},
 		}
 		return t[locale][key];

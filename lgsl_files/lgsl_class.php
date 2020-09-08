@@ -907,7 +907,7 @@
 
     if (long2ip(ip2long($ip)) == "255.255.255.255") { return "XX"; }
 
-    $url = "http://api.wipmania.com/".urlencode($ip)."?".urlencode($_SERVER['HTTP_HOST']);
+    $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode"; // http://api.wipmania.com/
 
     if (function_exists('curl_init') && function_exists('curl_setopt') && function_exists('curl_exec'))
     {
@@ -919,7 +919,9 @@
       curl_setopt($lgsl_curl, CURLOPT_CONNECTTIMEOUT, 2);
       curl_setopt($lgsl_curl, CURLOPT_URL, $url);
 
-      $location = curl_exec($lgsl_curl);
+      $answer = curl_exec($lgsl_curl);
+			$answer = json_decode($answer, true);
+      $location = $answer["countryCode"];
 
       if (curl_error($lgsl_curl)) { $location = "XX"; }
 

@@ -54,6 +54,7 @@ textarea {
   background-size: cover;
   width: 250px;
   height: 188px;
+	background-position: center;
 }
 .details_password_image, .details_game_image, .details_location_image {
   display: block;

@@ -47,7 +47,6 @@
 	imagecopy($im, $on_id, 8, 2, 0, 0, 16, 16);											// place status icon
 	imagecopy($im, $game_id, 26, 2, 0, 0, 16, 16);									// place game icon
 
-	putenv('GDFONTPATH=' . realpath('.'));
 	imagettftext($im, 7, 0, 44, 17, $color_map, "lgsl_files/other/verdana", 	/* map 			*/	$lgsl_config['text']['map'].": ".$server['s']['map']);
 	imagettftext($im, 7, 0, 44, 9, 	$color_ip, 	"lgsl_files/other/verdana", 	/* port 		*/ 	$server['b']['ip'].":".$server['b']['c_port']);
 	imagettftext($im, 8, 0, 150, 10, $color_pz, "lgsl_files/other/verdana", 	/* name 		*/	$server['s']['name']);
