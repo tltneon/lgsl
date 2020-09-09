@@ -298,7 +298,7 @@
     "crysiswars"    => "qtracker://{IP}:{S_PORT}?game=CrysisWars&action=show",
     "cs2d"          => "http://www.cs2d.com",
     "cube"          => "http://cubeengine.com",
-    "discord"       => "http://discord.gg/invite/{IP}",
+    "discord"       => "http://discord.gg/{IP}",
     "doomskulltag"  => "http://skulltag.com",
     "doomzdaemon"   => "http://www.zdaemon.org",
     "doom3"         => "qtracker://{IP}:{S_PORT}?game=Doom3&action=show",
@@ -391,9 +391,6 @@
 
     // TRY USING THE STANDARD LAUNCH LINK FOR ALTERNATE PROTOCOLS IF ONE IS NOT SET
     if (!isset($lgsl_software_link[$type])) { $type = str_replace("_", "", $type); }
-		
-		// ONLY FOR DISCORD
-		if ($type == "discord") { $ip = explode(".", $ip)[1]; }
 
     // INSERT DATA INTO STATIC LINK - CONVERT SPECIAL CHARACTERS - RETURN
     return htmlentities(str_replace(array("{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}"), array($ip, $c_port, $q_port, $s_port), $lgsl_software_link[$type]), ENT_QUOTES);
@@ -475,7 +472,7 @@
   {
 //---------------------------------------------------------+
 
-    if (preg_match("/[^0-9a-z\.\-\[\]\:]/i", $ip))
+    if (preg_match("/[^0-9a-zA-Z\.\-\[\]\:]/i", $ip))
     {
       exit("LGSL PROBLEM: INVALID IP OR HOSTNAME");
     }
@@ -610,8 +607,13 @@
 			}
 			elseif ($lgsl_function == "lgsl_query_36") // discord
 			{
-				$_ip = explode(".", $server['b']['ip'])[0];
-				$lgsl_fp = file_get_contents("https://discordapp.com/api/guilds/{$_ip}/widget.json");
+				$lgsl_fp = array();
+				
+				$raw_json = file_get_contents("https://discord.com/api/v8/invites/{$server['b']['ip']}?with_counts=true");
+				$lgsl_fp[0] = json_decode($raw_json, true);
+				
+				$raw_json = file_get_contents("https://discordapp.com/api/guilds/{$lgsl_fp[0]['guild']['id']}/widget.json");
+				$lgsl_fp[1] = json_decode($raw_json, true);
 			}
 		}
 
@@ -1913,7 +1915,7 @@
 
     fwrite($lgsl_fp, $challenge_packet);
 
-    $buffer = fread($lgsl_fp, 4096);
+    $buffer = fread($lgsl_fp, 8192);
 
     if (!$buffer) { return FALSE; }
 
@@ -1941,7 +1943,7 @@
 
     elseif ($response_type == "r")
     {
-      $lgsl_need['e'] = FALSE;
+      // $lgsl_need['e'] = FALSE;
 
       $item_total = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
 
@@ -1960,19 +1962,19 @@
 
     elseif ($response_type == "d")
     {
-      $lgsl_need['p'] = FALSE;
+      // $lgsl_need['p'] = FALSE;
 
       $player_total = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
 
-      for ($i=0; $i<$player_total; $i++)
-      {
-        if (!$buffer) { return FALSE; }
+			for ($i=0; $i<$player_total; $i++)
+			{
+				if (!$buffer) { return FALSE; }
 
-        $server['p'][$i]['pid']   = ord(lgsl_cut_byte($buffer, 1));
-        $server['p'][$i]['name']  = lgsl_cut_pascal($buffer);
-        $server['p'][$i]['score'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "S");
-        $server['p'][$i]['ping']  = lgsl_unpack(lgsl_cut_byte($buffer, 4), "S");
-      }
+				$server['p'][$i]['pid']   = ord(lgsl_cut_byte($buffer, 1));
+				$server['p'][$i]['name']  = lgsl_cut_pascal($buffer);
+				$server['p'][$i]['score'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "S");
+				$server['p'][$i]['ping']  = lgsl_unpack(lgsl_cut_byte($buffer, 4), "S");
+			}
     }
 
 //---------------------------------------------------------+
@@ -3789,16 +3791,17 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 
   function lgsl_query_36(&$server, &$lgsl_need, &$lgsl_fp) // Discord
 	{
-		$buffer = json_decode($lgsl_fp, true);
+		$buffer = $lgsl_fp[1];
 		
 		if(!$buffer) return FALSE;
 		
 		$server['s']['name'] = $buffer['name'];
 		$server['s']['map'] = 'discord';
 		$server['s']['players'] = $buffer['presence_count'];
-		$server['s']['playersmax'] = 10000;
+		$server['s']['playersmax'] = $lgsl_fp[0]['approximate_member_count'];
 		$server['e']['instant_invite'] = $buffer['instant_invite'];
 		$server['e']['id'] = $buffer['id'];
+		$server['e']['inviter'] = $lgsl_fp[0]['inviter']['username'] . "#" . $lgsl_fp[0]['inviter']['discriminator'];
 		
 		if(isset($buffer['channels']))
 			foreach($buffer['channels'] as $key => $value){

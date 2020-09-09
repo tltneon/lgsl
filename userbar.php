@@ -48,8 +48,8 @@
 	imagecopy($im, $game_id, 26, 2, 0, 0, 16, 16);									// place game icon
 
 	imagettftext($im, 7, 0, 44, 17, $color_map, "lgsl_files/other/verdana", 	/* map 			*/	$lgsl_config['text']['map'].": ".$server['s']['map']);
-	imagettftext($im, 7, 0, 44, 9, 	$color_ip, 	"lgsl_files/other/verdana", 	/* port 		*/ 	$server['b']['ip'].":".$server['b']['c_port']);
-	imagettftext($im, 8, 0, 150, 10, $color_pz, "lgsl_files/other/verdana", 	/* name 		*/	$server['s']['name']);
+	imagettftext($im, 7, 0, 44, 9, 	$color_ip, 	"lgsl_files/other/verdana", 	/* ip&port	*/ 	$misc['connect_filtered']);
+	imagettftext($im, 8, 0, 180, 10, $color_pz, "lgsl_files/other/verdana", 	/* name 		*/	$server['s']['name']);
 	imagettftext($im, 7, 0, 150, 18, $color_pl, "lgsl_files/other/verdana", 	/* players 	*/	$lgsl_config['text']['plr'].": ".$server['s']['players']."/".$server['s']['playersmax']);
 	imagettftext($im, 5, 0, 238, 18, $color_time, "lgsl_files/other/verdana", /* updated	*/	"upd: ".$time." | ".$server['s']['game']);
 	 

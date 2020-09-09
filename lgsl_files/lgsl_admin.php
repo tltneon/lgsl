@@ -110,7 +110,7 @@
 
       // THIS PREVENTS PORTS OR WHITESPACE BEING PUT IN THE IP WHILE ALLOWING IPv6
       if     (preg_match("/(\[[0-9a-z\:]+\])/iU", $ip, $match)) { $ip = $match[1]; }
-      elseif (preg_match("/([0-9a-z\.\-]+)/i", $ip, $match))    { $ip = $match[1]; }
+      // elseif (preg_match("/([0-9a-z\.\-]+)/i", $ip, $match))    { $ip = $match[1]; }
 
       list($c_port, $q_port, $s_port) = lgsl_port_conversion($type, $c_port, $q_port, $s_port);
 
@@ -184,7 +184,16 @@
 					text-align: end;
 				}
 				.inlined > div > div:first-child {
-					height: 50px;
+					height: 46px;
+					overflow-y: auto;
+				}
+				::-webkit-scrollbar-thumb {
+					background-color: gray;
+				}
+
+				::-webkit-scrollbar {
+					width: 6px;
+					background: #3e3e3e;
 				}
 				@media(max-width: 414px){
 					.inlined {

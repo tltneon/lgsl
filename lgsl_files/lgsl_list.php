@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -47,7 +47,7 @@
 
 			<td title='{$lgsl_config['text']['slk']}' class='connectlink_cell'>
 				<a href='{$misc['software_link']}'>
-					{$server['b']['ip']}:{$server['b']['c_port']}
+					{$misc['connect_filtered']}
 				</a>
 			</td>
 
