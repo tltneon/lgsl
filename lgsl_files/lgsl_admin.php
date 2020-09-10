@@ -108,9 +108,8 @@
       $cache      = mysqli_real_escape_string($lgsl_database, $cache);
       $cache_time = mysqli_real_escape_string($lgsl_database, $cache_time);
 
-      // THIS PREVENTS PORTS OR WHITESPACE BEING PUT IN THE IP WHILE ALLOWING IPv6
-      if     (preg_match("/(\[[0-9a-z\:]+\])/iU", $ip, $match)) { $ip = $match[1]; }
-      // elseif (preg_match("/([0-9a-z\.\-]+)/i", $ip, $match))    { $ip = $match[1]; }
+      // THIS WHITESPACE BEING PUT IN THE IP
+			$ip = trim($ip);
 
       list($c_port, $q_port, $s_port) = lgsl_port_conversion($type, $c_port, $q_port, $s_port);
 

@@ -414,6 +414,7 @@
       case "bf2142"        : $c_to_q = 0;     $c_def = 17567;   $q_def = 29900;   $c_to_s = 0;   break;
       case "cube"          : $c_to_q = 1;     $c_def = 28785;   $q_def = 28786;   $c_to_s = 0;   break;
       case "dh2005"        : $c_to_q = 0;     $c_def = 23459;   $q_def = 34567;   $c_to_s = 0;   break;
+			case "discord"       : $c_to_q = 0;     $c_def = 1;       $q_def = 1;       $c_to_s = 0;   break;
       case "farcry"        : $c_to_q = 123;   $c_def = 49001;   $q_def = 49124;   $c_to_s = 0;   break;
       case "fivem"         : $c_to_q = 0;     $c_def = 30120;   $q_def = 30120;   $c_to_s = 0;   break;
       case "flashpoint"    : $c_to_q = 1;     $c_def = 2302;    $q_def = 2303;    $c_to_s = 0;   break;
@@ -3799,7 +3800,6 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 		$server['s']['map'] = 'discord';
 		$server['s']['players'] = $buffer['presence_count'];
 		$server['s']['playersmax'] = $lgsl_fp[0]['approximate_member_count'];
-		$server['e']['instant_invite'] = $buffer['instant_invite'];
 		$server['e']['id'] = $buffer['id'];
 		$server['e']['inviter'] = $lgsl_fp[0]['inviter']['username'] . "#" . $lgsl_fp[0]['inviter']['discriminator'];
 		
