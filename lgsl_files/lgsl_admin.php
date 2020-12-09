@@ -40,11 +40,11 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  if ($_POST && get_magic_quotes_gpc()) { $_POST = lgsl_stripslashes_deep($_POST); }
+  if ($_POST) { $_POST = lgsl_stripslashes_deep($_POST); }
 
   if (function_exists("mysqli_set_charset"))
   {
-    @mysqli_set_charset("utf8");
+    @mysqli_set_charset($lgsl_database, "utf8");
   }
   else
   {
@@ -108,8 +108,12 @@
       $cache      = mysqli_real_escape_string($lgsl_database, $cache);
       $cache_time = mysqli_real_escape_string($lgsl_database, $cache_time);
 
-      // THIS WHITESPACE BEING PUT IN THE IP
+      // THIS PREVENTS PORTS OR WHITESPACE BEING PUT IN THE IP
 			$ip = trim($ip);
+			if (strpos($ip, ':') !== false){
+				$c_port = explode(":", $ip)[1];
+				$ip = explode(":", $ip)[0];
+			}
 
       list($c_port, $q_port, $s_port) = lgsl_port_conversion($type, $c_port, $q_port, $s_port);
 
@@ -202,21 +206,16 @@
 					}
 					.tt{
 						width: auto;
+						padding: 7px;
 					}
 				}
 			</style>
 		';
 
     $output .= "
-    <form method='post' action=''>
-      <div>
-        <br />
-        <br />
-        <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-        <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
-        <br />
-        <br />
-      </div>
+    <form method='post' action='' style='padding-top: 40px; text-align: center;'>
+			<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+			<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
     </form>";
 
     return;
@@ -227,6 +226,12 @@
   if (!empty($_POST['lgsl_map_image_paths']))
   {
     $server_list = lgsl_query_cached_all("s");
+		
+		$output .= "
+		<div style='padding: 5px;'>
+			Haven't got images? <a href='https://github.com/tltneon/lgsl/wiki#how-can-i-add-map-images' target='_blank'>How to: add map icons</a>
+		</div>
+		";
 
     foreach ($server_list as $server)
     {
@@ -235,21 +240,21 @@
       $image_map = lgsl_image_map($server['b']['status'], $server['b']['type'], $server['s']['game'], $server['s']['map'], FALSE);
 
       $output .= "
-      <div>
-        <a href='{$image_map}' target='_blank'> {$image_map} <img src='{$image_map}' width='32' height='32' /> </a>
+      <div style='padding-bottom: 5px;'>
+				<div style='display: inline-block;'>	
+					<img src='{$image_map}' width='32' height='32' />
+				</div>	
+				<div style='display: inline-block;vertical-align: super;'>	
+					<div>Map Name: {$server['s']['map']}</div>
+					<div>Link: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
+				</div>
       </div>";
     }
 
     $output .= "
-    <form method='post' action=''>
-      <div>
-        <br />
-        <br />
-        <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-        <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
-        <br />
-        <br />
-      </div>
+    <form method='post' action='' style='padding: 15px;'>
+			<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+			<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
     </form>";
 
     return;
@@ -405,7 +410,7 @@
 
         $output .= "
         <tr>
-          <td>NEW <a href='https://github.com/tltneon/lgsl/wiki/Supported-Games' target='_blank' style='position: absolute' title='How to choose query protocol?'>[?]</a></td>
+          <td>NEW<a href='https://github.com/tltneon/lgsl/wiki/Supported-Games' target='_blank' style='position: absolute;background: #fff;border-radius: 10px;width: 14px;height: 14px;border: 2px solid;margin-top: 7px;' title='How to choose query protocol?'>?</a></td>
           <td>
             <select name='form_type[{$id}]'>";
 //---------------------------------------------------------+

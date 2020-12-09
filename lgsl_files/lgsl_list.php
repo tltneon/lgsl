@@ -12,12 +12,16 @@
 
   require "lgsl_class.php";
 
-  $server_list = lgsl_query_group();
+	$type = (isset($_GET['type']) ?  $_GET['type'] : '');
+	$game = (isset($_GET['game']) ?  $_GET['game'] : '');
+	if($lgsl_config['pagination_mod']){
+		$page = (isset($_GET['page']) ?  (int)$_GET['page'] : 1);
+	}
+  $server_list = lgsl_query_group(array("type" => $type, "game" => $game, "page" => $page));
   $server_list = lgsl_sort_servers($server_list);
 
 //------------------------------------------------------------------------------------------------------------+
-	if(count($server_list) == 0)
-	{
+	if(count($server_list) == 0) {
 		$output .= "<div id='back_to_servers_list'><a href='./admin.php'>TO ADMIN PANEL</a></div>";
 	}
 	
@@ -36,13 +40,15 @@
 	{
 		$misc   = lgsl_server_misc($server);
 		$server = lgsl_server_html($server);
+		$percent = strval($server['s']['players'] == 0 ? 0 : floor($server['s']['players']/$server['s']['playersmax']*100));
+		$lastupd = Date('d.m.Y H:i:s', $server['s']['cache_time']);
 
 		$output .= "
 		<tr class='server_{$misc['text_status']}'>
 
 			<td class='status_cell'>
-				<span title='{$lgsl_config['text'][$misc['text_status']]}' class='status_icon_{$misc['text_status']}'></span>
-				<img alt='{$misc['name_filtered']}' src='{$misc['icon_game']}' title='{$misc['text_type_game']}' class='game_icon' />
+				<span title='{$lgsl_config['text'][$misc['text_status']]} | Last update: {$lastupd}' class='status_icon_{$misc['text_status']}'></span>
+				<a href='{$_SERVER['REQUEST_URI']}?&game={$server['s']['game']}'><img alt='{$misc['name_filtered']}' src='{$misc['icon_game']}' title='{$misc['text_type_game']}' class='game_icon' /></a>
 			</td>
 
 			<td title='{$lgsl_config['text']['slk']}' class='connectlink_cell'>
@@ -67,7 +73,12 @@
 			</td>
 
 			<td class='players_cell'>
-				<span class='players'>{$server['s']['players']}</span>/<span class='maxplayers'>{$server['s']['playersmax']}</span>
+				<div class='outer_bar'>
+					<div class='inner_bar' style='width:{$percent}%;'>
+						<span class='players_numeric'>{$server['s']['players']}/{$server['s']['playersmax']}</span>
+						<span class='players_percent{$percent}'>{$percent}%</span>
+					</div>
+				</div>
 			</td>
 
 			<td class='details_cell'>";
@@ -89,6 +100,16 @@
 
 	$output .= "
 	</table>";
+	
+	if($lgsl_config['pagination_mod']){
+		$output .= "
+			<div id='pages'>
+				" . ($page > 1 ? "<a href='" . str_replace('page='.strval($page), 'page='.strval($page - 1), $_SERVER['REQUEST_URI']) . "'><</a>" : "") . "
+			<span>Page {$page}</span>
+				" . (count($server_list) < $lgsl_config['pagination_lim'] ? "" : (isset($_GET['page']) ? "<a href='" . str_replace('page='.strval($page), 'page='.strval($page + 1), $_SERVER['REQUEST_URI']) . "'>></a>" : "<a href='" . $_SERVER['REQUEST_URI'] ."?page=2'>></a>")) . "
+			</div>
+			";
+	}
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -106,5 +127,6 @@
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
+//------ WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P --------------------------------------------------------------------------------------------------+
   $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='http://www.greycube.com' style='text-decoration:none'>".lgsl_version()."</a></div>";
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+

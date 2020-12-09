@@ -118,7 +118,7 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .contry_icon { border:none; width: 16px; height: 16px; }
 .game_icon { width: 28px; height: 28px; border-radius: 10px; border: 1px solid black; margin: 5px; border-radius: 12px; }
 a.details_icon { background-image: url(../other/icon_details.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
-.status_icon_onl, .status_icon_nrs, .status_icon_onp
+.status_icon_onl, .status_icon_nrs, .status_icon_onp, .status_icon_pen
 { background: #f1abab; 
   width: 36px;
   height: 36px;
@@ -131,19 +131,27 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 .status_icon_onl { background: #72ff60; }
 .status_icon_nrs { background: #ff6565; }
 .status_icon_onp { background: #fdb94a; }
+.status_icon_pen { background-color: gray; }
 
 #server_list_table { margin:auto; width: 100%; border-radius: 12px; margin-top:30px; border-collapse: collapse; }
 #server_list_table tr:not(#server_list_table_top) { background-color: #28282894; height: 59px; border: 1px solid black; }
 #server_list_table td, #server_list_table th { padding:13px; border-bottom: 1px dotted black; }
 #server_list_table_top { text-align: left; }
-.connectlink_cell { }
+
 .servername_cell { text-align:left; }
 .servername_cell > div { width:100%; overflow:hidden; height:1.3em; line-height:1.3em; }
 div.servername_nolink { display: none; }
 .map_cell { white-space:nowrap; text-align:left; }
 .players_cell { white-space:nowrap; }
+.inner_bar { width: 100% !important; }
+*[class^='players_percent'] { display:none; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell { display: none; }
+
+#pages { width: fit-content; margin: auto; margin-top: 16px; }
+#pages a { padding: 5px; background-color: #282828; }
+#pages span { padding: 10px; color: black; }
+
 #totals { width: fit-content; margin:auto; margin-top: 16px; }
 #totals > div { width: fit-content;  background-color: #282828; padding:15px; display:inline-block; }
 
@@ -176,7 +184,7 @@ div.servername_nolink { display: none; }
     font-family: cursive;
 		height:3em;
 	}
-	.connectlink_cell,
+	td.connectlink_cell,
 	td.details_cell, 
 	.map_cell, 
 	div.servername_nolink, {

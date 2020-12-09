@@ -6,6 +6,8 @@
 	"license": "GPL-3.0-only",
 	"keywords":
 	[
+		"discord",
+		"fivem",
 		"csgo",
 		"counter-strike",
 		"team fortress",
@@ -30,12 +32,13 @@
 	],
 	"support": {
 		"wiki": "https://github.com/tltneon/lgsl/wiki",
+		"games": "https://github.com/tltneon/lgsl/wiki/Supported-Games",
 		"source": "https://github.com/tltneon/lgsl",
 		"issues": "https://github.com/tltneon/lgsl/issues"
 	},
 	"require":
 	{
-		"php": ">=7.0"
+		"php": ">=5.4"
 	},
 	"autoload":
 	{

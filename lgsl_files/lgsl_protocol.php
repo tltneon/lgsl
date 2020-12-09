@@ -99,6 +99,7 @@
     "samp"          => "San Andreas Multiplayer",
     "savage"        => "Savage",
     "savage2"       => "Savage 2",
+    "scum"					=> "SCUM",
     "serioussam"    => "Serious Sam",
     "serioussam2"   => "Serious Sam 2",
     "shatteredh"    => "Shattered Horizon",
@@ -229,6 +230,7 @@
     "savage2"       => "18",
     "serioussam"    => "03",
     "serioussam2"   => "09",
+		"scum"					=> "37",
     "shatteredh"    => "05",
     "sof2"          => "02",
     "soldat"        => "08",
@@ -354,6 +356,7 @@
     "savage2"       => "http://en.wikipedia.org/wiki/Savage_2:_A_Tortured_Soul",
     "serioussam"    => "qtracker://{IP}:{S_PORT}?game=SeriousSam&action=show",
     "serioussam2"   => "qtracker://{IP}:{S_PORT}?game=Serious_Sam2&action=show",
+    "scum"          => "steam://connect/{IP}:{S_PORT}",
     "shatteredh"    => "http://en.wikipedia.org/wiki/Shattered_Horizon",
     "sof2"          => "qtracker://{IP}:{S_PORT}?game=SoldierOfFortune2&action=show",
     "soldat"        => "http://www.soldat.pl",
@@ -523,7 +526,7 @@
     {
       $response = lgsl_query_feed($server, $request, $lgsl_config['feed']['method'], $lgsl_config['feed']['url']);
     }
-    elseif ($lgsl_function == "lgsl_query_34" || $lgsl_function == "lgsl_query_36")
+    elseif ($lgsl_function == "lgsl_query_34" || $lgsl_function == "lgsl_query_36" || $lgsl_function == "lgsl_query_37")
     {
       $response = lgsl_query_direct($server, $request, $lgsl_function, "http");
     }
@@ -567,6 +570,8 @@
       if (strpos($request, "e") === FALSE && empty($server['e']))                                 { unset($server['e']); }
       if (strpos($request, "s") === FALSE && empty($server['s']['name']))                         { unset($server['s']); }
     }
+		
+		$server['s']['cache_time']    = time();
 
 //---------------------------------------------------------+
 
@@ -616,6 +621,12 @@
 				$raw_json = file_get_contents("https://discordapp.com/api/guilds/{$lgsl_fp[0]['guild']['id']}/widget.json");
 				$lgsl_fp[1] = json_decode($raw_json, true);
 			}
+			elseif ($lgsl_function == "lgsl_query_37") // scum
+			{
+				$lgsl_fp = array();
+				$data = file_get_contents("https://scumservers.net/api.php?ip={$server['b']['ip']}&port={$server['b']['c_port']}");
+				$lgsl_fp = json_decode($data, true);
+			}
 		}
 
 //---------------------------------------------------------+
@@ -653,8 +664,10 @@
 
 //---------------------------------------------------------+
 
-    @fclose($lgsl_fp);
-
+		if ($scheme != 'http') {
+			@fclose($lgsl_fp);
+		}
+		
     return $response;
   }
 
@@ -3817,6 +3830,24 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 			
 		return true;
 	}
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_query_37(&$server, &$lgsl_need, &$lgsl_fp) // SCUM API
+	{		
+		if(!$lgsl_fp) return FALSE;
+		
+		$server['s']['name']       = $lgsl_fp['serverName'];
+		$server['s']['map']        = "SCUM";
+		$server['s']['players']    = $lgsl_fp['players'];
+		$server['s']['playersmax'] = $lgsl_fp['maxPlayers'];
+		$server['e']['serverTime'] = $lgsl_fp['serverTime'];
+		$server['e']['version']			= $lgsl_fp['version'];
+		$server['e']['countryCode']	= $lgsl_fp['countryCode'];
+		$server['e']['countryName']	= $lgsl_fp['countryName'];
+				
+    return TRUE;
+	}
 
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
@@ -4280,10 +4311,11 @@ function lgsl_unescape($text) {
 
 //------------------------------------------------------------------------------------------------------------+
 //--------- PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT -----------+
+//-------- WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P ----------+
 
   function lgsl_version()
   {
-    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 5.10.3"; // little dirty trick
+    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 6.0.0"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+

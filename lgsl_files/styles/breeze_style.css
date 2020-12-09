@@ -106,6 +106,7 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .status_icon_onl { background-image: url(../other/icon_online.gif) !important; }
 .status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; }
 .status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; }
+.status_icon_pen { width: 14px; height: 14px; background-color: gray; display: inline-block; border: 1px solid black; }
 img.game_icon { width: 16px; }
 a.details_icon:hover { opacity: 0.6; }
 
@@ -121,10 +122,17 @@ a.details_icon:hover { opacity: 0.6; }
 div.servername_link { display: none; }
 .map_cell { white-space:nowrap; text-align:left; }
 .players_cell { white-space:nowrap; text-align:right; }
+.inner_bar { width: 100% !important; }
+*[class^='players_percent'] { display:none; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .status_cell { border-radius: 12px 0px 0px 12px !important; }
 .details_cell { border-radius: 0px 12px 12px 0px !important; }
 .details_cell > a { text-decoration: none; }
+
+#pages { width: fit-content; margin: auto; margin-top: 16px; }
+#pages a { padding: 7px; background-color: #feffff; border-radius: 6px; border: 1px solid #c2d1d4; }
+#pages span { padding: 10px; }
+
 #totals { width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
 #totals > div { border: 1px solid #e5fbff; padding: 10px; display:inline-block; }
 

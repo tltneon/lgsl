@@ -1,5 +1,5 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/tltneon/lgsl?color=green&style=for-the-badge)](https://github.com/tltneon/lgsl/releases)
-![PHP](https://img.shields.io/badge/PHP-5.4--7.4-brightgreen?style=for-the-badge&logo=php)
+![PHP](https://img.shields.io/badge/PHP-5.4--8.0-brightgreen?style=for-the-badge&logo=php)
 ![MySQL](https://img.shields.io/badge/MySQL-5.5.27--8.0.x-brightgreen?style=for-the-badge&logo=mysql)
 ![MariaDB](https://img.shields.io/badge/MariaDB-5.5--10.5.x-brightgreen?style=for-the-badge&logo=mariadb)
 
@@ -8,8 +8,8 @@
 [![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
-# LGSL v5.10.3 (Live Game Server List) for PHP 7+
-Based-off LGSL v5.8 (stand-alone version) from www.greycube.com. This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4-7.x and MySQL 5.5.27-8.0.x or MariaDB 5.5-10.5.x
+# LGSL v6.0.0 (Live Game Server List) for PHP 7+
+Based-off LGSL v5.8 (stand-alone version) from www.greycube.com. This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4-8.x and MySQL 5.5.27-8.0.x or MariaDB 5.5-10.5.x
 
 ## [Live Demos](http://lgsl-demo.freesite.vip/) | [Wiki](https://github.com/tltneon/lgsl/wiki) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games) | [Custom styles](https://github.com/tltneon/lgsl/wiki/Styles)
 
@@ -21,6 +21,15 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
  
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
+#### v6.0.0
+- **LGSL now can use pagination!**
+- **Filtering by type or game using ?game= or ?type= parameters**
+- **Game icon now is a link to show all server of that game**
+- **Admin panel: now you can add ip with port to ip input (LGSL split after ':' automatically)**
+- **Now servers shows timestamps of last querying**
+- **Added Arabic languages**
+	- *Thanks to [@lamjed001](https://github.com/lamjed001)*
+- **Updated all styles**
 #### v5.10.3
 - **LGSL now has update page**
 - **Added Rage:MP protocol**
@@ -72,4 +81,4 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 
 ##### [:: Older versions](https://github.com/tltneon/lgsl/wiki/Changelog)
 
-Original author of LGSL - Richard Perry (www.greycube.com)
+Original author of [LGSL](https://github.com/tltneon/lgsl/releases/tag/v5.8) - Richard Perry (www.greycube.com)

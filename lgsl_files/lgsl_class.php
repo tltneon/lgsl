@@ -199,6 +199,7 @@
       $cache['s']['players']    = 0;
       $cache['s']['playersmax'] = 0;
       $cache['s']['password']   = 0;
+      $cache['s']['cache_time'] = $cache_time[0];
     }
 
     if (!isset($cache['e'])) { $cache['e'] = array(); }
@@ -247,6 +248,7 @@
         $live['s']['password']   = $cache['s']['password'];
         $live['s']['players']    = 0;
         $live['s']['playersmax'] = $cache['s']['playersmax'];
+        $live['s']['cache_time'] = $cache['s']['cache_time'];
         $live['e']               = array();
         $live['p']               = array();
       }
@@ -292,14 +294,15 @@
     $random       = isset($options['random'])       ? intval($options['random'])       : intval($lgsl_config['random'][$zone]);
     $type         = empty($options['type'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['type']));
     $game         = empty($options['game'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['game']));
-    $mysqli_order  = empty($random)                  ? "`cache_time` ASC"               : "rand()";
+		$page         = empty($options['page'])         ? ""                               : "LIMIT {$lgsl_config['pagination_lim']} OFFSET " . strval($lgsl_config['pagination_lim']*((int)$options['page'] - 1));
+		$mysqli_order = empty($random)                  ? "id"                             : "rand()";
     $server_limit = empty($random)                  ? 0                                : $random;
 
                        $mysqli_where   = array("`disabled`=0");
     if ($zone != 0)  { $mysqli_where[] = "FIND_IN_SET('{$zone}',`zone`)"; }
     if ($type != "") { $mysqli_where[] = "`type`='{$type}'"; }
 
-    $mysqli_query  = "SELECT `id` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $mysqli_where)." ORDER BY {$mysqli_order}";
+    $mysqli_query  = "SELECT `id` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $mysqli_where)." ORDER BY {$mysqli_order} {$page}";
     $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
     $server_list  = array();
 

@@ -69,10 +69,13 @@
               <div class='details_info_ceil'>{$lgsl_config['text']['plr']}:</div><div class='details_info_ceil'>{$server['s']['players']} / {$server['s']['playersmax']}</div></div>
           </div>
         </div>
+				<div class='details_info_row'>
+					Last update: " . Date('d.m.Y H:i:s', $server['s']['cache_time']) . "
+        </div>
       </div>
       <div class='details_info_column zone{$server['o']['zone']}' style='background-image: url({$misc['image_map']});'>
         <span class='details_location_image' style='background-image: url({$misc['icon_location']});' title='{$misc['text_location']}'></span>
-        <span class='details_password_image zone{$server['o']['zone']}' style='background-image: url({$misc['image_map_password']});'></span>
+        <span class='details_password_image zone{$server['o']['zone']}' style='background-image: url({$misc['image_map_password']});' title='Map: {$server['s']['map']}'></span>
         <span class='details_game_image' style='background-image: url({$misc['icon_game']});' title='{$misc['text_type_game']}'></span>
       </div>
     </div>";
@@ -162,7 +165,7 @@
 
     foreach ($server['e'] as $field => $value)
     {
-			if(preg_match('/(https*:\/\/|www\.)([\w]*\.*)*\w+\/*([\w]*\/*)*/i', $value)){
+			if(preg_match('/(https*:\/\/www\.|www\.)([\w]*\.*)*\w+\/*([\w]*\/*)*/i', $value)){
 				$value = "<a href='".$value."' target='_blank'>".$value."</a>";
 			}
       $output .= "

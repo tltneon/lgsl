@@ -14,7 +14,7 @@ body
 	font-family: Roboto,Arial,sans-serif;
 	word-wrap: break-word;
 	color: white;
-	text-shadow: 1px 1px 0px black;
+	text-shadow: 2px 1px 2px black;
 	background-color: #03060e;
 	background-size: cover !important;
 	background-repeat: no-repeat;
@@ -130,6 +130,7 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .status_icon_onl { background-image: url(../other/icon_online.gif) !important; }
 .status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; }
 .status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; }
+.status_icon_pen { width: 14px; height: 14px; background-color: gray; display: inline-block; border: 1px solid black; }
 img.game_icon { width: 16px; }
 
 .server_onl { background-image: linear-gradient(to right, #ffffff00 0%, #8ee68345 50%,#ffffff00 ); }
@@ -145,9 +146,16 @@ img.game_icon { width: 16px; }
 div.servername_link { display: none; }
 .map_cell { white-space:nowrap; text-align:left; }
 .players_cell { white-space:nowrap; text-align:right; }
+.inner_bar { width: 100% !important; }
+*[class^='players_percent'] { display:none; }
 .server_nrs td.players_cell { color: black; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell > a { text-decoration: none; }
+
+#pages { width: fit-content; margin: auto; margin-top: 16px; }
+#pages a { padding: 5px; background-color: #282828; }
+#pages span { padding: 10px; }
+
 #totals { width: 95%; margin:auto; margin-top: 16px; background-color: rgba(0, 0, 0, 0.5); border: 1px solid #22252f; }
 #totals > div { width: 28%; padding:2%; text-align: center; display: inline-block; vertical-align: middle; }
 
