@@ -87,14 +87,17 @@
 //------------------------------------------------------------------------------------------------------------+
 
   if($lgsl_config['image_mod']){
-    $output .= '<img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
-    <textarea style="width: 500px; height: 40px;">[url='.str_replace("lgsl_files/", "", lgsl_url_path()).($lgsl_config['direct_index'] ? "index.php" : "").'?s='.intval($_GET['s']).'][img]'.str_replace("lgsl_files/", "", lgsl_url_path()).'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
-    <div class="spacer"></div>
-    <style>
-      @media (max-width: 414px){
-        textarea { width: 98.5% !important; }
-      }
-    </style>';
+		if(extension_loaded('gd')){
+			$output .= '<img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
+			<textarea style="width: 500px; height: 40px;">[url='.str_replace("lgsl_files/", "", lgsl_url_path()).($lgsl_config['direct_index'] ? "index.php" : "").'?s='.intval($_GET['s']).'][img]'.str_replace("lgsl_files/", "", lgsl_url_path()).'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
+			<div class="spacer"></div>
+			<style>
+				@media (max-width: 414px){
+					textarea { width: 98.5% !important; }
+				}
+			</style>';
+		}
+		else {$output .= "<div id='invalid_server_id'> Error while trying to display userbar: GD library not loaded (see php.ini) </div>";}
   }
 
 //------------------------------------------------------------------------------------------------------------+

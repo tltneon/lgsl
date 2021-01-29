@@ -300,7 +300,7 @@
     "crysiswars"    => "qtracker://{IP}:{S_PORT}?game=CrysisWars&action=show",
     "cs2d"          => "http://www.cs2d.com",
     "cube"          => "http://cubeengine.com",
-    "discord"       => "http://discord.gg/{IP}",
+    "discord"       => "https://discord.gg/{IP}",
     "doomskulltag"  => "http://skulltag.com",
     "doomzdaemon"   => "http://www.zdaemon.org",
     "doom3"         => "qtracker://{IP}:{S_PORT}?game=Doom3&action=show",
@@ -3835,7 +3835,7 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 
   function lgsl_query_37(&$server, &$lgsl_need, &$lgsl_fp) // SCUM API
 	{		
-		if(!$lgsl_fp) return FALSE;
+		if(!$lgsl_fp or gettype($lgsl_fp) == 'string') return FALSE;
 		
 		$server['s']['name']       = $lgsl_fp['serverName'];
 		$server['s']['map']        = "SCUM";

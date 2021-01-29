@@ -101,7 +101,7 @@
 	$output .= "
 	</table>";
 	
-	if($lgsl_config['pagination_mod']){
+	if($lgsl_config['pagination_mod'] && (intdiv(count($server_list), $lgsl_config['pagination_lim']) > 0 || strval($page) > 1)){
 		$output .= "
 			<div id='pages'>
 				" . ($page > 1 ? "<a href='" . str_replace('page='.strval($page), 'page='.strval($page - 1), $_SERVER['REQUEST_URI']) . "'><</a>" : "") . "

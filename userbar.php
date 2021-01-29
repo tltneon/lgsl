@@ -7,9 +7,17 @@
 	function resizeImage($width, $height, $src){
 		list($w, $h) = getimagesize($src);
 		$image_p = imagecreatetruecolor($width, $width);
-		$image = imagecreatefromgif($src);
+		$image = getImage($src);
 		imagecopyresampled($image_p, $image, 0, 0, 0, 0, $width, $height, $w, $h);
 		return $image_p;
+	}
+	function getImage($src){
+		if(substr($src, -3) == 'gif'){
+			return imagecreatefromgif($src);
+		}
+		else {
+			return imagecreatefrompng($src);
+		}
 	}
 //------------------------------------------------------------------------------------------------------------+
 	$lookup = lgsl_lookup_id($_GET['s']);
@@ -32,7 +40,7 @@
 		$on_id = resizeImage(16, 16, $misc['icon_status']);						// resize to 16x16 if it needed
 	}
 	
-	$game_id = imagecreatefromgif($misc['icon_game']);							// create game icon
+	$game_id = getImage($misc['icon_game']);							// create game icon
 	list($width, $height) = getimagesize($misc['icon_game']);
 	if($width > 16){
 		$game_id = resizeImage(16, 16, $misc['icon_game']);						// resize to 16x16 if it needed
@@ -48,7 +56,7 @@
 	imagecopy($im, $game_id, 26, 2, 0, 0, 16, 16);									// place game icon
 
 	imagettftext($im, 7, 0, 44, 17, $color_map, "lgsl_files/other/verdana", 	/* map 			*/	$lgsl_config['text']['map'].": ".$server['s']['map']);
-	imagettftext($im, 7, 0, 44, 9, 	$color_ip, 	"lgsl_files/other/verdana", 	/* ip&port	*/ 	$misc['connect_filtered']);
+	imagettftext($im, 7, 0, 44, 9, 	$color_ip, 	"lgsl_files/other/verdana", 	/* ip&port	*/ 	str_replace ('https://', '', $misc['connect_filtered']));
 	imagettftext($im, 8, 0, 180, 10, $color_pz, "lgsl_files/other/verdana", 	/* name 		*/	$server['s']['name']);
 	imagettftext($im, 7, 0, 150, 18, $color_pl, "lgsl_files/other/verdana", 	/* players 	*/	$lgsl_config['text']['plr'].": ".$server['s']['players']."/".$server['s']['playersmax']);
 	imagettftext($im, 5, 0, 238, 18, $color_time, "lgsl_files/other/verdana", /* updated	*/	"upd: ".$time." | ".$server['s']['game']);

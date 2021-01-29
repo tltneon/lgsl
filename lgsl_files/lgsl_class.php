@@ -199,7 +199,7 @@
       $cache['s']['players']    = 0;
       $cache['s']['playersmax'] = 0;
       $cache['s']['password']   = 0;
-      $cache['s']['cache_time'] = $cache_time[0];
+      $cache['s']['cache_time'] = $cache_time[0] == '' ? 0 : $cache_time[0];
     }
 
     if (!isset($cache['e'])) { $cache['e'] = array(); }
@@ -1037,11 +1037,17 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
-  global $lgsl_file_path, $lgsl_url_path;
+  global $lgsl_file_path, $lgsl_url_path, $lgsl_config;
 
   $lgsl_file_path = lgsl_file_path();
+	
+  require $lgsl_file_path."lgsl_config.php";
+  require $lgsl_file_path."lgsl_protocol.php";
+	
+	$auth   = md5($_SERVER['REMOTE_ADDR'].md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
+  $cookie = isset($_COOKIE['lgsl_admin_auth']) ? $_COOKIE['lgsl_admin_auth'] : "";
 
-  if (isset($_GET['lgsl_debug']))
+  if (isset($_GET['lgsl_debug']) and $auth == $cookie)
   {
     echo "<hr /><pre>".print_r($_SERVER, TRUE)."</pre>
           <hr />#d0# ".__FILE__."
@@ -1052,12 +1058,10 @@
           <hr />#d5# ".@realpath($_SERVER['DOCUMENT_ROOT']);
   }
 
-  require $lgsl_file_path."lgsl_config.php";
-  require $lgsl_file_path."lgsl_protocol.php";
 
   $lgsl_url_path = lgsl_url_path();
 
-  if (isset($_GET['lgsl_debug']))
+  if (isset($_GET['lgsl_debug']) and $auth == $cookie)
   {
     echo "<hr />#d6# {$lgsl_url_path}
           <hr />#c0# {$lgsl_config['url_path']}
@@ -1069,6 +1073,17 @@
           <hr />#c6# {$lgsl_config['timeout']}
           <hr />#c7# {$lgsl_config['cms']}
           <hr />";
+		echo "
+					<select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"lgsl_files/styles/\" + this.value + \".css\"'>
+						<option value='breeze_style'>breeze_style</option>
+						<option value='classic_style'>classic_style</option>
+						<option value='disc_ff_style'>disc_ff_style</option>
+						<option value='material_style'>material_style</option>
+						<option value='ogp_style'>ogp_style</option>
+						<option value='parallax_style'>parallax_style</option>
+						<option value='wallpaper_style'>wallpaper_style</option>
+						<option value='darken_style'>darken_style</option>
+					</select>";
   }
 
   if (!isset($lgsl_config['locations']))
