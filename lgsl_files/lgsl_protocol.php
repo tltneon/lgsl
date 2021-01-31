@@ -615,16 +615,16 @@
 			{
 				$lgsl_fp = array();
 				
-				$raw_json = file_get_contents("https://discord.com/api/v8/invites/{$server['b']['ip']}?with_counts=true");
+				$raw_json = @file_get_contents("https://discord.com/api/v8/invites/{$server['b']['ip']}?with_counts=true");
 				$lgsl_fp[0] = json_decode($raw_json, true);
 				
-				$raw_json = file_get_contents("https://discordapp.com/api/guilds/{$lgsl_fp[0]['guild']['id']}/widget.json");
+				$raw_json = @file_get_contents("https://discordapp.com/api/guilds/{$lgsl_fp[0]['guild']['id']}/widget.json");
 				$lgsl_fp[1] = json_decode($raw_json, true);
 			}
 			elseif ($lgsl_function == "lgsl_query_37") // scum
 			{
 				$lgsl_fp = array();
-				$data = file_get_contents("https://scumservers.net/api.php?ip={$server['b']['ip']}&port={$server['b']['c_port']}");
+				$data = @file_get_contents("https://scumservers.net/api.php?ip={$server['b']['ip']}&port={$server['b']['c_port']}");
 				$lgsl_fp = json_decode($data, true);
 			}
 		}
@@ -3754,14 +3754,10 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 
   function lgsl_query_34(&$server, &$lgsl_need, &$lgsl_fp) // Rage:MP
   {
+		if(!$lgsl_fp) return FALSE;
 		$buffer = json_decode($lgsl_fp, true);
-		
-		if(!$buffer) return FALSE;
-		
-		$found = false;
-		foreach($buffer as $key => $value){
-			if($key == $server['b']['ip'].':'.$server['b']['c_port']){
-				$found = true;
+		if(isset($buffer[$server['b']['ip'].':'.$server['b']['c_port']])){
+				$value = $buffer[$server['b']['ip'].':'.$server['b']['c_port']];
 				$server['s']['name']       = $value['name'];
 				$server['s']['map']        = "ragemp";
 				$server['s']['players']    = $value['players'];
@@ -3770,10 +3766,10 @@ function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
 				$server['e']['peak']			 = $value['peak'];
 				$server['e']['gamemode']	 = $value['gamemode'];
 				$server['e']['lang']			 = $value['lang'];
-				break;
-			}
+				return TRUE;
 		}
-    return $found;
+		else
+			return FALSE;
   }
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+

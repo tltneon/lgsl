@@ -88,12 +88,27 @@
 
   if($lgsl_config['image_mod']){
 		if(extension_loaded('gd')){
-			$output .= '<img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
-			<textarea style="width: 500px; height: 40px;">[url='.str_replace("lgsl_files/", "", lgsl_url_path()).($lgsl_config['direct_index'] ? "index.php" : "").'?s='.intval($_GET['s']).'][img]'.str_replace("lgsl_files/", "", lgsl_url_path()).'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
+			$output .= '
+			<details>
+				<summary style="margin-bottom: 12px;">
+					Click to show server banners
+				</summary>
+				<div>
+					<img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
+					<textarea style="width: 32em; height: 2.3em;word-break: break-all;" onClick="this.select();">[url='.str_replace("lgsl_files/", "", lgsl_url_path()).($lgsl_config['direct_index'] ? "index.php" : "").'?s='.intval($_GET['s']).'][img]'.str_replace("lgsl_files/", "", lgsl_url_path()).'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
+				</div>
+			</details>
 			<div class="spacer"></div>
 			<style>
 				@media (max-width: 414px){
 					textarea { width: 98.5% !important; }
+				}
+				details[open] div {
+					animation: spoiler 1s;
+				}
+				@keyframes spoiler {
+					0%   {opacity: 0;}
+					100% {opacity: 1;}
 				}
 			</style>';
 		}
