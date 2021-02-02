@@ -184,16 +184,16 @@ div.servername_nolink { display: none; }
     font-family: cursive;
 		height:3em;
 	}
-	td.connectlink_cell,
+	.connectlink_cell,
 	td.details_cell, 
 	.map_cell, 
-	div.servername_nolink, {
-			display: none;
+	div.servername_nolink {
+		display: none;
 	}
 	div.servername_link a { color: #d5f2ff; }
 	div.servername_link { display: block; }
 	#server_list_table td {
-			padding: 3px;
+		padding: 3px;
 	}
 	#server_list_table tr.server_nrs {
     background-color: rgba(148, 0, 0, 0.2);

@@ -22,7 +22,7 @@
 	$lookup = lgsl_lookup_id($_GET['s']);
 	$server = lgsl_query_cached($lookup['type'], $lookup['ip'], $lookup['c_port'], $lookup['q_port'], $lookup['s_port'], "sep");
 	$misc   = lgsl_server_misc($server);
-	if(strlen($misc['connect_filtered']) > 22) $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
+	if(strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
 
 	$hour = date("H") + 0;
 	if($hour >= 24) $hour - 24; 

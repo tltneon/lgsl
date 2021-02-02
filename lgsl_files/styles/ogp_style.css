@@ -186,7 +186,7 @@ div.servername_link { display: none; }
 		padding: 3px;
 	}
 	#server_list_table td:not(.status_cell) {
-		padding: 10px 3px;
+		padding: 10px 6px 10px 3px;
 	}
 	#server_list_table tr.server_nrs {
     background-color: rgba(148, 0, 0, 0.2);
