@@ -1,0 +1,243 @@
+/*--------------------------------------
+>			Blocks Style				<
+>			Neon						<
+>			https://github.com/tltneon	<
+---------------------------------------*/
+
+/* global */
+body
+{
+  font-size: 15px;
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  word-wrap: break-word;
+}
+tr { }
+td { }
+
+a:link, a:visited { text-decoration:none; color:#6f65a2; }
+a:hover { color:#8298b9;}
+a:active { color:#8298b9;}
+
+#adminlink { margin: 0; position: fixed; width: 25px; right: 0; top: 0; background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #6f65a261); height: 25px; }
+#adminlink:hover { background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #6f65a2); }
+#topmenu { padding: 1em; text-align: center; }
+#topmenu > li { display: inline-block; padding: 0px 10px; }
+#topmenu > li:before { content: '► '; }
+
+/* add */
+.annotation { text-align: center; background-color: #feffff; border: 1px solid #e5fbff; padding-top:17px; padding-bottom:17px; } 
+
+/* details */
+.players_table { margin: auto; border-spacing: 0px 5px; }
+.settings_table { margin: auto; border-spacing: 0px 0px; border-collapse: collapse; max-width: 600px; }
+.details_table tr:nth-child(n), .players_table tr:nth-child(n), .settings_table tr:nth-child(n) { background-color: #e4eaf2; white-space:nowrap; table-layout:fixed; }
+.details_table tr:nth-child(2n), .players_table tr:nth-child(2n), .settings_table tr:nth-child(2n) { background-color: #f4f7fa; white-space:nowrap; table-layout:fixed; }
+.players_table tr:not(.table_head):hover td { background-color: #ecf9ff; outline: auto; }
+.details_table td, .players_table td { padding: 4px; }
+.settings_table td { padding: 4px; white-space: pre-wrap; }
+
+.details_info_row { margin-top: 14px; }
+.details_info, .details_info_column:nth-child(2) { vertical-align: top; }
+.details_info_ceil, .details_info_column, .details_info_scolumn { display: inline-block; }
+.details_info_column { margin-right: 12px; }
+.details_info_srow { padding: 4px; background-color: #f4f7fa; border-radius: 6px; }
+.details_info_srow:nth-child(2n) { background-color: #e4eaf2; }
+.details_info_ceil:first-child { font-weight: 600; padding-right: 4px; }
+#gamelink { vertical-align: middle; display: block; margin-bottom: 6px; width: calc(100% - 2px); }
+.details_info_column:nth-child(2), .details_password_image {
+  background-size: cover;
+  width: 250px;
+  height: 188px;
+}
+.details_password_image, .details_game_image, .details_location_image {
+  display: block;
+  z-index: 5;
+  background-size: cover;
+}
+.details_info_column:nth-child(2) {
+  border-radius: 4px; 
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+}
+.details_password_image {
+  background-position: 100% 100%;
+  position: absolute;
+  background-size: auto;
+  background-repeat: no-repeat;
+}
+.details_location_image {
+  width: 16px;
+  height: 11px;
+  position: relative;
+  right: 4px;
+  float: right;
+  top: 4px;
+}
+.details_game_image {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  left: 4px;
+  top: 4px;
+  opacity: .4;
+  border-radius: 6px;
+}
+.details_game_image:hover { opacity: 1; transition-duration: 500ms; }
+img[title='Location: XX'] { display: none; }
+
+.table_head { font-weight: bold; background-color: #e0edff !important; }
+.spacer { background-color: #f6feff; border-radius: 6px; height:10px; width:90%; margin:auto; margin-top: 10px;  margin-bottom: 10px; border:1px solid #cee3e6; }
+.noinfo{ margin:auto; text-align:center; background-color: #f4f7fa; display: inline-block; padding: 6px; border-radius: 6px; border: 1px solid #e0f2f4; }
+#invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
+div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
+#gamelink { width:100%; margin:auto; background-color: #f3fbff; text-align: center; padding-top:4px; padding-bottom:4px; border-radius: 6px; border: 1px solid #e0f2f4; }
+#details_playerlist {margin:auto; overflow:auto; text-align:center; padding:10px}
+
+/* list */
+.contry_link {  position: absolute; margin-top: -18px; margin-left: -20px; }
+.contry_icon { border:none; width: 16px; height: 16px; }
+a.details_icon { width: 100%; height: 32px; display: inline-block; background: url(../other/magnifier.svg) no-repeat center center; background-size: contain; }
+.status_icon_onl, .status_icon_nrs, .status_icon_onp {
+	width: 48px;
+	height: 48px;
+	display: inline-block;
+	background-size: cover;
+}
+.details_icon { background-image: url(../other/icon_details.gif) !important; }
+.status_icon_onl { background-image: url(../other/icon_online.gif) !important; }
+.status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; }
+.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; }
+.status_icon_pen { width: 14px; height: 14px; background-color: gray; display: inline-block; border: 1px solid black; }
+img.game_icon { width: 42px; border: 3px solid black; }
+a.details_icon:before { content: 'Details'; font-size: 1.3em; color: black; }
+a.details_icon { background: inherit !important; border: 1px solid black; border-radius: 16px; }
+a.details_icon:hover { opacity: 0.6; }
+
+#server_list_table { margin:auto; width:85%; margin-top:30px; padding: 3px; text-align: center; }
+#server_list_table tr { margin: 20px; display: inline-block; width: 32%; min-width: 252px; max-width: 300px; box-shadow: 0 .125rem .25rem rgba(0,0,0,.275)!important; }
+#server_list_table td { border: 1px solid #f1f1f1!important; padding: 10px; text-align:center; display: block; }
+#server_list_table tr:nth-child(n) { background-color: #f3fbff; }
+#server_list_table tr:nth-child(2n) { background-color: #feffff; }
+#server_list_table td:hover, #server_list_table tr:hover td { background-color: #f9f9f9; box-shadow: 1px 1px 10px 0px #cac6dd; }
+#server_list_table_top { display:none !important; }
+td.connectlink_cell:before {display: block; content: 'Server address'; margin-bottom: 5px; font-weight: 500;}
+td.map_cell:before {display: block; content: 'Map'; margin-bottom: 5px; font-weight: 500;}
+td.players_cell:before {display: block; content: 'Players'; margin-bottom: 5px; font-weight: 500;}
+.connectlink_cell a { border: 1px solid #bdbdbd;padding: 3px 8px;border-radius: 12px;background-color: #ffffff; }
+.servername_cell { }
+.servername_cell > div { width:100%; overflow:hidden; height:2.7em; line-height:1.2em; font-size: 1.3em; }
+div.servername_nolink { display: none; }
+.map_cell { white-space:nowrap; }
+.players_cell { white-space:nowrap; }
+.outer_bar { width:100%; background-color:#e0e0e0; border-radius:13px; padding:2px; }
+.inner_bar { border-radius:13px; background-color:#bcaeff; }
+*[class^='players_percent'] { display:none; }
+.details_cell, .status_cell { white-space:nowrap; text-align:center; }
+.status_cell {  }
+.details_cell {  }
+.details_cell > a { text-decoration: none; }
+
+#pages { width: fit-content; margin: auto; margin-top: 16px; }
+#pages a { padding: 7px; background-color: #feffff; border-radius: 6px; border: 1px solid #c2d1d4; }
+#pages span { padding: 10px; }
+
+#totals { width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }
+#totals > div { border: 1px solid #e5fbff; padding: 10px; display:inline-block; }
+
+/* admin */
+input[type='submit'] {
+	background-color: #FFFFFF;
+	border: 1px solid #CCCCCC;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
+	border-radius: 4px;
+	color: #555555;
+	text-align:center;
+	vertical-align: middle;
+	text-decoration:none;
+}
+input[type='submit']:hover, input[type='submit']:focus {
+	border-color: rgba(82, 168, 236, 0.8);
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
+	outline: 0 none;
+}
+input[type='text'], input[type='number'], input[type='password'], select {
+	display: block;
+	border: none;
+	border-radius: 6px;
+	padding: 5px 8px;
+	color: #333;
+	box-shadow: inset 0 1px 0 rgba(0,0,0,.2), 0 0 4px rgba(0,0,0,0.1);
+}
+input[type='text']:focus, input[type='number']:focus, input[type='password']:focus {
+	outline: none;
+	box-shadow: inset 0 2px 0 rgba(0,0,0,.2), 0 0 4px rgba(0,0,0,0.1), 0 0 5px 1px #51CBEE;
+}
+
+/* */
+.inline {display:inline-block;}
+.center {text-align: center;}
+
+/* adaptiveness */
+
+@media(max-width: 990px){
+	.map_cell {
+		display: none;
+	}
+}
+
+@media(max-width: 414px){
+	body
+	{
+		margin: 0;
+	}
+	#topmenu > li {
+	    display: inline-block;
+	    padding: 10px 0px;
+	}
+	#server_list_table { width:100%; margin: 0px; }
+	.players_cell { border-radius: 0px 12px 12px 0px !important; }
+	img.game_icon { width: 32px; border-radius: 8px 0px; }
+	.connectlink_cell,
+	td.details_cell, 
+	.map_cell, 
+	div.servername_nolink,
+	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
+			display: none;
+	}
+	.servername_cell { padding: 0px; } 
+	.servername_cell > .servername_link {
+    width: 100%;
+    overflow: hidden;
+    line-height: 1em;
+    font-size: larger;
+    font-family: cursive;
+		height: 3.5em;
+		display: block;
+	}
+	.servername_link > a {
+    display: block;
+    margin: 0.5em 0.5em 0em 0.5em;
+    height: 100%;
+	}
+	#server_list_table td { padding: 10px; }
+	#server_list_table .status_cell {	padding: 0px; text-align: left;	}
+	#server_list_table .status_cell a {	position: absolute; margin-top: 3.5em; margin-left: -20px; }
+	#server_list_table .servername_cell {	padding: 0px;	}
+	#server_list_table tr { margin: 1.5em 0px; }
+	#server_list_table tr.server_nrs {
+    background-color: #d0d0d0;
+	}
+	#totals { margin: 0px; }
+	#totals > div {
+		border-radius: 8px 0px;
+		padding: 10px 1px;
+		border: 1px solid #d5d9da;
+	}
+	
+	/*details*/
+	#gamelink {display: none;}
+  .details_info { display: flex; flex-flow: column; }
+  .details_info_column { margin: auto; order: 2; margin-top: 6px; }
+  .details_info_column:nth-child(2) { order: 1; }
+	#details_playerlist { overflow: auto;	}
+}

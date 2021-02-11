@@ -8,7 +8,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
-# LGSL v6.0.0 (Live Game Server List) for PHP 7+
+# LGSL v6.0.1 (Live Game Server List) for PHP 7+
 Based-off LGSL v5.8 (stand-alone version) from www.greycube.com. This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4-8.x and MySQL 5.5.27-8.0.x or MariaDB 5.5-10.5.x
 
 ## [Live Demos](http://lgsl-demo.freesite.vip/) | [Wiki](https://github.com/tltneon/lgsl/wiki) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games) | [Custom styles](https://github.com/tltneon/lgsl/wiki/Styles)
@@ -21,6 +21,12 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
  
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
+#### v6.0.1
+- **New Style: Cards** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl9/index.php)]
+- **Selecting active scripts on install page**
+- **Available Map Preview script**
+- **New game icons**
+- **Minor fixes**
 #### v6.0.0
 - **LGSL now can use pagination!**
 - **Filtering by type or game using ?game= or ?type= parameters**
@@ -63,21 +69,6 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 	- *Thanks to [@ctannurella](https://github.com/ctannurella)*
 - **Default style was changed to: Darken**
 - **Added support to including js files in _lgsl_config.php_**
-#### v5.9.4
-- **More custom CSS classes for changing styles**
-- **Added OGP Style** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl4/index.php)]
-	- *Author [@oNdsen](https://github.com/oNdsen)*
-- **Added a few game icons**
-- **Added French and Spanish languages**
-	- *Thanks to [@own3mall](https://github.com/own3mall)*
-- **Added Czech, Bulgarian language**
-- **Changed HL Game Links to _steam://ip:port_ protocol**
-#### v5.9.3
-- **Added Darken Style** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl2/index.php)]
-- **Added favicon to _\lgsl_files\other\favicon.ico_**
-- **Added translation feature**
-	- [*You can help to translate LGSL to your language!*](https://github.com/tltneon/lgsl/tree/master/lgsl_files/languages)
-- **Added Russian language**
 
 ##### [:: Older versions](https://github.com/tltneon/lgsl/wiki/Changelog)
 

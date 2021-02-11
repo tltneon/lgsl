@@ -185,6 +185,7 @@
 			<option value="material_style.css">Material Design</option>
 			<option value="breeze_style.css">Breeze</option>
 			<option value="parallax_style.css">Parallax</option>
+			<option value="cards_style.css">Cards</option>
 			<option value="classic_style.css">Classic</option>
 			<option value="disc_ff_style.css">Disc FF</option>
 			<option value="wallpaper_style.css">Wallpaper</option>
@@ -205,6 +206,12 @@
 			<option value="arabic">اَلْعَرَبِيَّةُ</option>
 			<option value="help">>> Help to translate</option>
 		</select>
+	</p>
+	
+	<p>
+		<l k="selsc"></l>:
+		<br /><input type="checkbox" id="parallax.js" name="scripts" onChange="changeCheckbox(event)" /> parallax (for Parallax Style)
+		<br /><input type="checkbox" id="preview.js" name="scripts" onChange="changeCheckbox(event)" /> map preview (on server list)
 	</p>
 	
 	<hr />
@@ -302,6 +309,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		lgsl_password: "",
 		//
 		style: "darken_style.css",
+		scripts: [],
 		language: "english",
 		sort_servers_by: "id",
 		sort_players_by: "name",
@@ -314,6 +322,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		locations: false
 	}
 	function changeValue(event, options = {}) {
+		console.log(event);
 		if(options.styleChanged){
 			if(event.target.value == "showcase"){
 				event.target.value = "darken_style.css";
@@ -332,6 +341,10 @@ document.addEventListener("reloadLocale", reloadLocale);
 		vars[event.target.name] = event.target.value;
 	}
 	function changeCheckbox(event) {
+		if(event.target.name == 'scripts'){
+			vars[event.target.name][event.target.id] = event.target.checked;
+		}
+		else
 		vars[event.target.name] = event.target.checked;
 	}
 	function updateLValue(el, key){
@@ -342,13 +355,18 @@ document.addEventListener("reloadLocale", reloadLocale);
 	{
 		if(vars.mysql_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
 		let textarea = document.body.getElementsByTagName("textarea")[0] ? document.body.getElementsByTagName("textarea")[0] : document.createElement("textarea");
+		let slist = '';
+		for(s in vars['scripts']){
+			if(vars['scripts'][s])
+				slist += '"' + s + '",';
+		}
 		document.body.getElementsByTagName("div")[0].appendChild(textarea);
 		textarea.innerHTML = "&lt;?php \n" +
 		"global $lgsl_config; $lgsl_config = array(); \n" +
 		"$lgsl_config['feed']['method'] = 0; \n" +
 		"$lgsl_config['feed']['url'] = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"; \n" +
 		"$lgsl_config['style'] = \""+ vars.style +"\"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, materials_style.css \n" +
-		"$lgsl_config['scripts'] = ['parallax.js']; \n" +
+		"$lgsl_config['scripts'] = ["+ slist +"]; \n" +
 		"$lgsl_config['locations'] = "+ vars.locations +"; \n" +
 		"$lgsl_config['list']['totals'] = "+ vars.totals +"; \n" +
 		"$lgsl_config['sort']['servers'] = \""+ vars.sort_servers_by +"\";	// OPTIONS: id  type  zone  players  status \n" +
@@ -438,6 +456,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
 				"enaim": "Enable Image mod",
@@ -465,6 +484,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
 				"enaim": "Enable Image mod",
@@ -492,6 +512,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
 				"enaim": "Enable Image mod",
@@ -519,6 +540,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
 				"enaim": "Enable Image mod",
@@ -546,6 +568,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
 				"enaim": "Enable Image mod",
@@ -573,6 +596,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
 				"enaim": "Enable Image mod",
@@ -600,6 +624,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
 				"enaim": "Enable Image mod",
@@ -627,6 +652,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "Potom čo vytvoríš konfiguraciu, vymeň subor za lgsl_files/lgsl_config.php",
 				"selst": "Zvoliť štýl",
 				"sella": "Zvoliť jazyk",
+				"selsc": "Select scripts",
 				"sorts": "Zoradiť servery podľa",
 				"sortp": "Zoradiť hráčov podľa",
 				"enaim": "Povoliť obrázkové zobrazovanie",
@@ -654,6 +680,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
 				"enaim": "Enable Image mod",

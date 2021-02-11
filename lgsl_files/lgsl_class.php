@@ -1077,6 +1077,7 @@
 					<select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"lgsl_files/styles/\" + this.value + \".css\"'>
 						<option value='breeze_style'>breeze_style</option>
 						<option value='classic_style'>classic_style</option>
+						<option value='cards_style'>cards_style</option>
 						<option value='disc_ff_style'>disc_ff_style</option>
 						<option value='material_style'>material_style</option>
 						<option value='ogp_style'>ogp_style</option>
