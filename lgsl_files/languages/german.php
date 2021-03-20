@@ -2,7 +2,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  global $lgsl_config; 
+  global $lgsl_config;
 
   $lgsl_config['text']['ttl'] = "Live Game Server Liste";
   $lgsl_config['text']['vsd'] = "KLICK FÜR ANZEIGE DER SERVERDETAILS";

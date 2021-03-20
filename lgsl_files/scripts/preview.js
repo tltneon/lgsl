@@ -31,7 +31,7 @@ document.querySelectorAll('#server_list_table > tbody > tr > td.map_cell').forEa
 		el.style.position = 'absolute';
 		el.className = 'mapImage' + b;
 		a.appendChild(el);
-		
+
 		a.onmouseover = function(){document.querySelector('.mapImage'+b).style.display = 'inherit';}
 		a.onmouseout = function(){document.querySelector('.mapImage'+b).style.display = 'none';}
 	}

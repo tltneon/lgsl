@@ -2,9 +2,9 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  global $lgsl_config; 
+  global $lgsl_config;
 
-	$lgsl_config['text']['ttl'] = "Live Game Server List";
+  $lgsl_config['text']['ttl'] = "Live Game Server List";
   $lgsl_config['text']['vsd'] = "CLICK TO VIEW SERVER DETAILS";
   $lgsl_config['text']['slk'] = "GAME LINK";
   $lgsl_config['text']['sts'] = "Status";
@@ -42,21 +42,21 @@
   $lgsl_config['text']['asc'] = "SUCCESS - PLEASE CONFIRM ITS THE CORRECT SERVER";
   $lgsl_config['text']['aas'] = "Add Server";
   $lgsl_config['text']['loc'] = "Location:";
-	$lgsl_config['text']['umn'] = "USERNAME";
-	$lgsl_config['text']['pwd'] = "PASSWORD";
-	$lgsl_config['text']['lgn'] = "Login";
-	$lgsl_config['text']['skc'] = "Save - Keep Cache";
-	$lgsl_config['text']['srh'] = "Save - Reset Cache";
-	$lgsl_config['text']['mip'] = "Map Image Paths";
-	$lgsl_config['text']['avm'] = "Advanced Management";
-	$lgsl_config['text']['nrm'] = "Normal Management";
-	$lgsl_config['text']['bak'] = "BACK TO SERVERS LIST";
-	$lgsl_config['text']['yes'] = "YES";
-	$lgsl_config['text']['nno'] = "NO";
-	$lgsl_config['text']['enb'] = "Enabled";
-	$lgsl_config['text']['dsb'] = "Disabled";
-	$lgsl_config['text']['aum'] = "ADMIN USERNAME OR PASSWORD MISSING FROM CONFIG";
-	$lgsl_config['text']['apc'] = "ADMIN PASSWORD MUST BE CHANGED FROM THE DEFAULT";
+  $lgsl_config['text']['umn'] = "USERNAME";
+  $lgsl_config['text']['pwd'] = "PASSWORD";
+  $lgsl_config['text']['lgn'] = "Login";
+  $lgsl_config['text']['skc'] = "Save - Keep Cache";
+  $lgsl_config['text']['srh'] = "Save - Reset Cache";
+  $lgsl_config['text']['mip'] = "Map Image Paths";
+  $lgsl_config['text']['avm'] = "Advanced Management";
+  $lgsl_config['text']['nrm'] = "Normal Management";
+  $lgsl_config['text']['bak'] = "BACK TO SERVERS LIST";
+  $lgsl_config['text']['yes'] = "YES";
+  $lgsl_config['text']['nno'] = "NO";
+  $lgsl_config['text']['enb'] = "Enabled";
+  $lgsl_config['text']['dsb'] = "Disabled";
+  $lgsl_config['text']['aum'] = "ADMIN USERNAME OR PASSWORD MISSING FROM CONFIG";
+  $lgsl_config['text']['apc'] = "ADMIN PASSWORD MUST BE CHANGED FROM THE DEFAULT";
   $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
 
 //------------------------------------------------------------------------------------------------------------+

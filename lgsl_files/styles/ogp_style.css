@@ -39,7 +39,7 @@ a:hover, a:active { color:#fff; }
 #topmenu > li:before {content: '► ';}
 
 /* add */
-.annotation { text-align: center; background-color: rgba(26, 28, 34, 0.2); padding-top:17px; padding-bottom:17px; } 
+.annotation { text-align: center; background-color: rgba(26, 28, 34, 0.2); padding-top:17px; padding-bottom:17px; }
 
 /* details */
 .players_table { margin: auto; border: 1px solid #22252f; border-spacing: 0px 0px; border-collapse: collapse; }
@@ -70,7 +70,7 @@ a:hover, a:active { color:#fff; }
   background-size: cover;
 }
 .details_info_column:nth-child(2) {
-  border-radius: 4px; 
+  border-radius: 4px;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
 }
 .details_password_image {
@@ -172,8 +172,8 @@ div.servername_link { display: none; }
 		height:3em;
 	}
 	.connectlink_cell,
-	td.details_cell, 
-	.map_cell, 
+	td.details_cell,
+	.map_cell,
 	div.servername_nolink,
 	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
 		display: none;
@@ -191,7 +191,7 @@ div.servername_link { display: none; }
 	#server_list_table tr.server_nrs {
     background-color: rgba(148, 0, 0, 0.2);
 	}
-	
+
 	/*details*/
 	#gamelink { display: none; }
   .details_info { display: flex; flex-flow: column; }

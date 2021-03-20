@@ -1,7 +1,7 @@
 <?php
 //------------------------------------------------------------------------------------------------------------+
 	header("Content-Type:text/html; charset=utf-8");
-	
+
 	require "lgsl_files/lgsl_config.php";
 //------------------------------------------------------------------------------------------------------------+
 ?>
@@ -19,7 +19,7 @@
 	</head>
 
 	<body>
-	
+
 		<div id="topmenu">
 			<li><a href="../../"><?php echo $lgsl_config['text']['mpg']; ?></a></li>
 			<?php if($lgsl_config['public_add']) echo '<li><a href="?s=add">'.$lgsl_config["text"]["aas"].'</a></li>';?>
@@ -27,23 +27,23 @@
 			<?php if(isset($_GET['s'])) echo '<li><a href="./">'.$lgsl_config['text']['bak'].'</a></li>';?>
 		</div>
 		<a id="adminlink" href="admin.php"></a>
-		
+
 		<div id="container">
 <?php
 //------------------------------------------------------------------------------------------------------------+
   global $output, $lgsl_server_id;
-	
+
 
   $s = isset($_GET['s']) ? $_GET['s'] : "";
 
   if     (is_numeric($s)) { $lgsl_server_id = $s; require "lgsl_files/lgsl_details.php"; }
   elseif ($s == "add")    {                       require "lgsl_files/lgsl_add.php";     }
   else                    {                       require "lgsl_files/lgsl_list.php";    }
-   
+
   if(isset($lgsl_config['scripts']))
-		foreach($lgsl_config['scripts'] as $script)
-			$output .= "<script src='lgsl_files/scripts/".$script."'></script>";
-  
+    foreach($lgsl_config['scripts'] as $script)
+      $output .= "<script src='lgsl_files/scripts/".$script."'></script>";
+
   echo $output;
   unset($output);
 //------------------------------------------------------------------------------------------------------------+

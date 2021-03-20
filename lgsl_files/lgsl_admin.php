@@ -13,7 +13,7 @@
   if (!defined("LGSL_ADMIN")) { exit("DIRECT ACCESS ADMIN FILE NOT ALLOWED"); }
 
   require "lgsl_class.php";
-	
+
 	global $lgsl_database;
 
   lgsl_database();
@@ -109,11 +109,11 @@
       $cache_time = mysqli_real_escape_string($lgsl_database, $cache_time);
 
       // THIS PREVENTS PORTS OR WHITESPACE BEING PUT IN THE IP
-			$ip = trim($ip);
-			if (strpos($ip, ':') !== false){
-				$c_port = explode(":", $ip)[1];
-				$ip = explode(":", $ip)[0];
-			}
+      $ip = trim($ip);
+      if (strpos($ip, ':') !== false){
+        $c_port = explode(":", $ip)[1];
+        $ip = explode(":", $ip)[0];
+      }
 
       list($c_port, $q_port, $s_port) = lgsl_port_conversion($type, $c_port, $q_port, $s_port);
 
@@ -132,7 +132,7 @@
 
   if (!empty($_POST['lgsl_check_updates']))
   {
-		
+
 		$context = stream_context_create(
 				array(
 						"http" => array(
@@ -142,10 +142,10 @@
 		);
 		$lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/branches/master", false, $context);
 		$buffer1 = json_decode($lgsl_fp, true);
-		 
+
 		$lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/releases/latest", false, $context);
 		$buffer2 = json_decode($lgsl_fp, true);
- 
+
 		$output .= '
 			<div class="tt">
 				<div class="inlined">
@@ -175,7 +175,7 @@
 			</div>
 			<style>
 				.inlined {
-					display: inline-block; 
+					display: inline-block;
 					width: 300px;
 					vertical-align: top;
 				}
@@ -214,24 +214,24 @@
 
     $output .= "
     <form method='post' action='' style='padding-top: 40px; text-align: center;'>
-			<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-			<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
+      <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+      <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
     </form>";
 
     return;
   }
-	
+
 //------------------------------------------------------------------------------------------------------------+
 
   if (!empty($_POST['lgsl_map_image_paths']))
   {
     $server_list = lgsl_query_cached_all("s");
-		
-		$output .= "
-		<div style='padding: 5px;'>
-			Haven't got images? <a href='https://github.com/tltneon/lgsl/wiki#how-can-i-add-map-images' target='_blank'>How to: add map icons</a>
-		</div>
-		";
+
+    $output .= "
+    <div style='padding: 5px;'>
+      Haven't got images? <a href='https://github.com/tltneon/lgsl/wiki#how-can-i-add-map-images' target='_blank'>How to: add map icons</a>
+    </div>
+    ";
 
     foreach ($server_list as $server)
     {
@@ -241,20 +241,20 @@
 
       $output .= "
       <div style='padding-bottom: 5px;'>
-				<div style='display: inline-block;'>	
-					<img src='{$image_map}' width='32' height='32' />
-				</div>	
-				<div style='display: inline-block;vertical-align: super;'>	
-					<div>Map Name: {$server['s']['map']}</div>
-					<div>Link: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
-				</div>
+        <div style='display: inline-block;'>
+          <img src='{$image_map}' width='32' height='32' />
+        </div>
+        <div style='display: inline-block;vertical-align: super;'>
+          <div>Map Name: {$server['s']['map']}</div>
+          <div>Link: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
+        </div>
       </div>";
     }
 
     $output .= "
     <form method='post' action='' style='padding: 15px;'>
-			<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-			<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
+      <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+      <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
     </form>";
 
     return;
@@ -263,18 +263,18 @@
 //------------------------------------------------------------------------------------------------------------+
 
   if (!empty($_POST['lgsl_backup']))
-	{
-		$mysqli_result = mysqli_query($lgsl_database, "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
-		$content = "";
-		while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
-		{
-			$content .= $mysqli_row['ip'] . ':' . $mysqli_row['c_port'] . "\r\n";
-		}
-		$fp = fopen("lgslBackup.txt", "wb");
-		fwrite($fp,$content);
-		fclose($fp);
-	}	
-	
+  {
+    $mysqli_result = mysqli_query($lgsl_database, "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
+    $content = "";
+    while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
+    {
+      $content .= $mysqli_row['ip'] . ':' . $mysqli_row['c_port'] . "\r\n";
+    }
+    $fp = fopen("lgslBackup.txt", "wb");
+    fwrite($fp,$content);
+    fclose($fp);
+  }
+
 //------------------------------------------------------------------------------------------------------------+
 
   if ((!empty($_POST['lgsl_management']) && empty($_POST['lgsl_switch'])) || (empty($_POST['lgsl_management']) && !empty($_POST['lgsl_switch'])) || (!isset($_POST['lgsl_management']) && $lgsl_config['management']))

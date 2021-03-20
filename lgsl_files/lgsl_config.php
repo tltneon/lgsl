@@ -140,16 +140,16 @@
   $lgsl_config['image_mod']     = true;      // true = show userbar in server's details
   $lgsl_config['pagination_mod']= true;      // true = using pagination
   $lgsl_config['pagination_lim']= 15;        // limit per page
-	
-  include("languages/english.php");									// sets LGSL language
-  // English language: "languages/english.php"  		// Richard Perry
-  // Russian language: "languages/russian.php"  		// Neon
-  // French language: "languages/french.php"    		// own3mall
-  // German language: "languages/german.php"    		// ctannurella
-  // Spanish language: "languages/spanish.php"  		// own3mall
-  // Czech language: "languages/czech.php"					// Neon
-  // Bulgarian language: "languages/bulgarian.php"	// Neon
-  // Slovak language: "languages/slovak.php"				// KristianP26
-  // Arabic language: "languages/arabic.php"				// lamjed001
+
+  include("languages/english.php");                 // sets LGSL language
+  // English language: "languages/english.php"      // Richard Perry
+  // Russian language: "languages/russian.php"      // Neon
+  // French language: "languages/french.php"        // own3mall
+  // German language: "languages/german.php"        // ctannurella
+  // Spanish language: "languages/spanish.php"      // own3mall
+  // Czech language: "languages/czech.php"          // Neon
+  // Bulgarian language: "languages/bulgarian.php"  // Neon
+  // Slovak language: "languages/slovak.php"        // KristianP26
+  // Arabic language: "languages/arabic.php"        // lamjed001
 
 //------------------------------------------------------------------------------------------------------------+

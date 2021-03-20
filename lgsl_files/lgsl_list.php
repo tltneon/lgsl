@@ -12,11 +12,11 @@
 
   require "lgsl_class.php";
 
-	$type = (isset($_GET['type']) ?  $_GET['type'] : '');
-	$game = (isset($_GET['game']) ?  $_GET['game'] : '');
-	if($lgsl_config['pagination_mod']){
-		$page = (isset($_GET['page']) ?  (int)$_GET['page'] : 1);
-	}
+  $type = (isset($_GET['type']) ?  $_GET['type'] : '');
+  $game = (isset($_GET['game']) ?  $_GET['game'] : '');
+  if($lgsl_config['pagination_mod']){
+    $page = (isset($_GET['page']) ?  (int)$_GET['page'] : 1);
+  }
   $server_list = lgsl_query_group(array("type" => $type, "game" => $game, "page" => $page));
   $server_list = lgsl_sort_servers($server_list);
 
@@ -24,7 +24,7 @@
 	if(count($server_list) == 0) {
 		$output .= "<div id='back_to_servers_list'><a href='./admin.php'>TO ADMIN PANEL</a></div>";
 	}
-	
+
   $output .= "
 	<table id='server_list_table'>
 		<tr id='server_list_table_top'>
@@ -100,7 +100,7 @@
 
 	$output .= "
 	</table>";
-	
+
 	if($lgsl_config['pagination_mod'] && ((int)(count($server_list)/ $lgsl_config['pagination_lim']) > 0 || strval($page) > 1)){
 		$output .= "
 			<div id='pages'>
@@ -119,9 +119,9 @@
 
     $output .= "
     <div id='totals'>
-		<div> {$lgsl_config['text']['tns']}: {$total['servers']}    </div>
-		<div> {$lgsl_config['text']['tnp']}: {$total['players']}    </div>
-		<div> {$lgsl_config['text']['tmp']}: {$total['playersmax']} </div>
+        <div> {$lgsl_config['text']['tns']}: {$total['servers']}    </div>
+        <div> {$lgsl_config['text']['tnp']}: {$total['players']}    </div>
+        <div> {$lgsl_config['text']['tmp']}: {$total['playersmax']} </div>
     </div>";
   }
 
