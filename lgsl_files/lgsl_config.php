@@ -141,6 +141,9 @@
   $lgsl_config['pagination_mod']= true;      // true = using pagination
   $lgsl_config['pagination_lim']= 15;        // limit per page
 
+//------------------------------------------------------------------------------------------------------------+
+//[ TRANSLATION ]
+
   include("languages/english.php");                 // sets LGSL language
   // English language: "languages/english.php"      // Richard Perry
   // Russian language: "languages/russian.php"      // Neon

@@ -107,7 +107,7 @@
 
           $output .= "
           <tr>
-            <td style='padding: 0px 5px; border: 1px solid gray;'>
+            <td style='padding: 0 5px; border: 1px solid gray;'>
               <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; height:{$zone_height}; overflow:auto; text-align:left'>
                 <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
                 <span style='padding:1px; float:right'> {$server['s']['players']} / {$server['s']['playersmax']} </span>

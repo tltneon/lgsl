@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -409,7 +409,7 @@
       case "aarmy"         : $c_to_q = 1;     $c_def = 1716;    $q_def = 1717;    $c_to_s = 0;   break;
       case "aarmy3"        : $c_to_q = 0;     $c_def = 8777;    $q_def = 39300;   $c_to_s = 0;   break;
       case "arcasimracing" : $c_to_q = -100;  $c_def = 34397;   $q_def = 34297;   $c_to_s = 0;   break;
-      case "arma3"         : $c_to_q = 0;     $c_def = 2302;    $q_def = 2303;    $c_to_s = 0; 	 break;
+      case "arma3"         : $c_to_q = 0;     $c_def = 2302;    $q_def = 2303;    $c_to_s = 0;   break;
       case "bfbc2"         : $c_to_q = 0;     $c_def = 19567;   $q_def = 48888;   $c_to_s = 0;   break;
       case "bfvietnam"     : $c_to_q = 0;     $c_def = 15567;   $q_def = 23000;   $c_to_s = 0;   break;
       case "bf1942"        : $c_to_q = 0;     $c_def = 14567;   $q_def = 23000;   $c_to_s = 0;   break;
@@ -444,8 +444,8 @@
       case "starwarsrc"    : $c_to_q = 0;     $c_def = 7777;    $q_def = 11138;   $c_to_s = 0;   break;
       case "swat4"         : $c_to_q = 1;     $c_def = 10780;   $q_def = 10781;   $c_to_s = 0;   break;
       case "tribesv"       : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
-      case "ts"	           : $c_to_q = 0;     $c_def = 8767;    $q_def = 51234;   $c_to_s = 0; 	 break;
-      case "ts3"           : $c_to_q = 0;     $c_def = 9987;    $q_def = 10011;   $c_to_s = 0; 	 break;
+      case "ts"            : $c_to_q = 0;     $c_def = 8767;    $q_def = 51234;   $c_to_s = 0;   break;
+      case "ts3"           : $c_to_q = 0;     $c_def = 9987;    $q_def = 10011;   $c_to_s = 0;   break;
       case "ut"            : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
       case "ut2003"        : $c_to_q = 1;     $c_def = 7757;    $q_def = 7758;    $c_to_s = 10;  break;
       case "ut2003_"       : $c_to_q = 10;    $c_def = 7757;    $q_def = 7767;    $c_to_s = 0;   break;
@@ -571,7 +571,7 @@
       if (strpos($request, "s") === FALSE && empty($server['s']['name']))                         { unset($server['s']); }
     }
 
-		$server['s']['cache_time']    = time();
+    $server['s']['cache_time'] = time();
 
 //---------------------------------------------------------+
 
@@ -585,49 +585,49 @@
   {
 //---------------------------------------------------------+
 
-		if ($scheme != 'http') {
+    if ($scheme != 'http') {
 
-			$lgsl_fp = @fsockopen("{$scheme}://{$server['b']['ip']}", $server['b']['q_port'], $errno, $errstr, 1);
+      $lgsl_fp = @fsockopen("{$scheme}://{$server['b']['ip']}", $server['b']['q_port'], $errno, $errstr, 1);
 
-			if (!$lgsl_fp) { return FALSE; }
+      if (!$lgsl_fp) { return FALSE; }
 
-			global $lgsl_config;
+      global $lgsl_config;
 
-			$lgsl_config['timeout'] = intval($lgsl_config['timeout']);
+      $lgsl_config['timeout'] = intval($lgsl_config['timeout']);
 
-			stream_set_timeout($lgsl_fp, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
-			stream_set_blocking($lgsl_fp, TRUE);
+      stream_set_timeout($lgsl_fp, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
+      stream_set_blocking($lgsl_fp, TRUE);
 
-		}
-		else {
-			if ($lgsl_function == "lgsl_query_34") // ragemp
-			{
-				$ch =  curl_init('https://cdn.rage.mp/master/');
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-				curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-				$lgsl_fp = curl_exec($ch);
-				curl_close($ch);
-			}
-			elseif ($lgsl_function == "lgsl_query_36") // discord
-			{
-				$lgsl_fp = array();
+    }
+    else {
+      if ($lgsl_function == "lgsl_query_34") // ragemp
+      {
+        $ch =  curl_init('https://cdn.rage.mp/master/');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+        $lgsl_fp = curl_exec($ch);
+        curl_close($ch);
+      }
+      elseif ($lgsl_function == "lgsl_query_36") // discord
+      {
+        $lgsl_fp = array();
 
-				$raw_json = @file_get_contents("https://discord.com/api/v8/invites/{$server['b']['ip']}?with_counts=true");
-				$lgsl_fp[0] = json_decode($raw_json, true);
+        $raw_json = @file_get_contents("https://discord.com/api/v8/invites/{$server['b']['ip']}?with_counts=true");
+        $lgsl_fp[0] = json_decode($raw_json, true);
 
-				$raw_json = @file_get_contents("https://discordapp.com/api/guilds/{$lgsl_fp[0]['guild']['id']}/widget.json");
-				$lgsl_fp[1] = json_decode($raw_json, true);
-			}
-			elseif ($lgsl_function == "lgsl_query_37") // scum
-			{
-				$lgsl_fp = array();
-				$data = @file_get_contents("https://scumservers.net/api.php?ip={$server['b']['ip']}&port={$server['b']['c_port']}");
-				$lgsl_fp = json_decode($data, true);
-			}
-		}
+        $raw_json = @file_get_contents("https://discordapp.com/api/guilds/{$lgsl_fp[0]['guild']['id']}/widget.json");
+        $lgsl_fp[1] = json_decode($raw_json, true);
+          }
+          elseif ($lgsl_function == "lgsl_query_37") // scum
+          {
+        $lgsl_fp = array();
+        $data = @file_get_contents("https://scumservers.net/api.php?ip={$server['b']['ip']}&port={$server['b']['c_port']}");
+        $lgsl_fp = json_decode($data, true);
+      }
+    }
 
 //---------------------------------------------------------+
 //  CHECK WHAT IS NEEDED
@@ -1065,17 +1065,17 @@
 
     if ($server['b']['type'] == "halflifewon")
     {
-      if ($lgsl_need['s']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFdetails\x00"); }
-      elseif ($lgsl_need['e']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFrules\x00"); }
+      if     ($lgsl_need['s']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFdetails\x00"); }
+      elseif ($lgsl_need['e']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFrules\x00");   }
       elseif ($lgsl_need['p']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFplayers\x00"); }
     }
     else
     {
       $challenge_code = isset($lgsl_need['challenge']) ? $lgsl_need['challenge'] : "\x00\x00\x00\x00";
 
-      if ($lgsl_need['s']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x54Source Engine Query\x00"); }
-      elseif ($lgsl_need['e']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x56{$challenge_code}"); }
-      elseif ($lgsl_need['p']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x55{$challenge_code}"); }
+      if     ($lgsl_need['s']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x54Source Engine Query\x00"); }
+      elseif ($lgsl_need['e']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x56{$challenge_code}");       }
+      elseif ($lgsl_need['p']) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x55{$challenge_code}");       }
     }
 
 //---------------------------------------------------------+
@@ -1366,7 +1366,7 @@
       if (count($plugins) == 2) {
         while ($key = lgsl_cut_string($plugins[1],0," ")) { $server['e'][$key] = lgsl_cut_string($plugins[1],0,"; "); }
       }
-      $buffer = $buffer."\x00";	// Needed to correctly terminate the players list
+      $buffer = $buffer."\x00"; // Needed to correctly terminate the players list
     }
 
     if ($server['s']['players'] == "0") { return TRUE; } // IF SERVER IS EMPTY SKIP THE PLAYER CODE
@@ -3722,7 +3722,7 @@
     if ($ver) { $server['e']['version'] = lgsl_unescape($items['version']); }
     if (!$lgsl_need['p'] || $server['s']['players'] < 1) { return TRUE; }
 
-    fwrite($lgsl_fp, $param[$ver][3]."\n");	// request playerlist
+    fwrite($lgsl_fp, $param[$ver][3]."\n"); // request playerlist
     $buffer = fread($lgsl_fp, 4096);
     while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") {
         $part = fread($lgsl_fp, 4096);

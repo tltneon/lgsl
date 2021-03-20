@@ -5,30 +5,29 @@
 	require "lgsl_files/lgsl_config.php";
 //------------------------------------------------------------------------------------------------------------+
 ?>
-
 <!DOCTYPE html>
 <html>
-	<head>
-		<title><?php echo $lgsl_config['text']['ttl']; ?></title>
-		<link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
-		<link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-		<meta http-equiv='content-style-type' content='text/css' />
-		<link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style']; ?>' type='text/css' />
-	</head>
+  <head>
+    <title><?php echo $lgsl_config['text']['ttl']; ?></title>
+    <link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <meta http-equiv='content-style-type' content='text/css' />
+    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style']; ?>' type='text/css' />
+  </head>
 
-	<body>
+  <body>
 
-		<div id="topmenu">
-			<li><a href="../../"><?php echo $lgsl_config['text']['mpg']; ?></a></li>
-			<?php if($lgsl_config['public_add']) echo '<li><a href="?s=add">'.$lgsl_config["text"]["aas"].'</a></li>';?>
-			<?php if(file_exists("install.php")) echo '<li><a href="./install.php">INSTALLATION PAGE</a></li>';?>
-			<?php if(isset($_GET['s'])) echo '<li><a href="./">'.$lgsl_config['text']['bak'].'</a></li>';?>
-		</div>
-		<a id="adminlink" href="admin.php"></a>
+    <div id="topmenu">
+      <li><a href="../../"><?php echo $lgsl_config['text']['mpg']; ?></a></li>
+      <?php if($lgsl_config['public_add']) echo '<li><a href="?s=add">'.$lgsl_config["text"]["aas"].'</a></li>';?>
+      <?php if(file_exists("install.php")) echo '<li><a href="./install.php">INSTALLATION PAGE</a></li>';?>
+      <?php if(isset($_GET['s'])) echo '<li><a href="./">'.$lgsl_config['text']['bak'].'</a></li>';?>
+    </div>
+    <a id="adminlink" href="admin.php"></a>
 
-		<div id="container">
+    <div id="container">
 <?php
 //------------------------------------------------------------------------------------------------------------+
   global $output, $lgsl_server_id;
@@ -48,6 +47,6 @@
   unset($output);
 //------------------------------------------------------------------------------------------------------------+
 ?>
-		</div>
-	</body>
+    </div>
+  </body>
 </html>
