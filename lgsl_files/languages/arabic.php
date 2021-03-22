@@ -2,9 +2,9 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  global $lgsl_config; 
+  global $lgsl_config;
 
-	$lgsl_config['text']['ttl'] = "Live Game Server List";
+  $lgsl_config['text']['ttl'] = "Live Game Server List";
   $lgsl_config['text']['vsd'] = "انقر لعرض تفاصيل الخادم";
   $lgsl_config['text']['slk'] = "رابط اللعبة";
   $lgsl_config['text']['sts'] = "الحالة";
@@ -42,21 +42,21 @@
   $lgsl_config['text']['asc'] = "تم بنجاح - يرجى التأكد من أنه الخادم الصحيح";
   $lgsl_config['text']['aas'] = "إضافة خادم";
   $lgsl_config['text']['loc'] = "الموقع:";
-	$lgsl_config['text']['umn'] = "اسم االمستخدم";
-	$lgsl_config['text']['pwd'] = "كلمة المرور";
-	$lgsl_config['text']['lgn'] = "تسجيل الددخول";
-	$lgsl_config['text']['skc'] = "حفظ - حفظ ذاكرة التخزين المؤقت";
-	$lgsl_config['text']['srh'] = "حفظ - إعادة تعيين ذاكرة التخزين المؤقت";
-	$lgsl_config['text']['mip'] = "مسارات صورة الخريطة";
-	$lgsl_config['text']['avm'] = "الإدارة المتقدمة";
-	$lgsl_config['text']['nrm'] = "الإدارة العادية";
-	$lgsl_config['text']['bak'] = "رجوع إلى قائمة الخوادم";
-	$lgsl_config['text']['yes'] = "نعم";
-	$lgsl_config['text']['nno'] = "لا";
-	$lgsl_config['text']['enb'] = "ممكن";
-	$lgsl_config['text']['dsb'] = "معطل";
-	$lgsl_config['text']['aum'] = "اسم المستخدم أو كلمة المرور للمشرف مفقود من التكوين";
-	$lgsl_config['text']['apc'] = "يجب تغيير كلمة مرور المشرف من الافتراضي";
+  $lgsl_config['text']['umn'] = "اسم االمستخدم";
+  $lgsl_config['text']['pwd'] = "كلمة المرور";
+  $lgsl_config['text']['lgn'] = "تسجيل الددخول";
+  $lgsl_config['text']['skc'] = "حفظ - حفظ ذاكرة التخزين المؤقت";
+  $lgsl_config['text']['srh'] = "حفظ - إعادة تعيين ذاكرة التخزين المؤقت";
+  $lgsl_config['text']['mip'] = "مسارات صورة الخريطة";
+  $lgsl_config['text']['avm'] = "الإدارة المتقدمة";
+  $lgsl_config['text']['nrm'] = "الإدارة العادية";
+  $lgsl_config['text']['bak'] = "رجوع إلى قائمة الخوادم";
+  $lgsl_config['text']['yes'] = "نعم";
+  $lgsl_config['text']['nno'] = "لا";
+  $lgsl_config['text']['enb'] = "ممكن";
+  $lgsl_config['text']['dsb'] = "معطل";
+  $lgsl_config['text']['aum'] = "اسم المستخدم أو كلمة المرور للمشرف مفقود من التكوين";
+  $lgsl_config['text']['apc'] = "يجب تغيير كلمة مرور المشرف من الافتراضي";
   $lgsl_config['text']['mpg'] = "إلى الصفحة الرئيسية";
 
 //------------------------------------------------------------------------------------------------------------+

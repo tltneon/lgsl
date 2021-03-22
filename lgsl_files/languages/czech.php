@@ -2,9 +2,9 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  global $lgsl_config; 
+  global $lgsl_config;
 
-	$lgsl_config['text']['ttl'] = "Live Game Server List";
+  $lgsl_config['text']['ttl'] = "Live Game Server List";
   $lgsl_config['text']['vsd'] = "KLIKNUTÍM NA ZOBRAZENÍ DETAILŮ SERVERU";
   $lgsl_config['text']['slk'] = "HRA LINK";
   $lgsl_config['text']['sts'] = "Status";
@@ -42,19 +42,19 @@
   $lgsl_config['text']['asc'] = "ÚSPĚCH - POTVRZTE SE, ŽE JE SPRÁVNÝ SERVER";
   $lgsl_config['text']['aas'] = "Přidat server";
   $lgsl_config['text']['loc'] = "Umístění:";
-	$lgsl_config['text']['umn'] = "USERNAME";
-	$lgsl_config['text']['pwd'] = "HESLO";
-	$lgsl_config['text']['lgn'] = "Přihlášení";
-	$lgsl_config['text']['skc'] = "Uložit - zachovat mezipaměť";
-	$lgsl_config['text']['srh'] = "Uložit - Resetovat mezipaměť";
-	$lgsl_config['text']['mip'] = "Map Image Paths";
-	$lgsl_config['text']['avm'] = "Pokročilá správa";
-	$lgsl_config['text']['nrm'] = "Normální správa";
-	$lgsl_config['text']['bak'] = "ZPĚT NA SEZNAM SLUŽEB";
-	$lgsl_config['text']['yes'] = "ANO";
-	$lgsl_config['text']['nno'] = "NE";
-	$lgsl_config['text']['enb'] = "Povoleno";
-	$lgsl_config['text']['dsb'] = "Zakázáno";
+  $lgsl_config['text']['umn'] = "USERNAME";
+  $lgsl_config['text']['pwd'] = "HESLO";
+  $lgsl_config['text']['lgn'] = "Přihlášení";
+  $lgsl_config['text']['skc'] = "Uložit - zachovat mezipaměť";
+  $lgsl_config['text']['srh'] = "Uložit - Resetovat mezipaměť";
+  $lgsl_config['text']['mip'] = "Map Image Paths";
+  $lgsl_config['text']['avm'] = "Pokročilá správa";
+  $lgsl_config['text']['nrm'] = "Normální správa";
+  $lgsl_config['text']['bak'] = "ZPĚT NA SEZNAM SLUŽEB";
+  $lgsl_config['text']['yes'] = "ANO";
+  $lgsl_config['text']['nno'] = "NE";
+  $lgsl_config['text']['enb'] = "Povoleno";
+  $lgsl_config['text']['dsb'] = "Zakázáno";
   $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
 
 //------------------------------------------------------------------------------------------------------------+

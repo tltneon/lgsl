@@ -2,9 +2,9 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  global $lgsl_config; 
+  global $lgsl_config;
 
-	$lgsl_config['text']['ttl'] = "Live Game Server List";
+  $lgsl_config['text']['ttl'] = "Live Game Server List";
   $lgsl_config['text']['vsd'] = "Щракнете, за да видите данните на сървъра";
   $lgsl_config['text']['slk'] = "ВРЪЗКА НА ИГРАТА";
   $lgsl_config['text']['sts'] = "Състояние";
@@ -42,19 +42,19 @@
   $lgsl_config['text']['asc'] = "УСПЕХ - МОЛЯ, ПОТВЪРЖДАВАЙТЕ СЕ ПРАВИЛНИЯ СЪРВЪР";
   $lgsl_config['text']['aas'] = "Добавяне на сървър";
   $lgsl_config['text']['loc'] = "Местоположение:";
-	$lgsl_config['text']['umn'] = "USERNAME";
-	$lgsl_config['text']['pwd'] = "PASSWORD";
-	$lgsl_config['text']['lgn'] = "Вход";
-	$lgsl_config['text']['skc'] = "Запазване - запазване на кеша";
-	$lgsl_config['text']['srh'] = "Запазване - нулиране на кеша";
-	$lgsl_config['text']['mip'] = "Пътни изображения на карти";
-	$lgsl_config['text']['avm'] = "Разширено управление";
-	$lgsl_config['text']['nrm'] = "Нормално управление";
-	$lgsl_config['text']['bak'] = "ОБРАТНО КЪМ СПИСЪКА НА СЪРВЪРИТЕ";
-	$lgsl_config['text']['yes'] = "ДА";
-	$lgsl_config['text']['nno'] = "НЕ";
-	$lgsl_config['text']['enb'] = "Активирано";
-	$lgsl_config['text']['dsb'] = "Деактивиран";
+  $lgsl_config['text']['umn'] = "USERNAME";
+  $lgsl_config['text']['pwd'] = "PASSWORD";
+  $lgsl_config['text']['lgn'] = "Вход";
+  $lgsl_config['text']['skc'] = "Запазване - запазване на кеша";
+  $lgsl_config['text']['srh'] = "Запазване - нулиране на кеша";
+  $lgsl_config['text']['mip'] = "Пътни изображения на карти";
+  $lgsl_config['text']['avm'] = "Разширено управление";
+  $lgsl_config['text']['nrm'] = "Нормално управление";
+  $lgsl_config['text']['bak'] = "ОБРАТНО КЪМ СПИСЪКА НА СЪРВЪРИТЕ";
+  $lgsl_config['text']['yes'] = "ДА";
+  $lgsl_config['text']['nno'] = "НЕ";
+  $lgsl_config['text']['enb'] = "Активирано";
+  $lgsl_config['text']['dsb'] = "Деактивиран";
   $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
 
 //------------------------------------------------------------------------------------------------------------+

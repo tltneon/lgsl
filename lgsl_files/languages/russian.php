@@ -2,9 +2,9 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  global $lgsl_config; 
+  global $lgsl_config;
 
-	$lgsl_config['text']['ttl'] = "Онлайн мониторинг серверов LGSL";
+  $lgsl_config['text']['ttl'] = "Онлайн мониторинг серверов LGSL";
   $lgsl_config['text']['vsd'] = "Нажмите для просмотра подробностей";
   $lgsl_config['text']['slk'] = "ПОДКЛЮЧИТЬСЯ К СЕРВЕРУ";
   $lgsl_config['text']['sts'] = "Статус";
@@ -42,19 +42,19 @@
   $lgsl_config['text']['asc'] = "УСПЕШНО - ПОДТВЕРДИТЕ ДОБАВЛЕНИЕ В БАЗУ";
   $lgsl_config['text']['aas'] = "Добавить сервер";
   $lgsl_config['text']['loc'] = "Местонахождение:";
-	$lgsl_config['text']['umn'] = "Логин";
-	$lgsl_config['text']['pwd'] = "Пароль";
-	$lgsl_config['text']['lgn'] = "Войти";
-	$lgsl_config['text']['skc'] = "Сохранить и оставить кэш";
-	$lgsl_config['text']['srh'] = "Сохранить и очистить кэш";
-	$lgsl_config['text']['mip'] = "Пути до изображений карт";
-	$lgsl_config['text']['avm'] = "Расширенное управление";
-	$lgsl_config['text']['nrm'] = "Обычное управление";
-	$lgsl_config['text']['bak'] = "Вернуться к списку серверов";
-	$lgsl_config['text']['yes'] = "ДА";
-	$lgsl_config['text']['nno'] = "НЕТ";
-	$lgsl_config['text']['enb'] = "Включен";
-	$lgsl_config['text']['dsb'] = "Выключен";
+  $lgsl_config['text']['umn'] = "Логин";
+  $lgsl_config['text']['pwd'] = "Пароль";
+  $lgsl_config['text']['lgn'] = "Войти";
+  $lgsl_config['text']['skc'] = "Сохранить и оставить кэш";
+  $lgsl_config['text']['srh'] = "Сохранить и очистить кэш";
+  $lgsl_config['text']['mip'] = "Пути до изображений карт";
+  $lgsl_config['text']['avm'] = "Расширенное управление";
+  $lgsl_config['text']['nrm'] = "Обычное управление";
+  $lgsl_config['text']['bak'] = "Вернуться к списку серверов";
+  $lgsl_config['text']['yes'] = "ДА";
+  $lgsl_config['text']['nno'] = "НЕТ";
+  $lgsl_config['text']['enb'] = "Включен";
+  $lgsl_config['text']['dsb'] = "Выключен";
   $lgsl_config['text']['mpg'] = "На главную";
 
 //------------------------------------------------------------------------------------------------------------+

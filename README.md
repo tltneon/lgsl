@@ -19,7 +19,7 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 ![lgsl Server List on laptop](https://i.imgur.com/oU2x9Y5.png)
 ### Server List on mobile device
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
- 
+
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
 #### v6.0.1
 - **New Style: Cards** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl9/index.php)]

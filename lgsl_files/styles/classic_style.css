@@ -17,7 +17,7 @@ a:link { text-decoration:none; color:#c00000; }
 a:visited { text-decoration:none; color:#c00000; }
 a:hover { color:#7500c0; }
 a:active { color:#7500c0; }
- 
+
 #adminlink {margin: 0;position: fixed;width: 25px;right: 0;top: 0;background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #ff000061);height: 25px;}
 #adminlink:hover {background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #f30606);}
 #topmenu {padding: 1em; padding-bottom:6px; border-bottom: 6px solid #e4eaf2; margin-bottom:6px; }
@@ -25,7 +25,7 @@ a:active { color:#7500c0; }
 #topmenu > li:before {content: '► ';}
 
 /* add */
-.annotation { text-align: center; background-color: #e4eaf2; padding-top:17px; padding-bottom:17px; } 
+.annotation { text-align: center; background-color: #e4eaf2; padding-top:17px; padding-bottom:17px; }
 
 /* details */
 .players_table { margin: auto; border-spacing: 2px 4px; }
@@ -151,13 +151,13 @@ div.servername_link { display: none; }
 		height:3em;
 	}
 	.connectlink_cell,
-	td.details_cell, 
-	.map_cell, 
+	td.details_cell,
+	.map_cell,
 	div.servername_nolink,
 	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
 		display: none;
 	}
-  .servername_cell { padding: 0px; } 
+  .servername_cell { padding: 0px; }
   .servername_cell > .servername_link {
     width: 100%;
     overflow: hidden;
@@ -179,7 +179,7 @@ div.servername_link { display: none; }
 	#server_list_table tr.server_nrs {
     background-color: rgba(148, 0, 0, 0.2);
 	}
-	
+
 	/*details*/
 	#gamelink {display: none;}
 }

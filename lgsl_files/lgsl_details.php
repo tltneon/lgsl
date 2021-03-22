@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -26,13 +26,13 @@
 
   $server = lgsl_query_cached("", "", "", "", "", "sep", $lgsl_server_id);
 
-	if (!$server) { $output .= "<div id='invalid_server_id'> {$lgsl_config['text']['mid']} </div>"; return; }
+  if (!$server) { $output .= "<div id='invalid_server_id'> {$lgsl_config['text']['mid']} </div>"; return; }
 
-	$fields = lgsl_sort_fields($server, $fields_show, $fields_hide, $fields_other);
-	$server = lgsl_sort_players($server);
-	$server = lgsl_sort_extras($server);
-	$misc   = lgsl_server_misc($server);
-	$server = lgsl_server_html($server);
+  $fields = lgsl_sort_fields($server, $fields_show, $fields_hide, $fields_other);
+  $server = lgsl_sort_players($server);
+  $server = lgsl_sort_extras($server);
+  $misc   = lgsl_server_misc($server);
+  $server = lgsl_server_html($server);
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -44,7 +44,7 @@
 // SHOW THE STANDARD INFO
 
   $output .= "
-	<div id='servername_{$misc['text_status']}'> {$server['s']['name']} </div>
+    <div id='servername_{$misc['text_status']}'> {$server['s']['name']} </div>
     <div class='details_info'>
       <div class='details_info_column'>
         <a id='gamelink' href='{$misc['software_link']}'>{$lgsl_config['text']['slk']}</a>
@@ -69,8 +69,8 @@
               <div class='details_info_ceil'>{$lgsl_config['text']['plr']}:</div><div class='details_info_ceil'>{$server['s']['players']} / {$server['s']['playersmax']}</div></div>
           </div>
         </div>
-				<div class='details_info_row'>
-					Last update: " . Date('d.m.Y H:i:s', $server['s']['cache_time']) . "
+                <div class='details_info_row'>
+                    Last update: " . Date('d.m.Y H:i:s', $server['s']['cache_time']) . "
         </div>
       </div>
       <div class='details_info_column zone{$server['o']['zone']}' style='background-image: url({$misc['image_map']});'>
@@ -87,32 +87,32 @@
 //------------------------------------------------------------------------------------------------------------+
 
   if($lgsl_config['image_mod']){
-		if(extension_loaded('gd')){
-			$output .= '
-			<details>
-				<summary style="margin-bottom: 12px;">
-					Click to show server banners
-				</summary>
-				<div>
-					<img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
-					<textarea style="width: 32em; height: 2.3em;word-break: break-all;" onClick="this.select();">[url='.str_replace("lgsl_files/", "", lgsl_url_path()).($lgsl_config['direct_index'] ? "index.php" : "").'?s='.intval($_GET['s']).'][img]'.str_replace("lgsl_files/", "", lgsl_url_path()).'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
-				</div>
-			</details>
-			<div class="spacer"></div>
-			<style>
-				@media (max-width: 414px){
-					textarea { width: 98.5% !important; }
-				}
-				details[open] div {
-					animation: spoiler 1s;
-				}
-				@keyframes spoiler {
-					0%   {opacity: 0;}
-					100% {opacity: 1;}
-				}
-			</style>';
-		}
-		else {$output .= "<div id='invalid_server_id'> Error while trying to display userbar: GD library not loaded (see php.ini) </div>";}
+    if(extension_loaded('gd')){
+      $output .= '
+      <details>
+        <summary style="margin-bottom: 12px;">
+          Click to show server banners
+        </summary>
+        <div>
+          <img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
+          <textarea style="width: 32em; height: 2.3em;word-break: break-all;" onClick="this.select();">[url='.str_replace("lgsl_files/", "", lgsl_url_path()).($lgsl_config['direct_index'] ? "index.php" : "").'?s='.intval($_GET['s']).'][img]'.str_replace("lgsl_files/", "", lgsl_url_path()).'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
+        </div>
+      </details>
+      <div class="spacer"></div>
+      <style>
+        @media (max-width: 414px){
+          textarea { width: 98.5% !important; }
+        }
+        details[open] div {
+          animation: spoiler 1s;
+        }
+        @keyframes spoiler {
+          0%   {opacity: 0;}
+          100% {opacity: 1;}
+        }
+      </style>';
+    }
+    else {$output .= "<div id='invalid_server_id'> Error while trying to display userbar: GD library not loaded (see php.ini) </div>";}
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -183,9 +183,9 @@
 
     foreach ($server['e'] as $field => $value)
     {
-			if(preg_match('/(https*:\/\/|https*:\/\/www\.|www\.)[\w\.]*\/?[\w\/\?=&]*/i', $value)){
-				$value = "<a href='".$value."' target='_blank'>".$value."</a>";
-			}
+      if(preg_match('/(https*:\/\/|https*:\/\/www\.|www\.)[\w\.]*\/?[\w\/\?=&]*/i', $value)){
+        $value = "<a href='".$value."' target='_blank'>".$value."</a>";
+      }
       $output .= "
       <tr>
         <td> {$field} </td>
@@ -203,7 +203,7 @@
 
   $output .= "
   </div>";
-	
+
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
   $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='http://www.greycube.com' style='text-decoration:none'>".lgsl_version()."</a></div>";

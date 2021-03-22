@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -294,8 +294,8 @@
     $random       = isset($options['random'])       ? intval($options['random'])       : intval($lgsl_config['random'][$zone]);
     $type         = empty($options['type'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['type']));
     $game         = empty($options['game'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['game']));
-		$page         = empty($options['page'])         ? ""                               : "LIMIT {$lgsl_config['pagination_lim']} OFFSET " . strval($lgsl_config['pagination_lim']*((int)$options['page'] - 1));
-		$mysqli_order = empty($random)                  ? "id"                             : "rand()";
+    $page         = empty($options['page'])         ? ""                               : "LIMIT {$lgsl_config['pagination_lim']} OFFSET " . strval($lgsl_config['pagination_lim']*((int)$options['page'] - 1));
+    $mysqli_order = empty($random)                  ? "id"                             : "rand()";
     $server_limit = empty($random)                  ? 0                                : $random;
 
                        $mysqli_where   = array("`disabled`=0");
@@ -380,7 +380,7 @@
 
     return $mysqli_row;
   }
-	
+
   function lgsl_lookup_server($ip, $port) // LEGACY - DO NOT USE
   {
     global $lgsl_config, $lgsl_database;
@@ -462,7 +462,7 @@
     $misc['text_type_game']     = lgsl_text_type_game($server['b']['type'], $server['s']['game']);
     $misc['text_location']      = lgsl_text_location($server['o']['location']);
     $misc['name_filtered']      = lgsl_string_html($server['s']['name'], FALSE, 20); // LEGACY
-    $misc['connect_filtered'] 	= ($server['b']['type'] == "discord" ? "https://discord.gg/" . $server['b']['ip'] : $server['b']['ip'] . ":" . $server['b']['c_port'] );
+    $misc['connect_filtered']   = ($server['b']['type'] == "discord" ? "https://discord.gg/" . $server['b']['ip'] : $server['b']['ip'] . ":" . $server['b']['c_port'] );
     $misc['software_link']      = lgsl_software_link($server['b']['type'], $server['b']['ip'], $server['b']['c_port'], $server['b']['q_port'], $server['b']['s_port']);
     $misc['location_link']      = lgsl_location_link($server['o']['location']);
 
@@ -703,10 +703,10 @@
   function lgsl_sort_servers_by_players($server_a, $server_b)
   {
     if ($server_a['s']['players'] == $server_b['s']['players'])
-			if ($server_a['b']['status'] < $server_b['b']['status'])
-					{ return 1; }
-				else
-					{ return 0; }
+      if ($server_a['b']['status'] < $server_b['b']['status'])
+          { return 1; }
+        else
+          { return 0; }
 
     return ($server_a['s']['players'] < $server_b['s']['players']) ? 1 : -1;
   }
@@ -747,7 +747,7 @@
   }
 
 //------------------------------------------------------------------------------------------------------------+
-	 
+
   function lgsl_sort_players_by_time($player_a, $player_b)
   {
     if ($player_a['time'] == $player_b['time']) { return 0; }
@@ -924,7 +924,7 @@
       curl_setopt($lgsl_curl, CURLOPT_URL, $url);
 
       $answer = curl_exec($lgsl_curl);
-			$answer = json_decode($answer, true);
+      $answer = json_decode($answer, true);
       $location = $answer["countryCode"];
 
       if (curl_error($lgsl_curl)) { $location = "XX"; }
@@ -1040,11 +1040,11 @@
   global $lgsl_file_path, $lgsl_url_path, $lgsl_config;
 
   $lgsl_file_path = lgsl_file_path();
-	
+
   require $lgsl_file_path."lgsl_config.php";
   require $lgsl_file_path."lgsl_protocol.php";
-	
-	$auth   = md5($_SERVER['REMOTE_ADDR'].md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
+
+  $auth   = md5($_SERVER['REMOTE_ADDR'].md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
   $cookie = isset($_COOKIE['lgsl_admin_auth']) ? $_COOKIE['lgsl_admin_auth'] : "";
 
   if (isset($_GET['lgsl_debug']) and $auth == $cookie)
@@ -1073,18 +1073,18 @@
           <hr />#c6# {$lgsl_config['timeout']}
           <hr />#c7# {$lgsl_config['cms']}
           <hr />";
-		echo "
-					<select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"lgsl_files/styles/\" + this.value + \".css\"'>
-						<option value='breeze_style'>breeze_style</option>
-						<option value='classic_style'>classic_style</option>
-						<option value='cards_style'>cards_style</option>
-						<option value='disc_ff_style'>disc_ff_style</option>
-						<option value='material_style'>material_style</option>
-						<option value='ogp_style'>ogp_style</option>
-						<option value='parallax_style'>parallax_style</option>
-						<option value='wallpaper_style'>wallpaper_style</option>
-						<option value='darken_style'>darken_style</option>
-					</select>";
+    echo "
+          <select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"lgsl_files/styles/\" + this.value + \".css\"'>
+            <option value='breeze_style'>breeze_style</option>
+            <option value='classic_style'>classic_style</option>
+            <option value='cards_style'>cards_style</option>
+            <option value='disc_ff_style'>disc_ff_style</option>
+            <option value='material_style'>material_style</option>
+            <option value='ogp_style'>ogp_style</option>
+            <option value='parallax_style'>parallax_style</option>
+            <option value='wallpaper_style'>wallpaper_style</option>
+            <option value='darken_style'>darken_style</option>
+          </select>";
   }
 
   if (!isset($lgsl_config['locations']))

@@ -111,7 +111,7 @@
 
 //-----------------------------------------------------------------------------------------------------------+
 
-	global $lgsl_database;
+  global $lgsl_database;
   lgsl_database();
 
   $ip     = mysqli_real_escape_string($lgsl_database, $ip);
@@ -202,7 +202,7 @@
 
 //-----------------------------------------------------------------------------------------------------------+
 
-	$output .= "
+  $output .= "
   <form method='post' action=''>
     <div class='annotation'> {$lgsl_config['text']['asc']} </div>
 
