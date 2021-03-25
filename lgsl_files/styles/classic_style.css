@@ -25,6 +25,7 @@ a:active { color:#7500c0; }
 #topmenu > li:before {content: '► ';}
 
 /* add */
+.addserver_table { margin: auto; }
 .annotation { text-align: center; background-color: #e4eaf2; padding-top:17px; padding-bottom:17px; }
 
 /* details */

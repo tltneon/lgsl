@@ -55,6 +55,7 @@ a:hover, a:active { color:#fff; }
 #topmenu > li:before {content: '► ';}
 
 /* add */
+.addserver_table { margin: auto; }
 .annotation { text-align: center; background-color: rgba(0, 0, 0, 0.5); padding-top:17px; padding-bottom:17px; }
 
 /* details */

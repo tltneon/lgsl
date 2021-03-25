@@ -39,6 +39,7 @@ a:hover, a:active { color:#fff; }
 #topmenu > li:before {content: '► ';}
 
 /* add */
+.addserver_table { margin: auto; }
 .annotation { text-align: center; background-color: rgba(26, 28, 34, 0.2); padding-top:17px; padding-bottom:17px; }
 
 /* details */

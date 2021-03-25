@@ -41,7 +41,7 @@
     $misc   = lgsl_server_misc($server);
     $server = lgsl_server_html($server);
     $percent = strval($server['s']['players'] == 0 ? 0 : floor($server['s']['players']/$server['s']['playersmax']*100));
-    $lastupd = Date('d.m.Y H:i:s', $server['s']['cache_time']);
+    $lastupd = Date('d.m.Y H:i:s', (int)$server['s']['cache_time']);
 
     $output .= "
     <tr class='server_{$misc['text_status']}'>

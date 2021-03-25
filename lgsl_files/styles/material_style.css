@@ -83,6 +83,7 @@ a:hover {
 #topmenu > li > a:hover { border-bottom: 3px solid white !important;  color: #fff; }
 
 /* add */
+.addserver_table { margin: auto; }
 .annotation { text-align: center; background-color: #feffff; border: 1px solid #e5fbff; padding-top:17px; padding-bottom:17px; }
 
 /* details */

@@ -36,6 +36,7 @@ input[type="checkbox" i] {
 #topmenu > li:before {content: '► ';}
 
 /* add */
+.addserver_table { margin: auto; }
 .annotation { text-align: center; background-color: #282828; padding-top:17px; padding-bottom:17px; }
 
 /* details */

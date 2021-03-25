@@ -25,6 +25,7 @@ a:active{ color:#adcef1; }
 #topmenu > li {display: inline-block;padding: 0px 10px;}
 
 /* add */
+.addserver_table { margin: auto; }
 .annotation { text-align: center; background-color: #282828; padding-top:17px; padding-bottom:17px; }
 
 /* details */
