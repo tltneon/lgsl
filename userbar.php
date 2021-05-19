@@ -23,6 +23,8 @@
 	$server = lgsl_query_cached($lookup['type'], $lookup['ip'], $lookup['c_port'], $lookup['q_port'], $lookup['s_port'], "sep");
 	$misc   = lgsl_server_misc($server);
 	if(strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
+  $map = $server['s']['map'];
+	if(strlen($server['s']['map']) > 15) $map = substr($server['s']['map'], 0, 13) . '..';
 
 	$hour = date("H") + 0;
 	if($hour >= 24) $hour - 24;
@@ -40,7 +42,7 @@
 	imagecopy($im, $on_id, 8, 2, 0, 0, 16, 16);                                // place status icon
 	imagecopy($im, $game_id, 26, 2, 0, 0, 16, 16);                             // place game icon
 
-	imagettftext($im, 7, 0, 44, 17, $color_map, "lgsl_files/other/verdana",   /* map        */  $lgsl_config['text']['map'].": ".$server['s']['map']);
+	imagettftext($im, 7, 0, 44, 17, $color_map, "lgsl_files/other/verdana",   /* map        */  $lgsl_config['text']['map'].": ".$map);
 	imagettftext($im, 7, 0, 44, 9, $color_ip, "lgsl_files/other/verdana",     /* ip&port    */  str_replace('https://', '', $misc['connect_filtered']));
 	imagettftext($im, 8, 0, 160, 10, $color_pz, "lgsl_files/other/verdana",   /* name       */  $server['s']['name']);
 	imagettftext($im, 7, 0, 150, 18, $color_pl, "lgsl_files/other/verdana",   /* players    */  $lgsl_config['text']['plr'].": ".$server['s']['players'].
