@@ -126,8 +126,8 @@ div.servername_nolink { display: none; }
 #pages a { padding: 5px; background-color: #282828; }
 #pages span { padding: 10px; }
 
-#totals { width: fit-content; margin:auto; margin-top: 16px; }
-#totals > div { width: fit-content;  background-color: #282828; padding:15px; display:inline-block; }
+#totals { width: fit-content; margin:auto; margin-top: 16px; text-align: center; }
+#totals > div { width: fit-content;  background-color: #282828; padding:15px; margin: 2px 0; display:inline-block; }
 
 /* */
 .inline{ display:inline-block; }

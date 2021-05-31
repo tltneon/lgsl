@@ -145,7 +145,7 @@ div.servername_link { display: none; }
 #pages span { padding: 10px; }
 
 #totals { width: 95%; margin:auto; margin-top: 16px; background-color: rgba(26, 28, 34, 0.2); border: 1px solid #22252f; }
-#totals > div { width: calc(33vw - 30px - 3vw);  padding:15px; text-align: center; display:inline-block; }
+#totals > div { width: calc(33vw - 30px - 3vw);  padding:15px; text-align: center; display:inline-block; vertical-align: middle; }
 
 /* */
 .inline { display:inline-block; }

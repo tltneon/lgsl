@@ -40,14 +40,14 @@
   {
     $misc   = lgsl_server_misc($server);
     $server = lgsl_server_html($server);
-    $percent = strval($server['s']['players'] == 0 ? 0 : floor($server['s']['players']/$server['s']['playersmax']*100));
-    $lastupd = Date('d.m.Y H:i:s', (int)$server['s']['cache_time']);
+    $percent = strval($server['s']['players'] == 0 || $server['s']['playersmax'] == 0 ? 0 : floor($server['s']['players']/$server['s']['playersmax']*100));
+    $lastupd = Date($lgsl_config['text']['tzn'], (int)$server['s']['cache_time']);
 
     $output .= "
     <tr class='server_{$misc['text_status']}'>
 
       <td class='status_cell'>
-        <span title='{$lgsl_config['text'][$misc['text_status']]} | Last update: {$lastupd}' class='status_icon_{$misc['text_status']}'></span>
+        <span title='{$lgsl_config['text'][$misc['text_status']]} | {$lgsl_config['text']['lst']}: {$lastupd}' class='status_icon_{$misc['text_status']}'></span>
         <a href='{$_SERVER['REQUEST_URI']}?&game={$server['s']['game']}'><img alt='{$misc['name_filtered']}' src='{$misc['icon_game']}' title='{$misc['text_type_game']}' class='game_icon' /></a>
       </td>
 

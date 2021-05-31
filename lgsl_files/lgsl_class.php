@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -248,7 +248,7 @@
         $live['s']['password']   = $cache['s']['password'];
         $live['s']['players']    = 0;
         $live['s']['playersmax'] = $cache['s']['playersmax'];
-        $live['s']['cache_time'] = $cache['s']['cache_time'];
+        $live['s']['cache_time'] = time();
         $live['e']               = array();
         $live['p']               = array();
       }
@@ -753,7 +753,7 @@
     if((isset($player_a['time']))&&(isset($player_b['time'])))
     {
       if ($player_a['time'] == $player_b['time']) { return 0; }
-     
+
       return ($player_a['time'] < $player_b['time']) ? 1 : -1;
     }
   }
@@ -928,7 +928,7 @@
 
       $answer = curl_exec($lgsl_curl);
       $answer = json_decode($answer, true);
-      $location = $answer["countryCode"];
+      $location = (isset($answer["countryCode"]) ? $answer["countryCode"] : "XX");
 
       if (curl_error($lgsl_curl)) { $location = "XX"; }
 
@@ -1049,34 +1049,32 @@
 
   $auth   = md5($_SERVER['REMOTE_ADDR'].md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
   $cookie = isset($_COOKIE['lgsl_admin_auth']) ? $_COOKIE['lgsl_admin_auth'] : "";
-
-  if (isset($_GET['lgsl_debug']) and $auth == $cookie)
-  {
-    echo "<hr /><pre>".print_r($_SERVER, TRUE)."</pre>
-          <hr />#d0# ".__FILE__."
-          <hr />#d1# ".@realpath(__FILE__)."
-          <hr />#d2# ".dirname(__FILE__)."
-          <hr />#d3# {$lgsl_file_path}
-          <hr />#d4# {$_SERVER['DOCUMENT_ROOT']}
-          <hr />#d5# ".@realpath($_SERVER['DOCUMENT_ROOT']);
-  }
-
-
   $lgsl_url_path = lgsl_url_path();
 
   if (isset($_GET['lgsl_debug']) and $auth == $cookie)
   {
-    echo "<hr />#d6# {$lgsl_url_path}
-          <hr />#c0# {$lgsl_config['url_path']}
-          <hr />#c1# {$lgsl_config['no_realpath']}
-          <hr />#c2# {$lgsl_config['feed']['method']}
-          <hr />#c3# {$lgsl_config['feed']['url']}
-          <hr />#c4# {$lgsl_config['cache_time']}
-          <hr />#c5# {$lgsl_config['live_time']}
-          <hr />#c6# {$lgsl_config['timeout']}
-          <hr />#c7# {$lgsl_config['cms']}
-          <hr />";
-    echo "
+    echo "<details>
+            <summary style='margin-bottom: 12px;'>
+              Open debug infos
+            </summary>
+            <hr /><pre>".print_r($_SERVER, TRUE)."</pre>
+            <hr />#d0# ".__FILE__."
+            <hr />#d1# ".@realpath(__FILE__)."
+            <hr />#d2# ".dirname(__FILE__)."
+            <hr />#d3# {$lgsl_file_path}
+            <hr />#d4# {$_SERVER['DOCUMENT_ROOT']}
+            <hr />#d5# ".@realpath($_SERVER['DOCUMENT_ROOT'])."
+            <hr />#d6# {$lgsl_url_path}
+            <hr />#c0# {$lgsl_config['url_path']}
+            <hr />#c1# {$lgsl_config['no_realpath']}
+            <hr />#c2# {$lgsl_config['feed']['method']}
+            <hr />#c3# {$lgsl_config['feed']['url']}
+            <hr />#c4# {$lgsl_config['cache_time']}
+            <hr />#c5# {$lgsl_config['live_time']}
+            <hr />#c6# {$lgsl_config['timeout']}
+            <hr />#c7# {$lgsl_config['cms']}
+            <hr />
+          </details>
           <select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"lgsl_files/styles/\" + this.value + \".css\"'>
             <option value='breeze_style'>breeze_style</option>
             <option value='classic_style'>classic_style</option>

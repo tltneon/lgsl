@@ -53,7 +53,7 @@
             <div class='details_info_srow'>
               <div class='details_info_ceil'>{$lgsl_config['text']['sts']}:</div><div class='details_info_ceil'>{$lgsl_config['text'][$misc['text_status']]}</div></div>
             <div class='details_info_srow'>
-              <div class='details_info_ceil'>{$lgsl_config['text']['adr']}:</div><div class='details_info_ceil'>{$server['b']['ip']} </div></div>
+              <div class='details_info_ceil'>{$lgsl_config['text']['adr']}:</div><div class='details_info_ceil'>{$server['b']['ip']}</div></div>
             <div class='details_info_srow'>
               <div class='details_info_ceil'>{$lgsl_config['text']['cpt']}:</div><div class='details_info_ceil'>{$server['b']['c_port']}</div></div>
             <div class='details_info_srow'>
@@ -69,13 +69,13 @@
               <div class='details_info_ceil'>{$lgsl_config['text']['plr']}:</div><div class='details_info_ceil'>{$server['s']['players']} / {$server['s']['playersmax']}</div></div>
           </div>
         </div>
-                <div class='details_info_row'>
-                    Last update: " . Date('d.m.Y H:i:s', $server['s']['cache_time']) . "
+        <div class='details_info_row'>
+            {$lgsl_config['text']['lst']}: " . Date($lgsl_config['text']['tzn'], $server['s']['cache_time']) . "
         </div>
       </div>
       <div class='details_info_column zone{$server['o']['zone']}' style='background-image: url({$misc['image_map']});'>
         <span class='details_location_image' style='background-image: url({$misc['icon_location']});' title='{$misc['text_location']}'></span>
-        <span class='details_password_image zone{$server['o']['zone']}' style='background-image: url({$misc['image_map_password']});' title='Map: {$server['s']['map']}'></span>
+        <span class='details_password_image zone{$server['o']['zone']}' style='background-image: url({$misc['image_map_password']});' title='{$lgsl_config['text']['map']}: {$server['s']['map']}'></span>
         <span class='details_game_image' style='background-image: url({$misc['icon_game']});' title='{$misc['text_type_game']}'></span>
       </div>
     </div>";
@@ -88,17 +88,17 @@
 
   if($lgsl_config['image_mod']){
     if(extension_loaded('gd')){
-      $output .= '
+      $output .= "
       <details>
-        <summary style="margin-bottom: 12px;">
-          Click to show server banners
+        <summary style='margin-bottom: 12px;'>
+          {$lgsl_config['text']['cts']}
         </summary>
         <div>
-          <img src="userbar.php?s='.intval($_GET['s']).'" alt="'.$server['s']['name'].'"/><br />
-          <textarea style="width: 32em; height: 2.3em;word-break: break-all;" onClick="this.select();">[url='.str_replace("lgsl_files/", "", lgsl_url_path()).($lgsl_config['direct_index'] ? "index.php" : "").'?s='.intval($_GET['s']).'][img]'.str_replace("lgsl_files/", "", lgsl_url_path()).'userbar.php?s='.intval($_GET['s']).'[/img][/url]</textarea>
+          <img src='userbar.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}'/><br />
+          <textarea style='width: 32em; height: 2.3em;word-break: break-all;' onClick='this.select();'>[url=".str_replace('lgsl_files/', '', lgsl_url_path()).($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".str_replace('lgsl_files/', '', lgsl_url_path())."userbar.php?s=".intval($_GET["s"])."[/img][/url]</textarea>
         </div>
       </details>
-      <div class="spacer"></div>
+      <div class='spacer'></div>
       <style>
         @media (max-width: 414px){
           textarea { width: 98.5% !important; }
@@ -110,7 +110,7 @@
           0%   {opacity: 0;}
           100% {opacity: 1;}
         }
-      </style>';
+      </style>";
     }
     else {$output .= "<div id='invalid_server_id'> Error while trying to display userbar: GD library not loaded (see php.ini) </div>";}
   }
@@ -133,7 +133,7 @@
 
       foreach ($fields as $field)
       {
-        $field = ucfirst($field);
+        $field = ucfirst($lgsl_config['text'][substr(strtolower($field), 0, 3)]);
         $output .= "<td> {$field} </td>";
       }
 

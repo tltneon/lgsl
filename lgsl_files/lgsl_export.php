@@ -18,6 +18,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
+  $json        = empty($_GET['json'])        ? FALSE : TRUE;
   $xml         = empty($_GET['xml'])         ? FALSE : TRUE;
   $online      = empty($_GET['online'])      ? FALSE : TRUE;
   $nodisabled  = empty($_GET['nodisabled'])  ? FALSE : TRUE;
@@ -31,6 +32,7 @@
   $mysql_filter = "";
   $mysql_where  = array();
 
+  if ($json)        { $jsarray = array(); }
   if ($nodisabled)  { $mysql_where[] = "`disabled`=0"; } // ONLY LIST ENABLED
   if ($online)      { $mysql_where[] = "`status`=1"; }   // ONLY LIST ONLINE
   if ($mysql_where) { $mysql_filter  = "WHERE ".implode(" AND ", $mysql_where); }
@@ -60,6 +62,19 @@
         <disabled>{$mysql_row['disabled']}</disabled>
       </server>";
     }
+    elseif ($json)
+    {
+      array_push($jsarray, 
+        array(
+          'type'     => $mysql_row['type'],
+          'ip'       => $mysql_row['ip'],
+          'c_port'   => $mysql_row['c_port'],
+          'q_port'   => $mysql_row['q_port'],
+          's_port'   => $mysql_row['s_port'],
+          'zone'     => $mysql_row['zone'],
+          'disabled' => $mysql_row['disabled'])
+        );
+    }
     else
     {
       $output .= "{$mysql_row['type']} : {$mysql_row['ip']} : {$mysql_row['c_port']} : {$mysql_row['q_port']} : {$mysql_row['s_port']} : {$mysql_row['zone']} : {$mysql_row['disabled']} \r\n";
@@ -68,6 +83,11 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
+  if ($json)
+  {
+    $output = json_encode($jsarray);
+  }
+  
   if ($download)
   {
     header("Content-type: application/octet-stream");
@@ -91,9 +111,7 @@
 <html xmlns='http://www.w3.org/1999/xhtml'>
   <head>
     <title>Live Game Server List</title>
-    <meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />
-    <meta http-equiv='content-style-type' content='text/css' />
-    <link rel='stylesheet' href='lgsl_style.css' type='text/css' />
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   </head>
 
   <body>

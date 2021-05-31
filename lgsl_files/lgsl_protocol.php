@@ -600,8 +600,7 @@
 
     }
     else {
-      if ($lgsl_function == "lgsl_query_34") // ragemp
-      {
+      if ($lgsl_function == "lgsl_query_34") { // ragemp
         $ch =  curl_init('https://cdn.rage.mp/master/');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
@@ -611,8 +610,7 @@
         $lgsl_fp = curl_exec($ch);
         curl_close($ch);
       }
-      elseif ($lgsl_function == "lgsl_query_36") // discord
-      {
+      elseif ($lgsl_function == "lgsl_query_36") { // discord
         $lgsl_fp = array();
 
         $raw_json = @file_get_contents("https://discord.com/api/v8/invites/{$server['b']['ip']}?with_counts=true");
@@ -620,9 +618,8 @@
 
         $raw_json = @file_get_contents("https://discordapp.com/api/guilds/{$lgsl_fp[0]['guild']['id']}/widget.json");
         $lgsl_fp[1] = json_decode($raw_json, true);
-          }
-          elseif ($lgsl_function == "lgsl_query_37") // scum
-          {
+      }
+      elseif ($lgsl_function == "lgsl_query_37") { // scum
         $lgsl_fp = array();
         $data = @file_get_contents("https://scumservers.net/api.php?ip={$server['b']['ip']}&port={$server['b']['c_port']}");
         $lgsl_fp = json_decode($data, true);
@@ -1921,17 +1918,18 @@
 //  VICE CITY CURRENTLY ONLY SUPPORTS THE 'i' CHALLENGE
 
     if     ($server['b']['type'] == "samp") { $challenge_packet = "SAMP\x21\x21\x21\x21\x00\x00"; }
-    elseif ($server['b']['type'] == "vcmp") { $challenge_packet = "VCMP\x21\x21\x21\x21\x00\x00"; $lgsl_need['e'] = FALSE; $lgsl_need['p'] = FALSE; }
+    elseif ($server['b']['type'] == "vcmp") { $challenge_packet = "VCMP\x21\x21\x21\x21\x00\x00"; $lgsl_need['e'] = FALSE; }
 
     if     ($lgsl_need['s']) { $challenge_packet .= "i"; }
     elseif ($lgsl_need['e']) { $challenge_packet .= "r"; }
-    elseif ($lgsl_need['p']) { $challenge_packet .= "d"; }
+    elseif ($lgsl_need['p'] && $server['b']['type'] == "samp") { $challenge_packet .= "d"; }
+    elseif ($lgsl_need['p'] && $server['b']['type'] == "vcmp") { $challenge_packet .= "c"; }
 
-    fwrite($lgsl_fp, $challenge_packet);
+    fwrite($lgsl_fp, $challenge_packet);  
 
-    $buffer = fread($lgsl_fp, 8192);
+    $buffer = fread($lgsl_fp, 4096);
 
-    if (!$buffer) { return FALSE; }
+    if (!$buffer && substr($challenge_packet, 10, 1) == "i") { return FALSE; }
 
 //---------------------------------------------------------+
 
@@ -1945,6 +1943,8 @@
     {
       $lgsl_need['s'] = FALSE;
 
+      if ($server['b']['type'] == "vcmp") { $buffer = substr($buffer, 12); }
+
       $server['s']['password']   = ord(lgsl_cut_byte($buffer, 1));
       $server['s']['players']    = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
       $server['s']['playersmax'] = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
@@ -1957,7 +1957,7 @@
 
     elseif ($response_type == "r")
     {
-      // $lgsl_need['e'] = FALSE;
+      $lgsl_need['e'] = FALSE;
 
       $item_total = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
 
@@ -1976,7 +1976,7 @@
 
     elseif ($response_type == "d")
     {
-      // $lgsl_need['p'] = FALSE;
+      $lgsl_need['p'] = FALSE;
 
       $player_total = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
 
@@ -1988,6 +1988,22 @@
         $server['p'][$i]['name']  = lgsl_cut_pascal($buffer);
         $server['p'][$i]['score'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "S");
         $server['p'][$i]['ping']  = lgsl_unpack(lgsl_cut_byte($buffer, 4), "S");
+      }
+    }
+    
+//---------------------------------------------------------+
+
+    elseif ($response_type == "c")
+    {
+      $lgsl_need['p'] = FALSE;
+
+      $player_total = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
+
+      for ($i=0; $i<$player_total; $i++)
+      {
+        if (!$buffer) { return FALSE; }
+
+        $server['p'][$i]['name']  = lgsl_cut_pascal($buffer);
       }
     }
 
@@ -4152,6 +4168,20 @@ function lgsl_unescape($text) {
     $string = substr($buffer, 0, $length);
 
     return $string;
+  }
+  
+//---------------------------------------------------------+
+
+  function lgsl_print_raw_buffer(&$buffer){
+      $raw = '';
+      $raw2 = '';
+      foreach (unpack('C*', $buffer) as $key => $value) {
+        if ($value == 0) { $raw .= '[0]'; }
+        else { $raw .= chr($value); }
+        $raw2 .= ' '.$value;
+      }
+      echo(strlen($raw) . "symbols >> " . $raw . "<br />");
+      echo($raw2 . "<br />");
   }
 
 //---------------------------------------------------------+

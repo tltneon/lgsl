@@ -140,8 +140,8 @@ div.servername_link { display: none; }
 #pages a { padding: 5px; background-color: #282828; }
 #pages span { padding: 10px; }
 
-#totals { width: fit-content; margin:auto; margin-top: 16px; }
-#totals > div { width: fit-content;  background-color: #282828; padding:15px; display:inline-block; }
+#totals { width: fit-content; margin:auto; margin-top: 16px; text-align: center; }
+#totals > div { width: fit-content;  background-color: #282828; padding:15px; margin: 2px 0; display:inline-block; }
 
 /* */
 .inline{ display:inline-block; }
@@ -208,6 +208,7 @@ div.servername_link { display: none; }
   .details_info { display: flex; flex-flow: column; }
   .details_info_column { margin: auto; order: 2; margin-top: 6px; }
   .details_info_column:nth-child(2) { order: 1; }
+  .details_info_row { margin: 10px 0; }
 	#details_playerlist { overflow: auto;	}
 	.table_head {
 		font-weight: bold;
@@ -223,6 +224,6 @@ div.servername_link { display: none; }
     color: #ffcfa6;
 	}
 	.settings_table td:first-child:after {
-			content: " =";
+		content: " =";
 	}
 }

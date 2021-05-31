@@ -42,6 +42,20 @@
   $lgsl_config['text']['asc'] = "УСПЕШНО - ПОДТВЕРДИТЕ ДОБАВЛЕНИЕ В БАЗУ";
   $lgsl_config['text']['aas'] = "Добавить сервер";
   $lgsl_config['text']['loc'] = "Местонахождение:";
+  $lgsl_config['text']['cts'] = "Click to show server banners";
+  $lgsl_config['text']['lst'] = "Last update";
+  $lgsl_config['text']['nam'] = "Name";
+  $lgsl_config['text']['gam'] = "Game";
+  $lgsl_config['text']['sta'] = "Status";
+  $lgsl_config['text']['sco'] = "Score";
+  $lgsl_config['text']['tim'] = "Time";
+  $lgsl_config['text']['tea'] = "Team";
+  $lgsl_config['text']['cou'] = "Country";
+  $lgsl_config['text']['pin'] = "Ping";
+  $lgsl_config['text']['bak'] = "Вернуться к списку серверов";
+  $lgsl_config['text']['mpg'] = "На главную";
+  /* admin section */
+  $lgsl_config['text']['tzn'] = "d.m.Y H:i:s";
   $lgsl_config['text']['umn'] = "Логин";
   $lgsl_config['text']['pwd'] = "Пароль";
   $lgsl_config['text']['lgn'] = "Войти";
@@ -50,11 +64,19 @@
   $lgsl_config['text']['mip'] = "Пути до изображений карт";
   $lgsl_config['text']['avm'] = "Расширенное управление";
   $lgsl_config['text']['nrm'] = "Обычное управление";
-  $lgsl_config['text']['bak'] = "Вернуться к списку серверов";
+  $lgsl_config['text']['upd'] = "Updates";
   $lgsl_config['text']['yes'] = "ДА";
   $lgsl_config['text']['nno'] = "НЕТ";
   $lgsl_config['text']['enb'] = "Включен";
   $lgsl_config['text']['dsb'] = "Выключен";
-  $lgsl_config['text']['mpg'] = "На главную";
+  $lgsl_config['text']['aum'] = "ADMIN USERNAME OR PASSWORD MISSING FROM CONFIG";
+  $lgsl_config['text']['apc'] = "ADMIN PASSWORD MUST BE CHANGED FROM THE DEFAULT";
+  $lgsl_config['text']['faq'] = "- To remove a server, delete the IP, then click Save.<br /><br />- Leave the query port blank to have LGSL try to fill it in for you.<br /><br />- Software port is only needed for a few games so it being set 0 is normal.<br /><br />- Edit the lgsl_config.php to set the style and other options.<br /><br />- Keep your LGSL up to date.";
+  $lgsl_config['text']['fso'] = "Required for direct querying of servers";
+  $lgsl_config['text']['crl'] = "Used for the feed when fsockopen is disabled";
+  $lgsl_config['text']['mbs'] = "Used to show UTF-8 server and player names correctly";
+  $lgsl_config['text']['bz2'] = "Used to show Source server settings over a certain size";
+  $lgsl_config['text']['gd2'] = "Required for Image Mod";
+  $lgsl_config['text']['zli'] = "Required for America's Army 3";
 
 //------------------------------------------------------------------------------------------------------------+

@@ -4,6 +4,7 @@
 
   global $lgsl_config;
 
+  $lgsl_config['text']['ttl'] = "Live Game Server List";
   $lgsl_config['text']['vsd'] = "PULSE AQUI PARA VER LOS DETALLES DEL SERVIDOR";
   $lgsl_config['text']['slk'] = "CONECTAR AL SERVIDOR";
   $lgsl_config['text']['sts'] = "Estado";
@@ -41,6 +42,20 @@
   $lgsl_config['text']['asc'] = "CORRECTO - PORFAVOR CONFIRME EL SERVIDOR";
   $lgsl_config['text']['aas'] = "Añadir Servidor";
   $lgsl_config['text']['loc'] = "Hubicación:";
+  $lgsl_config['text']['cts'] = "Click to show server banners";
+  $lgsl_config['text']['lst'] = "Last update";
+  $lgsl_config['text']['nam'] = "Name";
+  $lgsl_config['text']['gam'] = "Game";
+  $lgsl_config['text']['sta'] = "Status";
+  $lgsl_config['text']['sco'] = "Score";
+  $lgsl_config['text']['tim'] = "Time";
+  $lgsl_config['text']['tea'] = "Team";
+  $lgsl_config['text']['cou'] = "Country";
+  $lgsl_config['text']['pin'] = "Ping";
+  $lgsl_config['text']['bak'] = "BACK TO SERVERS LIST";
+  $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
+  /* admin section */
+  $lgsl_config['text']['tzn'] = "d/m/Y H:i:s";
   $lgsl_config['text']['umn'] = "USERNAME";
   $lgsl_config['text']['pwd'] = "CONTRASEÑA";
   $lgsl_config['text']['lgn'] = "Iniciar sesión";
@@ -49,11 +64,19 @@
   $lgsl_config['text']['mip'] = "Map Image Paths";
   $lgsl_config['text']['avm'] = "Advanced Management";
   $lgsl_config['text']['nrm'] = "Normal Management";
-  $lgsl_config['text']['bak'] = "VOLVER A LA LISTA DE SERVIDORES";
+  $lgsl_config['text']['upd'] = "Updates";
   $lgsl_config['text']['yes'] = "SÍ";
   $lgsl_config['text']['nno'] = "NO";
   $lgsl_config['text']['enb'] = "Habilitado";
   $lgsl_config['text']['dsb'] = "Discapacitado";
-  $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
+  $lgsl_config['text']['aum'] = "ADMIN USERNAME OR PASSWORD MISSING FROM CONFIG";
+  $lgsl_config['text']['apc'] = "ADMIN PASSWORD MUST BE CHANGED FROM THE DEFAULT";
+  $lgsl_config['text']['faq'] = "- To remove a server, delete the IP, then click Save.<br /><br />- Leave the query port blank to have LGSL try to fill it in for you.<br /><br />- Software port is only needed for a few games so it being set 0 is normal.<br /><br />- Edit the lgsl_config.php to set the style and other options.<br /><br />- Keep your LGSL up to date.";
+  $lgsl_config['text']['fso'] = "Required for direct querying of servers";
+  $lgsl_config['text']['crl'] = "Used for the feed when fsockopen is disabled";
+  $lgsl_config['text']['mbs'] = "Used to show UTF-8 server and player names correctly";
+  $lgsl_config['text']['bz2'] = "Used to show Source server settings over a certain size";
+  $lgsl_config['text']['gd2'] = "Required for Image Mod";
+  $lgsl_config['text']['zli'] = "Required for America's Army 3";
 
 //------------------------------------------------------------------------------------------------------------+

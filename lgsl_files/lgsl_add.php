@@ -51,7 +51,7 @@
       <table class='addserver_table'>
 
         <tr>
-          <td colspan='2' style='text-align:center'>
+          <td colspan='2' class='center'>
             <br />
             {$lgsl_config['text']['awm']}
             <br />
@@ -210,11 +210,12 @@
     <br />
     </div>
 
-    <table class='details_table'>
-      <tr> <td> <b> Name:                         </b> </td> <td style='white-space:nowrap'> {$server['s']['name']}                                   </td> </tr>
-      <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td style='white-space:nowrap'> {$server['s']['game']}                                   </td> </tr>
-      <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td style='white-space:nowrap'> {$server['s']['map']}                                    </td> </tr>
-      <tr> <td> <b> {$lgsl_config['text']['plr']} </b> </td> <td style='white-space:nowrap'> {$server['s']['players']} / {$server['s']['playersmax']} </td> </tr>
+    <table class='details_table' style='text-align: center; margin: auto; max-width: 500px;'>
+      <tr> <td> <b> IP                            </b> </td> <td> {$ip}:{$c_port}                                          </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['nam']} </b> </td> <td> {$server['s']['name']}                                   </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td> {$server['s']['game']}                                   </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td> {$server['s']['map']}                                    </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['plr']} </b> </td> <td> {$server['s']['players']} / {$server['s']['playersmax']} </td> </tr>
     </table>
 
     <div>

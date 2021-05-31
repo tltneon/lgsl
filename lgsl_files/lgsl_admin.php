@@ -30,11 +30,11 @@
   {
     if ((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")))
     {
-      $output = "<div style='text-align:center'><br /><br /><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><br /><br /></div>".lgsl_help_info(); return;
+      $output = "<div class='center'><br /><br /><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><br /><br /></div>".lgsl_help_info(); return;
     }
     else
     {
-      $output = "<div style='text-align:center'><br /><br /><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><br /><br /></div>".lgsl_help_info(); return;
+      $output = "<div class='center'><br /><br /><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><br /><br /></div>".lgsl_help_info(); return;
     }
   }
 
@@ -160,7 +160,7 @@
             </div>
           </div>
         </div>
-        <div  class="inlined">
+        <div class="inlined">
           <div>
             <h4>Latest release (stable)</h4>
           </div>
@@ -245,7 +245,7 @@
           <img src='{$image_map}' width='32' height='32' />
         </div>
         <div style='display: inline-block;vertical-align: super;'>
-          <div>Map Name: {$server['s']['map']}</div>
+          <div>{$lgsl_config['text']['map']}: {$server['s']['map']}</div>
           <div>Link: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
         </div>
       </div>";
@@ -262,31 +262,16 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  if (!empty($_POST['lgsl_backup']))
-  {
-    $mysqli_result = mysqli_query($lgsl_database, "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
-    $content = "";
-    while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
-    {
-      $content .= $mysqli_row['ip'] . ':' . $mysqli_row['c_port'] . "\r\n";
-    }
-    $fp = fopen("lgslBackup.txt", "wb");
-    fwrite($fp,$content);
-    fclose($fp);
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
   if ((!empty($_POST['lgsl_management']) && empty($_POST['lgsl_switch'])) || (empty($_POST['lgsl_management']) && !empty($_POST['lgsl_switch'])) || (!isset($_POST['lgsl_management']) && $lgsl_config['management']))
   {
     $output .= "
     <form method='post' action=''>
-      <div style='text-align:center'>
+      <div class='center'>
         <b>TYPE : IP : C PORT : Q PORT : S PORT : ZONES : DISABLED : COMMENT</b>
         <br />
         <br />
       </div>
-      <div style='text-align:center'>
+      <div class='center'>
         <textarea name='form_list' cols='90' rows='30' wrap='off' spellcheck='false' style='width:95%; height:500px; font-size:1.2em; font-family:courier new, monospace'>\r\n";
 
 //---------------------------------------------------------+
@@ -308,7 +293,7 @@
         $output .= "
         </textarea>
       </div>
-      <div style='text-align:center'>
+      <div class='center'>
         <input type='hidden' name='lgsl_management' value='1' />
         <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
           <tr>
@@ -316,7 +301,6 @@
             <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' /> </td>
             <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' /> </td>
             <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['nrm']."' /> </td>
-            <td><input type='submit' name='lgsl_backup'          value='Backup' /> </td>
           </tr>
         </table>
       </div>
@@ -376,10 +360,10 @@
             $output .= "
             </select>
           </td>
-          <td style='text-align:center'><input type='text' name='form_ip[{$id}]'       value='".lgsl_string_html($mysqli_row['ip'])."' size='15' maxlength='255' /></td>
-          <td style='text-align:center'><input type='number' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536'   /></td>
-          <td style='text-align:center'><input type='number' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536'   /></td>
-          <td style='text-align:center'><input type='number' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536'   /></td>
+          <td class='center'><input type='text' name='form_ip[{$id}]'       value='".lgsl_string_html($mysqli_row['ip'])."' size='15' maxlength='255' /></td>
+          <td class='center'><input type='number' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536'   /></td>
+          <td class='center'><input type='number' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536'   /></td>
+          <td class='center'><input type='number' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536'   /></td>
           <td>
             <select name='form_zone[$id]'>";
 //---------------------------------------------------------+
@@ -399,8 +383,8 @@
             $output .= "
             </select>
           </td>
-          <td style='text-align:center'><input type='checkbox' name='form_disabled[{$id}]' value='1' ".(empty($mysqli_row['disabled']) ? "" : "checked='checked'")." /></td>
-          <td style='text-align:center'><input type='text'     name='form_comment[{$id}]'  value='{$mysqli_row['comment']}' size='20' maxlength='255' /></td>
+          <td class='center'><input type='checkbox' name='form_disabled[{$id}]' value='1' ".(empty($mysqli_row['disabled']) ? "" : "checked='checked'")." /></td>
+          <td class='center'><input type='text'     name='form_comment[{$id}]'  value='{$mysqli_row['comment']}' size='20' maxlength='255' /></td>
         </tr>";
 
         $last_type = $mysqli_row['type']; // SET LAST TYPE ( $mysqli_row EXISTS ONLY WITHIN THE LOOP )
@@ -423,10 +407,10 @@
             $output .= "
             </select>
           </td>
-          <td style='text-align:center'><input type='text' name='form_ip[{$id}]'     value=''  size='15' maxlength='255' /></td>
-          <td style='text-align:center'><input type='number' name='form_c_port[{$id}]' value=''  min='0' max='65536'   /></td>
-          <td style='text-align:center'><input type='number' name='form_q_port[{$id}]' value=''  min='0' max='65536'   /></td>
-          <td style='text-align:center'><input type='number' name='form_s_port[{$id}]' value='0' min='0' max='65536'   /></td>
+          <td class='center'><input type='text'   name='form_ip[{$id}]'     value=''  size='15' maxlength='255' /></td>
+          <td class='center'><input type='number' name='form_c_port[{$id}]' value=''  min='0' max='65536'   /></td>
+          <td class='center'><input type='number' name='form_q_port[{$id}]' value=''  min='0' max='65536'   /></td>
+          <td class='center'><input type='number' name='form_s_port[{$id}]' value='0' min='0' max='65536'   /></td>
           <td>
             <select name='form_zone[{$id}]'>";
 //---------------------------------------------------------+
@@ -439,8 +423,8 @@
             $output .= "
             </select>
           </td>
-          <td style='text-align:center'><input type='checkbox' name='form_disabled[{$id}]' value='' /></td>
-          <td style='text-align:center'><input type='text'     name='form_comment[{$id}]'  value='' size='20' maxlength='255' /></td>
+          <td class='center'><input type='checkbox' name='form_disabled[{$id}]' value='' /></td>
+          <td class='center'><input type='text'     name='form_comment[{$id}]'  value='' size='20' maxlength='255' /></td>
         </tr>
       </table>
 
@@ -451,7 +435,7 @@
           <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' /> </td>
           <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' /> </td>
           <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['avm']."' /> </td>
-          <td><input type='submit' name='lgsl_check_updates'   value='Updates' />                         </td>
+          <td><input type='submit' name='lgsl_check_updates'   value='".$lgsl_config['text']['upd']."' /> </td>
         </tr>
       </table>
     </div>
@@ -467,41 +451,40 @@
     return "
     <div style='text-align:center; line-height:1em; font-size:1em;'>
       <br /><br />
-      <a href='https://github.com/tltneon/lgsl/wiki'>[ LGSL ONLINE WIKI ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB ]</a>  <br /><br />
-      - To remove a server, delete the IP, then click Save.                           <br /><br />
-      - Leave the query port blank to have LGSL try to fill it in for you.            <br /><br />
-      - Software port is only needed for a few games so it being set 0 is normal.     <br /><br />
-      - Edit the lgsl_config.php to set the style and other options.                  <br /><br />
+      <a href='https://github.com/tltneon/lgsl/wiki'>[ LGSL ONLINE WIKI ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB ]</a>
+      <br /><br />
+      {$lgsl_config['text']['faq']}
+      <br /><br />
       <table cellspacing='10' cellpadding='0' style='border:1px solid; margin:auto; text-align:left'>
         <tr>
           <td> <a href='http://php.net/fsockopen'>FSOCKOPEN</a> </td>
           <td> {$lgsl_config['text']['enb']}: ".(function_exists("fsockopen") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( Required for direct querying of servers ) </td>
+          <td> ( {$lgsl_config['text']['fso']} ) </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/curl'>CURL</a> </td>
           <td> {$lgsl_config['text']['enb']}: ".((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( Used for the feed when fsockopen is disabled ) </td>
+          <td> ( {$lgsl_config['text']['crl']} ) </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/mbstring'>MBSTRING</a> </td>
           <td> {$lgsl_config['text']['enb']}: ".(function_exists("mb_convert_encoding") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( Used to show UTF-8 server and player names correctly ) </td>
+          <td> ( {$lgsl_config['text']['mbs']} ) </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/bzip2'>BZIP2</a> </td>
           <td> {$lgsl_config['text']['enb']}: ".(function_exists("bzdecompress") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( Used to show Source server settings over a certain size ) </td>
+          <td> ( {$lgsl_config['text']['bz2']} ) </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/gd2'>GD</a> </td>
           <td> {$lgsl_config['text']['enb']}: ".(extension_loaded("gd") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( Required for Image Mod ) </td>
+          <td> ( {$lgsl_config['text']['gd2']} ) </td>
         </tr>
         <tr>
           <td> <a href='http://php.net/zlib'>ZLIB</a> </td>
           <td> {$lgsl_config['text']['enb']}: ".(function_exists("gzuncompress") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( Required for America's Army 3 ) </td>
+          <td> ( {$lgsl_config['text']['zli']} ) </td>
         </tr>
       </table>
       <br /><br />
