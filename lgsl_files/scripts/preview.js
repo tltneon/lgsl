@@ -1,6 +1,6 @@
 function imageExists(image_url){
 	var http = new XMLHttpRequest();
-	http.open('HEAD', image_url, false);
+	http.open('HEAD', 'lgsl_files/maps/' + image_url, false);
 	http.send();
 	return http.status != 404;
 }
@@ -10,13 +10,14 @@ document.querySelectorAll('#server_list_table > tbody > tr > td.map_cell').forEa
 	let map = a.innerHTML.trim();
 	if(map != '--'){
 		let el = document.createElement('img');
-		let type = types[b].title.match(/Type: [\w]*/)[0].slice(6);
-		let game = types[b].title.match(/Game: [\w]*/)[0].slice(6);
+    let arr = types[b].title.match(/(\w{1,} \])/i)
+		let type = arr[0].slice(0, -2);
+		let game = arr[1].slice(0, -2);
 		let pathes = [
-			'lgsl_files/maps/' + type + '/' + game + '.jpg',
-			'lgsl_files/maps/' + type + '/' + game + '.png',
-			'lgsl_files/maps/' + type + '/' + game + '/' + map + '.jpg',
-			'lgsl_files/maps/' + type + '/' + game + '/' + map + '.png'
+			type + '/' + game + '.jpg',
+			type + '/' + game + '.png',
+			type + '/' + game + '/' + map + '.jpg',
+			type + '/' + game + '/' + map + '.png'
 		]
 		path = 'lgsl_files/other/map_no_image.jpg';
 		pathes.forEach(a => {
@@ -29,6 +30,7 @@ document.querySelectorAll('#server_list_table > tbody > tr > td.map_cell').forEa
 		el.style.height = '188px';
 		el.style.display = 'none';
 		el.style.position = 'absolute';
+		el.style.marginTop = '5px';
 		el.className = 'mapImage' + b;
 		a.appendChild(el);
 

@@ -244,6 +244,14 @@
 		<input type="number" min="5" max="35" value="15" onChange="vars.page_lim = event.target.value" />
 	</p>
 	<p>
+		Automatically reload page:
+		<input type="checkbox" name="autoreload" onChange="changeCheckbox(event)" />
+	</p>
+	<p>
+		Time before a server needs updating:
+		<input type="number" min="0" max="3600" value="60" onChange="vars.cache_time = event.target.value" />
+	</p>
+	<p>
 		<l k="hideo"></l>:
 		<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)" />
 	</p>
@@ -316,6 +324,8 @@ document.addEventListener("reloadLocale", reloadLocale);
 		image_mod: false,
 		page_mod: false,
 		page_lim: 15,
+		autoreload: false,
+		cache_time: 60,
 		hide_offline: false,
 		public_add: false,
 		totals: false,
@@ -434,7 +444,8 @@ document.addEventListener("reloadLocale", reloadLocale);
 		"$lgsl_config['host_to_ip']    = 0;                     // 1=show the servers ip instead of its hostname \n" +
 		"$lgsl_config['public_add']    = "+ vars.public_add +"; // 1=servers require approval OR 2=servers shown instantly \n" +
 		"$lgsl_config['public_feed']   = 0;                     // 1=feed requests can add new servers to your list \n" +
-		"$lgsl_config['cache_time']    = 60;                    // seconds=time before a server needs updating \n" +
+		"$lgsl_config['cache_time']    = "+ vars.cache_time +"; // seconds=time before a server needs updating \n" +
+		"$lgsl_config['autoreload']    = "+ vars.autoreload +"; // 1=reloads page when cache_time is passed \n" +
 		"$lgsl_config['live_time']     = 3;                     // seconds=time allowed for updating servers per page load \n" +
 		"$lgsl_config['timeout']       = 0;                     // 1=gives more time for servers to respond but adds loading delay \n" +
 		"$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay \n" +
@@ -470,7 +481,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 2).",
+				"filla": "You need to fill required* inputs (step 1 or 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
@@ -498,7 +509,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 2).",
+				"filla": "You need to fill required* inputs (step 1 or 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
@@ -526,7 +537,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 2).",
+				"filla": "You need to fill required* inputs (step 1 or 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
@@ -554,7 +565,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 2).",
+				"filla": "You need to fill required* inputs (step 1 or 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
@@ -582,7 +593,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 2).",
+				"filla": "You need to fill required* inputs (step 1 or 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
@@ -610,7 +621,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 2).",
+				"filla": "You need to fill required* inputs (step 1 or 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
@@ -638,7 +649,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 2).",
+				"filla": "You need to fill required* inputs (step 1 or 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
@@ -666,7 +677,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: Ako na to",
 				"gener": "Vytvoriť konfiguráciu",
 				"creat": "Vytvoriť tabuľky",
-				"filla": "Musíš vyplniť povinné* údaje (krok 2).",
+				"filla": "Musíš vyplniť povinné* údaje (krok 1 or 2).",
 				"mysld": "Pripojenie <span style='color: red;'>Zlyhalo</span>: PHP rozšírenie mysqli nie je aktívne.",
 				"table": "LGSL <span style='color: red;'>tabulka nebola vytvorená</span>: nesprávny názov databázy alebo tabuľka už existuje.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
@@ -694,7 +705,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 2).",
+				"filla": "You need to fill required* inputs (step 1 or 2).",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",

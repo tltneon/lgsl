@@ -15,10 +15,10 @@
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta http-equiv='content-style-type' content='text/css' />
     <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style']; ?>' type='text/css' />
+    <?php echo ($lgsl_config['autoreload'] ? "<META HTTP-EQUIV='REFRESH' CONTENT=" . $lgsl_config['cache_time'] + 1 . " />" : ""); ?>
   </head>
 
   <body>
-
     <div id="topmenu">
       <li><a href="../../"><?php echo $lgsl_config['text']['mpg']; ?></a></li>
       <?php if($lgsl_config['public_add']) echo '<li><a href="?s=add">'.$lgsl_config["text"]["aas"].'</a></li>';?>
@@ -31,7 +31,6 @@
 <?php
 //------------------------------------------------------------------------------------------------------------+
   global $output, $lgsl_server_id;
-
 
   $s = isset($_GET['s']) ? $_GET['s'] : "";
 

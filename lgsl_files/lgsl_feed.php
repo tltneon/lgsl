@@ -78,7 +78,7 @@
 //------------------------------------------------------------------------------------------------------------+
 // ADD THE FEED PROVIDER
 
-  if ($server['e']) { $server['e']['_feed_'] = "http://{$_SERVER['HTTP_HOST']}"; }
+  if (isset($server['e'])) { $server['e']['_feed_'] = "http://{$_SERVER['HTTP_HOST']}"; }
 
 //------------------------------------------------------------------------------------------------------------+
 // FEED USAGE LOGGING - 'logs' FOLDER MUST BE MANUALLY CREATED AND SET AS WRITABLE
