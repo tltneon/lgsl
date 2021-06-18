@@ -16,6 +16,7 @@
 		}
 		else {
 			try {
+        mysqli_report(MYSQLI_REPORT_ERROR);
 				$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
 
 				if (!$lgsl_database) {
@@ -56,17 +57,35 @@
 			}
 		}
 	}
-	if(isset($_GET['test_udp'])){
-		$fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
-		if (!$fp) {
-			echo "ERROR: $errno - $errstr<br />\n";
-			echo "<l k='coutd'></l>\n";
-		} else {
-			fwrite($fp, "\n");
-			echo fread($fp, 26);
-			echo "<l k='consu'></l>";
-			fclose($fp);
-		}
+	if(isset($_GET['test'])){
+    if(function_exists("fsockopen")){
+      $fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
+      if (!$fp) {
+        echo "ERROR: $errno - $errstr<br />\n";
+        echo "<l k='coutd'></l>\n";
+      } else {
+        fwrite($fp, "\n");
+        echo "<l k='consu'></l>\n";
+        fclose($fp);
+      } 
+    }
+    else {
+      echo("FSOCKOPEN: FAILED\n");
+    }
+    
+    if(function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")){
+      echo("CURL: SUCCESS\n");
+    }
+    else{
+      echo("CURL: FAILED\n");
+    }
+    
+    if(function_exists("bzdecompress")){
+      echo("BZ2: SUCCESS\n");
+    }
+    else{
+      echo("BZ2: FAILED\n");
+    }
 	}
 
 ?>
@@ -130,7 +149,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
 	$output = '
-	<h6><a href="./"><l k="back"></l></a> | <a href="?test_udp">Test UDP</a></h6>
+	<h6><a href="./"><l k="back"></l></a> | <a href="?test">Check requirements</a></h6>
 	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank"><l k="owiki"></l></a></h5>
 	<h4><l k="step1"></l></h4>
 	<form method="post" action="?">
@@ -209,9 +228,11 @@
 	</p>
 
 	<p>
-		<l k="selsc"></l>:
+		<l k="selsc"></l> <a href="https://github.com/tltneon/lgsl/wiki/scripts" target="_blank" class="hinfolink">?</a>:
 		<br /><input type="checkbox" id="parallax.js" name="scripts" onChange="changeCheckbox(event)" /> parallax (for Parallax Style)
 		<br /><input type="checkbox" id="preview.js" name="scripts" onChange="changeCheckbox(event)" /> map preview (on server list)
+		<br /><input type="checkbox" id="refresh.js" name="scripts" onChange="changeCheckbox(event)" /> refresh (manually refresh server status)
+		<br /><input type="checkbox" id="flag-icon.js" name="scripts" onChange="changeCheckbox(event)" /> flag-icon (replacing with svg)
 	</p>
 
 	<hr />
@@ -250,6 +271,10 @@
 	<p>
 		Time before a server needs updating:
 		<input type="number" min="0" max="3600" value="60" onChange="vars.cache_time = event.target.value" />
+	</p>
+	<p>
+		Enable server tracking (history):
+		<input type="checkbox" name="history" onChange="changeCheckbox(event)" />
 	</p>
 	<p>
 		<l k="hideo"></l>:
@@ -325,6 +350,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		page_mod: false,
 		page_lim: 15,
 		autoreload: false,
+		history: false,
 		cache_time: 60,
 		hide_offline: false,
 		public_add: false,
@@ -446,6 +472,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		"$lgsl_config['public_feed']   = 0;                     // 1=feed requests can add new servers to your list \n" +
 		"$lgsl_config['cache_time']    = "+ vars.cache_time +"; // seconds=time before a server needs updating \n" +
 		"$lgsl_config['autoreload']    = "+ vars.autoreload +"; // 1=reloads page when cache_time is passed \n" +
+		"$lgsl_config['history']       = "+ vars.history +";    // 1=reloads page when cache_time is passed \n" +
 		"$lgsl_config['live_time']     = 3;                     // seconds=time allowed for updating servers per page load \n" +
 		"$lgsl_config['timeout']       = 0;                     // 1=gives more time for servers to respond but adds loading delay \n" +
 		"$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay \n" +

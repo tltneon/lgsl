@@ -133,12 +133,14 @@
   $lgsl_config['public_add']    = 0;         // 1=servers require approval OR 2=servers shown instantly
   $lgsl_config['public_feed']   = 0;         // 1=feed requests can add new servers to your list
   $lgsl_config['cache_time']    = 60;        // seconds=time before a server needs updating
+  $lgsl_config['autoreload']    = false;     // true=reloads page when cache_time is passed
+  $lgsl_config['history']       = false;     // true=enable server tracking (history of past 24 hours)
   $lgsl_config['live_time']     = 3;         // seconds=time allowed for updating servers per page load
   $lgsl_config['timeout']       = 0;         // 1=gives more time for servers to respond but adds loading delay
   $lgsl_config['retry_offline'] = 0;         // 1=repeats query when there is no response but adds loading delay
   $lgsl_config['cms']           = "sa";      // sets which CMS specific code to use
-  $lgsl_config['image_mod']     = true;      // true = show userbar in server's details
-  $lgsl_config['pagination_mod']= true;      // true = using pagination
+  $lgsl_config['image_mod']     = false;     // true=show userbar in server's details
+  $lgsl_config['pagination_mod']= true;      // true=using pagination
   $lgsl_config['pagination_lim']= 15;        // limit per page
 
 //------------------------------------------------------------------------------------------------------------+

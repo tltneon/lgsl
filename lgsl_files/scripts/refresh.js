@@ -10,6 +10,7 @@ async function refreshData(type = 'source', ip, c_port, q_port){
     let status = await response.text();
     status = JSON.parse(atob(status.slice(4, -4)));
     let details = document.querySelectorAll(".details_info .details_info_srow .details_info_ceil:nth-child(2)");
+    // reload main info
     details[0].innerText = (status.b.status == "1"
                           ? (status.s.password == "1"
                               ? "ONLINE WITH PASSWORD"
@@ -19,6 +20,9 @@ async function refreshData(type = 'source', ip, c_port, q_port){
     details[7].innerText = status.s.players + " / " + status.s.playersmax;
     document.querySelector('[id^=servername]').innerText = status.s.name;
     document.querySelector(".details_info_row:last-child").innerText = "Last update: " + (new Date()).toUTCString() + "\nServer last query: " + (new Date(Number(status.s.cache_time + '000'))).toUTCString() + " ";
+    // reload chart if it exists
+    if(document.querySelector('#chart'))
+      document.querySelector('#chart').src = document.querySelector('#chart').src;
     a.appendChild(el);
   }
   else {

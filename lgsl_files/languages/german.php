@@ -52,6 +52,7 @@
   $lgsl_config['text']['tea'] = "Team";
   $lgsl_config['text']['cou'] = "Country";
   $lgsl_config['text']['pin'] = "Ping";
+  $lgsl_config['text']['pag'] = "Page";
   $lgsl_config['text']['bak'] = "ZURÜCK ZUR SERVERLISTE";
   $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
   /* admin section */

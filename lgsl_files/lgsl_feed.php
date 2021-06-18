@@ -32,7 +32,7 @@
     exit("LGSL FEED PROBLEM: INCOMPLETE REQUEST");
   }
 
-  if ($q_port > 99999 || $q_port < 1024)
+  if ($q_port > 99999 || $q_port < 1)
   {
     exit("LGSL FEED PROBLEM: INVALID QUERY PORT: '{$q_port}'");
   }

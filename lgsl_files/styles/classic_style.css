@@ -119,8 +119,8 @@ div.servername_link { display: none; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell > a { text-decoration: none; }
 
-#pages { width: fit-content; margin: auto; margin-top: 16px; }
-#pages a { padding: 5px; background-color: #c6c6c6; color: black; border: 1px solid #848484; }
+#pages { width: fit-content; margin: 2.6em auto; font-size: 1.12em; }
+#pages a { padding: 5px; background-color: #c6c6c6; font-size: 1.3em; }
 #pages span { padding: 10px; }
 
 #totals { width: fit-content; margin:auto; margin-top: 16px; }

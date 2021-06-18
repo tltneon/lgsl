@@ -149,8 +149,8 @@ div.servername_nolink { display: none; }
 .details_cell, .status_cell { white-space:nowrap; text-align:center; }
 .details_cell { display: none; }
 
-#pages { width: fit-content; margin: auto; margin-top: 16px; }
-#pages a { padding: 5px; background-color: #282828; }
+#pages { width: fit-content; margin: 2.6em auto; font-size: 1.12em; }
+#pages a { padding: 5px; background-color: #282828; font-size: 1.3em; }
 #pages span { padding: 10px; color: black; }
 
 #totals { width: fit-content; margin:auto; margin-top: 16px; text-align: center; }

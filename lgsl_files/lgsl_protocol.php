@@ -52,7 +52,7 @@
     "dh2005"        => "Deer Hunter 2005",
     "farcry"        => "Far Cry",
     "fear"          => "F.E.A.R.",
-    "fivem"         => "FiveM",
+    "fivem"         => "FiveM / RedM",
     "flashpoint"    => "Operation Flashpoint",
     "freelancer"    => "Freelancer",
     "frontlines"    => "Frontlines: Fuel Of War",
@@ -328,7 +328,7 @@
     "jediknightja"  => "qtracker://{IP}:{S_PORT}?game=JediKnightJediAcademy&action=show",
     "killingfloor"  => "steam://connect/{IP}:{S_PORT}",
     "kingpin"       => "qtracker://{IP}:{S_PORT}?game=Kingpin&action=show",
-    "minecraft"     => "http://en.wikipedia.org/wiki/Minecraft",
+    "minecraft"     => "minecraft://{IP}:{S_PORT}/",
     "mohaa"         => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssault&action=show",
     "mohaab"        => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssaultBreakthrough&action=show",
     "mohaas"        => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssaultSpearhead&action=show",
@@ -526,7 +526,7 @@
     {
       $response = lgsl_query_feed($server, $request, $lgsl_config['feed']['method'], $lgsl_config['feed']['url']);
     }
-    elseif ($lgsl_function == "lgsl_query_34" || $lgsl_function == "lgsl_query_36" || $lgsl_function == "lgsl_query_37")
+    elseif ($lgsl_function == "lgsl_query_34" || $lgsl_function == "lgsl_query_35" || $lgsl_function == "lgsl_query_36" || $lgsl_function == "lgsl_query_37")
     {
       $response = lgsl_query_direct($server, $request, $lgsl_function, "http");
     }
@@ -585,45 +585,31 @@
   {
 //---------------------------------------------------------+
 
-    if ($scheme != 'http') {
+    global $lgsl_config;
+
+    $lgsl_config['timeout'] = intval($lgsl_config['timeout']);
+
+    if ($scheme == 'http') {
+      
+      if(!function_exists('curl_init') || !function_exists('curl_setopt') || !function_exists('curl_exec')) return FALSE;
+
+      $lgsl_fp =  curl_init('');
+      curl_setopt($lgsl_fp, CURLOPT_RETURNTRANSFER, 1);
+      curl_setopt($lgsl_fp, CURLOPT_SSL_VERIFYPEER, 0);
+      curl_setopt($lgsl_fp, CURLOPT_CONNECTTIMEOUT, $lgsl_config['timeout']);
+      curl_setopt($lgsl_fp, CURLOPT_TIMEOUT, 3);
+      curl_setopt($lgsl_fp, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+
+    }
+    else {
 
       $lgsl_fp = @fsockopen("{$scheme}://{$server['b']['ip']}", $server['b']['q_port'], $errno, $errstr, 1);
 
       if (!$lgsl_fp) { return FALSE; }
 
-      global $lgsl_config;
-
-      $lgsl_config['timeout'] = intval($lgsl_config['timeout']);
-
       stream_set_timeout($lgsl_fp, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
       stream_set_blocking($lgsl_fp, TRUE);
 
-    }
-    else {
-      if ($lgsl_function == "lgsl_query_34") { // ragemp
-        $ch =  curl_init('https://cdn.rage.mp/master/');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 3);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-        $lgsl_fp = curl_exec($ch);
-        curl_close($ch);
-      }
-      elseif ($lgsl_function == "lgsl_query_36") { // discord
-        $lgsl_fp = array();
-
-        $raw_json = @file_get_contents("https://discord.com/api/v8/invites/{$server['b']['ip']}?with_counts=true");
-        $lgsl_fp[0] = json_decode($raw_json, true);
-
-        $raw_json = @file_get_contents("https://discordapp.com/api/guilds/{$lgsl_fp[0]['guild']['id']}/widget.json");
-        $lgsl_fp[1] = json_decode($raw_json, true);
-      }
-      elseif ($lgsl_function == "lgsl_query_37") { // scum
-        $lgsl_fp = array();
-        $data = @file_get_contents("https://scumservers.net/api.php?ip={$server['b']['ip']}&port={$server['b']['c_port']}");
-        $lgsl_fp = json_decode($data, true);
-      }
     }
 
 //---------------------------------------------------------+
@@ -661,7 +647,10 @@
 
 //---------------------------------------------------------+
 
-    if ($scheme != 'http') {
+    if ($scheme == 'http') {
+      curl_close($lgsl_fp);
+    }
+    else {
       @fclose($lgsl_fp);
     }
 
@@ -1173,6 +1162,21 @@
       $server['s']['password']    = ord(lgsl_cut_byte($buffer, 1));
       $server['e']['anticheat']   = ord(lgsl_cut_byte($buffer, 1));
       $server['e']['version']     = lgsl_cut_string($buffer);
+
+      if (ord(lgsl_cut_byte($buffer, 1)) == 177) {
+        lgsl_cut_byte($buffer, 10);
+      }
+      else {
+        lgsl_cut_byte($buffer, 6);
+      }
+      $server['e']['tags']        = lgsl_cut_string($buffer);
+
+      if($server['s']['game'] == 'rust'){
+        preg_match('/cp\d{1,3}/', $server['e']['tags'], $e);
+        $server['s']['players'] = substr($e[0], 2);
+        preg_match('/mp\d{1,3}/', $server['e']['tags'], $e);
+        $server['s']['playersmax'] = substr($e[0], 2);
+      }
     }
 
     elseif ($response_type == "m") // HALF-LIFE 1 INFO
@@ -1301,6 +1305,7 @@
 
       $buffer[$packet_order] = $packet;
       if ($server['b']['type'] == "minecraft") { $packet_total = 1; }
+
     }
     while ($packet_count < $packet_total);
 
@@ -1914,8 +1919,6 @@
   function lgsl_query_12(&$server, &$lgsl_need, &$lgsl_fp)
   {
 //---------------------------------------------------------+
-//  REFERENCE:
-//  VICE CITY CURRENTLY ONLY SUPPORTS THE 'i' CHALLENGE
 
     if     ($server['b']['type'] == "samp") { $challenge_packet = "SAMP\x21\x21\x21\x21\x00\x00"; }
     elseif ($server['b']['type'] == "vcmp") { $challenge_packet = "VCMP\x21\x21\x21\x21\x00\x00"; $lgsl_need['e'] = FALSE; }
@@ -3771,7 +3774,14 @@
   function lgsl_query_34(&$server, &$lgsl_need, &$lgsl_fp) // Rage:MP
   {
     if(!$lgsl_fp) return FALSE;
-    $buffer = json_decode($lgsl_fp, true);
+
+    $lgsl_need['e'] = FALSE;
+    $lgsl_need['p'] = FALSE;
+
+    curl_setopt($lgsl_fp, CURLOPT_URL, 'https://cdn.rage.mp/master/');
+    $buffer = curl_exec($lgsl_fp);
+    $buffer = json_decode($buffer, true);
+
     if(isset($buffer[$server['b']['ip'].':'.$server['b']['c_port']])){
       $value = $buffer[$server['b']['ip'].':'.$server['b']['c_port']];
       $server['s']['name']       = $value['name'];
@@ -3790,73 +3800,117 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_query_35(&$server, &$lgsl_need, &$lgsl_fp) // FiveM
+  function lgsl_query_35(&$server, &$lgsl_need, &$lgsl_fp) // FiveM / RedM
   {
-    fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo xxx");
-    $buffer = fread($lgsl_fp, 4096);
+    if(!$lgsl_fp) return FALSE;
 
-    if(!$buffer) return FALSE;
+    if($lgsl_need['s']) {
+      $lgsl_need['s'] = FALSE;
 
-    lgsl_cut_byte($buffer, 18);
+      curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/dynamic.json");
+      $buffer = curl_exec($lgsl_fp);
+      $buffer = json_decode($buffer, true);
 
-    $data = explode('\\', $buffer);
+      $server['s']['name'] = $buffer['hostname'];
+      $server['s']['players'] = $buffer['clients'];
+      $server['s']['playersmax'] = $buffer['sv_maxclients'];
+      $server['s']['map'] = $buffer['mapname'];
+      if ($server['s']['map'] == 'redm-map-one'){
+        $server['s']['game'] = 'redm';
+      }
+      $server['e']['gametype'] = $buffer['gametype'];
+      $server['e']['version'] = $buffer['iv'];
+    }
 
-    for ($i = 0; $i < count($data); $i += 2) {
-      switch($data[$i]){
-        case 'sv_maxclients': $server['s']['playersmax'] = $data[$i + 1]; break;
-        case 'clients': $server['s']['players'] = $data[$i + 1]; break;
-        case 'hostname': $server['s']['name'] = lgsl_parse_color($data[$i + 1], "fivem"); break;
-        case 'mapname': $server['s']['map'] = $data[$i + 1]; break;
-        default: $server['e'][$data[$i]] = $data[$i + 1]; break;
+    if($lgsl_need['p']) {
+      $lgsl_need['p'] = FALSE;
+
+      curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/players.json");
+      $buffer = curl_exec($lgsl_fp);
+      $buffer = json_decode($buffer, true);
+
+      foreach($buffer as $key => $value){
+        $server['p'][$key]['name'] = $value['name'];
+        $server['p'][$key]['ping'] = $value['ping'];
       }
     }
-      return true;
-  }
-//------------------------------------------------------------------------------------------------------------+
-//------------------------------------------------------------------------------------------------------------+
-
-  function lgsl_query_36(&$server, &$lgsl_need, &$lgsl_fp) // Discord
-  {
-    $buffer = $lgsl_fp[1];
-
-    if(!$buffer) return FALSE;
-
-    $server['s']['name'] = $buffer['name'];
-    $server['s']['map'] = 'discord';
-    $server['s']['players'] = $buffer['presence_count'];
-    $server['s']['playersmax'] = $lgsl_fp[0]['approximate_member_count'];
-    $server['e']['id'] = $buffer['id'];
-    $server['e']['inviter'] = $lgsl_fp[0]['inviter']['username'] . "#" . $lgsl_fp[0]['inviter']['discriminator'];
-
-    if(isset($buffer['channels']))
-      foreach($buffer['channels'] as $key => $value){
-        $server['e']['channel'.$key] = $value['name'];
-      }
-
-    if(isset($buffer['members']))
-      foreach($buffer['members'] as $key => $value){
-        $server['p'][$key]['name'] = $value['username'];
-        $server['p'][$key]['status'] = $value['status'];
-        $server['p'][$key]['game'] = isset($value['game']) ? $value['game']['name'] : '--';
-      }
 
     return true;
   }
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
+  function lgsl_query_36(&$server, &$lgsl_need, &$lgsl_fp) // Discord
+  {
+    if(!$lgsl_fp) return FALSE;
+
+    if($lgsl_need['s']) {
+      $lgsl_need['s'] = FALSE;
+
+      curl_setopt($lgsl_fp, CURLOPT_URL, "https://discord.com/api/v9/invites/{$server['b']['ip']}?with_counts=true");
+      $buffer = curl_exec($lgsl_fp);
+      $buffer = json_decode($buffer, true);
+
+      if(isset($buffer['message']) && $buffer['message'] == "Unknown Invite") { $server['s']['name'] = "Unknown Invite"; return FALSE; }
+
+      $server['s']['map'] = 'discord';
+      $server['s']['name'] = $buffer['guild']['name'];
+      $server['s']['players'] = $buffer['approximate_presence_count'];
+      $server['s']['playersmax'] = $buffer['approximate_member_count'];
+      $server['e']['id'] = $buffer['guild']['id'];
+      $server['e']['description'] = $buffer['guild']['description'];
+      $server['e']['features'] = implode(', ', $buffer['guild']['features']);
+      $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
+      $server['e']['inviter'] = $buffer['inviter']['username'] . "#" . $buffer['inviter']['discriminator'];
+    }
+
+    if($lgsl_need['p']) {
+      $lgsl_need['p'] = FALSE;
+
+      curl_setopt($lgsl_fp, CURLOPT_URL, "https://discordapp.com/api/guilds/{$server['e']['id']}/widget.json");
+      $buffer = curl_exec($lgsl_fp);
+      $buffer = json_decode($buffer, true);
+
+      if(isset($buffer['channels']))
+        foreach($buffer['channels'] as $key => $value){
+          $server['e']['channel'.$key] = $value['name'];
+        }
+
+      if(isset($buffer['members']))
+        foreach($buffer['members'] as $key => $value){
+          $server['p'][$key]['name'] = $value['username'];
+          $server['p'][$key]['status'] = $value['status'];
+          $server['p'][$key]['game'] = isset($value['game']) ? $value['game']['name'] : '--';
+        }
+    }
+
+    return true;
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
   function lgsl_query_37(&$server, &$lgsl_need, &$lgsl_fp) // SCUM API
   {
-    if(!$lgsl_fp or gettype($lgsl_fp) == 'string') return FALSE;
+    if(!$lgsl_fp) return FALSE;
 
-    $server['s']['name']        = $lgsl_fp['serverName'];
+    $lgsl_need['e'] = FALSE;
+    $lgsl_need['p'] = FALSE;
+
+    curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.hellbz.de/scum/api.php?address={$server['b']['ip']}&port={$server['b']['c_port']}");
+    $buffer = curl_exec($lgsl_fp);
+    $buffer = json_decode($buffer, true);
+
+    if(!$buffer['success']){ return FALSE; }
+
+    $lgsl_need['s'] = FALSE;
+
+    $server['s']['name']        = $buffer['data'][0]['name'];
     $server['s']['map']         = "SCUM";
-    $server['s']['players']     = $lgsl_fp['players'];
-    $server['s']['playersmax']  = $lgsl_fp['maxPlayers'];
-    $server['e']['serverTime']  = $lgsl_fp['serverTime'];
-    $server['e']['version']     = $lgsl_fp['version'];
-    $server['e']['countryCode'] = $lgsl_fp['countryCode'];
-    $server['e']['countryName'] = $lgsl_fp['countryName'];
+    $server['s']['players']     = $buffer['data'][0]['players'];
+    $server['s']['playersmax']  = $buffer['data'][0]['players_max'];
+    $server['e']['time']        = $buffer['data'][0]['time'];
+    $server['e']['version']     = $buffer['data'][0]['version'];
 
     return TRUE;
   }
@@ -3884,7 +3938,7 @@ function lgsl_unescape($text) {
 
     if (empty($host['host']) || empty($host['path'])) { exit("LGSL FEED PROBLEM: INVALID URL"); }
 
-    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=5.8";
+    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=6.1.0";
 
     if (function_exists("json_decode")) { $host_query .= function_exists("gzuncompress") ? "&format=4" : "&format=3"; }
     else                                { $host_query .= function_exists("gzuncompress") ? "&format=2" : "&format=1"; }
@@ -4094,7 +4148,7 @@ function lgsl_unescape($text) {
 
   function lgsl_time($seconds)
   {
-    if ($seconds === "") { return ""; }
+    if (!$seconds or $seconds === "") { return ""; }
 
     $n = $seconds < 0 ? "-" : "";
 
@@ -4341,7 +4395,7 @@ function lgsl_unescape($text) {
 
   function lgsl_version()
   {
-    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 6.0.1"; // little dirty trick
+    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 6.1.0"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+

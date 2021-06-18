@@ -130,8 +130,8 @@ div.servername_link { display: none; }
 .details_cell { border-radius: 0px 12px 12px 0px !important; }
 .details_cell > a { text-decoration: none; }
 
-#pages { width: fit-content; margin: auto; margin-top: 16px; }
-#pages a { padding: 7px; background-color: #feffff; border-radius: 6px; border: 1px solid #c2d1d4; }
+#pages { width: fit-content; margin: 2.6em auto; font-size: 1.12em; }
+#pages a { padding: 7px; background-color: #feffff; border-radius: 6px; border: 1px solid #c2d1d4; font-size: 1.3em; }
 #pages span { padding: 10px; }
 
 #totals { width: fit-content; background-color: #f4f7fa; margin:auto; margin-top: 20px; }

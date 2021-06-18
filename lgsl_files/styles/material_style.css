@@ -214,8 +214,8 @@ div.servername_link { display: none; }
 	border-radius: 19px;
 }
 
-#pages { width: fit-content; margin: auto; margin-top: 16px; }
-#pages a { padding: 5px 20px; background-color: #282828; border: 2px solid #4285f4 !important; border-radius: 4px; }
+#pages { width: fit-content; margin: 2.6em auto; font-size: 1.12em; }
+#pages a { padding: 5px 20px; background-color: #282828; border: 2px solid #4285f4 !important; border-radius: 4px; font-size: 1.3em; }
 #pages a:hover { box-shadow: 0 5px 11px 0 rgba(0,0,0,0.18), 0 4px 15px 0 rgba(0,0,0,0.15); }
 #pages span { padding: 20px; vertical-align: super; }
 

@@ -200,6 +200,7 @@
       $cache['s']['playersmax'] = 0;
       $cache['s']['password']   = 0;
       $cache['s']['cache_time'] = $cache_time[0] == '' ? 0 : $cache_time[0];
+      $cache['s']['history']    = array();
     }
 
     if (!isset($cache['e'])) { $cache['e'] = array(); }
@@ -251,6 +252,23 @@
         $live['s']['cache_time'] = time();
         $live['e']               = array();
         $live['p']               = array();
+      }
+
+      // WRITING STATS
+
+      if($lgsl_config['history']) {
+        $live['s']['history']    = array();
+
+        foreach($cache['s']['history'] as $item){
+          if(time() - $item['time'] <= 3600 * 24) // NOT OLDER THAN 1 DAY
+            array_push($live['s']['history'], $item);
+        }
+
+        array_push($live['s']['history'], array(
+          "status"  => (int) $live['b']['status'],
+          "time"    => $live['s']['cache_time'],
+          "players" => (int) $live['s']['players']
+        ));
       }
 
       // MERGE LIVE INTO CACHE

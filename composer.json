@@ -2,21 +2,21 @@
 	"name": "tltneon/lgsl",
 	"description": "PHP library retrieve game servers status from various types of games.",
 	"homepage": "https://github.com/tltneon/lgsl",
-	"type": "project",
+	"type": "library",
 	"license": "GPL-3.0-only",
 	"keywords":
 	[
+    "gameserver",
+    "query",
 		"discord",
 		"fivem",
-		"csgo",
-		"counter-strike",
-		"team fortress",
+		"minecraft",
+		"cs",
 		"gmod",
 		"rust",
 		"dayz",
 		"ark",
-		"samp",
-		"minecraft"
+		"samp"
 	],
 	"authors": [
 		{
@@ -32,19 +32,33 @@
 	],
 	"support": {
 		"wiki": "https://github.com/tltneon/lgsl/wiki",
-		"games": "https://github.com/tltneon/lgsl/wiki/Supported-Games",
+		"forum": "https://github.com/tltneon/lgsl/discussions",
 		"source": "https://github.com/tltneon/lgsl",
 		"issues": "https://github.com/tltneon/lgsl/issues"
 	},
+  "funding": [
+    {
+      "type": "patreon",
+      "url": "https://www.patreon.com/user?u=22162275&fan_landing=true"
+    }
+  ],
 	"require":
 	{
-		"php": ">=5.4"
+		"php": ">=5.4",
+		"ext-mysqli": "*",
+		"ext-bz2": "*",
+		"ext-curl": "*"
+	},
+	"suggest":
+	{
+		"ext-gd": "*",
+		"ext-mbstring": "*"
 	},
 	"autoload":
 	{
 		"psr-4":
 		{
-			"tltneon\\lgsl\\": "lgsl/"
+			"lgsl\\": "lgsl/lgsl_files/lgsl_class.php"
 		}
 	}
 }

@@ -105,7 +105,7 @@
     $output .= "
       <div id='pages'>
         " . ($page > 1 ? "<a href='" . str_replace('page='.strval($page), 'page='.strval($page - 1), $_SERVER['REQUEST_URI']) . "'><</a>" : "") . "
-      <span>Page {$page}</span>
+      <span>{$lgsl_config['text']['pag']} {$page}</span>
         " . (count($server_list) < $lgsl_config['pagination_lim'] ? "" : (isset($_GET['page']) ? "<a href='" . str_replace('page='.strval($page), 'page='.strval($page + 1), $_SERVER['REQUEST_URI']) . "'>></a>" : "<a href='" . $_SERVER['REQUEST_URI'] ."?page=2'>></a>")) . "
       </div>
       ";

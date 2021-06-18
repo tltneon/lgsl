@@ -86,6 +86,10 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
+  if($lgsl_config['history']){
+    $output .= "<img src='charts.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart' />";
+  }
+
   if($lgsl_config['image_mod']){
     if(extension_loaded('gd')){
       $output .= "
