@@ -259,9 +259,11 @@
       if($lgsl_config['history']) {
         $live['s']['history']    = array();
 
-        foreach($cache['s']['history'] as $item){
-          if(time() - $item['time'] <= 3600 * 24) // NOT OLDER THAN 1 DAY
-            array_push($live['s']['history'], $item);
+        if(isset($cache['s']['history'])){
+          foreach($cache['s']['history'] as $item){
+            if(time() - $item['time'] <= 3600 * 24) // NOT OLDER THAN 1 DAY
+              array_push($live['s']['history'], $item);
+          }
         }
 
         array_push($live['s']['history'], array(

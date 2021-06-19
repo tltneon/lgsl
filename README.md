@@ -28,7 +28,7 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 - **Added RedM support**
 - **New game icons**
 - **Minor fixes**
-- *Tested on PHP 8.1.0-dev
+- * Tested on PHP 8.1.0-dev
 #### v6.0.1
 - **New Style: Cards** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl9/index.php)]
 - **Selecting active scripts on install page**
