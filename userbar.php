@@ -1,6 +1,4 @@
 <?php # original author: playzone46@yandex.ru
-	header("Content-type: image/gif");
-	require "lgsl_files/lgsl_class.php";
 
 	function makeImage($src, $width, $height){
 		list($w, $h) = getimagesize($src);
@@ -18,7 +16,30 @@
 		return $result;
 	}
 
+  // SETTINGS
+
+  $w = 350;
+  $h = 20;
+	$im = @makeImage("lgsl_files/other/banner_thin.gif", $w, $h);             // create background
+
+	$color_pz = imagecolorallocate($im, 128, 0, 0);
+	$color_ip = imagecolorallocate($im, 255, 0, 0);
+	$color_map = imagecolorallocate($im, 0, 0, 0);
+	$color_pl = imagecolorallocate($im, 255, 94, 0);
+	$color_time = imagecolorallocate($im, 66, 66, 66);
+
+  // MAIN SECTION
+
+	header("Content-type: image/gif");
+	require "lgsl_files/lgsl_class.php";
+
 	$lookup = lgsl_lookup_id($_GET['s']);
+  if(!$lookup){
+    imagestring($im, 1, (int)($w / 2 - strlen($lgsl_config['text']['mid']) * 2.2), (int)($h / 2 - 4), $lgsl_config['text']['mid'], $color_map);
+    imagegif($im);
+    imagedestroy($im);
+    exit();
+  }
 	$server = lgsl_query_cached($lookup['type'], $lookup['ip'], $lookup['c_port'], $lookup['q_port'], $lookup['s_port'], "s");
 	$misc   = lgsl_server_misc($server);
 	if(strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
@@ -29,15 +50,8 @@
 	if($hour >= 24) $hour - 24;
 	$time = date("d.m ".$hour.":i");
 
-	$im = @makeImage("lgsl_files/other/banner_thin.gif", 350, 20);             // create background
 	$on_id = makeImage($misc['icon_status'], 16, 16);                          // create status icon
 	$game_id = makeImage($misc['icon_game'], 16, 16);                          // create game icon
-
-	$color_pz = imagecolorallocate($im, 128, 0, 0);
-	$color_ip = imagecolorallocate($im, 255, 0, 0);
-	$color_map = imagecolorallocate($im, 0, 0, 0);
-	$color_pl = imagecolorallocate($im, 255, 94, 0);
-	$color_time = imagecolorallocate($im, 66, 66, 66);
 	imagecopy($im, $on_id, 8, 2, 0, 0, 16, 16);                                // place status icon
 	imagecopy($im, $game_id, 26, 2, 0, 0, 16, 16);                             // place game icon
 
