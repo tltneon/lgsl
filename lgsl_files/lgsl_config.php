@@ -156,5 +156,6 @@
   // Bulgarian language: "languages/bulgarian.php"  // Neon
   // Slovak language: "languages/slovak.php"        // KristianP26
   // Arabic language: "languages/arabic.php"        // lamjed001
+  // Turkish language: "languages/turkish.php"      // izmoxkawaii
 
 //------------------------------------------------------------------------------------------------------------+

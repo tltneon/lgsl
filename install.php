@@ -37,7 +37,7 @@
 							`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
 							`comment`    VARCHAR (255) NOT NULL DEFAULT '',
 							`status`     TINYINT (1)   NOT NULL DEFAULT '0',
-							`cache`      TEXT          NOT NULL,
+							`cache`      MEDIUMTEXT    NOT NULL,
 							`cache_time` TEXT          NOT NULL,
 
 							PRIMARY KEY (`id`)
@@ -223,7 +223,8 @@
 			<option value="bulgarian">български</option>
 			<option value="slovak">Slovenčina</option>
 			<option value="arabic">اَلْعَرَبِيَّةُ</option>
-			<option value="help">>> Help to translate</option>
+			<option value="turkish">Türkçe</option>
+			<option value="help" style="color: green;">!Help to translate LGSL!</option>
 		</select>
 	</p>
 
@@ -260,7 +261,7 @@
 		<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)" />
 	</p>
 	<p>
-		Enable Pagination <a href="https://github.com/tltneon/lgsl/wiki" target="_blank" class="hinfolink">?</a>:
+		Enable Pagination <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
 		<input type="checkbox" name="page_mod" onChange="changeCheckbox(event)" />
 		<input type="number" min="5" max="35" value="15" onChange="vars.page_lim = event.target.value" />
 	</p>
@@ -273,7 +274,7 @@
 		<input type="number" min="0" max="3600" value="60" onChange="vars.cache_time = event.target.value" />
 	</p>
 	<p>
-		Enable server tracking (history):
+		Enable server tracking (history) <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
 		<input type="checkbox" name="history" onChange="changeCheckbox(event)" />
 	</p>
 	<p>

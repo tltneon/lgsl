@@ -3811,7 +3811,7 @@
       $buffer = curl_exec($lgsl_fp);
       $buffer = json_decode($buffer, true);
 
-      $server['s']['name'] = $buffer['hostname'];
+      $server['s']['name'] = lgsl_parse_color($buffer['hostname'], 'fivem');
       $server['s']['players'] = $buffer['clients'];
       $server['s']['playersmax'] = $buffer['sv_maxclients'];
       $server['s']['map'] = $buffer['mapname'];
@@ -3844,25 +3844,27 @@
   {
     if(!$lgsl_fp) return FALSE;
 
-    if($lgsl_need['s']) {
-      $lgsl_need['s'] = FALSE;
+    $lgsl_need['s'] = FALSE;
 
-      curl_setopt($lgsl_fp, CURLOPT_URL, "https://discord.com/api/v9/invites/{$server['b']['ip']}?with_counts=true");
-      $buffer = curl_exec($lgsl_fp);
-      $buffer = json_decode($buffer, true);
+    curl_setopt($lgsl_fp, CURLOPT_URL, "https://discord.com/api/v9/invites/{$server['b']['ip']}?with_counts=true");
+    $buffer = curl_exec($lgsl_fp);
+    $buffer = json_decode($buffer, true);
 
-      if(isset($buffer['message']) && $buffer['message'] == "Unknown Invite") { $server['s']['name'] = "Unknown Invite"; return FALSE; }
-
-      $server['s']['map'] = 'discord';
-      $server['s']['name'] = $buffer['guild']['name'];
-      $server['s']['players'] = $buffer['approximate_presence_count'];
-      $server['s']['playersmax'] = $buffer['approximate_member_count'];
-      $server['e']['id'] = $buffer['guild']['id'];
-      $server['e']['description'] = $buffer['guild']['description'];
-      $server['e']['features'] = implode(', ', $buffer['guild']['features']);
-      $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
-      $server['e']['inviter'] = $buffer['inviter']['username'] . "#" . $buffer['inviter']['discriminator'];
+    if(isset($buffer['message'])){
+      $server['e']['_error_fetching_info'] = $buffer['message'];
+      return FALSE;
     }
+
+    $server['s']['map'] = 'discord';
+    $server['s']['name'] = $buffer['guild']['name'];
+    $server['s']['players'] = $buffer['approximate_presence_count'];
+    $server['s']['playersmax'] = $buffer['approximate_member_count'];
+    $server['e']['id'] = $buffer['guild']['id'];
+    $server['e']['description'] = $buffer['guild']['description'] ? $buffer['guild']['description'] : $buffer['guild']['welcome_screen']['description'];
+    $server['e']['features'] = implode(', ', $buffer['guild']['features']);
+    $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
+    if(isset($buffer['inviter']))
+      $server['e']['inviter'] = $buffer['inviter']['username'] . "#" . $buffer['inviter']['discriminator'];
 
     if($lgsl_need['p']) {
       $lgsl_need['p'] = FALSE;
@@ -3870,6 +3872,10 @@
       curl_setopt($lgsl_fp, CURLOPT_URL, "https://discordapp.com/api/guilds/{$server['e']['id']}/widget.json");
       $buffer = curl_exec($lgsl_fp);
       $buffer = json_decode($buffer, true);
+
+      if(isset($buffer['code']) and $buffer['code'] == 0){
+        $server['e']['_error_fetching_users'] = $buffer['message'];
+      }
 
       if(isset($buffer['channels']))
         foreach($buffer['channels'] as $key => $value){

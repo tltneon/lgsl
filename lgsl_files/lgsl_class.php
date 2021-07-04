@@ -261,16 +261,18 @@
 
         if(isset($cache['s']['history'])){
           foreach($cache['s']['history'] as $item){
-            if(time() - $item['time'] <= 3600 * 24) // NOT OLDER THAN 1 DAY
+            if(time() - $item['time'] < 60 * 60 * 24) // NOT OLDER THAN 1 DAY
               array_push($live['s']['history'], $item);
           }
         }
-
-        array_push($live['s']['history'], array(
-          "status"  => (int) $live['b']['status'],
-          "time"    => $live['s']['cache_time'],
-          "players" => (int) $live['s']['players']
-        ));
+        $last = ($cache['s']['history'] ? end($cache['s']['history']) : null);
+        if(!$last or time() - $last['time'] >= 60 * 15 ) { // RECORD IF 15 MINS IS PASSED
+          array_push($live['s']['history'], array(
+            "status"  => (int) $live['b']['status'],
+            "time"    => $live['s']['cache_time'],
+            "players" => (int) $live['s']['players']
+          ));
+        }
       }
 
       // MERGE LIVE INTO CACHE
@@ -748,7 +750,7 @@
   {
     global $lgsl_config;
 
-    if (!is_array($server['p'])) { return $server; }
+    if (!isset($server['p']) or !is_array($server['p'])) { return $server; }
 
     if     ($lgsl_config['sort']['players'] == "name")  { usort($server['p'], "lgsl_sort_players_by_name");  }
     elseif ($lgsl_config['sort']['players'] == "score") { usort($server['p'], "lgsl_sort_players_by_score"); }
