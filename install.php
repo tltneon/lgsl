@@ -762,7 +762,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"gener": "Yapılandırma oluştur",
 				"creat": "Tablo oluştur",
 				"filla": "Gerekli* girişleri doldurmanız gerekir (adım 1 veya 2).",
-				"mysld": "Bağlantı <span style='color: red;'>failed</span>: Hatalı <span style='color: red;'>Bağlantı Başarısız</span>: mysqli extension doesn't active.",
+				"mysld": "Bağlantı <span style='color: red;'>failed</span>: Hatalı <span style='color: red;'>Bağlantı Başarısız</span>: mysqli uzantısı etkin değil.",
 				"table": "LGSL <span style='color: red;'>tablo oluşturulmadı</span>: yanlış veritabanı adı veya tablo zaten var.",
 				"cretd": "Tablo <span style='color: green;'>Başarıyla Oluşturuldu!</span> Oluşturuldu! 2'inci adıma geçin",
 			},
