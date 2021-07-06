@@ -22,7 +22,7 @@
   $lgsl_config['text']['ehv'] = "값";
   $lgsl_config['text']['onl'] = "서버 활성";
   $lgsl_config['text']['onp'] = "활성 상태이지만 암호화 됨";
-  $lgsl_config['text']['nrs'] = "VERİ YOK";
+  $lgsl_config['text']['nrs'] = "데이터 없음";
   $lgsl_config['text']['pen'] = "쿼리 대기";
   $lgsl_config['text']['zpl'] = "플레이어:";
   $lgsl_config['text']['mid'] = "잘못된 서버 ID";
