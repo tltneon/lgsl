@@ -224,6 +224,7 @@
 			<option value="slovak">Slovenčina</option>
 			<option value="arabic">اَلْعَرَبِيَّةُ</option>
 			<option value="turkish">Türkçe</option>
+			<option value="korean">한국어</option>
 			<option value="help" style="color: green;">!Help to translate LGSL!</option>
 		</select>
 	</p>
