@@ -1,5 +1,21 @@
 <?php
 
+	function makeImage($src, $width, $height){
+		list($w, $h) = getimagesize($src);
+		if(substr($src, -3) == 'gif'){
+			$result = imagecreatefromgif($src);
+		}
+		else {
+			$result = imagecreatefrompng($src);
+		}
+		if($width != $w || $height != $h){
+			$image = $result;
+			$result = imagecreatetruecolor($width, $height);
+			imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
+		}
+		return $result;
+	}
+
   // SETTINGS
 
   $w = 400;
@@ -23,6 +39,7 @@
     exit();
   }
   $server = lgsl_query_cached($lookup['type'], $lookup['ip'], $lookup['c_port'], $lookup['q_port'], $lookup['s_port'], "s");
+  $misc   = lgsl_server_misc($server);
   $server['s']['playersmax'] = $server['s']['playersmax'] > 0 ? $server['s']['playersmax'] : 1;
 
   $x0 = 30;
@@ -34,7 +51,8 @@
   $s = array();
   $x = array();
   $y = array();
-  foreach($server['s']['history'] as $key){
+  $history = $server['s']['history'] or array();
+  foreach($history as $key){
     array_push($s, $key['status']);
     array_push($x, $key['time'] - time() + $period);
     array_push($y, $key['players']);
@@ -58,6 +76,7 @@
     $str = Date("H:i", time() - $period + (int) ($i * round($xStep/$scaleX, 1)));
     imagestring($im, 1, (($x0+$xStep*$i) - 6), $maxY+2, $str, $black);
   }
+  imagestring($im, 1, $x0 - 6, $maxY+2, $str, $black);
 
   $ySteps = ($maxY-$y0) / $yStep-1;
   for($i=1; $i < $ySteps+1; $i++) {
@@ -82,9 +101,13 @@
     }
   }
 
-  imagestring($im, 1, 10, 0, "Server: " . trim ($server['s']['name']), $black);
-  imagestring($im, 1, 9, 10, "IP: " . ($lookup['type'] == 'discord' ? $lookup['ip'] : $lookup['ip'].':'.$lookup['c_port']), $black);
-  imagestring($im, 1, $w - 80, 10, "Date: " . Date("d.m.y", time()), $black);
+  $game_id = makeImage($misc['icon_game'], 16, 16);                          // create game icon
+  imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);                             // place game icon
+
+  $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
+	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim ($server['s']['name']));
+	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $misc['connect_filtered']));
+	imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
 
   imagepng($im);
   imagedestroy($im);

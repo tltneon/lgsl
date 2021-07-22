@@ -58,6 +58,25 @@
     .sidebarserver img {
       border: none;
     }
+
+    .marquee{
+      width:100%;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+
+    .marquee span.on {
+      display:inline-block;
+      animation: marquee 8s infinite linear alternate;
+    }
+    .sidebarserver table:hover .marquee span.on {
+      animation: marquee 2s infinite linear alternate;
+    }
+
+    @keyframes marquee{
+      0%{transform: translateX(25%);}
+      100%{transform: translateX(-25%);}
+    }
   </style>
   <table cellpadding='0' cellspacing='0' style='width:100%; margin:auto; text-align:center' class='sidebarserver'>
     <tr>";
@@ -79,6 +98,7 @@
       $zone_count ++;
 //------------------------------------------------------------------------------------------------------------+
 
+      $marquee = strlen($misc['name_filtered']) > 25;
       $output .= "
       <td style='padding-top:5px; padding-bottom:5px; vertical-align:top; text-align:center'>
 
@@ -96,8 +116,8 @@
 
           <tr>
             <td title='{$server['s']['name']}' style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
-                {$misc['name_filtered']}
+              <div class='marquee' style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
+                <span ". ($marquee ? "class='on'" : "") .">{$misc['name_filtered']}</span>
               </div>
             </td>
           </tr>
@@ -130,10 +150,11 @@
 
           $output .= "
           <tr>
-            <td style='border-radius: 4px; border: 1px solid gray;'>
+            <td style='border-radius: 4px;'>
               <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
-              <span style='padding:1px; float:right'> {$server['s']['players']} / {$server['s']['playersmax']} </span>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
+              <span style='padding:1px; float:right'> {$server['s']['players']} / {$server['s']['playersmax']} </span>";
+              if(count($server['p']) > 0){
+                $output .= "<div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
 
                 foreach ($server['p'] as $player)
                 {
@@ -141,8 +162,17 @@
                   <div style='left:0px; right:0px; top:0px; bottom:0px; padding:1px; white-space:nowrap; overflow:hidden; text-align:left' title='{$player['name']}'> {$player['name']} </div>";
                 }
 
-                $output .= "
-              </div>
+                $output .= "</div";
+              }
+              else {
+                $inner_width = ($server['s']['playersmax'] > 0 ? $server['s']['players']/$server['s']['playersmax']*100 : 0);
+                $output .="
+                <br />
+                <div style='margin-top: 5px; border: 1px solid #555555; background-color: #222222; height: 4px;'>
+                  <div style='width: ". $inner_width ."%; background-color: #ff8400; height: 4px;'></div>
+                </div>";
+              }
+              $output .= "
             </td>
           </tr>";
         }

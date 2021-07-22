@@ -92,6 +92,7 @@
 
   if($lgsl_config['image_mod']){
     if(extension_loaded('gd')){
+      $p = str_replace('lgsl_files/', '', lgsl_url_path());
       $output .= "
       <details>
         <summary style='margin-bottom: 12px;'>
@@ -99,11 +100,19 @@
         </summary>
         <div>
           <img src='userbar.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}'/><br />
-          <textarea style='width: 32em; height: 2.3em;word-break: break-all;' onClick='this.select();'>[url=".str_replace('lgsl_files/', '', lgsl_url_path()).($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".str_replace('lgsl_files/', '', lgsl_url_path())."userbar.php?s=".intval($_GET["s"])."[/img][/url]</textarea>
+          <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."[/img][/url]</textarea><br /><br />
+
+          <img src='userbar.php?s=".intval($_GET["s"])."&t=2' alt='{$server["s"]["name"]}'/><br />
+          <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."&t=2[/img][/url]</textarea>
         </div>
       </details>
       <div class='spacer'></div>
       <style>
+        textarea {
+          width: 32em;
+          height: 2.3em;
+          word-break: break-all;
+        }
         @media (max-width: 414px){
           textarea { width: 98.5% !important; }
         }
