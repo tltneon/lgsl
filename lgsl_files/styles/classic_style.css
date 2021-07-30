@@ -59,7 +59,7 @@ a:active { color:#7500c0; }
   background-size: cover;
 }
 .details_password_image {
-  background-position: 100% 100%;
+  background-position: calc(100% - 3px) calc(100% - 3px);
   position: absolute;
   background-size: auto;
   background-repeat: no-repeat;

@@ -58,16 +58,6 @@ textarea {background-color: rgba(26, 28, 34, 0.2); border: 1px solid rgba(26, 28
   z-index: 5;
   background-size: cover;
 }
-.details_info_column:nth-child(2) {
-  border-radius: 4px;
-  box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
-}
-.details_password_image {
-  background-position: 100% 100%;
-  position: absolute;
-  background-size: auto;
-  background-repeat: no-repeat;
-}
 .details_location_image {
   width: 16px;
   height: 11px;
@@ -107,9 +97,10 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
 }
 .details_password_image {
-  background-position: 100% 100%;
+  background-position: calc(100% - 3px) calc(100% - 3px);
   position: absolute;
   background-size: auto;
+  background-repeat: no-repeat;
   width: 48px;
   height: 56px;
   right: 4px;

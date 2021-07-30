@@ -67,15 +67,15 @@
 
     .marquee span.on {
       display:inline-block;
-      animation: marquee 8s infinite linear alternate;
+      animation: marquee 10s infinite linear alternate;
     }
     .sidebarserver table:hover .marquee span.on {
-      animation: marquee 2s infinite linear alternate;
+      animation: marquee 4s infinite linear alternate;
     }
 
     @keyframes marquee{
-      0%{transform: translateX(25%);}
-      100%{transform: translateX(-25%);}
+      0%{transform: translateX(15px);}
+      100%{transform: translateX(calc(-100% + {$zone_width} - 15px));}
     }
   </style>
   <table cellpadding='0' cellspacing='0' style='width:100%; margin:auto; text-align:center' class='sidebarserver'>
@@ -127,7 +127,7 @@
               <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; padding:0px; position:relative'>
                 <a href='".lgsl_link($server['o']['id'])."'>
                   <img alt='' src='{$misc['image_map']}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
-                  <img alt='' src='{$misc['image_map_password']}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; top:0px; left:0px;' />
+                  <img alt='' src='{$misc['image_map_password']}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
                   <img alt='' src='{$misc['icon_game']}'          title='{$misc['text_type_game']}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
                   <img alt='' src='{$misc['icon_location']}'      title='{$misc['text_location']}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
                 </a>

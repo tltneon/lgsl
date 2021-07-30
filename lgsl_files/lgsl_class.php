@@ -612,7 +612,7 @@
   {
     global $lgsl_url_path;
 
-    if (!$password || !$status) { return "{$lgsl_url_path}other/map_overlay.gif"; }
+    if (!$password || !$status) { return "{$lgsl_url_path}other/overlay.gif"; }
 
     return "{$lgsl_url_path}other/map_overlay_password.gif";
   }

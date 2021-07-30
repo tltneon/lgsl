@@ -19,7 +19,9 @@
 	require "lgsl_files/lgsl_class.php";
 	$lookup = lgsl_lookup_id($_GET['s']);
   if(!$lookup){
-    imagestring($im, 1, (int)($w / 2 - strlen($lgsl_config['text']['mid']) * 2.2), (int)($h / 2 - 4), $lgsl_config['text']['mid'], $color_map);
+    header("Content-type: image/gif");
+    $im = imagecreatetruecolor(350, 20);
+    imagestring($im, 1, (int)(175 - strlen($lgsl_config['text']['mid']) * 2.2), 6, $lgsl_config['text']['mid'], imagecolorallocate($im, 255, 0, 0));
     imagegif($im);
     imagedestroy($im);
     exit();

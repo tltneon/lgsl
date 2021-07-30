@@ -31,6 +31,7 @@ document.querySelectorAll('#server_list_table > tbody > tr > td.map_cell').forEa
 		el.style.display = 'none';
 		el.style.position = 'absolute';
 		el.style.marginTop = '5px';
+		el.style.zIndex = '10';
 		el.className = 'mapImage' + b;
 		a.appendChild(el);
 
