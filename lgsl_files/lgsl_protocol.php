@@ -1085,12 +1085,12 @@
       // NEWER HL1 SERVERS REPLY TO A2S_INFO WITH 3 PACKETS ( HL1 FORMAT INFO, SOURCE FORMAT INFO, PLAYERS )
       // THIS DISCARDS UN-EXPECTED PACKET FORMATS ON THE GO ( AS READING IN ADVANCE CAUSES TIMEOUT DELAYS FOR OTHER SERVER VERSIONS )
       // ITS NOT PERFECT AS [s] CAN FLIP BETWEEN HL1 AND SOURCE FORMATS DEPENDING ON ARRIVAL ORDER ( MAYBE FIX WITH RETURN ON HL1 APPID )
-      if ($lgsl_need['s']) { if ($packet[4] == "D") { continue; } }
+      if     ($lgsl_need['s']) { if ($packet[4] == "D") { continue; } }
       elseif ($lgsl_need['e']) { if ($packet[4] == "m" || $packet[4] == "I" || $packet[4] == "D") { continue; } }
       elseif ($lgsl_need['p']) { if ($packet[4] == "m" || $packet[4] == "I") { continue; } }
       //---------------------------------------------------------------------------------------------------------------------------------+
 
-      if     (substr($packet, 0,  5) == "\xFF\xFF\xFF\xFF\x41") { $lgsl_need['challenge'] = substr($packet, 5,  4); $server['s']['players'] = -1; return TRUE; } // REPEAT WITH GIVEN CHALLENGE CODE
+      if     (substr($packet, 0,  5) == "\xFF\xFF\xFF\xFF\x41") { $lgsl_need['challenge'] = substr($packet, 5, 4); $server['s']['players'] = $server['s']['players'] ? $server['s']['players'] : -1; return TRUE; } // REPEAT WITH GIVEN CHALLENGE CODE
       elseif (substr($packet, 0,  4) == "\xFF\xFF\xFF\xFF")     { $packet_total = 1;                     $packet_type = 1;       } // SINGLE PACKET - HL1 OR HL2
       elseif (substr($packet, 9,  4) == "\xFF\xFF\xFF\xFF")     { $packet_total = ord($packet[8]) & 0xF; $packet_type = 2;       } // MULTI PACKET  - HL1 ( TOTAL IS LOWER NIBBLE OF BYTE )
       elseif (substr($packet, 12, 4) == "\xFF\xFF\xFF\xFF")     { $packet_total = ord($packet[8]);       $packet_type = 3;       } // MULTI PACKET  - HL2
@@ -4236,12 +4236,12 @@ function lgsl_unescape($text) {
       $raw = '';
       $raw2 = '';
       foreach (unpack('C*', $buffer) as $key => $value) {
-        if ($value == 0) { $raw .= '[0]'; }
+        if ($value == 0) { $raw .= '<span style="color:gray;">[0]</span>'; }
         else { $raw .= chr($value); }
-        $raw2 .= ' '.$value;
+        $raw2 .= ' ' . $value;
       }
-      echo(strlen($raw) . "symbols >> " . $raw . "<br />");
-      echo($raw2 . "<br />");
+      echo("<span style='color:red;'>" . strlen($raw) . "</span> symbols <span style='color:yellow;'>>></span> " . $raw . "<br />");
+      echo("<details>" . $raw2 . "</details><hr />");
   }
 
 //---------------------------------------------------------+
