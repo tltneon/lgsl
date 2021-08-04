@@ -336,6 +336,7 @@
       while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
       {
         $id = $mysqli_row['id']; // ID USED AS [] ONLY RETURNS TICKED CHECKBOXES
+        $disabled = ($mysqli_row['type'] == 'discord' ? 'disabled' : '');
 
         $output .= "
         <tr>
@@ -361,9 +362,9 @@
             </select>
           </td>
           <td class='center'><input type='text' name='form_ip[{$id}]'       value='".lgsl_string_html($mysqli_row['ip'])."' size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536'   /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536'   /></td>
-          <td class='center'><input type='number' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536'   /></td>
+          <td class='center'><input type='number' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536' {$disabled} /></td>
+          <td class='center'><input type='number' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536' {$disabled} /></td>
+          <td class='center'><input type='number' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536' {$disabled} /></td>
           <td>
             <select name='form_zone[$id]'>";
 //---------------------------------------------------------+

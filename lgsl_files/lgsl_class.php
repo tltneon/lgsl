@@ -747,7 +747,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_extras($server)
+  function lgsl_sort_extras(&$server)
   {
     if (!is_array($server['e'])) { return $server; }
 

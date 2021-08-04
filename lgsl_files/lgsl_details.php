@@ -43,6 +43,8 @@
 //------------------------------------------------------------------------------------------------------------+
 // SHOW THE STANDARD INFO
 
+  $c_port = ($server['b']['c_port'] > 1 ? $server['b']['c_port'] : '--');
+  $q_port = ($server['b']['q_port'] > 1 ? $server['b']['q_port'] : '--');
   $output .= "
     <div id='servername_{$misc['text_status']}'> {$server['s']['name']} </div>
     <div class='details_info'>
@@ -55,9 +57,9 @@
             <div class='details_info_srow'>
               <div class='details_info_ceil'>{$lgsl_config['text']['adr']}:</div><div class='details_info_ceil'>{$server['b']['ip']}</div></div>
             <div class='details_info_srow'>
-              <div class='details_info_ceil'>{$lgsl_config['text']['cpt']}:</div><div class='details_info_ceil'>{$server['b']['c_port']}</div></div>
+              <div class='details_info_ceil'>{$lgsl_config['text']['cpt']}:</div><div class='details_info_ceil'>{$c_port}</div></div>
             <div class='details_info_srow'>
-              <div class='details_info_ceil'>{$lgsl_config['text']['qpt']}:</div><div class='details_info_ceil'>{$server['b']['q_port']}</div></div></div>
+              <div class='details_info_ceil'>{$lgsl_config['text']['qpt']}:</div><div class='details_info_ceil'>{$q_port}</div></div></div>
           <div class='details_info_scolumn'>
             <div class='details_info_srow'>
               <div class='details_info_ceil'>{$lgsl_config['text']['typ']}:</div><div class='details_info_ceil'>{$server['b']['type']}</div></div>
@@ -87,7 +89,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
   if($lgsl_config['history']){
-    $output .= "<img src='charts.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart' />";
+    $output .= "<div style='overflow-x: auto;'><img src='charts.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart' /></div>";
   }
 
   if($lgsl_config['image_mod']){

@@ -33,6 +33,8 @@
   require "lgsl_files/lgsl_class.php";
   $lookup = lgsl_lookup_id($_GET['s']);
   if(!$lookup){
+    $white = imagecolorallocate($im, 255, 255, 255);
+    imagefill($im, 0, 0, $white);
     imagestring($im, 1, (int)($w / 2 - strlen($lgsl_config['text']['mid']) * 2.2), (int)($h / 2), $lgsl_config['text']['mid'], $black);
     imagepng($im);
     imagedestroy($im);

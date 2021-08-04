@@ -21,7 +21,9 @@
   if(!$lookup){
     header("Content-type: image/gif");
     $im = imagecreatetruecolor(350, 20);
-    imagestring($im, 1, (int)(175 - strlen($lgsl_config['text']['mid']) * 2.2), 6, $lgsl_config['text']['mid'], imagecolorallocate($im, 255, 0, 0));
+    $white = imagecolorallocate($im, 255, 255, 255);
+    imagefill($im, 0, 0, $white);
+    imagestring($im, 1, (int)(175 - strlen($lgsl_config['text']['mid']) * 2.2), 6, $lgsl_config['text']['mid'], imagecolorallocate($im, 0, 0, 0));
     imagegif($im);
     imagedestroy($im);
     exit();
