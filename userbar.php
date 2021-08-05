@@ -53,11 +53,11 @@
 
       $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
 
-      switch($misc['status']){
-        case 'pending': { $stat = $stat_pn; break; }
-        case 'no_response': { $stat = $stat_of; break; }
-        case 'online_password': { $stat = $stat_ps; break; }
-        case 'online': { $stat = $stat_on; break; }
+      switch($misc['text_status']){
+        case 'pen': { $stat = $stat_pn; break; }
+        case 'nrs': { $stat = $stat_of; break; }
+        case 'onp': { $stat = $stat_ps; break; }
+        case 'onl': { $stat = $stat_on; break; }
       }
       imagefilledrectangle($im, 14, 14, 47, 47, $stat);
       $game_id = makeImage($misc['icon_game'], 32, 32);                          // create game icon

@@ -476,7 +476,6 @@
 
     $misc['icon_details']       = $lgsl_url_path."other/icon_details.gif";
     $misc['icon_game']          = lgsl_icon_game($server['b']['type'], $server['s']['game']);
-    $misc['status']             = lgsl_server_status($server['b']['status'], $server['s']['password'], $server['b']['pending']);
     $misc['icon_status']        = lgsl_icon_status($server['b']['status'], $server['s']['password'], $server['b']['pending']);
     $misc['icon_location']      = lgsl_icon_location($server['o']['location']);
     $misc['image_map']          = lgsl_image_map($server['b']['status'], $server['b']['type'], $server['s']['game'], $server['s']['map'], TRUE, $server['o']['id']);
@@ -513,17 +512,6 @@
     }
 
     return "{$lgsl_url_path}other/icon_unknown.gif";
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
-  function lgsl_server_status($status, $password, $pending = 0)
-  {
-    if ($pending)  { return "pending"; }
-    if (!$status)  { return "no_response"; }
-    if ($password) { return "online_password"; }
-
-    return "online";
   }
 
 //------------------------------------------------------------------------------------------------------------+
