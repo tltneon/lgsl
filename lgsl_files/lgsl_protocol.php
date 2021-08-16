@@ -119,6 +119,7 @@
     "tribesv"       => "Tribes Vengeance",
     "ts"            => "Teamspeak",
     "ts3"           => "Teamspeak 3",
+    "teaspeak"      => "Teaspeak",
     "urbanterror"   => "UrbanTerror",
     "ut"            => "Unreal Tournament",
     "ut2003"        => "Unreal Tournament 2003",
@@ -249,6 +250,7 @@
     "tribesv"       => "09",
     "ts"            => "33",
     "ts3"           => "33",
+    "teaspeak"      => "33",
     "warsow"        => "02",
     "warsowold"     => "02",
     "urbanterror"   => "02",
@@ -605,7 +607,7 @@
 
       $lgsl_fp = @fsockopen("{$scheme}://{$server['b']['ip']}", $server['b']['q_port'], $errno, $errstr, 1);
 
-      if (!$lgsl_fp) { return FALSE; }
+      if (!$lgsl_fp) { $server['e']['_error'] = $errstr; return FALSE; }
 
       stream_set_timeout($lgsl_fp, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
       stream_set_blocking($lgsl_fp, TRUE);
@@ -3709,10 +3711,14 @@
 
   function lgsl_query_33(&$server, &$lgsl_need, &$lgsl_fp)
   {
-    if (strpos(fread($lgsl_fp, 4096), 'TS') === FALSE) { return FALSE; }
-    $ver = $server['b']['type'] == 'ts3' ? 1 : 0;
+    if (strpos(fread($lgsl_fp, 4096), 'TS') === FALSE) {
+      if (strpos(fread($lgsl_fp, 4096), 'TeaSpeak') === FALSE) {
+        return FALSE;
+      }
+    }
+    $ver = $server['b']['type'] == 'ts' ? 0 : 1;
     $param[0] = array('sel ','si',"\r\n",'pl');
-    $param[1] = array('use port=','serverinfo',' ','clientlist -country');
+    $param[1] = array('use port=','serverinfo',' ','clientlist -country', 'channellist -topic');
     if ($ver) { fread($lgsl_fp, 4096); }
     fwrite($lgsl_fp, $param[$ver][0].$server['b']['c_port']."\n"); // select virtualserver
     if (strtoupper(substr(fread($lgsl_fp, 4096), -4, -2)) != 'OK') { return FALSE; }
@@ -3729,9 +3735,9 @@
         $key = lgsl_cut_string($val, 0, '='); $items[$key] = $val;
     }
     if (!isset($items['name'])) { return FALSE; }
-    $server['s']['name'] = $ver ? lgsl_unescape($items['name']) : $items['name'];
-    $server['s']['map'] = "teamspeak";
-    $server['s']['players'] = intval($items[$ver ? 'clientsonline' : 'currentusers']) - $ver;
+    $server['s']['name']       = $ver ? lgsl_unescape($items['name']) : $items['name'];
+    $server['s']['map']        = $server['b']['type'];
+    $server['s']['players']    = intval($items[$ver ? 'clientsonline' : 'currentusers']) - $ver;
     $server['s']['playersmax'] = intval($items[$ver ? 'maxclients' : 'maxusers']);
     $server['s']['password']   = intval($items[$ver ? 'flag_password' : 'password']);
     $server['e']['platform']   = $items['platform'];
@@ -3766,6 +3772,24 @@
             $server['p'][$i]['time'] = lgsl_time($items[8]); $i++;
         }
     }
+
+    if($ver)
+    {
+        fwrite($lgsl_fp, $param[$ver][4]."\n"); // request channellist
+        $buffer = fread($lgsl_fp, 4096);
+        while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") {
+            $part = fread($lgsl_fp, 4096);
+            if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
+        }
+        while ($items = lgsl_cut_string($buffer, 0, '|')) {
+            $id = lgsl_cut_string($items, 4, ' ');
+            lgsl_cut_string($items, 0, 'e=');
+            $name = lgsl_cut_string($items, 0, ' ');
+            if(strpos($name, '*spacer') != FALSE) { continue; }
+            $server['e']['channel'.$id] = lgsl_unescape($name);
+        }
+    }
+
     return TRUE;
 }
 //------------------------------------------------------------------------------------------------------------+

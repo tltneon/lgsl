@@ -250,7 +250,7 @@
         $live['s']['players']    = 0;
         $live['s']['playersmax'] = $cache['s']['playersmax'];
         $live['s']['cache_time'] = time();
-        $live['e']               = array();
+        $live['e']               = $live['e'] or array();
         $live['p']               = array();
       }
 
