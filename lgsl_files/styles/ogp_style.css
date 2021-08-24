@@ -160,10 +160,11 @@ div.servername_link { display: none; }
 }
 
 @media(max-width: 414px){
-	body
-	{
-		margin: 0;
-	}
+	body { margin: 0; }
+	#topmenu { text-align: center; padding: 0.5em; }
+	#topmenu > li { display: block; }
+	#topmenu > li:before { content: ''; }
+	#topmenu a {display: block;	padding: 8px; background: #40414240; border: 1px solid black; border-radius: 4px;}
 	.servername_cell > div {
     width: 100%;
     overflow: hidden;
@@ -195,8 +196,10 @@ div.servername_link { display: none; }
 
 	/*details*/
 	#gamelink { display: none; }
-  .details_info { display: flex; flex-flow: column; }
-  .details_info_column { margin: auto; order: 2; margin-top: 6px; }
-  .details_info_column:nth-child(2) { order: 1; }
-	#details_playerlist { overflow: auto;	}
+	.details_info { display: flex; flex-flow: column; }
+	.details_info_column { margin: auto; order: 2; margin-top: 6px; }
+	.details_info_column:nth-child(2) { order: 1; }
+	.details_info_scolumn { display: block; }
+	#details_playerlist { overflow: auto; }
+	.settings_table td { word-break: break-all; max-width: 50vw; }
 }

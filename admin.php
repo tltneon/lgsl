@@ -19,7 +19,7 @@
     setcookie("lgsl_admin_auth", $auth, (time() + (60 * 60 * 24)), "/");
     define("LGSL_ADMIN", TRUE);
   }
-  elseif ($cookie == $auth)
+  elseif ($cookie === $auth)
   {
     setcookie("lgsl_admin_auth", $auth, (time() + (60 * 60 * 24)), "/");
     define("LGSL_ADMIN", TRUE);

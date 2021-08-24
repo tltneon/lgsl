@@ -52,6 +52,8 @@
   $lgsl_config['text']['tea'] = "Takım";
   $lgsl_config['text']['cou'] = "Ülke";
   $lgsl_config['text']['pin'] = "Gecikme";
+  $lgsl_config['text']['dea'] = "Deaths";
+  $lgsl_config['text']['hea'] = "Health";
   $lgsl_config['text']['pag'] = "Sayfa";
   $lgsl_config['text']['bak'] = "SUNUCU LİSTESİNE GERİ DÖN";
   $lgsl_config['text']['mpg'] = "ANA SAYFA'YA DÖN";

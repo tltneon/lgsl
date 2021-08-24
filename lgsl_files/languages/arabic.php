@@ -52,6 +52,8 @@
   $lgsl_config['text']['tea'] = "Team";
   $lgsl_config['text']['cou'] = "Country";
   $lgsl_config['text']['pin'] = "Ping";
+  $lgsl_config['text']['dea'] = "Deaths";
+  $lgsl_config['text']['hea'] = "Health";
   $lgsl_config['text']['pag'] = "Page";
   $lgsl_config['text']['bak'] = "رجوع إلى قائمة الخوادم";
   $lgsl_config['text']['mpg'] = "إلى الصفحة الرئيسية";

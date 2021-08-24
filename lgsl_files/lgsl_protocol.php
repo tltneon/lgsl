@@ -449,6 +449,7 @@
       case "tribesv"       : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
       case "ts"            : $c_to_q = 0;     $c_def = 8767;    $q_def = 51234;   $c_to_s = 0;   break;
       case "ts3"           : $c_to_q = 0;     $c_def = 9987;    $q_def = 10011;   $c_to_s = 0;   break;
+      case "teaspeak"      : $c_to_q = 0;     $c_def = 9987;    $q_def = 10101;   $c_to_s = 0;   break;
       case "ut"            : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
       case "ut2003"        : $c_to_q = 1;     $c_def = 7757;    $q_def = 7758;    $c_to_s = 10;  break;
       case "ut2003_"       : $c_to_q = 10;    $c_def = 7757;    $q_def = 7767;    $c_to_s = 0;   break;

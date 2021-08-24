@@ -52,6 +52,8 @@
   $lgsl_config['text']['tea'] = "팀";
   $lgsl_config['text']['cou'] = "국가";
   $lgsl_config['text']['pin'] = "지연(Ping)";
+  $lgsl_config['text']['dea'] = "Deaths";
+  $lgsl_config['text']['hea'] = "Health";
   $lgsl_config['text']['pag'] = "페이지";
   $lgsl_config['text']['bak'] = "서버 목록으로 돌아 가기";
   $lgsl_config['text']['mpg'] = "홈페이지로 돌아 가기";

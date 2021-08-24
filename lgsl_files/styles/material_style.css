@@ -345,9 +345,11 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 	}
 
 	/*details*/
-	#gamelink {display: none;}
-  .details_info { display: flex; flex-flow: column; }
-  .details_info_column { margin: auto; order: 2; margin-top: 6px; }
-  .details_info_column:nth-child(2) { order: 1; }
-	#details_playerlist { overflow: auto;	}
+	#gamelink { display: none; }
+  	.details_info { display: flex; flex-flow: column; }
+  	.details_info_column { margin: auto; order: 2; margin-top: 6px; }
+  	.details_info_column:nth-child(2) { order: 1; }
+	.details_info_scolumn { display: block; }
+	#details_playerlist { overflow: auto; }
+	.settings_table td { word-break: break-all; max-width: 50vw; }
 }

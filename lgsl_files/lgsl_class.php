@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ ï¿½ RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -1073,7 +1073,7 @@
   $cookie = isset($_COOKIE['lgsl_admin_auth']) ? $_COOKIE['lgsl_admin_auth'] : "";
   $lgsl_url_path = lgsl_url_path();
 
-  if (isset($_GET['lgsl_debug']) and $auth == $cookie)
+  if (isset($_GET['lgsl_debug']) and $auth === $cookie)
   {
     echo "<details>
             <summary style='margin-bottom: 12px;'>
