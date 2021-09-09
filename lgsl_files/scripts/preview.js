@@ -19,10 +19,10 @@ document.querySelectorAll('#server_list_table > tbody > tr > td.map_cell').forEa
 			type + '/' + game + '/' + map + '.jpg',
 			type + '/' + game + '/' + map + '.png'
 		]
-		path = 'lgsl_files/other/map_no_image.jpg';
+		path = '/lgsl_files/other/map_no_image.jpg';
 		pathes.forEach(a => {
 			if(imageExists(a)){
-				path = a;
+				path = 'lgsl_files/maps/' + a;
 			}
 		})
 		el.src = path;
