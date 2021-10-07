@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -3886,7 +3886,8 @@
     $server['s']['players'] = $buffer['approximate_presence_count'];
     $server['s']['playersmax'] = $buffer['approximate_member_count'];
     $server['e']['id'] = $buffer['guild']['id'];
-    $server['e']['description'] = $buffer['guild']['description'] ? $buffer['guild']['description'] : $buffer['guild']['welcome_screen']['description'];
+    if(isset($buffer['guild']['welcome_screen']['description']))
+     $server['e']['description'] = $buffer['guild']['description'] ? $buffer['guild']['description'] : $buffer['guild']['welcome_screen']['description'];
     $server['e']['features'] = implode(', ', $buffer['guild']['features']);
     $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
     if(isset($buffer['inviter']))
