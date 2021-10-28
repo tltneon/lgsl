@@ -114,6 +114,7 @@
     "starwarsrc"    => "Star Wars: Republic Commando",
     "swat4"         => "SWAT 4",
     "teeworlds"     => "Teeworlds",
+    "terraria"      => "Terraria",
     "tribes"        => "Tribes ( Starsiege )",
     "tribes2"       => "Tribes 2",
     "tribesv"       => "Tribes Vengeance",
@@ -245,6 +246,7 @@
     "swat4"         => "03",
     "test"          => "01",
     "teeworlds"     => "21",
+    "terraria"      => "38",
     "tribes"        => "23",
     "tribes2"       => "25",
     "tribesv"       => "09",
@@ -372,6 +374,7 @@
     "swat4"         => "qtracker://{IP}:{S_PORT}?game=SWAT4&action=show",
     "test"          => "http://www.greycube.com",
     "teeworlds"     => "steam://connect/{IP}:{C_PORT}",
+    "terraria"      => "steam://connect/{IP}:{C_PORT}",
     "tribes"        => "qtracker://{IP}:{S_PORT}?game=Tribes&action=show",
     "tribes2"       => "qtracker://{IP}:{S_PORT}?game=Tribes2&action=show",
     "tribesv"       => "qtracker://{IP}:{S_PORT}?game=TribesVengeance&action=show",
@@ -400,6 +403,25 @@
 
     // INSERT DATA INTO STATIC LINK - CONVERT SPECIAL CHARACTERS - RETURN
     return htmlentities(str_replace(array("{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}"), array($ip, $c_port, $q_port, $s_port), $lgsl_software_link[$type]), ENT_QUOTES);
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_gametype_scheme($type)
+  {
+    $lgsl_scheme_list = array(
+    "bfbc2"         => "tcp",
+    "discord"       => "http",
+    "fivem"         => "http",
+    "ragemp"        => "http",
+    "scum"          => "http",
+    "terraria"      => "http",
+    "ts"            => "tcp",
+    "ts3"           => "tcp",
+    "teaspeak"      => "tcp");
+    
+    return isset($lgsl_scheme_list[$type]) ? $lgsl_scheme_list[$type] : "udp";
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -446,6 +468,7 @@
       case "stalkercs"     : $c_to_q = 2;     $c_def = 5447;    $q_def = 5445;    $c_to_s = 0;   break;
       case "starwarsrc"    : $c_to_q = 0;     $c_def = 7777;    $q_def = 11138;   $c_to_s = 0;   break;
       case "swat4"         : $c_to_q = 1;     $c_def = 10780;   $q_def = 10781;   $c_to_s = 0;   break;
+      case "terraria"      : $c_to_q = 101;   $c_def = 7777;    $q_def = 7878;    $c_to_s = 0;   break;
       case "tribesv"       : $c_to_q = 1;     $c_def = 7777;    $q_def = 7778;    $c_to_s = 0;   break;
       case "ts"            : $c_to_q = 0;     $c_def = 8767;    $q_def = 51234;   $c_to_s = 0;   break;
       case "ts3"           : $c_to_q = 0;     $c_def = 9987;    $q_def = 10011;   $c_to_s = 0;   break;
@@ -530,17 +553,9 @@
     {
       $response = lgsl_query_feed($server, $request, $lgsl_config['feed']['method'], $lgsl_config['feed']['url']);
     }
-    elseif ($lgsl_function == "lgsl_query_34" || $lgsl_function == "lgsl_query_35" || $lgsl_function == "lgsl_query_36" || $lgsl_function == "lgsl_query_37")
-    {
-      $response = lgsl_query_direct($server, $request, $lgsl_function, "http");
-    }
-    elseif ($lgsl_function == "lgsl_query_30" || $lgsl_function == "lgsl_query_33")
-    {
-      $response = lgsl_query_direct($server, $request, $lgsl_function, "tcp");
-    }
     else
     {
-      $response = lgsl_query_direct($server, $request, $lgsl_function, "udp");
+      $response = lgsl_query_direct($server, $request, $lgsl_function, lgsl_gametype_scheme($type));
     }
 
 //---------------------------------------------------------+
@@ -3886,7 +3901,10 @@
     $server['s']['players'] = $buffer['approximate_presence_count'];
     $server['s']['playersmax'] = $buffer['approximate_member_count'];
     $server['e']['id'] = $buffer['guild']['id'];
-    $server['e']['description'] = $buffer['guild']['description'] ? $buffer['guild']['description'] : $buffer['guild']['welcome_screen']['description'];
+    if($buffer['guild']['description'])
+      $server['e']['description'] = $buffer['guild']['description'];
+    if($buffer['guild']['welcome_screen'] && $buffer['guild']['welcome_screen']['description'])
+      $server['e']['description'] = $buffer['guild']['welcome_screen']['description'];
     $server['e']['features'] = implode(', ', $buffer['guild']['features']);
     $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
     if(isset($buffer['inviter']))
@@ -3946,6 +3964,33 @@
 
     return TRUE;
   }
+  
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_query_38(&$server, &$lgsl_need, &$lgsl_fp) // Terraria
+  {
+    if(!$lgsl_fp) return FALSE;
+    
+    curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/v2/server/status?players=true");
+    $buffer = curl_exec($lgsl_fp);
+    $buffer = json_decode($buffer, true);
+
+    if($buffer['status'] != '200'){
+      $server['e']['_error']    = $buffer['error'];
+      return FALSE;
+    }
+    
+    $server['s']['name']        = $buffer['name'];
+    $server['s']['map']         = $buffer['world'];
+    $server['s']['players']     = $buffer['playercount'];
+    $server['s']['playersmax']  = $buffer['maxplayers'];
+    $server['s']['password']    = $buffer['serverpassword'];
+    $server['e']['uptime']      = $buffer['uptime'];
+    $server['e']['version']     = $buffer['serverversion'];
+
+    return TRUE;
+  }
 
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
@@ -3970,7 +4015,7 @@ function lgsl_unescape($text) {
 
     if (empty($host['host']) || empty($host['path'])) { exit("LGSL FEED PROBLEM: INVALID URL"); }
 
-    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=6.1.0";
+    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=6.1.1";
 
     if (function_exists("json_decode")) { $host_query .= function_exists("gzuncompress") ? "&format=4" : "&format=3"; }
     else                                { $host_query .= function_exists("gzuncompress") ? "&format=2" : "&format=1"; }
@@ -4427,7 +4472,7 @@ function lgsl_unescape($text) {
 
   function lgsl_version()
   {
-    return "LGSL By Richard Perry</a> | <a href='https://github.com/tltneon/lgsl'>v 6.1.0"; // little dirty trick
+    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 6.1.1"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+

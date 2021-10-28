@@ -105,7 +105,10 @@
           <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."[/img][/url]</textarea><br /><br />
 
           <img src='userbar.php?s=".intval($_GET["s"])."&t=2' alt='{$server["s"]["name"]}'/><br />
-          <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."&t=2[/img][/url]</textarea>
+          <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."&t=2[/img][/url]</textarea><br /><br />
+
+          <img src='userbar.php?s=".intval($_GET["s"])."&t=3' alt='{$server["s"]["name"]}'/><br />
+          <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."&t=3[/img][/url]</textarea>
         </div>
       </details>
       <div class='spacer'></div>
@@ -221,5 +224,5 @@
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
-  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='http://www.greycube.com' style='text-decoration:none'>".lgsl_version()."</a></div>";
+  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='https://github.com/tltneon/lgsl' style='text-decoration:none'>".lgsl_version()."</a></div>";
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+

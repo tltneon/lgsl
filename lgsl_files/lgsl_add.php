@@ -60,7 +60,7 @@
         </tr>
 
         <tr>
-          <td> {$lgsl_config['text']['typ']}: </td>
+          <td> {$lgsl_config['text']['typ']} </td>
           <td>
             <select name='form_type'>";
   //---------------------------------------------------------+
@@ -82,12 +82,14 @@
 
         <tr>
           <td> {$lgsl_config['text']['cpt']} </td>
-          <td> <input type='number' name='form_c_port' value='".lgsl_string_html($c_port)."' min='1' max='65536' /> </td>
+          <td> <input type='number' name='form_c_port' value='".lgsl_string_html($c_port)."' min='1024' max='65535' /> </td>
         </tr>
 
         <tr>
-          <td> {$lgsl_config['text']['qpt']} </td>
-          <td> <input type='number' name='form_q_port' value='".lgsl_string_html($q_port)."' min='1' max='65536' /> </td>
+          <td> {$lgsl_config['text']['qpt']}
+            <a href='https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports' target='_blank' id='new_q' style='position: absolute;background: #fff;  text-align: center;border-radius: 10px;width: 14px;height: 14px;border: 2px solid;margin-top: 7px;' title='How to choose protocol or query port?'>?</a>
+          </td>
+          <td> <input type='number' name='form_q_port' value='".lgsl_string_html($q_port)."' min='1024' max='65535' /> </td>
         </tr>
 
         <tr>
@@ -104,10 +106,17 @@
     </div>
   </form>";
 
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+//------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
+//------ WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P --------------------------------------------------------------------------------------------------+
+  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='https://github.com/tltneon/lgsl' style='text-decoration:none'>".lgsl_version()."</a></div>";
+//--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
 //-----------------------------------------------------------------------------------------------------------+
 
   if (empty($_POST['lgsl_submit_test']) && empty($_POST['lgsl_submit_add'])) { return; }
   if (!isset($lgsl_type_list[$type]) || !$ip || !$c_port || !$q_port)        { return; }
+  if ($type === "discord") {$c_port = 1; $q_port = 1;}
 
 //-----------------------------------------------------------------------------------------------------------+
 
@@ -200,6 +209,8 @@
     return;
   }
 
+  $status = $lgsl_config['text'][lgsl_text_status($server['b']['status'], $server['s']['password'])];
+
 //-----------------------------------------------------------------------------------------------------------+
 
   $output .= "
@@ -211,7 +222,8 @@
     </div>
 
     <table class='details_table' style='text-align: center; margin: auto; max-width: 500px;'>
-      <tr> <td> <b> IP                            </b> </td> <td> {$ip}:{$c_port}                                          </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['adr']} </b> </td> <td> {$ip}:{$c_port}                                          </td> </tr>
+      <tr> <td> <b> {$lgsl_config['text']['sts']} </b> </td> <td> {$status}                                   </td> </tr>
       <tr> <td> <b> {$lgsl_config['text']['nam']} </b> </td> <td> {$server['s']['name']}                                   </td> </tr>
       <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td> {$server['s']['game']}                                   </td> </tr>
       <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td> {$server['s']['map']}                                    </td> </tr>

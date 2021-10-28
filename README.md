@@ -8,12 +8,12 @@
 [![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
-# LGSL v6.1.0 (Live Game Server List)
+# LGSL v6.1.1 (Live Game Server List)
 Based-off LGSL v5.8 (stand-alone version) from www.greycube.com. This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4-8.x and MySQL 5.5.27-8.0.x or MariaDB 5.5-10.6.x. May be upgraded from LGSL 5.8 and older.
 
-## [Live Demos](http://lgsl-demo.freesite.vip/) | [Wiki](https://github.com/tltneon/lgsl/wiki) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports) | [Custom styles](https://github.com/tltneon/lgsl/wiki/Styles)
+## [Live DEMOs](https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports) | [Features list](https://github.com/tltneon/lgsl/wiki/features) | [Wiki](https://github.com/tltneon/lgsl/wiki) 
 
-Feel free to make [pull request](https://github.com/tltneon/lgsl) with your custom styles or languages! Also you can suggest any [features](https://github.com/tltneon/lgsl/issues).
+Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can suggest any [ideas about new features](https://github.com/tltneon/lgsl/issues).
 
 ### Server List on laptop
 ![lgsl Server List on laptop](https://i.imgur.com/oU2x9Y5.png)
@@ -21,6 +21,13 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl) with your cust
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
 
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
+#### v6.1.1
+- **Userbar & Charts improvements**
+- **Added Terraria, TeaSpeak support**
+- **New game icons**
+- **Turkish and Korean languages**
+	- *Thanks to [@IGNRexI](https://github.com/IGNRexI)*
+- **Minor fixes**
 #### v6.1.0
 - **LGSL now has native history chart: records server status and players count at last 24 hours**
 - **Available Flag-icon script: replacing standard icons to svg from flag-icon-css**
