@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ ï¿½ RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -3835,7 +3835,7 @@
       $server['e']['lang']       = $value['lang'];
       return TRUE;
     }
-    else
+
       return FALSE;
   }
 //------------------------------------------------------------------------------------------------------------+
@@ -3845,12 +3845,11 @@
   {
     if(!$lgsl_fp) return FALSE;
 
-    if($lgsl_need['s']) {
-      $lgsl_need['s'] = FALSE;
-
       curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/dynamic.json");
       $buffer = curl_exec($lgsl_fp);
       $buffer = json_decode($buffer, true);
+
+    if(!$buffer) return FALSE;
 
       $server['s']['name'] = lgsl_parse_color($buffer['hostname'], 'fivem');
       $server['s']['players'] = $buffer['clients'];
@@ -3861,7 +3860,6 @@
       }
       $server['e']['gametype'] = $buffer['gametype'];
       $server['e']['version'] = $buffer['iv'];
-    }
 
     if($lgsl_need['p']) {
       $lgsl_need['p'] = FALSE;
@@ -3876,7 +3874,7 @@
       }
     }
 
-    return true;
+    return TRUE;
   }
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
@@ -3934,7 +3932,7 @@
         }
     }
 
-    return true;
+    return TRUE;
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -3942,7 +3940,7 @@
 
   function lgsl_query_37(&$server, &$lgsl_need, &$lgsl_fp) // SCUM API
   {
-    if(!$lgsl_fp) return FALSE;
+    if (!$lgsl_fp) return FALSE;
 
     $lgsl_need['e'] = FALSE;
     $lgsl_need['p'] = FALSE;
@@ -3970,7 +3968,7 @@
 
   function lgsl_query_38(&$server, &$lgsl_need, &$lgsl_fp) // Terraria
   {
-    if(!$lgsl_fp) return FALSE;
+    if (!$lgsl_fp) return FALSE;
     
     curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/v2/server/status?players=true");
     $buffer = curl_exec($lgsl_fp);

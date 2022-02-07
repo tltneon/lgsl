@@ -123,8 +123,12 @@
       imagettftext($im, 8, 0, 25, 32, $color_nm, $font, /* name  */ $server['s']['name']);
       imagefilledrectangle($im, 17, 40, $w, 54, $border);
       imagettftext($im, 8, 0, 25, 52, $color_ip, $font, /* ip  */  $lgsl_config['text']['adr']);
-      imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $server['b']['ip']));
-      imagettftext($im, 8, 0, 118, 86, $color_ip, $font,/* port  */  ":" . $server['b']['c_port']);
+      if($server['s']['game'] == 'discord')
+        imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $misc['connect_filtered']));
+      else {
+        imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $server['b']['ip']));
+        imagettftext($im, 8, 0, 118, 86, $color_ip, $font,/* port  */  ":" . $server['b']['c_port']);
+      }
       imagefilledrectangle($im, 17, 100, $w, 114, $border);
       imagettftext($im, 7, 0, 25, 112, $color_mp, $font, /* map      */  $lgsl_config['text']['map'].": ".$server['s']['map']);
       imagefilledrectangle($im, 17, 120, $w, 134, $border);
