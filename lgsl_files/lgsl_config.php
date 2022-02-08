@@ -12,7 +12,7 @@
   $lgsl_config['feed']['url']    = "http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php";
 
 //------------------------------------------------------------------------------------------------------------+
-//[ BACKGROUND COLORS: TEXT HARD TO READ ? CHANGE THESE TO CONTRAST THE FONT COLOR / www.colorpicker.com ]
+//[ ADDITIONAL FILES ]
 
   $lgsl_config['style'] = "darken_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, material_style.css, cards_style.css
   $lgsl_config['scripts'] = [];
@@ -142,6 +142,7 @@
   $lgsl_config['image_mod']     = false;     // true=show userbar in server's details
   $lgsl_config['pagination_mod']= true;      // true=using pagination
   $lgsl_config['pagination_lim']= 15;        // limit per page
+  $lgsl_config['disabled_types']= false;     // allow to exclude some protocols (games) from list. usage: $lgsl_config['disabled_types']= array('warsowold', 'halflifewon', 'test');
 
 //------------------------------------------------------------------------------------------------------------+
 //[ TRANSLATION ]

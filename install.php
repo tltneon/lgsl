@@ -10,21 +10,19 @@
 	$mysql_table = empty($_POST["table"]) ? "lgsl" : $_POST["table"];
 	$installed = "";
 
-	if(isset($_POST["_createtables"])){
-		if(empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])){
+	if (isset($_POST["_createtables"])){
+		if (empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])){
 			echo('<l k="filli"></l>');
-		}
-		else {
+		} else {
 			try {
         mysqli_report(MYSQLI_REPORT_ERROR);
 				$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
 
 				if (!$lgsl_database) {
 					printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
-				}
-				else {
+				} else {
 					$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
-					if(mysqli_query($lgsl_database, "
+					if (mysqli_query($lgsl_database, "
 						CREATE TABLE `".$_POST["table"]."` (
 
 							`id`         INT     (11)  NOT NULL auto_increment,
@@ -57,8 +55,8 @@
 			}
 		}
 	}
-	if(isset($_GET['test'])){
-    if(function_exists("fsockopen")){
+	if (isset($_GET['test'])) {
+		if (function_exists("fsockopen")) {
       $fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
       if (!$fp) {
         echo "ERROR: $errno - $errstr<br />\n";
@@ -68,23 +66,26 @@
         echo "<l k='consu'></l>\n";
         fclose($fp);
       } 
-    }
-    else {
+		} else {
       echo("FSOCKOPEN: FAILED\n");
     }
     
-    if(function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")){
+		if (function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) {
       echo("CURL: SUCCESS\n");
-    }
-    else{
+		} else {
       echo("CURL: FAILED\n");
     }
     
-    if(function_exists("bzdecompress")){
+		if (function_exists("bzdecompress")) {
       echo("BZ2: SUCCESS\n");
-    }
-    else{
+		} else {
       echo("BZ2: FAILED\n");
+		}
+
+		if (extension_loaded('gd')) {
+			echo("GD: SUCCESS\n");
+		} else {
+			echo("GD: FAILED\n");
     }
 	}
 
@@ -208,7 +209,7 @@
 			<option value="classic_style.css">Classic</option>
 			<option value="disc_ff_style.css">Disc FF</option>
 			<option value="wallpaper_style.css">Wallpaper</option>
-			<option value="showcase">>> Showcase</option>
+			<option value="showcase" style="color: green;">(external) Showcase</option>
 		</select>
 	</p>
 	<p>
@@ -366,7 +367,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 				event.target.value = "darken_style.css";
 				window.open("https://github.com/tltneon/lgsl/wiki/Styles");
 			}
-			document.getElementsByTagName("link")[0].href = href='lgsl_files/styles/'+event.target.value;
+			if(event.target.value == "parallax_style.css"){
+				vars["scripts"]["parallax.js"] = true;
+				document.querySelector("input[id='parallax.js']").checked = true;
+			}
+			document.getElementsByTagName("link")[0].href = `lgsl_files/styles/${event.target.value}`;
 		}
 		if(options.translationInput){
 			if(event.target.value == "help"){

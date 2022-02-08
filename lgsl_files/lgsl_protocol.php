@@ -18,7 +18,8 @@
 
   function lgsl_type_list()
   {
-    return array(
+    global $lgsl_config;
+    $lgsl_type_list = array(
     "aarmy"         => "Americas Army",
     "aarmy3"        => "Americas Army 3",
     "arcasimracing" => "Arca Sim Racing",
@@ -51,6 +52,7 @@
     "doom3"         => "Doom 3",
     "dh2005"        => "Deer Hunter 2005",
     "farcry"        => "Far Cry",
+    "farmsim"       => "Farming Simulator",
     "fear"          => "F.E.A.R.",
     "fivem"         => "FiveM / RedM",
     "flashpoint"    => "Operation Flashpoint",
@@ -71,8 +73,10 @@
     "il2"           => "IL-2 Sturmovik",
     "jediknight2"   => "JediKnight 2: Jedi Outcast",
     "jediknightja"  => "JediKnight: Jedi Academy",
+    "jc2mp"         => "Just Cause 2 Multiplayer",
     "killingfloor"  => "Killing Floor",
     "kingpin"       => "Kingpin: Life of Crime",
+    "m2mp"          => "Mafia II Multiplayer",
     "minecraft"     => "Minecraft",
     "mohaa"         => "Medal of Honor: Allied Assault",
     "mohaab"        => "Medal of Honor: Allied Assault Breakthrough",
@@ -100,6 +104,7 @@
     "savage"        => "Savage",
     "savage2"       => "Savage 2",
     "scum"          => "SCUM",
+    "sf"            => "Satisfactory",
     "serioussam"    => "Serious Sam",
     "serioussam2"   => "Serious Sam 2",
     "shatteredh"    => "Shattered Horizon",
@@ -107,6 +112,7 @@
     "soldat"        => "Soldat",
     "source"        => "Source Protocol ( Half-Life 2, etc. )",
     "stalker"       => "S.T.A.L.K.E.R.",
+    "stalkercop"    => "S.T.A.L.K.E.R. Call of Pripyat",
     "stalkercs"     => "S.T.A.L.K.E.R. Clear Sky",
     "startrekef"    => "StarTrek Elite-Force",
     "starwarsbf"    => "Star Wars: Battlefront",
@@ -134,8 +140,15 @@
     "wolfet"        => "Wolfenstein: Enemy Territory",
     "wolfrtcw"      => "Wolfenstein: Return To Castle Wolfenstein",
     "wolf2009"      => "Wolfenstein ( 2009 By Raven )",
+    "wow"           => "World of Warcraft",
     "test"          => "~ Test ( For PHP Developers )"
     );
+    if($lgsl_config['disabled_types']) {
+      foreach($lgsl_config['disabled_types'] as $type){
+        unset($lgsl_type_list[$type]);
+      }
+    }
+    return $lgsl_type_list;
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -182,6 +195,7 @@
     "halo"          => "03",
     "il2"           => "03",
     "farcry"        => "08",
+    "farmsim"       => "40",
     "fear"          => "09",
     "fivem"         => "35",
     "flashpoint"    => "03",
@@ -197,8 +211,10 @@
     "gtr2"          => "15",
     "jediknight2"   => "02",
     "jediknightja"  => "02",
+    "jc2mp"         => "06",
     "killingfloor"  => "13",
     "kingpin"       => "03",
+    "m2mp"          => "39",
     "minecraft"     => "06",
     "mohaa"         => "03",
     "mohaab"        => "03",
@@ -233,11 +249,13 @@
     "serioussam"    => "03",
     "serioussam2"   => "09",
     "scum"          => "37",
+    "sf"            => "41",
     "shatteredh"    => "05",
     "sof2"          => "02",
     "soldat"        => "08",
     "source"        => "05",
     "stalker"       => "06",
+    "stalkercop"    => "09",
     "stalkercs"     => "09",
     "startrekef"    => "02",
     "starwarsbf"    => "09",
@@ -267,7 +285,8 @@
     "vietcong2"     => "09",
     "wolfet"        => "02",
     "wolfrtcw"      => "02",
-    "wolf2009"      => "10");
+    "wolf2009"      => "10",
+    "wow"           => "41");
 
     return $lgsl_protocol_list;
   }
@@ -310,6 +329,7 @@
     "doom3"         => "qtracker://{IP}:{S_PORT}?game=Doom3&action=show",
     "dh2005"        => "http://en.wikipedia.org/wiki/Deer_Hunter_(computer_game)",
     "farcry"        => "qtracker://{IP}:{S_PORT}?game=FarCry&action=show",
+    "farmsim"       => "steam://connect/{IP}:{C_PORT}",
     "fear"          => "qtracker://{IP}:{S_PORT}?game=FEAR&action=show",
     "fivem"         => "fivem://connect/{IP}:{C_PORT}",
     "flashpoint"    => "qtracker://{IP}:{S_PORT}?game=OperationFlashpoint&action=show",
@@ -330,8 +350,10 @@
     "il2"           => "http://en.wikipedia.org/wiki/IL-2_Sturmovik_(game)",
     "jediknight2"   => "qtracker://{IP}:{S_PORT}?game=JediKnight2&action=show",
     "jediknightja"  => "qtracker://{IP}:{S_PORT}?game=JediKnightJediAcademy&action=show",
+    "jc2mp"         => "steam://connect/{IP}:{C_PORT}",
     "killingfloor"  => "steam://connect/{IP}:{C_PORT}",
     "kingpin"       => "qtracker://{IP}:{S_PORT}?game=Kingpin&action=show",
+    "m2mp"          => "https://m2mp.de/",
     "minecraft"     => "minecraft://{IP}:{C_PORT}/",
     "mohaa"         => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssault&action=show",
     "mohaab"        => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssaultBreakthrough&action=show",
@@ -361,11 +383,13 @@
     "serioussam"    => "qtracker://{IP}:{S_PORT}?game=SeriousSam&action=show",
     "serioussam2"   => "qtracker://{IP}:{S_PORT}?game=Serious_Sam2&action=show",
     "scum"          => "steam://connect/{IP}:{C_PORT}",
+    "sf"            => "steam://connect/{IP}:{C_PORT}",
     "shatteredh"    => "http://en.wikipedia.org/wiki/Shattered_Horizon",
     "sof2"          => "qtracker://{IP}:{S_PORT}?game=SoldierOfFortune2&action=show",
     "soldat"        => "soldat://{IP}:{C_PORT}",
     "source"        => "steam://connect/{IP}:{C_PORT}",
     "stalker"       => "qtracker://{IP}:{S_PORT}?game=STALKER_ShadowChernobyl&action=show",
+    "stalkercop"    => "qtracker://{IP}:{S_PORT}?game=STALKER_CallOfPripyat&action=show",
     "stalkercs"     => "qtracker://{IP}:{S_PORT}?game=STALKER_ClearSky&action=show",
     "startrekef"    => "http://en.wikipedia.org/wiki/Star_Trek:_Voyager:_Elite_Force",
     "starwarsbf"    => "qtracker://{IP}:{S_PORT}?game=StarWarsBattlefront&action=show",
@@ -389,11 +413,12 @@
     "vcmp"          => "https://vc-mp.org",
     "vietcong"      => "qtracker://{IP}:{S_PORT}?game=Vietcong&action=show",
     "vietcong2"     => "qtracker://{IP}:{S_PORT}?game=Vietcong2&action=show",
-    "warsow"        => "qtracker://{IP}:{S_PORT}?game=Warsow&action=show",
+    "warsow"        => "warsow://{IP}:{C_PORT}",
     "warsowold"     => "qtracker://{IP}:{S_PORT}?game=Warsow&action=show",
     "wolfet"        => "qtracker://{IP}:{S_PORT}?game=WolfensteinEnemyTerritory&action=show",
     "wolfrtcw"      => "qtracker://{IP}:{S_PORT}?game=ReturntoCastleWolfenstein&action=show",
-    "wolf2009"      => "http://en.wikipedia.org/wiki/Wolfenstein_(2009_video_game)");
+    "wolf2009"      => "http://en.wikipedia.org/wiki/Wolfenstein_(2009_video_game)",
+    "wow"           => "javascript:prompt('Put it into your realm list:', 'set realmlist {IP}')");
 
     // SOFTWARE PORT IS THE QUERY PORT UNLESS SET
     if (!$s_port) { $s_port = $q_port; }
@@ -413,13 +438,15 @@
     $lgsl_scheme_list = array(
     "bfbc2"         => "tcp",
     "discord"       => "http",
+    "farmsim"       => "http",
     "fivem"         => "http",
     "ragemp"        => "http",
     "scum"          => "http",
     "terraria"      => "http",
     "ts"            => "tcp",
     "ts3"           => "tcp",
-    "teaspeak"      => "tcp");
+    "teaspeak"      => "tcp",
+    "wow"           => "tcp");
     
     return isset($lgsl_scheme_list[$type]) ? $lgsl_scheme_list[$type] : "udp";
   }
@@ -452,6 +479,7 @@
       case "had2"          : $c_to_q = 3;     $c_def = 11001;   $q_def = 11004;   $c_to_s = 0;   break;
       case "kingpin"       : $c_to_q = -10;   $c_def = 31510;   $q_def = 31500;   $c_to_s = 0;   break;
       case "killingfloor"  : $c_to_q = 1;     $c_def = 7708;    $q_def = 7709;    $c_to_s = 0;   break;
+      case "minecraft"     : $c_to_q = 0;     $c_def = 25565;   $q_def = 25565;   $c_to_s = 0;   break;
       case "mohaa"         : $c_to_q = 97;    $c_def = 12203;   $q_def = 12300;   $c_to_s = 0;   break;
       case "mohaab"        : $c_to_q = 97;    $c_def = 12203;   $q_def = 12300;   $c_to_s = 0;   break;
       case "mohaas"        : $c_to_q = 97;    $c_def = 12203;   $q_def = 12300;   $c_to_s = 0;   break;
@@ -464,7 +492,9 @@
       case "rfactor"       : $c_to_q = -100;  $c_def = 34397;   $q_def = 34297;   $c_to_s = 0;   break;
       case "serioussam"    : $c_to_q = 1;     $c_def = 25600;   $q_def = 25601;   $c_to_s = 0;   break;
       case "soldat"        : $c_to_q = 123;   $c_def = 23073;   $q_def = 23196;   $c_to_s = 0;   break;
+      case "sf"            : $c_to_q = 0;     $c_def = 7777;    $q_def = 15777;   $c_to_s = 0;   break;
       case "stalker"       : $c_to_q = 2;     $c_def = 5447;    $q_def = 5445;    $c_to_s = 0;   break;
+      case "stalkercop"    : $c_to_q = 2;     $c_def = 5447;    $q_def = 5445;    $c_to_s = 0;   break;
       case "stalkercs"     : $c_to_q = 2;     $c_def = 5447;    $q_def = 5445;    $c_to_s = 0;   break;
       case "starwarsrc"    : $c_to_q = 0;     $c_def = 7777;    $q_def = 11138;   $c_to_s = 0;   break;
       case "swat4"         : $c_to_q = 1;     $c_def = 10780;   $q_def = 10781;   $c_to_s = 0;   break;
@@ -481,6 +511,7 @@
       case "ut3"           : $c_to_q = 0;     $c_def = 7777;    $q_def = 6500;    $c_to_s = 0;   break;
       case "vietcong"      : $c_to_q = 10000; $c_def = 5425;    $q_def = 15425;   $c_to_s = 0;   break;
       case "vietcong2"     : $c_to_q = 0;     $c_def = 5001;    $q_def = 19967;   $c_to_s = 0;   break;
+      case "wow"           : $c_to_q = 0;     $c_def = 3724;    $q_def = 8085;    $c_to_s = 0;   break;
       default              : $c_to_q = 0;     $c_def = 0;       $q_def = 0;       $c_to_s = 0;   break;
     }
 
@@ -1323,7 +1354,7 @@
       }
 
       $buffer[$packet_order] = $packet;
-      if ($server['b']['type'] == "minecraft") { $packet_total = 1; }
+      if ($server['b']['type'] == "minecraft" || $server['b']['type'] == "jc2mp") { $packet_total = 1; }
 
     }
     while ($packet_count < $packet_total);
@@ -1376,16 +1407,33 @@
     $lgsl_conversion = array("hostname"=>"name", "gamename"=>"game", "mapname"=>"map", "map"=>"map", "numplayers"=>"players", "maxplayers"=>"playersmax", "password"=>"password");
     foreach ($lgsl_conversion as $e => $s) { if (isset($server['e'][$e])) { $server['s'][$s] = $server['e'][$e]; unset($server['e'][$e]); } }
 
-    if ($server['b']['type'] == "bf2" || $server['b']['type'] == "bf2142") { $server['s']['map'] = ucwords(str_replace("_", " ", $server['s']['map'])); } // MAP NAME CONSISTENCY
+    if ($server['b']['type'] == "bf2" || $server['b']['type'] == "bf2142") {
+      $server['s']['map'] = ucwords(str_replace("_", " ", $server['s']['map']));
+    } // MAP NAME CONSISTENCY
+    elseif ($server['b']['type'] == "jc2mp") {
+      $server['s']['map'] = 'Panau';
+    }
     elseif ($server['b']['type'] == "minecraft") {
-      if (isset($server['e']['gametype'])) { $server['s']['game'] = $server['e']['gametype']; }
+      if (isset($server['e']['gametype'])) {
+        $server['s']['game'] = strtolower($server['e']['game_id']);
+      }
       $server['s']['name'] = lgsl_parse_color($server['s']['name'], "minecraft");
-      foreach ($server['e'] as $key=>$val) { if (($key != 'version') && ($key != 'plugins')) { unset($server['e'][$key]); } }
+      foreach ($server['e'] as $key => $val) {
+        if (($key != 'version') && ($key != 'plugins')) {
+          unset($server['e'][$key]);
+        }
+      }
 
-      $plugins = explode(": ",$server['e']['plugins'], 2);
-      if ($plugins[0]) { $server['e']['plugins'] = $plugins[0]; } else { $server['e']['plugins'] = 'none (Vanilla)'; }
+      $plugins = explode(": ", $server['e']['plugins'], 2);
+      if ($plugins[0]) {
+        $server['e']['plugins'] = $plugins[0];
+      } else {
+        $server['e']['plugins'] = 'none (Vanilla)';
+      }
       if (count($plugins) == 2) {
-        while ($key = lgsl_cut_string($plugins[1],0," ")) { $server['e'][$key] = lgsl_cut_string($plugins[1],0,"; "); }
+        while ($key = lgsl_cut_string($plugins[1], 0, " ")) {
+          $server['e'][$key] = lgsl_cut_string($plugins[1], 0, "; ");
+        }
       }
       $buffer = $buffer."\x00"; // Needed to correctly terminate the players list
     }
@@ -3993,6 +4041,83 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
+  function lgsl_query_39(&$server, &$lgsl_need, &$lgsl_fp) // Mafia 2: MP
+  {
+    fwrite($lgsl_fp, "M2MPi");
+    $buffer = fread($lgsl_fp, 1024);
+
+    if (!$buffer) { return FALSE; }
+
+    $buffer = substr($buffer, 4); // REMOVE HEADER
+
+    $server['s']['name']        = lgsl_cut_pascal($buffer, 1, -1);
+    $server['s']['map']         = "Empire Bay";
+    $server['s']['players']     = lgsl_cut_pascal($buffer, 1, -1);
+    $server['s']['playersmax']  = lgsl_cut_pascal($buffer, 1, -1);
+    $server['s']['password']    = 0;
+    $server['e']['gamemode']    = lgsl_cut_pascal($buffer, 1, -1);
+
+    return TRUE;
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_query_40(&$server, &$lgsl_need, &$lgsl_fp) // Farming Simulator
+  {
+    curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/index.html"); // CAN QUERY ONLY SERVER NAME AND ONLINE STATUS, MEH
+    $buffer = curl_exec($lgsl_fp);
+
+    if (!$buffer) { return FALSE; }
+    
+    preg_match('/<h2>Login to [\w\d\s\/\\&@"\'-]+<\/h2>/', $buffer, $name);
+
+    $server['s']['name']        = substr($name[0], 12, strlen($name[0])-17);
+    $server['s']['map']         = "Farm";
+
+    return strpos($buffer, 'status-indicator online') !== FALSE;
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_query_41(&$server, &$lgsl_need, &$lgsl_fp) // ONLY BEACON: World of Warcraft, Satisfactory
+  {
+    if (!$lgsl_fp) return FALSE;
+
+    $lgsl_need['e'] = FALSE;
+    $lgsl_need['p'] = FALSE;
+
+    if ($server['b']['type'] == 'wow') {
+      $buffer = fread($lgsl_fp, 5);
+      if ($buffer && $buffer == "\x00\x2A\xEC\x01\x01") {
+        $server['s']['name']        = "World of Warcraft Server";
+        $server['s']['map']         = "Twisting Nether";
+        return TRUE;
+      }
+      return FALSE;
+    }
+    if ($server['b']['type'] == 'sf') {
+      fwrite($lgsl_fp, "\x00\x00\xd6\x9c\x28\x25\x00\x00\x00\x00");
+      $buffer = fread($lgsl_fp, 128);
+      if (!$buffer) {
+        return FALSE;
+      }
+      lgsl_cut_byte($buffer, 11);
+      $version = lgsl_unpack(lgsl_cut_byte($buffer, 1), "H*");
+      $version = lgsl_unpack(lgsl_cut_byte($buffer, 1), "H*") . $version;
+      $version = lgsl_unpack(lgsl_cut_byte($buffer, 1), "H*") . $version;
+      $server['s']['name']        = "Satisfactory Dedicated Server";
+      $server['s']['map']         = "World";
+      $server['e']['version']     = hexdec($version);
+      return TRUE;
+    }
+    return FALSE;
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
 function lgsl_unescape($text) {
   $escaped = array('\t', '\v', '\r', '\n', '\f', '\s', '\p', '\/');
   $unescaped = array(' ', ' ', ' ', ' ', ' ', ' ', '|', '/');
@@ -4215,6 +4340,10 @@ function lgsl_unescape($text) {
       case "swat4":
         $string = preg_replace("/\[c=......\]/Usi", "", $string);
       break;
+
+      case "minecraft":
+        $string = preg_replace("/�./S", "", $string);
+      break;
     }
     return $string;
   }
@@ -4304,13 +4433,25 @@ function lgsl_unescape($text) {
   function lgsl_print_raw_buffer(&$buffer){
       $raw = '';
       $raw2 = '';
-      foreach (unpack('C*', $buffer) as $key => $value) {
-        if ($value == 0) { $raw .= '<span style="color:gray;">[0]</span>'; }
-        else { $raw .= chr($value); }
-        $raw2 .= ' ' . $value;
+    $symbols = $buffer ? unpack('C*', $buffer) : Array();
+
+    foreach ($symbols as $key => $value) {
+      $cd = chr($value);
+      if ($value == 0) {
+        $raw .= "<span style='color:gray;'>[0]</span>";
+        $raw2 .= "<div class='char-element'><div class='char-cell'>{$cd}</div><div class='char-cell'><span style='color:gray;'>{$value}</span></div></div>";
       }
-      echo("<span style='color:red;'>" . strlen($raw) . "</span> symbols <span style='color:yellow;'>>></span> " . $raw . "<br />");
-      echo("<details>" . $raw2 . "</details><hr />");
+      else {
+        $raw .= $cd;
+        $raw2 .= "<div class='char-element'><div class='char-cell'>{$cd}</div><div class='char-cell'>{$value}</div></div>";
+      }
+    }
+
+    echo("
+      <style>.char-element {display: inline-block;max-width: 24px;border: 1px solid black;text-align: center;} .char-cell {width: 24px;height: 18px;display: inline-block;}</style>
+      <span style='color:red;'>". count($symbols) ."</span> symbols <span style='color:yellow;'>>></span>{$raw}<br />
+      <details style='width: 260px;'>{$raw2}</details>
+    ");
   }
 
 //---------------------------------------------------------+

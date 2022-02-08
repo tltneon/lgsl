@@ -225,7 +225,7 @@
 
   if (!empty($_POST['lgsl_map_image_paths']))
   {
-    $server_list = lgsl_query_cached_all("s");
+    $server_list = lgsl_query_group( array( "request" => "s" ) );
 
     $output .= "
     <div style='padding: 5px;'>

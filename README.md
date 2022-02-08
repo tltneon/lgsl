@@ -1,5 +1,5 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/tltneon/lgsl?color=green&style=for-the-badge)](https://github.com/tltneon/lgsl/releases)
-![PHP](https://img.shields.io/badge/PHP-5.4--8.1.0-brightgreen?style=for-the-badge&logo=php)
+![PHP](https://img.shields.io/badge/PHP-5.4--8.1.2-brightgreen?style=for-the-badge&logo=php)
 ![MySQL](https://img.shields.io/badge/MySQL-5.5.27--8.0.x-brightgreen?style=for-the-badge&logo=mysql)
 ![MariaDB](https://img.shields.io/badge/MariaDB-5.5--10.6.x-brightgreen?style=for-the-badge&logo=mariadb)
 

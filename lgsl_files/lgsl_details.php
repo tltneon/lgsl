@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ ï¿½ RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -26,7 +26,7 @@
 
   $server = lgsl_query_cached("", "", "", "", "", "sep", $lgsl_server_id);
 
-  if (!$server) { $output .= "<div id='invalid_server_id'> {$lgsl_config['text']['mid']} </div>"; return; }
+  if ($server) {
 
   $fields = lgsl_sort_fields($server, $fields_show, $fields_hide, $fields_other);
   $server = lgsl_sort_players($server);
@@ -101,10 +101,10 @@
           {$lgsl_config['text']['cts']}
         </summary>
         <div>
-          <img src='userbar.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}'/><br />
+            <div style='overflow-x: auto;'><img src='userbar.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}'/></div>
           <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."[/img][/url]</textarea><br /><br />
 
-          <img src='userbar.php?s=".intval($_GET["s"])."&t=2' alt='{$server["s"]["name"]}'/><br />
+            <div style='overflow-x: auto;'><img src='userbar.php?s=".intval($_GET["s"])."&t=2' alt='{$server["s"]["name"]}'/></div>
           <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."&t=2[/img][/url]</textarea><br /><br />
 
           <img src='userbar.php?s=".intval($_GET["s"])."&t=3' alt='{$server["s"]["name"]}'/><br />
@@ -192,6 +192,16 @@
   }
   else
   {
+      $hide_options = count($server['e']) > 40;
+      if ($hide_options) {
+         $output .= "
+        <details>
+          <summary style='margin-bottom: 12px;'>
+            {$lgsl_config['text']['ctb']}
+          </summary>
+          <div>
+         ";
+      }
     $output .= "
     <table class='settings_table'>
       <tr class='table_head'>
@@ -199,9 +209,8 @@
         <th> {$lgsl_config['text']['ehv']} </th>
       </tr>";
 
-    foreach ($server['e'] as $field => $value)
-    {
-      if(preg_match('/(https*:\/\/|https*:\/\/www\.|www\.)[\w\.]*\/?[\w\/\?=&]*/i', $value)){
+      foreach ($server['e'] as $field => $value) {
+        if (preg_match('/(https*:\/\/|https*:\/\/www\.|www\.)[\w\.]*\/?[\w\/\?=&]*/i', $value)) {
         $value = "<a href='".$value."' target='_blank'>".$value."</a>";
       }
       $output .= "
@@ -213,6 +222,11 @@
 
     $output .= "
     </table>";
+      if ($hide_options) {
+        $output .= "
+        </div>
+        </details>";
+      }
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -221,6 +235,10 @@
 
   $output .= "
   </div>";
+  }
+  else {
+    $output .= "<div id='invalid_server_id'> {$lgsl_config['text']['mid']} </div>";
+  }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+

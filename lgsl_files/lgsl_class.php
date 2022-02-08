@@ -368,27 +368,6 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_query_cached_all($request) // LEGACY - DO NOT USE
-  {
-    return lgsl_query_group( array( "request"=>$request ) );
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
-  function lgsl_query_cached_zone($request, $zone) // LEGACY - DO NOT USE
-  {
-    return lgsl_query_group( array( "request"=>$request, "zone"=>$zone ) );
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
-  function lgsl_cached_totals() // LEGACY - DO NOT USE
-  {
-    return lgsl_group_totals();
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
   function lgsl_lookup_id($id) // LEGACY - DO NOT USE
   {
     global $lgsl_config, $lgsl_database;
@@ -642,11 +621,15 @@
 
     if (!is_array($server_list)) { return $server_list; }
 
-    if     ($lgsl_config['sort']['servers'] == "id")      { usort($server_list, "lgsl_sort_servers_by_id");      }
-    elseif ($lgsl_config['sort']['servers'] == "zone")    { usort($server_list, "lgsl_sort_servers_by_zone");    }
-    elseif ($lgsl_config['sort']['servers'] == "type")    { usort($server_list, "lgsl_sort_servers_by_type");    }
-    elseif ($lgsl_config['sort']['servers'] == "status")  { usort($server_list, "lgsl_sort_servers_by_status");  }
-    elseif ($lgsl_config['sort']['servers'] == "players") { usort($server_list, "lgsl_sort_servers_by_players"); }
+    switch($lgsl_config['sort']['servers']){
+
+      case "id":      { usort($server_list, "lgsl_sort_servers_by_id");      break; }
+      case "zone":    { usort($server_list, "lgsl_sort_servers_by_zone");    break; }
+      case "type":    { usort($server_list, "lgsl_sort_servers_by_type");    break; }
+      case "status":  { usort($server_list, "lgsl_sort_servers_by_status");  break; }
+      case "players": { usort($server_list, "lgsl_sort_servers_by_players"); break; }
+      
+    }
 
     return $server_list;
   }
@@ -936,7 +919,7 @@
 
     if (long2ip(ip2long($ip)) == "255.255.255.255") { return "XX"; }
 
-    $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode"; // http://api.wipmania.com/
+    $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode";
 
     if (function_exists('curl_init') && function_exists('curl_setopt') && function_exists('curl_exec'))
     {

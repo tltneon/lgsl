@@ -1,5 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------------------+
+  $time = microtime(true);
 	header("Content-Type:text/html; charset=utf-8");
 
   global $output, $lgsl_server_id;
@@ -50,4 +51,4 @@
     </div>
   </body>
 </html>
-<!-- Powered by LGSL -->
+<!-- Powered by LGSL v6.1.1; <?php echo "Page loaded: ".round(microtime(true) - $time, 6)."s";?> -->

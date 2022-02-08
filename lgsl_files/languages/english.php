@@ -43,6 +43,7 @@
   $lgsl_config['text']['aas'] = "Add Server";
   $lgsl_config['text']['loc'] = "Location:";
   $lgsl_config['text']['cts'] = "Click to show server banners";
+  $lgsl_config['text']['ctb'] = "Click to show server settings";
   $lgsl_config['text']['lst'] = "Last update";
   $lgsl_config['text']['nam'] = "Name";
   $lgsl_config['text']['gam'] = "Game";
@@ -54,6 +55,8 @@
   $lgsl_config['text']['pin'] = "Ping";
   $lgsl_config['text']['dea'] = "Deaths";
   $lgsl_config['text']['hea'] = "Health";
+  $lgsl_config['text']['ski'] = "Skill";
+  $lgsl_config['text']['spe'] = "Spectator";
   $lgsl_config['text']['pag'] = "Page";
   $lgsl_config['text']['bak'] = "BACK TO SERVERS LIST";
   $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
