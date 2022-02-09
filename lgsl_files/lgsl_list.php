@@ -16,6 +16,7 @@
   $game = (isset($_GET['game']) ? $_GET['game'] : '');
   $page = ($lgsl_config['pagination_mod'] && isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
+  $uri = $_SERVER['REQUEST_URI'];
   }
   $server_list = lgsl_query_group(array("type" => $type, "game" => $game, "page" => $page));
   $server_list = lgsl_sort_servers($server_list);
