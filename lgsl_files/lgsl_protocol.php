@@ -36,6 +36,7 @@
     "bf4"           => "Battlefield 4",
     "bf2142"        => "Battlefield 2142",
     "callofduty"    => "Call Of Duty",
+    "callofdutybo3" => "Call Of Duty: Black Ops 3",
     "callofdutyuo"  => "Call Of Duty: United Offensive",
     "callofdutywaw" => "Call Of Duty: World at War",
     "callofduty2"   => "Call Of Duty 2",
@@ -170,10 +171,11 @@
     "bfvietnam"     => "09",
     "bf1942"        => "03",
     "bf2"           => "06",
-    "bf3"           => "06",
+    "bf3"           => "30",
     "bf4"           => "06",
     "bf2142"        => "06",
     "callofduty"    => "02",
+    "callofdutybo3" => "05",
     "callofdutyuo"  => "02",
     "callofdutywaw" => "02",
     "callofduty2"   => "02",
@@ -313,6 +315,7 @@
     "bf4"           => "https://en.wikipedia.org/wiki/Battlefield_4",
     "bf2142"        => "qtracker://{IP}:{S_PORT}?game=Battlefield2142&action=show",
     "callofduty"    => "qtracker://{IP}:{S_PORT}?game=CallOfDuty&action=show",
+    "callofdutybo3" => "qtracker://{IP}:{S_PORT}?game=CallOfDutyBlackOps3&action=show",
     "callofdutyuo"  => "qtracker://{IP}:{S_PORT}?game=CallOfDutyUnitedOffensive&action=show",
     "callofdutywaw" => "qtracker://{IP}:{S_PORT}?game=CallOfDutyWorldAtWar&action=show",
     "callofduty2"   => "qtracker://{IP}:{S_PORT}?game=CallOfDuty2&action=show",
@@ -437,6 +440,7 @@
   {
     $lgsl_scheme_list = array(
     "bfbc2"         => "tcp",
+    "bf3"           => "tcp",
     "discord"       => "http",
     "farmsim"       => "http",
     "fivem"         => "http",
@@ -466,7 +470,9 @@
       case "bfvietnam"     : $c_to_q = 0;     $c_def = 15567;   $q_def = 23000;   $c_to_s = 0;   break;
       case "bf1942"        : $c_to_q = 0;     $c_def = 14567;   $q_def = 23000;   $c_to_s = 0;   break;
       case "bf2"           : $c_to_q = 0;     $c_def = 16567;   $q_def = 29900;   $c_to_s = 0;   break;
+      case "bf3"           : $c_to_q = 22000; $c_def = 25200;   $q_def = 47200;   $c_to_s = 0;   break;
       case "bf2142"        : $c_to_q = 0;     $c_def = 17567;   $q_def = 29900;   $c_to_s = 0;   break;
+      case "callofdutybo3" : $c_to_q = 0;     $c_def = 27017;   $q_def = 27017;   $c_to_s = 0;   break;
       case "cube"          : $c_to_q = 1;     $c_def = 28785;   $q_def = 28786;   $c_to_s = 0;   break;
       case "dh2005"        : $c_to_q = 0;     $c_def = 23459;   $q_def = 34567;   $c_to_s = 0;   break;
       case "discord"       : $c_to_q = 0;     $c_def = 1;       $q_def = 1;       $c_to_s = 0;   break;
