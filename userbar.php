@@ -1,13 +1,13 @@
 <?php
 
-	function makeImage($src, $width, $height){
+	function makeImage($src, $width, $height) {
 		list($w, $h) = getimagesize($src);
-    switch(substr($src, -3)){
+    switch (substr($src, -3)) {
       case 'gif': {$result = imagecreatefromgif($src); break;}
       case 'png': {$result = imagecreatefrompng($src); break;}
       case 'jpg': {$result = imagecreatefromjpeg($src); break;}
     }
-		if($width != $w || $height != $h){
+		if ($width != $w || $height != $h) {
 			$image = $result;
 			$result = imagecreatetruecolor($width, $height);
 			imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
@@ -15,9 +15,39 @@
 		return $result;
 	}
 
+  function drawHistory(&$im, $x, $y, $w, $h, &$server) {
+    $axis = imagecolorallocate($im, 255, 255, 255);
+    $grid = imagecolorallocate($im, 90, 90, 90);
+    $chart = imagecolorallocate($im, 120, 255, 120);
+    $x0 = array();
+    $y0 = array();
+    $history = $server['s']['history'] or array();
+    foreach ($history as $key) {
+      array_push($x0, $key['time'] - time() + 60*60*24);
+      array_push($y0, $key['players']);
+    }
+
+    $scaleX = $w / max($x0);
+    $scaleY = $h / $server['s']['playersmax'];
+
+    imagestring($im, 1, $x - 10, $y + $h - 4, "0", $axis);
+    imagestring($im, 1, $x - 10, floor($y + $h / 2) - 4, floor($server['s']['playersmax'] / 2), $axis);
+    imagestring($im, 1, $x - 10, $y - 4, $server['s']['playersmax'], $axis);
+    imageline($im, $x, $y + $h, $x + $w, $y + $h, $axis);
+    imageline($im, $x, $y - 1, $x, $y + $h, $axis);
+    imageline($im, $x + 1, floor($y + $h / 2), $x + $w - 2, floor($y + $h / 2), $grid);
+    imageline($im, $x + 1, $y, $x + $w - 2, $y, $grid);
+    imagestringup($im, 1, $x + $w + 3, $y + $h, "24 hrs", $grid);
+    imageantialias($im, true);
+    imagesetthickness($im, 2);
+    for ($i=1; $i < count($x0); $i++) {
+      imageline($im, (int) ($x+$x0[$i-1]*$scaleX), (int) ($y+$h-$y0[$i-1]*$scaleY), (int) ($x+$x0[$i]*$scaleX), (int) ($y+$h-$y0[$i]*$scaleY), $chart);
+    }
+  }
+
 	require "lgsl_files/lgsl_class.php";
 	$lookup = lgsl_lookup_id($_GET['s']);
-  if(!$lookup){
+  if (!$lookup) {
     header("Content-type: image/gif");
     $im = imagecreatetruecolor(350, 20);
     $white = imagecolorallocate($im, 255, 255, 255);
@@ -29,11 +59,11 @@
   }
   $query = "s";
   $bar = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
-  if($bar == 3) {$query .= "p";};
+  if ($bar == 3) { $query .= "p"; }
 	$server = lgsl_query_cached($lookup['type'], $lookup['ip'], $lookup['c_port'], $lookup['q_port'], $lookup['s_port'], $query);
 	$misc   = lgsl_server_misc($server);
 
-  switch($bar){
+  switch ($bar) {
     case 2: {
       header("Content-type: image/png");
       // SETTINGS
@@ -55,7 +85,7 @@
 
       $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
 
-      switch($misc['text_status']){
+      switch ($misc['text_status']) {
         case 'pen': { $stat = $stat_pn; break; }
         case 'nrs': { $stat = $stat_of; break; }
         case 'onp': { $stat = $stat_ps; break; }
@@ -70,7 +100,9 @@
       imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  $lgsl_config['text']['map'].":".$server['s']['map']);
       imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  $lgsl_config['text']['plr'].":".$server['s']['players'].($server['s']['playersmax'] > 999 ? "" : "/".$server['s']['playersmax']));
       imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game  */  ucfirst($server['s']['game']));
-      imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:".$time." /".$server['s']['game']);      
+      imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:".$time." /".$server['s']['game']);
+
+      drawHistory($im, 374, 28, 80, 25, $server);
       break;
     }
     case 3: {
@@ -91,11 +123,11 @@
       $border = imagecolorallocatealpha($im, 0, 0, 0, 20);
       $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
       // MAIN SECTION
-      if(strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
+      if (strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
 
       $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
 
-      switch($misc['text_status']){
+      switch ($misc['text_status']) {
         case 'pen': { $stat = $stat_pn; break; }
         case 'nrs': { $stat = $stat_of; break; }
         case 'onp': { $stat = $stat_ps; break; }
@@ -105,8 +137,7 @@
       imagettftext($im, 8, 90, 12, $h, $color_nm, $font, /* name  */ $server['s']['name']);
       if (version_compare(phpversion(), '8.0.0', '<')) {
         imagefilledpolygon($im, array(0,0, 16,0, 0,16), 3, $stat);
-      }
-      else {
+      } else {
         imagefilledpolygon($im, array(0,0, 16,0, 0,16), $stat);
       }
       $game_id = @makeImage($misc['icon_game'], 16, 16);                              // create game icon
@@ -123,9 +154,9 @@
       imagettftext($im, 8, 0, 25, 32, $color_nm, $font, /* name  */ $server['s']['name']);
       imagefilledrectangle($im, 17, 40, $w, 54, $border);
       imagettftext($im, 8, 0, 25, 52, $color_ip, $font, /* ip  */  $lgsl_config['text']['adr']);
-      if($server['s']['game'] == 'discord')
+      if ($server['s']['game'] == 'discord') {
         imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $misc['connect_filtered']));
-      else {
+      } else {
         imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $server['b']['ip']));
         imagettftext($im, 8, 0, 118, 86, $color_ip, $font,/* port  */  ":" . $server['b']['c_port']);
       }
@@ -133,9 +164,9 @@
       imagettftext($im, 7, 0, 25, 112, $color_mp, $font, /* map      */  $lgsl_config['text']['map'].": ".$server['s']['map']);
       imagefilledrectangle($im, 17, 120, $w, 134, $border);
       imagettftext($im, 7, 0, 25, 132, $color_pl, $font, /* players  */  $lgsl_config['text']['plr'].": ".$server['s']['players']."/".$server['s']['playersmax']);
-      if($server['s']['players'] > 0 && count($server['p']) > 0){
+      if ($server['s']['players'] > 0 && count($server['p']) > 0) {
         $i = 0;
-        foreach($server['p'] as $player){
+        foreach ($server['p'] as $player) {
           imagettftext($im, 7, 0, 25, 144 + 10 * $i, $color_pl, $font, /* player  */  $player['name']);
           $i++;
           if($i > 7) {
@@ -143,8 +174,7 @@
             break;
           }
         }
-      }
-      else {
+      } else {
         imagettftext($im, 7, 0, 25, 190, $color_pl, $font, /* players  */  $lgsl_config['text']['npi']);
       }
       
@@ -164,9 +194,9 @@
       $color_tm = imagecolorallocate($im, 66, 66, 66);
       $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
       // MAIN SECTION
-      if(strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
+      if (strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
       $map = $server['s']['map'];
-      if(strlen($server['s']['map']) > 15) $map = substr($server['s']['map'], 0, 13) . '..';
+      if (strlen($server['s']['map']) > 15) $map = substr($server['s']['map'], 0, 13) . '..';
 
       $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
 

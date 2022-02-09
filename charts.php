@@ -1,14 +1,13 @@
 <?php
 
-	function makeImage($src, $width, $height){
+	function makeImage($src, $width, $height) {
 		list($w, $h) = getimagesize($src);
-		if(substr($src, -3) == 'gif'){
+		if (substr($src, -3) == 'gif') {
 			$result = imagecreatefromgif($src);
-		}
-		else {
+		}	else {
 			$result = imagecreatefrompng($src);
 		}
-		if($width != $w || $height != $h){
+		if ($width != $w || $height != $h) {
 			$image = $result;
 			$result = imagecreatetruecolor($width, $height);
 			imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
@@ -32,7 +31,7 @@
   header("Content-Type: image/png");
   require "lgsl_files/lgsl_class.php";
   $lookup = lgsl_lookup_id($_GET['s']);
-  if(!$lookup){
+  if (!$lookup) {
     $white = imagecolorallocate($im, 255, 255, 255);
     imagefill($im, 0, 0, $white);
     imagestring($im, 1, (int)($w / 2 - strlen($lgsl_config['text']['mid']) * 2.2), (int)($h / 2), $lgsl_config['text']['mid'], $black);
@@ -48,13 +47,13 @@
   $y0 = 20;
   $period = 60 * 60 * 24; // 1 day
   $xStep = 30;
-  $yStep = (int)($server['s']['playersmax'] > 32 ? 9 : 100 / $server['s']['playersmax']) + 1;
+  $yStep = (int) ($server['s']['playersmax'] > 32 ? 9 : 100 / $server['s']['playersmax']) + 1;
 
   $s = array();
   $x = array();
   $y = array();
   $history = $server['s']['history'] or array();
-  foreach($history as $key){
+  foreach ($history as $key) {
     array_push($s, $key['status']);
     array_push($x, $key['time'] - time() + $period);
     array_push($y, $key['players']);
@@ -69,11 +68,12 @@
 
   imageline($im, $x0, $maxY, $maxX, $maxY, $black);
   imageline($im, $x0, $y0, $x0, $maxY, $black);
+  imageantialias($im, true);
 
   // DRAW GRID
 
   $xSteps = ($maxX-$x0) / $xStep-1;
-  for($i=1; $i < $xSteps+1; $i++) {
+  for ($i=1; $i < $xSteps+1; $i++) {
     imageline($im, $x0+$xStep*$i, $y0, $x0+$xStep*$i, $maxY-1, $gray);
     $str = Date("H:i", time() - $period + (int) ($i * round($xStep/$scaleX, 1)));
     imagestring($im, 1, (($x0+$xStep*$i) - 6), $maxY+2, $str, $black);
@@ -81,7 +81,7 @@
   imagestring($im, 1, $x0 - 6, $maxY+2, $str, $black);
 
   $ySteps = ($maxY-$y0) / $yStep-1;
-  for($i=1; $i < $ySteps+1; $i++) {
+  for ($i=1; $i < $ySteps+1; $i++) {
     imageline($im, $x0+1, (int) $maxY-$yStep*$i, $maxX, (int) $maxY-$yStep*$i, $gray);
     if($server['s']['playersmax'] > 32 or $i % (int)(1 + $server['s']['playersmax']/10) == 0) {
       imagestring($im, 1, 3, ($maxY-$yStep*$i)-3, round($i * $yStep/$scaleY, 0), $black);
@@ -94,12 +94,12 @@
 
   // DRAW GRAPH
 
- for($i=1; $i < count($x); $i++) {
+  imagesetthickness($im, 2);
+  for ($i=1; $i < count($x); $i++) {
     if($s[$i-1]) {
       imageline($im, (int) ($x0+$x[$i-1]*$scaleX), (int) ($maxY-$y[$i-1]*$scaleY), (int) ($x0+$x[$i]*$scaleX), (int) ($maxY-$y[$i]*$scaleY), $green);
-    }
-    else {
-      imagefilledellipse($im, (int) ($x0+$x[$i]*$scaleX), (int) ($maxY-$y[$i]*$scaleY), 4, 4, $red);
+    } else {
+      imagefilledellipse($im, (int) ($x0+$x[$i]*$scaleX), (int) ($maxY-$y[$i]*$scaleY), 6, 6, $red);
     }
   }
 

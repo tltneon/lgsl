@@ -841,7 +841,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_string_html($string, $xml_feed = FALSE, $word_wrap = 0)
+  function lgsl_string_html($string = "", $xml_feed = FALSE, $word_wrap = 0)
   {
     if ($word_wrap) { $string = lgsl_word_wrap($string, $word_wrap); }
 
@@ -977,6 +977,46 @@
     $lgsl_path = str_replace("\\", "/", $lgsl_path);
 
     return $lgsl_path;
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_build_link_params($url, $params)
+  {
+    // IS NO PARAMS
+
+    if (!strpos($url, '?')) {
+      return "{$url}?" . http_build_query($params);
+    }
+
+    // IS '?' EXISTS
+
+    if (isset($params['game'])) {
+      if (strpos($url, 'game=')) {
+        $url = preg_replace('/game=([\w\d\_\-])+/', "game={$params['game']}", $url);
+      }
+      else {
+        $url .= "&game={$params['game']}";
+      }
+    }
+    if (isset($params['type'])) {
+      if (strpos($url, 'type=')) {
+        $url = preg_replace('/type=([\w\d\_\-])+/', "type={$params['type']}", $url);
+      }
+      else {
+        $url .= "&type={$params['type']}";
+      }
+    }
+    if (isset($params['page'])) {
+      if (strpos($url, 'page=')) {
+        $url = preg_replace('/page=\d+/', "page={$params['page']}", $url);
+      }
+      else {
+        $url .= "&page={$params['page']}";
+      }
+    }
+
+    return $url;
   }
 
 //------------------------------------------------------------------------------------------------------------+
