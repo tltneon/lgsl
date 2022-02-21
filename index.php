@@ -39,16 +39,17 @@
 
     <div id="container">
 <?php
-//------------------------------------------------------------------------------------------------------------+
-  if(isset($lgsl_config['scripts']))
-    foreach($lgsl_config['scripts'] as $script)
-      $output .= "<script src='lgsl_files/scripts/".$script."'></script>";
-
   echo $output;
   unset($output);
-//------------------------------------------------------------------------------------------------------------+
 ?>
     </div>
+    <?php
+      if (isset($lgsl_config['scripts'])) {
+        foreach ($lgsl_config['scripts'] as $script) {
+          echo "<script src='lgsl_files/scripts/{$script}'></script>";
+        }
+      }
+    ?>
   </body>
 </html>
 <!-- Powered by LGSL v6.1.1; <?php echo "Page loaded: ".round(microtime(true) - $time, 6)."s";?> -->

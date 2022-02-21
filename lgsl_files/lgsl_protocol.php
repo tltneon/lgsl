@@ -40,7 +40,7 @@
     "callofdutyuo"  => "Call Of Duty: United Offensive",
     "callofdutywaw" => "Call Of Duty: World at War",
     "callofduty2"   => "Call Of Duty 2",
-    "callofduty4"   => "Call Of Duty 4",
+    "callofduty4"   => "Call Of Duty 4 / CoD4X",
     "cncrenegade"   => "Command and Conquer: Renegade",
     "conanexiles"   => "Conan Exiles",
     "crysis"        => "Crysis",
@@ -52,6 +52,7 @@
     "doomzdaemon"   => "Doom - ZDaemon",
     "doom3"         => "Doom 3",
     "dh2005"        => "Deer Hunter 2005",
+    "factorio"      => "Factorio",
     "farcry"        => "Far Cry",
     "farmsim"       => "Farming Simulator",
     "fear"          => "F.E.A.R.",
@@ -191,6 +192,7 @@
     "doomzdaemon"   => "28",
     "doom3"         => "10",
     "dh2005"        => "09",
+    "factorio"      => "42",
     "had2"          => "03",
     "halflife"      => "05",
     "halflifewon"   => "05",
@@ -319,7 +321,7 @@
     "callofdutyuo"  => "qtracker://{IP}:{S_PORT}?game=CallOfDutyUnitedOffensive&action=show",
     "callofdutywaw" => "qtracker://{IP}:{S_PORT}?game=CallOfDutyWorldAtWar&action=show",
     "callofduty2"   => "qtracker://{IP}:{S_PORT}?game=CallOfDuty2&action=show",
-    "callofduty4"   => "qtracker://{IP}:{S_PORT}?game=CallOfDuty4&action=show",
+    "callofduty4"   => "cod4://{IP}:{S_PORT}",
     "cncrenegade"   => "qtracker://{IP}:{S_PORT}?game=CommandConquerRenegade&action=show",
     "conanexiles"   => "steam://connect/{IP}:{C_PORT}",
     "crysis"        => "qtracker://{IP}:{S_PORT}?game=Crysis&action=show",
@@ -331,6 +333,7 @@
     "doomzdaemon"   => "http://www.zdaemon.org",
     "doom3"         => "qtracker://{IP}:{S_PORT}?game=Doom3&action=show",
     "dh2005"        => "http://en.wikipedia.org/wiki/Deer_Hunter_(computer_game)",
+    "factorio"      => "steam://connect/{IP}",
     "farcry"        => "qtracker://{IP}:{S_PORT}?game=FarCry&action=show",
     "farmsim"       => "steam://connect/{IP}:{C_PORT}",
     "fear"          => "qtracker://{IP}:{S_PORT}?game=FEAR&action=show",
@@ -476,6 +479,7 @@
       case "cube"          : $c_to_q = 1;     $c_def = 28785;   $q_def = 28786;   $c_to_s = 0;   break;
       case "dh2005"        : $c_to_q = 0;     $c_def = 23459;   $q_def = 34567;   $c_to_s = 0;   break;
       case "discord"       : $c_to_q = 0;     $c_def = 1;       $q_def = 1;       $c_to_s = 0;   break;
+      case "factorio"      : $c_to_q = 0;     $c_def = 34197;   $q_def = 34197;   $c_to_s = 0;   break;
       case "farcry"        : $c_to_q = 123;   $c_def = 49001;   $q_def = 49124;   $c_to_s = 0;   break;
       case "fivem"         : $c_to_q = 0;     $c_def = 30120;   $q_def = 30120;   $c_to_s = 0;   break;
       case "flashpoint"    : $c_to_q = 1;     $c_def = 2302;    $q_def = 2303;    $c_to_s = 0;   break;
@@ -4124,6 +4128,65 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
+  function lgsl_query_42(&$server, &$lgsl_need, &$lgsl_fp) // Factorio
+  {
+    if (!$lgsl_fp) return FALSE;
+
+    $lgsl_need['e'] = FALSE;
+    $lgsl_need['p'] = FALSE;
+
+    fwrite($lgsl_fp, "\x30");
+    $packet = fread($lgsl_fp, 4096);
+    if (!$packet) return FALSE;
+    $buffer = $packet;
+    while (strlen($packet) >= 504){
+      $packet = fread($lgsl_fp, 512);
+      lgsl_cut_byte($packet, 4);
+      $buffer .= $packet;
+    }
+    if(strlen($buffer) > 508) lgsl_cut_byte($buffer, 3);
+    lgsl_cut_byte($buffer, 13);
+    $server['s']['name']        = lgsl_parse_color(lgsl_cut_byte($buffer, ord(lgsl_cut_byte($buffer, 1))), "factorio");
+    $server['e']['version']     = ord(lgsl_cut_byte($buffer, 1)) . "." . ord(lgsl_cut_byte($buffer, 1)) . "." . ord(lgsl_cut_byte($buffer, 1));
+    $server['e']['build']       = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
+    $desc = ord(lgsl_cut_byte($buffer, 1));
+    $desc = $desc === 255 ? lgsl_unpack(lgsl_cut_byte($buffer, 2), "S")+2 : $desc;
+    $server['e']['description'] = lgsl_parse_color(lgsl_cut_byte($buffer, $desc), "factorio");
+    $maxplayers = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
+    $server['s']['playersmax']  = $maxplayers ? $maxplayers : 9999;
+    $server['e']['time']        = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S") . "m";
+    lgsl_cut_byte($buffer, 2);
+    $server['s']['password']    = ord(lgsl_cut_byte($buffer, 1));
+    lgsl_cut_byte($buffer, 1);
+    lgsl_cut_byte($buffer, ord(lgsl_cut_byte($buffer, 1)));
+    $server['e']['public']      = ord(lgsl_cut_byte($buffer, 1)) ? "true" : "false";
+    lgsl_cut_byte($buffer, 1);
+    $server['e']['lan']         = ord(lgsl_cut_byte($buffer, 1)) ? "true" : "false";
+    $server['e']['mods']        = "";
+    $gamemodes = ord(lgsl_cut_byte($buffer, 1));
+    for ($i = 0; $i < $gamemodes; $i++){
+      $server['e']['mods']      .= lgsl_cut_byte($buffer, ord(lgsl_cut_byte($buffer, 1))) . " " . "(" . ord(lgsl_cut_byte($buffer, 1)) . "." . ord(lgsl_cut_byte($buffer, 1)) . "." . ord(lgsl_cut_byte($buffer, 1)) . ")\n";
+      lgsl_cut_byte($buffer, 4);
+    }
+    $server['e']['tags']        = "";
+    $tags = ord(lgsl_cut_byte($buffer, 1));
+    for ($i = 0; $i < $tags; $i++){
+      $tag = ord(lgsl_cut_byte($buffer, 1));
+      $tag = $tag === 255 ? lgsl_unpack(lgsl_cut_byte($buffer, 2), "S")+2 : $tag;
+      $server['e']['tags'] .= lgsl_parse_color(lgsl_cut_byte($buffer, $tag), "factorio") . "\n";
+    }
+    $players = ord(lgsl_cut_byte($buffer, 1));
+    for ($i = 0; $i < $players; $i++){
+      $server['p'][$i]['name']  = lgsl_cut_byte($buffer, ord(lgsl_cut_byte($buffer, 1)));
+    }
+    $server['s']['players']     = count($server['p']);
+    $server['s']['map']         = "World";
+    return TRUE;
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+
 function lgsl_unescape($text) {
   $escaped = array('\t', '\v', '\r', '\n', '\f', '\s', '\p', '\/');
   $unescaped = array(' ', ' ', ' ', ' ', ' ', ' ', '|', '/');
@@ -4349,6 +4412,10 @@ function lgsl_unescape($text) {
 
       case "minecraft":
         $string = preg_replace("/�./S", "", $string);
+      break;
+
+      case "factorio":
+        $string = preg_replace("/\[[-a-z=0-9\#\/\.,\s?]*\]/S", "", $string);
       break;
     }
     return $string;
