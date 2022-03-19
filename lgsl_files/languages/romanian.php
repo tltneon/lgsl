@@ -6,7 +6,7 @@
 
   $lgsl_config['text']['ttl'] = "Listă Live Servere";
   $lgsl_config['text']['vsd'] = "CLICK AICI PENTRU A VEDEA DETALIILE SERVERULUI";
-  $lgsl_config['text']['slk'] = "LINK JOC";
+  $lgsl_config['text']['slk'] = "CONECTEAZĂ-TE LA JOC";
   $lgsl_config['text']['sts'] = "Status";
   $lgsl_config['text']['adr'] = "Adresă";
   $lgsl_config['text']['cpt'] = "Port Server";
