@@ -30,7 +30,7 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "Servere";
   $lgsl_config['text']['tnp'] = "Jucători";
-  $lgsl_config['text']['tmp'] = "Limită jucători";
+  $lgsl_config['text']['tmp'] = "Număr maxim de jucători";
   $lgsl_config['text']['asd'] = "MOMENTAN ADĂUGAREA PUBLICĂ DE SERVERE ÎN LISTĂ ESTE DEZACTIVATĂ";
   $lgsl_config['text']['awm'] = "ACEASTĂ ZONĂ ÎȚI PERMITE SĂ TESTEZI UN SERVER, APOI SĂ ÎL ADAUGI ÎN LISTA DE SERVERE";
   $lgsl_config['text']['ats'] = "Testare Server";
