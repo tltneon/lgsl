@@ -1,7 +1,7 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/tltneon/lgsl?color=green&style=for-the-badge)](https://github.com/tltneon/lgsl/releases)
-![PHP](https://img.shields.io/badge/PHP-5.4--8.1.2-brightgreen?style=for-the-badge&logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-5.5.27--8.0.x-brightgreen?style=for-the-badge&logo=mysql)
-![MariaDB](https://img.shields.io/badge/MariaDB-5.5--10.6.x-brightgreen?style=for-the-badge&logo=mariadb)
+![PHP](https://img.shields.io/badge/PHP-5.4--8.2.0dev-brightgreen?style=for-the-badge&logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-5.5--8.0.x-brightgreen?style=for-the-badge&logo=mysql)
+![MariaDB](https://img.shields.io/badge/MariaDB-5.5--10.8.x-brightgreen?style=for-the-badge&logo=mariadb)
 
 [![GitHub followers](https://img.shields.io/github/followers/tltneon?style=for-the-badge)](https://github.com/tltneon?tab=followers)
 [![GitHub stars](https://img.shields.io/github/stars/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/stargazers)
@@ -37,7 +37,7 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can 
 - **Minor fixes**
 - * Tested on PHP 8.1.0-dev
 #### v6.0.1
-- **New Style: Cards** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl9/index.php)]
+- **New Style: Cards** [[Screenshots](https://github.com/tltneon/lgsl/wiki/Styles#cards-style)]
 - **Selecting active scripts on install page**
 - **Available Map Preview script**
 - **New game icons**
@@ -63,13 +63,13 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can 
 #### v5.10.2
 - **LGSL now with IMG Mod!**
 	- *Author playzone46@yandex.ru*
-- **Added Material Style** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl6/index.php)]
+- **Added Material Style** [[Screenshots](https://github.com/tltneon/lgsl/wiki/Styles#material-design-style)]
 - **Improvements to all styles**
 - **Better installation page with various settings**
 - **Rewrited main info table**
 - **Default icons now has bigger resolution**
 	- *Now you can use bigger map images*
-- **Added Wallpaper Style** [[Live Demo](http://lgsl-demo.freesite.vip/lgsl8/index.php)]
+- **Added Wallpaper Style** [[Screenshots](https://github.com/tltneon/lgsl/wiki/Styles#wallpaper-style)]
 #### v5.10.1
 - **Menu in the top of page** (_also now you can enter the admin page thru the clicking on top right corner of the page_)
 - **Further adaptiveness to different resolutions**

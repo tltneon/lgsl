@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ ï¿½ RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -110,7 +110,7 @@
 
       // THIS PREVENTS PORTS OR WHITESPACE BEING PUT IN THE IP
       $ip = trim($ip);
-      if (strpos($ip, ':') !== false){
+      if (strpos($ip, ':') !== false) {
         $c_port = explode(":", $ip)[1];
         $ip = explode(":", $ip)[0];
       }
@@ -223,8 +223,24 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  if (!empty($_POST['lgsl_map_image_paths']))
-  {
+  if (!empty($_POST['lgsl_map_image_paths'])) {
+    if(!empty($_POST['lgsl_map_image_upload'])) {
+      $ext = strtolower(pathinfo($_FILES['map']['name'], PATHINFO_EXTENSION));
+      if ($ext === "jpg" || $ext === "gif") {
+        $uploadfolder = preg_replace("/[^a-z0-9_\/]/", "_", strtolower("lgsl_files/maps/{$_POST['lgsl_map_upload_path']}/"));
+        $uploadfile = preg_replace("/[^a-z0-9_]/", "_", strtolower($_POST['lgsl_map_upload_file'])) . ".{$ext}";
+        if (!file_exists($uploadfolder . $uploadfile)) {
+          mkdir($uploadfolder, 0666, true);
+        }
+        if (move_uploaded_file($_FILES['map']['tmp_name'], $uploadfolder . $uploadfile)) {
+          echo "Image {$uploadfile} uploaded successfully.\n";
+        } else {
+          echo "File not uploaded. Something wrong.\n";
+        }
+      } else {
+        echo "Allowed only .jpg and .gif extensions.\n";
+      }
+    }
     $server_list = lgsl_query_group( array( "request" => "s" ) );
 
     $output .= "
@@ -233,8 +249,7 @@
     </div>
     ";
 
-    foreach ($server_list as $server)
-    {
+    foreach ($server_list as $server) {
       if (!$server['b']['status']) { continue; }
 
       $image_map = lgsl_image_map($server['b']['status'], $server['b']['type'], $server['s']['game'], $server['s']['map'], FALSE);
@@ -247,6 +262,15 @@
         <div style='display: inline-block;vertical-align: super;'>
           <div>{$lgsl_config['text']['map']}: {$server['s']['map']}</div>
           <div>Link: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
+          <form action='admin.php' method='post' enctype='multipart/form-data'>
+            Select image to upload:
+            <input type='file' name='map' id='map' />
+            <input type='hidden' name='lgsl_map_upload_path' value='{$server['b']['type']}/{$server['s']['game']}' />
+            <input type='hidden' name='lgsl_map_upload_file' value='{$server['s']['map']}' />
+            <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+            <input type='hidden' name='lgsl_map_image_paths' value='true' />
+            <input type='submit' name='lgsl_map_image_upload' value='Upload Image' />
+          </form>
         </div>
       </div>";
     }

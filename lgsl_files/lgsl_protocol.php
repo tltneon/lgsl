@@ -37,6 +37,7 @@
     "bf2142"        => "Battlefield 2142",
     "callofduty"    => "Call Of Duty",
     "callofdutybo3" => "Call Of Duty: Black Ops 3",
+    "callofdutyiw"  => "Call Of Duty (IW5, IW6x)",
     "callofdutyuo"  => "Call Of Duty: United Offensive",
     "callofdutywaw" => "Call Of Duty: World at War",
     "callofduty2"   => "Call Of Duty 2",
@@ -177,6 +178,7 @@
     "bf2142"        => "06",
     "callofduty"    => "02",
     "callofdutybo3" => "05",
+    "callofdutyiw"  => "02",
     "callofdutyuo"  => "02",
     "callofdutywaw" => "02",
     "callofduty2"   => "02",
@@ -318,6 +320,7 @@
     "bf2142"        => "qtracker://{IP}:{S_PORT}?game=Battlefield2142&action=show",
     "callofduty"    => "qtracker://{IP}:{S_PORT}?game=CallOfDuty&action=show",
     "callofdutybo3" => "qtracker://{IP}:{S_PORT}?game=CallOfDutyBlackOps3&action=show",
+    "callofdutyiw"  => "javascript:prompt('Put it into console:', 'connect {IP}:{C_PORT}')",
     "callofdutyuo"  => "qtracker://{IP}:{S_PORT}?game=CallOfDutyUnitedOffensive&action=show",
     "callofdutywaw" => "qtracker://{IP}:{S_PORT}?game=CallOfDutyWorldAtWar&action=show",
     "callofduty2"   => "qtracker://{IP}:{S_PORT}?game=CallOfDuty2&action=show",
@@ -781,6 +784,7 @@
 
     if     ($server['b']['type'] == "quake2")              { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFstatus");        }
     elseif ($server['b']['type'] == "warsowold")           { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo");       }
+    elseif ($server['b']['type'] == "callofdutyiw")        { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo LGSL");  } // IW6x
     elseif (strpos($server['b']['type'], "moh") !== FALSE) { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFF\x02getstatus"); } // mohaa_ mohaab_ mohaas_ mohpa_
     else                                                   { fwrite($lgsl_fp, "\xFF\xFF\xFF\xFFgetstatus");     }
 
@@ -791,7 +795,9 @@
 //---------------------------------------------------------+
 
     $part = explode("\n", $buffer);  // SPLIT INTO PARTS: HEADER/SETTINGS/PLAYERS/FOOTER
-    array_pop($part);                // REMOVE FOOTER WHICH IS EITHER NULL OR "\challenge\"
+    if ($server['b']['type'] !== "callofdutyiw") {
+      array_pop($part);              // REMOVE FOOTER WHICH IS EITHER NULL OR "\challenge\"
+    }
     $item = explode("\\", $part[1]); // SPLIT PART INTO ITEMS
 
     foreach ($item as $item_key => $data_key)
@@ -808,6 +814,13 @@
     if (!empty($server['e']['sv_hostname'])) { $server['s']['name'] = $server['e']['sv_hostname']; }
 
     if (isset($server['e']['gamename'])) { $server['s']['game'] = $server['e']['gamename']; }
+    if (isset($server['e']['protocol'])) {
+      switch($server['e']['protocol']) {
+        case '6':     $server['s']['game'] = 'iw3'; break;
+        case '20604': $server['s']['game'] = 'iw5'; break;
+        case '101':   $server['s']['game'] = 'iw6x'; break;
+      }
+    }
     if (isset($server['e']['mapname']))  { $server['s']['map']  = $server['e']['mapname']; }
 
     $server['s']['players'] = empty($part['2']) ? 0 : count($part) - 2;
