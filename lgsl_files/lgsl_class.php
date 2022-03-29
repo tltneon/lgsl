@@ -368,37 +368,6 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_lookup_id($id) // LEGACY - DO NOT USE
-  {
-    global $lgsl_config, $lgsl_database;
-
-    lgsl_database();
-
-    $id           = mysqli_real_escape_string($lgsl_database, intval($id));
-    $mysqli_query  = "SELECT `type`,`ip`,`c_port`,`q_port`,`s_port` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `id`='{$id}' LIMIT 1";
-    $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
-    $mysqli_row    = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC);
-
-    return $mysqli_row;
-  }
-
-  function lgsl_lookup_server($ip, $port) // LEGACY - DO NOT USE
-  {
-    global $lgsl_config, $lgsl_database;
-
-    lgsl_database();
-
-    $ip           = mysqli_real_escape_string($lgsl_database, $ip);
-    $port           = mysqli_real_escape_string($lgsl_database, intval($port));
-    $mysqli_query  = "SELECT `id` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `ip`='{$ip}' AND `c_port`='{$port}' LIMIT 1";
-    $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
-    $mysqli_row    = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC);
-
-    return $mysqli_row['id'];
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
   function lgsl_timer($action)
   {
     global $lgsl_config;

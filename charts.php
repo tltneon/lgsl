@@ -30,8 +30,8 @@
 
   header("Content-Type: image/png");
   require "lgsl_files/lgsl_class.php";
-  $lookup = lgsl_lookup_id($_GET['s']);
-  if (!$lookup) {
+  $server = lgsl_query_cached("", "", "", "", "", "cs", $_GET['s']);
+  if (!$server) {
     $white = imagecolorallocate($im, 255, 255, 255);
     imagefill($im, 0, 0, $white);
     imagestring($im, 1, (int)($w / 2 - strlen($lgsl_config['text']['mid']) * 2.2), (int)($h / 2), $lgsl_config['text']['mid'], $black);
@@ -39,7 +39,6 @@
     imagedestroy($im);
     exit();
   }
-  $server = lgsl_query_cached($lookup['type'], $lookup['ip'], $lookup['c_port'], $lookup['q_port'], $lookup['s_port'], "s");
   $misc   = lgsl_server_misc($server);
   $server['s']['playersmax'] = $server['s']['playersmax'] > 0 ? $server['s']['playersmax'] : 1;
 
@@ -83,7 +82,7 @@
   $ySteps = ($maxY-$y0) / $yStep-1;
   for ($i=1; $i < $ySteps+1; $i++) {
     imageline($im, $x0+1, (int) $maxY-$yStep*$i, $maxX, (int) $maxY-$yStep*$i, $gray);
-    if($server['s']['playersmax'] > 32 or $i % (int)(1 + $server['s']['playersmax']/10) == 0) {
+    if ($server['s']['playersmax'] > 32 or $i % (int)(1 + $server['s']['playersmax']/10) == 0) {
       imagestring($im, 1, 3, ($maxY-$yStep*$i)-3, round($i * $yStep/$scaleY, 0), $black);
     }
   }
@@ -96,7 +95,7 @@
 
   imagesetthickness($im, 2);
   for ($i=1; $i < count($x); $i++) {
-    if($s[$i-1]) {
+    if ($s[$i-1]) {
       imageline($im, (int) ($x0+$x[$i-1]*$scaleX), (int) ($maxY-$y[$i-1]*$scaleY), (int) ($x0+$x[$i]*$scaleX), (int) ($maxY-$y[$i]*$scaleY), $green);
     } else {
       imagefilledellipse($im, (int) ($x0+$x[$i]*$scaleX), (int) ($maxY-$y[$i]*$scaleY), 6, 6, $red);

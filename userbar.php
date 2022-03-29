@@ -46,8 +46,11 @@
   }
 
 	require "lgsl_files/lgsl_class.php";
-	$lookup = lgsl_lookup_id($_GET['s']);
-  if (!$lookup) {
+  $query = "cs";
+  $bar   = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
+  if ($bar == 3) { $query .= "p"; }
+	$server = lgsl_query_cached("", "", "", "", "", $query, $_GET['s']);
+  if (!$server) {
     header("Content-type: image/gif");
     $im = imagecreatetruecolor(350, 20);
     $white = imagecolorallocate($im, 255, 255, 255);
@@ -57,10 +60,6 @@
     imagedestroy($im);
     exit();
   }
-  $query = "s";
-  $bar = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
-  if ($bar == 3) { $query .= "p"; }
-	$server = lgsl_query_cached($lookup['type'], $lookup['ip'], $lookup['c_port'], $lookup['q_port'], $lookup['s_port'], $query);
 	$misc   = lgsl_server_misc($server);
 
   switch ($bar) {
@@ -81,7 +80,7 @@
       $stat_of = imagecolorallocate($im, 241, 171, 171);
       $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
       // MAIN SECTION
-      if(strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
+      if(strlen($misc['connect_filtered']) > 22 && $server['b']['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
 
       $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
 
@@ -95,14 +94,14 @@
       $game_id = @makeImage($misc['icon_game'], 32, 32);                          // create game icon
       imagecopy($im, $game_id, 16, 16, 0, 0, 32, 32);                             // place game icon
 
-      imagettftext($im, 10, 0, 62,  20, $color_nm, $font, /* name     */  $server['s']['name']);
+      imagettftext($im, 10, 0, 62,  19, $color_nm, $font, /* name     */  $server['s']['name']);
       imagettftext($im, 8,  0, 62,  32, $color_ip, $font, /* ip&port  */  str_replace('https://', '', $misc['connect_filtered']));
       imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  $lgsl_config['text']['map'].":".$server['s']['map']);
       imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  $lgsl_config['text']['plr'].":".$server['s']['players'].($server['s']['playersmax'] > 999 ? "" : "/".$server['s']['playersmax']));
       imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game  */  ucfirst($server['s']['game']));
       imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:".$time." /".$server['s']['game']);
 
-      drawHistory($im, 374, 28, 80, 25, $server);
+      drawHistory($im, 374, 24, 80, 24, $server);
       break;
     }
     case 3: {
@@ -123,7 +122,7 @@
       $border = imagecolorallocatealpha($im, 0, 0, 0, 20);
       $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
       // MAIN SECTION
-      if (strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
+      if (strlen($misc['connect_filtered']) > 22 && $server['b']['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
 
       $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
 
@@ -169,7 +168,7 @@
         foreach ($server['p'] as $player) {
           imagettftext($im, 7, 0, 25, 144 + 10 * $i, $color_pl, $font, /* player  */  $player['name']);
           $i++;
-          if($i > 7) {
+          if ($i > 7) {
             imagettftext($im, 7, 0, 25, 144 + 10 * 8, $color_pl, $font, /* player  */  "+ " . ($server['s']['players'] - $i . " " . lcfirst($lgsl_config['text']['plr'])));
             break;
           }
@@ -194,7 +193,7 @@
       $color_tm = imagecolorallocate($im, 66, 66, 66);
       $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
       // MAIN SECTION
-      if (strlen($misc['connect_filtered']) > 22 && $lookup['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
+      if (strlen($misc['connect_filtered']) > 22 && $server['b']['type'] != 'discord') $misc['connect_filtered'] = gethostbyname(explode(":", $misc['connect_filtered'])[0]) . ":" . explode(":", $misc['connect_filtered'])[1];
       $map = $server['s']['map'];
       if (strlen($server['s']['map']) > 15) $map = substr($server['s']['map'], 0, 13) . '..';
 
