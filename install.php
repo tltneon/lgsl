@@ -227,6 +227,7 @@
 			<option value="turkish">Türkçe</option>
 			<option value="korean">한국어</option>
 			<option value="romanian">Română</option>
+			<option value="chinese_simplified">简体中文</option>
 			<option value="help" style="color: green;">!Help to translate LGSL!</option>
 		</select>
 	</p>
@@ -801,7 +802,35 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"table": "LGSL <span style='color: red;'>테이블이 생성되지 않음</span>: 잘못된 데이터베이스 이름 또는 테이블이 이미 존재합니다.",
 				"cretd": "<span style='color: green;'>성공적으로 생성되었습니다!</span> 테이블이 생성되었습니다! 2단계로 이동",
 			},
-		}
+            "chinese_simplified": {
+                "tablc": "LGSL 数据表创建 <span style='color: green;'>成功</span>.",
+                "filli": "您必须确保必填项 (<span style='color:red'>步骤1</span>) 正确.",
+                "consu": "连接 <span style='color: green;'>成功</span> 确认, LGSL 可以从游戏服务器获取数据。",
+                "coutd": "LGSL <span style='color: red;'>无法从大多数游戏服务器获取数据</span> ，因为UDP upflow在您的当前服务器主机上被阻止。",
+                "remem": "请务必在LGSL安装成功删除install.php",
+                "after": "接下来, 请将它替换到 lgsl_files/lgsl_config.php",
+                "selst": "选择风格",
+                "sella": "选择语言",
+                "selsc": "选择脚本",
+                "sorts": "服务器排序方式",
+                "sortp": "玩家排序方式",
+                "enaim": "开启图片mod",
+                "hideo": "隐藏离线服务器",
+                "pubad": "开放服务器添加",
+                "showt": "显示总数",
+                "showl": "显示位置",
+                "step1": "步骤1: 安装LGSL数据表",
+                "step2": "步骤2: 配置LGSL",
+                "back": "< 返回",
+                "owiki": "在线文档: 访问",
+                "gener": "生成配置文件",
+                "creat": "创建数据表",
+                "filla": "您必须完成必填项* (步骤1或步骤2).",
+                "mysld": "连接 <span style='color: red;'>失败</span>: mysqli扩展未激活。",
+                "table": "LGSL <span style='color: red;'>数据表未创建</span>: 数据库名称有误或数据表已被创建。",
+                "cretd": "数据表 <span style='color: green;'>成功</span> 创建! 请进入第2步。",
+            }
+		};
 		return t[locale][key];
 	}
 </script>
