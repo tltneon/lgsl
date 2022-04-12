@@ -159,5 +159,6 @@
   // Arabic language: "languages/arabic.php"        // lamjed001
   // Turkish language: "languages/turkish.php"      // izmoxkawaii
   // Korean language: "languages/korean.php"        // izmoxkawaii
+  // Chinese_simplified language: "languages/chinese_simplified.php"      // Nanfei
 
 //------------------------------------------------------------------------------------------------------------+
