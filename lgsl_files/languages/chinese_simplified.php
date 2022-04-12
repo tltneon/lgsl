@@ -30,6 +30,7 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "服务器";
   $lgsl_config['text']['tnp'] = "玩家";
+  $lgsl_config['text']['bot'] = "机器人";
   $lgsl_config['text']['tmp'] = "最大支持玩家";
   $lgsl_config['text']['asd'] = "开放添加服务器已禁用";
   $lgsl_config['text']['awm'] = "当前位置允许您进行测试，然后将在线游戏服务器添加到列表中";

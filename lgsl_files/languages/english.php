@@ -30,6 +30,7 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "Servers";
   $lgsl_config['text']['tnp'] = "Players";
+  $lgsl_config['text']['bot'] = "bot";
   $lgsl_config['text']['tmp'] = "Max Players";
   $lgsl_config['text']['asd'] = "PUBLIC ADDING OF SERVERS IS DISABLED";
   $lgsl_config['text']['awm'] = "THIS AREA ALLOWS YOU TO TEST AND THEN ADD ONLINE GAME SERVERS TO THE LIST";
