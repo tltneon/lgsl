@@ -150,7 +150,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
 	$output = '
-	<h6><a href="./"><l k="back"></l></a> | <a href="?test">Check requirements</a></h6>
+	<h6><a href="./"><l k="back"></l></a> | <a href="?test"><l k="check"></l></a></h6>
 	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank"><l k="owiki"></l></a></h5>
 	<h4><l k="step1"></l></h4>
 	<form method="post" action="?">
@@ -521,6 +521,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"russian": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -549,6 +550,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"french": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -577,6 +579,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"german": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -605,6 +608,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"spanish": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -633,6 +637,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"czech": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -661,6 +666,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"bulgarian": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -689,6 +695,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"slovak": {
 				"tablc": "LGSL tabuľka bola vytvorená <span style='color: green;'>úspešne</span>.",
@@ -717,6 +724,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Pripojenie <span style='color: red;'>Zlyhalo</span>: PHP rozšírenie mysqli nie je aktívne.",
 				"table": "LGSL <span style='color: red;'>tabulka nebola vytvorená</span>: nesprávny názov databázy alebo tabuľka už existuje.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"arabic": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -745,6 +753,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
+                "check": "Check requirements",
 			},
 			"turkish": {
 				"tablc": "LGSL tablosu oluşturuldu <span style='color: green;'>Başarıyla Tamamlandı!</span>.",
@@ -773,8 +782,9 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Bağlantı <span style='color: red;'>failed</span>: Hatalı <span style='color: red;'>Bağlantı Başarısız</span>: mysqli uzantısı etkin değil.",
 				"table": "LGSL <span style='color: red;'>tablo oluşturulmadı</span>: yanlış veritabanı adı veya tablo zaten var.",
 				"cretd": "Tablo <span style='color: green;'>Başarıyla Oluşturuldu!</span> Oluşturuldu! 2'inci adıma geçin",
+                "check": "Check requirements",
 			},
-            "romanian": {
+			"romanian": {
 				"tablc": "Tabelul LGSL a fost creat cu <span style='color: green;'>success</span>.",
 				"filli": "Trebuie să completezi câmpurile (<span style='color:red'>pasul 1</span>) corect.",
 				"consu": "Conexiunea a fost stabilită cu <span style='color: green;'>succes</span>, LGSL poate prelua date de la serverele de jocuri.",
@@ -801,6 +811,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Conectarea a <span style='color: red;'>eșuat</span>: extensia mysqli nu este activă.",
 				"table": "<span style='color: red;'>Tabelul LGSL nu a fost creat</span>: nume greșit al bazei de date sau tabelul există deja.",
 				"cretd": "Tabel creat cu <span style='color: green;'>succes</span> created! Continuați cu Pasul 2.",
+                "check": "Verificați cerințele",
 			},
 			"korean": {
 				"tablc": "LGSL 테이블이<span style='color: green;'>완료되었습니다!</span>를 만들었습니다.",
@@ -829,6 +840,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "링크 <span style='color: red;'>실패</span>: 잘못된 <span style='color: red;'>연결 실패</span>: mysqli 확장이 활성화되어 있지 않습니다.",
 				"table": "LGSL <span style='color: red;'>테이블이 생성되지 않음</span>: 잘못된 데이터베이스 이름 또는 테이블이 이미 존재합니다.",
 				"cretd": "<span style='color: green;'>성공적으로 생성되었습니다!</span> 테이블이 생성되었습니다! 2단계로 이동",
+                "check": "Check requirements",
 			},
             "chinese_simplified": {
                 "tablc": "LGSL 数据表创建 <span style='color: green;'>成功</span>.",
@@ -857,6 +869,7 @@ document.addEventListener("reloadLocale", reloadLocale);
                 "mysld": "连接 <span style='color: red;'>失败</span>: mysqli扩展未激活。",
                 "table": "LGSL <span style='color: red;'>数据表未创建</span>: 数据库名称有误或数据表已被创建。",
                 "cretd": "数据表 <span style='color: green;'>成功</span> 创建! 请进入第2步。",
+                "check": "Check requirements",
             }
 		};
 		return t[locale][key];
