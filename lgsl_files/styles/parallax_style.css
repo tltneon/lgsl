@@ -8,7 +8,7 @@
 body
 {
 	margin: 0;
-  padding: 0;
+	padding: 0;
 	background-color: #fff;
 	font-size: 14px;
 	font-family: Roboto,Arial,sans-serif;
@@ -29,7 +29,6 @@ body
 	background-position: center;
 	background-position: 50% 50%;
 	background-size: 105% 100%;
-	overflow-y: overlay;
 }
 @media (max-width: 1280px) { /*1.333*/
 	#container {
@@ -76,7 +75,7 @@ a:hover, a:active { color:#fff; }
 .details_info_srow:nth-child(2n) {background-color: rgba(26, 28, 34, 0.1);}
 .details_info_ceil:first-child {padding-right: 4px;}
 .details_info_ceil:nth-child(2) {font-weight: 300;}
-#gamelink {vertical-align: middle;display: block;margin-bottom: 6px;width: calc(100% - 2px);}
+#gamelink {display: block;margin-bottom: 6px;width: calc(100% - 2px);}
 .details_info_column:nth-child(2), .details_password_image {
   background-size: cover;
   width: 250px;

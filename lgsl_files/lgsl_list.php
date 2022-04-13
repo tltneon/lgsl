@@ -22,7 +22,7 @@
   $server_list = lgsl_sort_servers($server_list);
 
 //------------------------------------------------------------------------------------------------------------+
-  if(count($server_list) == 0 && $page < 2) {
+  if (count($server_list) == 0 && $page < 2) {
     $output .= "<div id='back_to_servers_list'><a href='./admin.php'>ADD YOUR FIRST SERVER</a></div>";
   }
 
@@ -87,8 +87,7 @@
 
       <td class='details_cell'>";
 
-      if ($lgsl_config['locations'])
-      {
+      if ($lgsl_config['locations']) {
         $output .= "
         <a href='".lgsl_location_link($server['o']['location'])."' target='_blank' class='contry_link'>
           <img alt='{$misc['text_location']}' src='{$misc['icon_location']}' title='{$misc['text_location']}' class='contry_icon' />
@@ -105,7 +104,7 @@
   $output .= "
   </table>";
 
-  if($lgsl_config['pagination_mod'] && ((int)(count($server_list) / $lgsl_config['pagination_lim']) > 0 || $page > 1)){
+  if ($lgsl_config['pagination_mod'] && ((int)(count($server_list) / $lgsl_config['pagination_lim']) > 0 || $page > 1)) {
     $output .= "
       <div id='pages'>
         " . ($page > 1 ? "<a href='" . lgsl_build_link_params($uri, array("page" => $page - 1)) . "'> < </a>" : "") . "
@@ -121,8 +120,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  if ($lgsl_config['list']['totals'])
-  {
+  if ($lgsl_config['list']['totals']) {
     $total = lgsl_group_totals($server_list);
 
     $output .= "

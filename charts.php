@@ -79,12 +79,16 @@
   }
   imagestring($im, 1, $x0 - 6, $maxY+2, $str, $black);
 
-  $ySteps = ($maxY-$y0) / $yStep-1;
-  for ($i=1; $i < $ySteps+1; $i++) {
-    imageline($im, $x0+1, (int) $maxY-$yStep*$i, $maxX, (int) $maxY-$yStep*$i, $gray);
-    if ($server['s']['playersmax'] > 32 or $i % (int)(1 + $server['s']['playersmax']/10) == 0) {
-      imagestring($im, 1, 3, ($maxY-$yStep*$i)-3, round($i * $yStep/$scaleY, 0), $black);
+  if ($server['s']['playersmax'] > 1) {
+    $ySteps = ($maxY-$y0) / $yStep-1;
+    for ($i=1; $i < $ySteps+1; $i++) {
+      imageline($im, $x0+1, (int) $maxY-$yStep*$i, $maxX, (int) $maxY-$yStep*$i, $gray);
+      if ($server['s']['playersmax'] > 32 or $i % (int)(1 + $server['s']['playersmax']/10) == 0) {
+        imagestring($im, 1, 3, ($maxY-$yStep*$i)-3, round($i * $yStep/$scaleY, 0), $black);
+      }
     }
+  } else {
+    imagestring($im, 2, 150, 65, $lgsl_config['text']['npi'], $black);
   }
   imageline($im, $x0 - 15, $maxY, $x0, $maxY, $black);
   imagestring($im, 1, 3, $maxY - 3, 0, $black);

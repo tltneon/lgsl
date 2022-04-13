@@ -88,12 +88,12 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  if($lgsl_config['history']){
+    if ($lgsl_config['history']) {
     $output .= "<div style='overflow-x: auto;'><img src='charts.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart' /></div>";
   }
 
-  if($lgsl_config['image_mod']){
-    if(extension_loaded('gd')){
+    if ($lgsl_config['image_mod']) {
+      if (extension_loaded('gd')) {
       $p = str_replace('lgsl_files/', '', lgsl_url_path());
       $output .= "
       <details>
@@ -139,18 +139,14 @@
   $output .= "
   <div id='details_playerlist'>";
 
-  if (empty($server['p']) || !is_array($server['p']))
-  {
+    if (empty($server['p']) || !is_array($server['p'])) {
     $output .= "<div class='noinfo'>{$lgsl_config['text']['npi']}</div>";
-  }
-  else
-  {
+    } else {
     $output .= "
     <table class='players_table'>
       <tr class='table_head'>";
 
-      foreach ($fields as $field)
-      {
+        foreach ($fields as $field) {
         $field = ucfirst($lgsl_config['text'][substr(strtolower($field), 0, 3)]);
         $output .= "<td> {$field} </td>";
       }
@@ -158,13 +154,11 @@
       $output .= "
       </tr>";
 
-      foreach ($server['p'] as $player_key => $player)
-      {
+        foreach ($server['p'] as $player_key => $player) {
         $output .= "
         <tr>";
 
-        foreach ($fields as $field)
-        {
+          foreach ($fields as $field) {
           $output .= "<td> {$player[$field]} </td>";
         }
 
@@ -186,12 +180,9 @@
 //------------------------------------------------------------------------------------------------------------+
 // SHOW THE SETTINGS
 
-  if (empty($server['e']) || !is_array($server['e']))
-  {
+    if (empty($server['e']) || !is_array($server['e'])) {
     $output .= "<div class='noinfo'>{$lgsl_config['text']['nei']} </div>";
-  }
-  else
-  {
+    } else {
       $hide_options = count($server['e']) > 40;
       if ($hide_options) {
          $output .= "
@@ -210,9 +201,7 @@
       </tr>";
 
       foreach ($server['e'] as $field => $value) {
-        if (preg_match('/(https*:\/\/|https*:\/\/www\.|www\.)[\w\.]*\/?[\w\/\?=&]*/i', $value)) {
-        $value = "<a href='".$value."' target='_blank'>".$value."</a>";
-      }
+        $value = preg_replace('/((https*:\/\/|https*:\/\/www\.|www\.)[\w\d\.\-\/=$?​]*)/i', "<a href='$1' target='_blank'>$1</a>", $value);
       $output .= "
       <tr>
         <td> {$field} </td>
