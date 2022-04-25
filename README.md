@@ -21,6 +21,20 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can 
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
 
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
+#### v6.2.0
+- **Added Preloader feature**
+	- *Loading animation by (https://codepen.io/Bilal1909)*
+- **Added Factorio, Black Ops 3, S.T.A.L.K.E.R. COP, Mafia 2: MP, Just Cause 2: MP support**
+- **Added Satisfactory, World of Warcraft, Farming Simulator support (only online-offline status)**
+- **Fixed FiveM, Battlefield 3, TeamSpeak3/TeaSpeak, Minecraft protocols**
+- **New game icons**
+- **Userbar & Charts improvements**
+- **Romanian language**
+	- *Thanks to [@BaxAndrei](https://github.com/BaxAndrei)*
+- **Chinese simplified language**
+	- *Thanks to [@malimaliao](https://github.com/malimaliao)*
+- **Minor fixes**
+- * Tested on PHP 8.2.0-dev
 #### v6.1.1
 - **Userbar & Charts improvements**
 - **Added Terraria, TeaSpeak support**

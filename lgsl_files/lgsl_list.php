@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
   require "lgsl_class.php";
+  global $output;
 
   $type = (isset($_GET['type']) ? $_GET['type'] : '');
   $game = (isset($_GET['game']) ? $_GET['game'] : '');
@@ -18,6 +19,10 @@
 
   $uri = $_SERVER['REQUEST_URI'];
   
+  if ($lgsl_config['preloader']) {
+    $uri = $_SERVER['HTTP_REFERER'];
+  }
+
   $server_list = lgsl_query_group(array("type" => $type, "game" => $game, "page" => $page));
   $server_list = lgsl_sort_servers($server_list);
 
@@ -108,7 +113,7 @@
     $output .= "
       <div id='pages'>
         " . ($page > 1 ? "<a href='" . lgsl_build_link_params($uri, array("page" => $page - 1)) . "'> < </a>" : "") . "
-      <span>{$lgsl_config['text']['pag']} {$page}</span>
+        <span>{$lgsl_config['text']['pag']} {$page}</span>
         " . (count($server_list) < $lgsl_config['pagination_lim'] ?
             "" :
             (isset($_GET['page']) ?
@@ -136,3 +141,5 @@
 //------ WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P --------------------------------------------------------------------------------------------------+
   $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='https://github.com/tltneon/lgsl' style='text-decoration:none'>".lgsl_version()."</a></div>";
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+if ($lgsl_config['preloader'])
+  echo $output;

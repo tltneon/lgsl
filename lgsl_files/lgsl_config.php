@@ -142,6 +142,7 @@
   $lgsl_config['image_mod']     = false;     // true=show userbar in server's details
   $lgsl_config['pagination_mod']= true;      // true=using pagination
   $lgsl_config['pagination_lim']= 15;        // limit per page
+  $lgsl_config['preloader']     = true;      // true=using ajax to faster loading page
   $lgsl_config['disabled_types']= false;     // allow to exclude some protocols (games) from list. usage: $lgsl_config['disabled_types']= array('warsowold', 'halflifewon', 'test');
 
 //------------------------------------------------------------------------------------------------------------+

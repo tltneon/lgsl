@@ -265,6 +265,10 @@
 		<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)" />
 	</p>
 	<p>
+		Enable Preloader <a href="https://github.com/tltneon/lgsl/wiki/features#preloader" target="_blank" class="hinfolink">?</a>:
+		<input type="checkbox" name="preloader" onChange="changeCheckbox(event)" />
+	</p>
+	<p>
 		Enable Pagination <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
 		<input type="checkbox" name="page_mod" onChange="changeCheckbox(event)" />
 		<input type="number" min="5" max="35" value="15" onChange="vars.page_lim = event.target.value" />
@@ -360,7 +364,8 @@ document.addEventListener("reloadLocale", reloadLocale);
 		hide_offline: false,
 		public_add: false,
 		totals: false,
-		locations: false
+		locations: false,
+    	preloader: false
 	}
 	function changeValue(event, options = {}) {
 		console.log(event);
@@ -470,6 +475,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		"$lgsl_config['db']['db']      = \""+ vars.mysql_database +"\"; \n" +
 		"$lgsl_config['db']['table']   = \""+ vars.mysql_table +"\"; \n" +
 		"$lgsl_config['image_mod']     = "+ vars.image_mod +"; \n" +
+		"$lgsl_config['preloader']     = "+ vars.preloader +";   // true=using ajax to faster loading page\n" +
 		"$lgsl_config['pagination_mod']= "+ vars.page_mod +";   // true = using pagination\n" +
 		"$lgsl_config['pagination_lim']= "+ vars.page_lim +";   // limit per page\n" +
 		"$lgsl_config['direct_index']  = 0;                     // 1=link to index.php instead of the folder \n" +
