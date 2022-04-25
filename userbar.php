@@ -27,6 +27,7 @@
       array_push($y0, $key['players']);
     }
 
+    $server['s']['playersmax'] = $server['s']['playersmax'] > 0 ? $server['s']['playersmax'] : 1;
     $scaleX = $w / max($x0);
     $scaleY = $h / $server['s']['playersmax'];
 
@@ -49,7 +50,7 @@
   $query = "cs";
   $bar   = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
   if ($bar == 3) { $query .= "p"; }
-	$server = lgsl_query_cached("", "", "", "", "", $query, $_GET['s']);
+	$server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", "cs", (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", "cs");
   if (!$server) {
     header("Content-type: image/gif");
     $im = imagecreatetruecolor(350, 20);
@@ -96,10 +97,10 @@
 
       imagettftext($im, 10, 0, 62,  19, $color_nm, $font, /* name     */  $server['s']['name']);
       imagettftext($im, 8,  0, 62,  32, $color_ip, $font, /* ip&port  */  str_replace('https://', '', $misc['connect_filtered']));
-      imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  $lgsl_config['text']['map'].":".$server['s']['map']);
-      imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  $lgsl_config['text']['plr'].":".$server['s']['players'].($server['s']['playersmax'] > 999 ? "" : "/".$server['s']['playersmax']));
-      imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game  */  ucfirst($server['s']['game']));
-      imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:".$time." /".$server['s']['game']);
+      imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$server['s']['map']}");
+      imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server['s']['players']}".($server['s']['playersmax'] > 999 ? "" : "/{$server['s']['playersmax']}"));
+      imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game     */  ucfirst($server['s']['game']));
+      imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:{$time} /{$server['s']['game']}");
 
       drawHistory($im, 374, 24, 80, 24, $server);
       break;
@@ -157,13 +158,13 @@
         imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $misc['connect_filtered']));
       } else {
         imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $server['b']['ip']));
-        imagettftext($im, 8, 0, 118, 86, $color_ip, $font,/* port  */  ":" . $server['b']['c_port']);
+        imagettftext($im, 8, 0, 118, 86, $color_ip, $font,/* port  */  ":{$server['b']['c_port']}");
       }
       imagefilledrectangle($im, 17, 100, $w, 114, $border);
-      imagettftext($im, 7, 0, 25, 112, $color_mp, $font, /* map      */  $lgsl_config['text']['map'].": ".$server['s']['map']);
+      imagettftext($im, 7, 0, 25, 112, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}: {$server['s']['map']}");
       imagefilledrectangle($im, 17, 120, $w, 134, $border);
-      imagettftext($im, 7, 0, 25, 132, $color_pl, $font, /* players  */  $lgsl_config['text']['plr'].": ".$server['s']['players']."/".$server['s']['playersmax']);
-      if ($server['s']['players'] > 0 && count($server['p']) > 0) {
+      imagettftext($im, 7, 0, 25, 132, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}: {$server['s']['players']}/{$server['s']['playersmax']}");
+      if ($server['s']['players'] > 0 && isset($server['p']) && count($server['p']) > 0) {
         $i = 0;
         foreach ($server['p'] as $player) {
           imagettftext($im, 7, 0, 25, 144 + 10 * $i, $color_pl, $font, /* player  */  $player['name']);
@@ -177,7 +178,7 @@
         imagettftext($im, 7, 0, 25, 190, $color_pl, $font, /* players  */  $lgsl_config['text']['npi']);
       }
       
-      imagettftext($im, 6, 0, 25, 242, $color_tm, $font, /* updated  */  "upd:" . $time);
+      imagettftext($im, 6, 0, 25, 242, $color_tm, $font, /* updated  */  "upd:{$time}");
       break;
     }
     default: {
@@ -204,11 +205,11 @@
       imagecopy($im, $on_id, 7, 2, 0, 0, 16, 16);                                 // place status icon
       imagecopy($im, $game_id, 25, 2, 0, 0, 16, 16);                              // place game icon
 
-      imagettftext($im, 7, 0, 43,  17, $color_mp, $font, /* map      */  $lgsl_config['text']['map'].":".$map);
+      imagettftext($im, 7, 0, 43,  17, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$map}");
       imagettftext($im, 7, 0, 43,  9,  $color_ip, $font, /* ip&port  */  str_replace('https://', '', $misc['connect_filtered']));
       imagettftext($im, 8, 0, 156, 9,  $color_nm, $font, /* name     */  $server['s']['name']);
-      imagettftext($im, 7, 0, 156, 17, $color_pl, $font, /* players  */  $lgsl_config['text']['plr'].":".$server['s']['players'].($server['s']['playersmax'] > 999 ? "" : "/".$server['s']['playersmax']));
-      imagettftext($im, 5, 0, 238, 18, $color_tm, $font, /* updated  */  "upd:".$time." /".$server['s']['game']);
+      imagettftext($im, 7, 0, 156, 17, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server['s']['players']}".($server['s']['playersmax'] > 999 ? "" : "/{$server['s']['playersmax']}"));
+      imagettftext($im, 5, 0, 238, 18, $color_tm, $font, /* updated  */  "upd:{$time} /{$server['s']['game']}");
     }
   }
 

@@ -30,7 +30,7 @@
 
   header("Content-Type: image/png");
   require "lgsl_files/lgsl_class.php";
-  $server = lgsl_query_cached("", "", "", "", "", "cs", $_GET['s']);
+  $server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", "cs", (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", "cs");
   if (!$server) {
     $white = imagecolorallocate($im, 255, 255, 255);
     imagefill($im, 0, 0, $white);

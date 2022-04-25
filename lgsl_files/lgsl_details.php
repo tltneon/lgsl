@@ -27,8 +27,10 @@
   if ($lgsl_config['preloader']) {
     $lgsl_server_id = isset($_GET["s"]) ? (int) $_GET["s"] : null;
   }
+  $lgsl_server_ip = isset($_GET["ip"]) ? $_GET["ip"] : "";
+  $lgsl_server_port = isset($_GET["port"]) ? (int) $_GET["port"] : "";
 
-  $server = lgsl_query_cached("", "", "", "", "", "sep", $lgsl_server_id);
+  $server = lgsl_query_cached("", $lgsl_server_ip, $lgsl_server_port, "", "", "sep", $lgsl_server_id);
 
   if ($server) {
 
@@ -93,27 +95,28 @@
 
   //------------------------------------------------------------------------------------------------------------+
 
+    $g = "ip={$server['b']['ip']}&port={$server['b']['c_port']}";
     if ($lgsl_config['history']) {
-      $output .= "<div style='overflow-x: auto;'><img src='charts.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart' /></div>";
+      $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart' /></div>";
     }
 
     if ($lgsl_config['image_mod']) {
       if (extension_loaded('gd')) {
-        $p = str_replace('lgsl_files/', '', lgsl_url_path());
+        $p = str_replace('lgsl_files/', '', lgsl_url_path()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
         $output .= "
         <details>
           <summary style='margin-bottom: 12px;'>
             {$lgsl_config['text']['cts']}
           </summary>
           <div>
-            <div style='overflow-x: auto;'><img src='userbar.php?s=".intval($_GET["s"])."' alt='{$server["s"]["name"]}'/></div>
-            <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."[/img][/url]</textarea><br /><br />
+            <div style='overflow-x: auto;'><img src='userbar.php?{$g}' alt='{$server["s"]["name"]}'/></div>
+            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}[/img][/url]</textarea><br /><br />
 
-            <div style='overflow-x: auto;'><img src='userbar.php?s=".intval($_GET["s"])."&t=2' alt='{$server["s"]["name"]}'/></div>
-            <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."&t=2[/img][/url]</textarea><br /><br />
+            <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t=2' alt='{$server["s"]["name"]}'/></div>
+            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=2[/img][/url]</textarea><br /><br />
 
-            <img src='userbar.php?s=".intval($_GET["s"])."&t=3' alt='{$server["s"]["name"]}'/><br />
-            <textarea onClick='this.select();'>[url=".$p.($lgsl_config["direct_index"] ? 'index.php' : '')."?s=".intval($_GET["s"])."][img]".$p."userbar.php?s=".intval($_GET["s"])."&t=3[/img][/url]</textarea>
+            <img src='userbar.php?{$g}&t=3' alt='{$server["s"]["name"]}'/><br />
+            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=3[/img][/url]</textarea>
           </div>
         </details>
         <div class='spacer'></div>

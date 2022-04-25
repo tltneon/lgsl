@@ -1,7 +1,7 @@
 <?php
 //------------------------------------------------------------------------------------------------------------+
   $time = microtime(true);
-	header("Content-Type:text/html; charset=utf-8");
+  header("Content-Type:text/html; charset=utf-8");
 
   require ("lgsl_files/lgsl_config.php");
   global $output, $title;
@@ -52,10 +52,13 @@
       return $output;
     }
   }
-  
+
   $title = $lgsl_config['text']['ttl'];
   $s = isset($_GET['s']) ? $_GET['s'] : null;
+  $ip = isset($_GET['ip']) ? $_GET['ip'] : null;
+  $port = isset($_GET['port']) ? $_GET['port'] : null;
   if     (is_numeric($s)) { $output = load_page("details"); }    
+  elseif (isset($ip) && isset($port)) { $output = load_page("details");                                              }
   elseif ($s === "add")   { $output = load_page("add");     $title .= " | {$lgsl_config["text"]["aas"]}"; }
   else                    { $output = load_page("list");                                                  }
 //------------------------------------------------------------------------------------------------------------+
@@ -85,10 +88,10 @@
     <a id="adminlink" href="admin.php"></a>
 
     <div id="container">
-<?php
-  echo $output;
-  unset($output);
-?>
+      <?php
+        echo $output;
+        unset($output);
+      ?>
     </div>
     <?php
       if (isset($lgsl_config['scripts'])) {

@@ -15,7 +15,7 @@
 			echo('<l k="filli"></l>');
 		} else {
 			try {
-        mysqli_report(MYSQLI_REPORT_ERROR);
+        		mysqli_report(MYSQLI_REPORT_ERROR);
 				$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
 
 				if (!$lgsl_database) {
@@ -57,36 +57,36 @@
 	}
 	if (isset($_GET['test'])) {
 		if (function_exists("fsockopen")) {
-      $fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
-      if (!$fp) {
-        echo "ERROR: $errno - $errstr<br />\n";
-        echo "<l k='coutd'></l>\n";
-      } else {
-        fwrite($fp, "\n");
-        echo "<l k='consu'></l>\n";
-        fclose($fp);
-      } 
+			$fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
+			if (!$fp) {
+				echo "ERROR: $errno - $errstr<br />\n";
+				echo "<l k='coutd'></l>\n";
+			} else {
+				fwrite($fp, "\n");
+				echo "<l k='consu'></l>\n";
+				fclose($fp);
+			} 
 		} else {
-      echo("FSOCKOPEN: FAILED\n");
-    }
-    
+			echo("FSOCKOPEN: FAILED\n");
+		}
+		
 		if (function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) {
-      echo("CURL: SUCCESS\n");
+			echo("CURL: SUCCESS\n");
 		} else {
-      echo("CURL: FAILED\n");
-    }
-    
+			echo("CURL: FAILED\n");
+		}
+		
 		if (function_exists("bzdecompress")) {
-      echo("BZ2: SUCCESS\n");
+			echo("BZ2: SUCCESS\n");
 		} else {
-      echo("BZ2: FAILED\n");
+			echo("BZ2: FAILED\n");
 		}
 
 		if (extension_loaded('gd')) {
 			echo("GD: SUCCESS\n");
 		} else {
 			echo("GD: FAILED\n");
-    }
+		}
 	}
 
 ?>

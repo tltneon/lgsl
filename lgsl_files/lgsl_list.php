@@ -71,7 +71,7 @@
           {$misc['name_filtered']}
         </div>
         <div class='servername_link'>
-          <a href='".lgsl_link($server['o']['id'])."'>
+          <a href='".lgsl_link($server['b']['ip'], $server['b']['c_port'])."'>
             {$misc['name_filtered']}
           </a>
         </div>
@@ -100,7 +100,7 @@
       }
 
       $output .= "
-        <a href='".lgsl_link($server['o']['id'])."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
+        <a href='".lgsl_link($server['b']['ip'], $server['b']['c_port'])."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
       </td>
 
     </tr>";

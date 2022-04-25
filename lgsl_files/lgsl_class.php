@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_link($s = "")
+  function lgsl_link($s = "", $p = "")
   {
     global $lgsl_config, $lgsl_url_path;
 
@@ -41,7 +41,11 @@
       break;
 
       default: // "sa"
-        $link = $s ? $lgsl_url_path."../{$index}?s={$s}" : $lgsl_url_path."../{$index}";
+        $link = $s ? 
+                  $p ?
+                    "{$lgsl_url_path}../{$index}?ip={$s}&port={$p}" :
+                    "{$lgsl_url_path}../{$index}?s={$s}" :
+                    "{$lgsl_url_path}../{$index}";
       break;
     }
 
@@ -120,32 +124,27 @@
 
     // LOOKUP SERVER
 
-    if ($id != NULL)
-    {
-      $id           = intval($id);
+    if ($id != NULL) {
+      $id            = intval($id);
       $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `id`='{$id}' LIMIT 1";
-      $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
-      $mysqli_row    = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC);
-      if (!$mysqli_row) { return FALSE; }
-      list($type, $ip, $c_port, $q_port, $s_port) = array($mysqli_row['type'], $mysqli_row['ip'], $mysqli_row['c_port'], $mysqli_row['q_port'], $mysqli_row['s_port']);
-    }
-    else
-    {
+    } else if ($ip != "" && $c_port != "" && ($type == "" || $q_port == "")) {
+      list($ip, $c_port) = array(mysqli_real_escape_string($lgsl_database, $ip), intval($c_port));
+      $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `ip`='{$ip}' AND `c_port`='{$c_port}' LIMIT 1";
+    } else {
       list($type, $ip, $c_port, $q_port, $s_port) = array(mysqli_real_escape_string($lgsl_database, $type), mysqli_real_escape_string($lgsl_database, $ip), intval($c_port), intval($q_port), intval($s_port));
-
       if (!$type || !$ip || !$c_port || !$q_port) { exit("LGSL PROBLEM: INVALID SERVER '{$type} : {$ip} : {$c_port} : {$q_port} : {$s_port}'"); }
       $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `type`='{$type}' AND `ip`='{$ip}' AND `q_port`='{$q_port}' LIMIT 1";
-      $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
-      $mysqli_row    = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC);
-
-      if (!$mysqli_row)
-      {
-        if (strpos($request, "a") === FALSE) { exit("LGSL PROBLEM: SERVER NOT IN DATABASE '{$type} : {$ip} : {$c_port} : {$q_port} : {$s_port}'"); }
-        $mysqli_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','','')";
-        $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
-        $mysqli_row    = array("id"=>mysqli_insert_id(), "zone"=>"0", "comment"=>"");
-      }
     }
+
+    $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
+    $mysqli_row    = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC);
+    if (!$mysqli_row) {
+      if (strpos($request, "a") === FALSE) { exit("LGSL PROBLEM: SERVER NOT IN DATABASE '{$type} : {$ip} : {$c_port} : {$q_port} : {$s_port}'"); }
+      $mysqli_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','','')";
+      $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
+      $mysqli_row    = array("id" => mysqli_insert_id(), "zone" => "0", "comment" => "");
+    }
+    list($type, $ip, $c_port, $q_port, $s_port) = array($mysqli_row['type'], $mysqli_row['ip'], $mysqli_row['c_port'], $mysqli_row['q_port'], $mysqli_row['s_port']);
 
     // UNPACK CACHE AND CACHE TIMES
 

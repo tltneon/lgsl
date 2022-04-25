@@ -2011,7 +2011,7 @@
     elseif ($lgsl_need['p'] && $server['b']['type'] == "samp") { $challenge_packet .= "d"; }
     elseif ($lgsl_need['p'] && $server['b']['type'] == "vcmp") { $challenge_packet .= "c"; }
 
-    fwrite($lgsl_fp, $challenge_packet);  
+    fwrite($lgsl_fp, $challenge_packet);
 
     $buffer = fread($lgsl_fp, 4096);
 
@@ -3805,7 +3805,7 @@
     } else {
       if (strpos($buffer, 'TS') === FALSE) {
         return FALSE;
-    }
+      }
     }
     $ver = $server['b']['type'] === 'ts' ? 0 : 1;
     $param[0] = array('sel ', 'si', "\r\n", 'pl');
@@ -3818,12 +3818,12 @@
     $buffer = fread($lgsl_fp, 4096);
     if (!$buffer || substr($buffer, 0, 5) === 'error') { return FALSE; }
     while (strtoupper(substr($buffer, -4, -2)) != 'OK') {
-        $part = fread($lgsl_fp, 4096);
-        if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
+      $part = fread($lgsl_fp, 4096);
+      if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
     }
 
     while ($val = lgsl_cut_string($buffer, 7+7*$ver, $param[$ver][2])) {
-        $key = lgsl_cut_string($val, 0, '='); $items[$key] = $val;
+      $key = lgsl_cut_string($val, 0, '='); $items[$key] = $val;
     }
     if (!isset($items['name'])) return FALSE;
     $server['s']['name']         = $ver ? lgsl_unescape($items['name']) : $items['name'];
@@ -3840,46 +3840,46 @@
 
     if ($lgsl_need['p'] && $server['s']['players'] > 0) {
       fwrite($lgsl_fp, "{$param[$ver][3]}\n"); // request playerlist
-    $buffer = fread($lgsl_fp, 4096);
-    while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") {
+      $buffer = fread($lgsl_fp, 4096);
+      while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") {
         $part = fread($lgsl_fp, 4096);
         if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
-    }
+      }
 
-    $i = 0;
-    if ($ver) {
+      $i = 0;
+      if ($ver) {
         while ($items = lgsl_cut_string($buffer, 0, '|')) {
-            lgsl_cut_string($items, 0, 'e='); $name = lgsl_cut_string($items, 0, ' ');
+          lgsl_cut_string($items, 0, 'e='); $name = lgsl_cut_string($items, 0, ' ');
           if (substr($name, 0, 15) === 'Unknown\sfrom\s') { continue; }
-            $server['p'][$i]['name'] = lgsl_unescape($name); lgsl_cut_string($items, 0, 'ry');
+          $server['p'][$i]['name'] = lgsl_unescape($name); lgsl_cut_string($items, 0, 'ry');
           $server['p'][$i]['country'] = substr($items, 0, 1) === '=' ? substr($items, 1, 2) : ''; $i++;
         }
       } else {
         $buffer = substr($buffer, 89, -4);
         while ($items = lgsl_cut_string($buffer, 0, "\r\n")) {
-            $items = explode("\t", $items);
-            $server['p'][$i]['name'] = substr($items[14], 1, -1);
-            $server['p'][$i]['ping'] = $items[7];
-            $server['p'][$i]['time'] = lgsl_time($items[8]); $i++;
+          $items = explode("\t", $items);
+          $server['p'][$i]['name'] = substr($items[14], 1, -1);
+          $server['p'][$i]['ping'] = $items[7];
+          $server['p'][$i]['time'] = lgsl_time($items[8]); $i++;
         }
-    }
+      }
     }
 
     if ($lgsl_need['e'] && $ver) {
       fwrite($lgsl_fp, "{$param[$ver][4]}\n"); // request channellist
-        $buffer = fread($lgsl_fp, 4096);
-        while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") {
-            $part = fread($lgsl_fp, 4096);
-            if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
-        }
+      $buffer = fread($lgsl_fp, 4096);
+      while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") {
+        $part = fread($lgsl_fp, 4096);
+        if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
+      }
       $server['e']['channels'] = '';
-        while ($items = lgsl_cut_string($buffer, 0, '|')) {
+      while ($items = lgsl_cut_string($buffer, 0, '|')) {
         $id = str_pad(lgsl_cut_string($items, 4, ' '), 5, '0', STR_PAD_LEFT);
-            lgsl_cut_string($items, 0, 'e=');
-            $name = lgsl_cut_string($items, 0, ' ');
+        lgsl_cut_string($items, 0, 'e=');
+        $name = lgsl_cut_string($items, 0, ' ');
         if (strpos($name, '*spacer') != FALSE) { continue; }
         $server['e']['channels'] .= preg_replace("/\[[cr]?spacer[\d\w-]{0,5}\]/", "", lgsl_unescape($name)) . "\n";
-        }
+      }
     }
 
     return TRUE;
@@ -3911,7 +3911,7 @@
       return TRUE;
     }
 
-      return FALSE;
+    return FALSE;
   }
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
@@ -4227,7 +4227,7 @@ function lgsl_unescape($text) {
 
     if (empty($host['host']) || empty($host['path'])) { exit("LGSL FEED PROBLEM: INVALID URL"); }
 
-    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=6.1.1";
+    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=6.2.0";
 
     if (function_exists("json_decode")) { $host_query .= function_exists("gzuncompress") ? "&format=4" : "&format=3"; }
     else                                { $host_query .= function_exists("gzuncompress") ? "&format=2" : "&format=1"; }
@@ -4705,7 +4705,7 @@ function lgsl_unescape($text) {
 
   function lgsl_version()
   {
-    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 6.1.1"; // little dirty trick
+    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 6.2.0"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+
