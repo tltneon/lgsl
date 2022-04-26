@@ -50,7 +50,7 @@
   $query = "cs";
   $bar   = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
   if ($bar == 3) { $query .= "p"; }
-	$server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", "cs", (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", "cs");
+	$server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", $query, (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", $query);
   if (!$server) {
     header("Content-type: image/gif");
     $im = imagecreatetruecolor(350, 20);
