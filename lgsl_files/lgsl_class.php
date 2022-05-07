@@ -263,14 +263,14 @@
             if(time() - $item['time'] < 60 * 60 * 24) // NOT OLDER THAN 1 DAY
               array_push($live['s']['history'], $item);
           }
-        }
-        $last = ($cache['s']['history'] ? end($cache['s']['history']) : null);
-        if(!$last or time() - $last['time'] >= 60 * 15 ) { // RECORD IF 15 MINS IS PASSED
-          array_push($live['s']['history'], array(
-            "status"  => (int) $live['b']['status'],
-            "time"    => $live['s']['cache_time'],
-            "players" => (int) $live['s']['players']
-          ));
+         $last = ($cache['s']['history'] ? end($cache['s']['history']) : null);
+         if(!$last or time() - $last['time'] >= 60 * 15 ) { // RECORD IF 15 MINS IS PASSED
+           array_push($live['s']['history'], array(
+             "status"  => (int) $live['b']['status'],
+             "time"    => $live['s']['cache_time'],
+             "players" => (int) $live['s']['players']
+           ));
+         }
         }
       }
 
