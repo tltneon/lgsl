@@ -1,5 +1,5 @@
 function reImage(country) {
-  if (country == "XX") {
+  if (country === "XX") {
     country = "US";
   }
   return `https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/flags/4x3/${country.toLowerCase()}.svg`;

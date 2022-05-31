@@ -1,21 +1,20 @@
 (function() {
+  // Disabled for mobile devices
+  if (window.innerWidth < 720) {
+    return;
+  }
   // Add event listener
   document.addEventListener("mousemove", parallax);
   const elem = document.querySelector("#container");
   // Magic happens here
   function parallax(e) {
-    let _w = window.innerWidth / 2;
-    let _h = window.innerHeight / 2;
-    let _mouseX = e.clientX;
-    let _mouseY = e.clientY;
-    let _depth1 = `${50 - (_mouseX - _w) * 0.01}% ${50 -
-      (_mouseY - _h) * 0.01}%`;
-    let _depth2 = `${50 - (_mouseX - _w) * 0.02}% ${50 -
-      (_mouseY - _h) * 0.02}%`;
-    let _depth3 = `${50 - (_mouseX - _w) * 0.06}% ${50 -
-      (_mouseY - _h) * 0.06}%`;
-    let x = `${_depth3}, ${_depth2}, ${_depth1}`;
-    //console.log(x);
+    const _w = window.innerWidth / 2;
+    const _mouseX = e.clientX;
+    const _delta = _mouseX - _w;
+    const _depth1 = `${50 - _delta * .01}%`;
+    const _depth2 = `${50 - _delta * .02}%`;
+    const _depth3 = `${50 - _delta * .06}%`;
+    const x = `${_depth3}, ${_depth2}, ${_depth1}`;
     elem.style.backgroundPosition = x;
   }
 })();
