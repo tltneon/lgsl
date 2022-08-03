@@ -30,7 +30,7 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ SORTING OPTIONS ]
 
-  $lgsl_config['sort']['servers'] = "id";   // OPTIONS: id  type  zone  players  status
+  $lgsl_config['sort']['servers'] = "id";   // OPTIONS: id  ip  type  zone  players  playersmax  status  map [ASC / DESC]
   $lgsl_config['sort']['players'] = "name"; // OPTIONS: name  score time
 
 //------------------------------------------------------------------------------------------------------------+

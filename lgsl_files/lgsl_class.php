@@ -293,8 +293,9 @@
             `players`='{$cache['s']['players']}',
             `playersmax`='{$cache['s']['playersmax']}',
             `game`='{$cache['s']['game']}',
-            `map`='{$cache['s']['map']}',
-            `mode`='{$cache['s']['mode']}'
+            `mode`='{$cache['s']['mode']}',
+            `name`='{$cache['s']['name']}',
+            `map`='{$cache['s']['map']}'
         WHERE `id`='{$mysqli_row['id']}'
         LIMIT 1";
       $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
@@ -326,16 +327,18 @@
     $random       = isset($options['random'])       ? intval($options['random'])       : intval($lgsl_config['random'][$zone]);
     $type         = empty($options['type'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['type']));
     $game         = empty($options['game'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['game']));
+    $mode         = empty($options['mode'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['mode']));
     $page         = empty($options['page'])         ? ""                               : "LIMIT {$lgsl_config['pagination_lim']} OFFSET " . strval($lgsl_config['pagination_lim']*((int)$options['page'] - 1));
-    $sort         = empty($options['sort'])         ? $lgsl_config['sort']['servers']  : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['type']));
-    $mysqli_order = empty($random)                  ? $lgsl_config['sort']['servers']  : "rand()";
+    $default_order= empty($random)                  ? $lgsl_config['sort']['servers']  : "rand()";
+    $order        = empty($options['order'])        ? ""                               : $options['order'];
+    $sort         = empty($options['sort'])         ? $default_order                   : "{$options['sort']} {$order}";
     $server_limit = empty($random)                  ? 0                                : $random;
 
                        $mysqli_where   = array("`disabled`=0");
     if ($zone != 0)  { $mysqli_where[] = "FIND_IN_SET('{$zone}',`zone`)"; }
     if ($type != "") { $mysqli_where[] = "`type`='{$type}'"; }
 
-    $mysqli_query  = "SELECT `id` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $mysqli_where)." ORDER BY {$mysqli_order} {$page}";
+    $mysqli_query  = "SELECT `id` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $mysqli_where)." ORDER BY {$sort} {$page}";
     $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
     $server_list  = array();
 
@@ -986,6 +989,30 @@
       }
       else {
         $url .= "&type={$params['type']}";
+      }
+    }
+    if (isset($params['mode'])) {
+      if (strpos($url, 'mode=')) {
+        $url = preg_replace('/mode=([\w\d\_\-])+/', "mode={$params['mode']}", $url);
+      }
+      else {
+        $url .= "&mode={$params['mode']}";
+      }
+    }
+    if (isset($params['sort'])) {
+      if (strpos($url, 'sort=')) {
+        $url = preg_replace('/sort=([\w\d\_\-])+/', "sort={$params['sort']}", $url);
+      }
+      else {
+        $url .= "&sort={$params['sort']}";
+      }
+    }
+    if (isset($params['order'])) {
+      if (strpos($url, 'order=')) {
+        $url = preg_replace('/order=([\w\d\_\-])+/', "order={$params['order']}", $url);
+      }
+      else {
+        $url .= "&order={$params['order']}";
       }
     }
     if (isset($params['page'])) {

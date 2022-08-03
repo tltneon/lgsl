@@ -26,6 +26,7 @@
 					if (isset($_POST["_updatetables"])) {
 						$query = "
 						ALTER TABLE `{$_POST["table"]}`
+						ADD    `name`           VARCHAR (255) NOT NULL DEFAULT '' AFTER `id`,
 						ADD    `game`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `type`,
 						ADD    `mode`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `game`,
 						ADD    `map`            VARCHAR (255) NOT NULL DEFAULT '' AFTER `s_port`,
@@ -37,6 +38,7 @@
 						CREATE TABLE `{$_POST["table"]}` (
 
 							`id`         INT     (11)  NOT NULL auto_increment,
+							`name`       VARCHAR (255) NOT NULL DEFAULT '',
 							`type`       VARCHAR (50)  NOT NULL DEFAULT '',
 							`game`       VARCHAR (50)  NOT NULL DEFAULT '',
 							`mode`       VARCHAR (50)  NOT NULL DEFAULT '',

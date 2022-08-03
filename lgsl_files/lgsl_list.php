@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ � RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -15,6 +15,9 @@
 
   $type = (isset($_GET['type']) ? $_GET['type'] : '');
   $game = (isset($_GET['game']) ? $_GET['game'] : '');
+  $mode = (isset($_GET['mode']) ? $_GET['mode'] : '');
+  $sort = (isset($_GET['sort']) ? $_GET['sort'] : '');
+  $order= (isset($_GET['order']) ? $_GET['order'] == "ASC" ? "DESC" : 'ASC' : "ASC");
   $page = ($lgsl_config['pagination_mod'] && isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
   $uri = $_SERVER['REQUEST_URI'];
@@ -23,22 +26,28 @@
     $uri = $_SERVER['HTTP_REFERER'];
   }
 
-  $server_list = lgsl_query_group(array("type" => $type, "game" => $game, "page" => $page));
-  $server_list = lgsl_sort_servers($server_list);
+  $server_list = lgsl_query_group(array("type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order));
 
 //------------------------------------------------------------------------------------------------------------+
   if (count($server_list) == 0 && $page < 2) {
     $output .= "<div id='back_to_servers_list'><a href='./admin.php'>ADD YOUR FIRST SERVER</a></div>";
   }
+  if ($type || $game || $mode) {
+    $output .= "<div id='back_to_servers_list'><a href='./'>CLEAR FILTERS</a></div>";
+  }
+  $ipsort = lgsl_build_link_params($uri, array("sort" => "ip", "order" => $order));
+  $mapsort = lgsl_build_link_params($uri, array("sort" => "map", "order" => $order));
+  $namesort = lgsl_build_link_params($uri, array("sort" => "name", "order" => $order));
+  $playersort = lgsl_build_link_params($uri, array("sort" => "players", "order" => $order));
 
   $output .= "
   <table id='server_list_table'>
     <tr id='server_list_table_top'>
       <th class='status_cell'>{$lgsl_config['text']['sts']}:</th>
-      <th class='connectlink_cell'>{$lgsl_config['text']['adr']}:</th>
-      <th class='servername_cell'>{$lgsl_config['text']['tns']}:</th>
-      <th class='map_cell'>{$lgsl_config['text']['map']}:</th>
-      <th class='players_cell'>{$lgsl_config['text']['plr']}:</th>
+      <th class='connectlink_cell'><a href='{$ipsort}'>{$lgsl_config['text']['adr']}:</a></th>
+      <th class='servername_cell'><a href='{$namesort}'>{$lgsl_config['text']['tns']}:</a></th>
+      <th class='map_cell'><a href='{$mapsort}'>{$lgsl_config['text']['map']}:</a></th>
+      <th class='players_cell'><a href='{$playersort}'>{$lgsl_config['text']['plr']}:</a></th>
       <th class='details_cell'>{$lgsl_config['text']['dtl']}:</th>
     </tr>";
 
