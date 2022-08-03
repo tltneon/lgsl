@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ � RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -285,7 +285,18 @@
 
       $packed_cache = mysqli_real_escape_string($lgsl_database, base64_encode(serialize($cache)));
       $packed_times = mysqli_real_escape_string($lgsl_database, implode("_", $cache_time));
-      $mysqli_query  = "UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` SET `status`='{$cache['b']['status']}',`cache`='{$packed_cache}',`cache_time`='{$packed_times}' WHERE `id`='{$mysqli_row['id']}' LIMIT 1";
+      $mysqli_query  = "
+        UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`
+        SET `status`='{$cache['b']['status']}',
+            `cache`='{$packed_cache}',
+            `cache_time`='{$packed_times}',
+            `players`='{$cache['s']['players']}',
+            `playersmax`='{$cache['s']['playersmax']}',
+            `game`='{$cache['s']['game']}',
+            `map`='{$cache['s']['map']}',
+            `mode`='{$cache['s']['mode']}'
+        WHERE `id`='{$mysqli_row['id']}'
+        LIMIT 1";
       $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
     }
 
@@ -299,7 +310,7 @@
   }
 
 //------------------------------------------------------------------------------------------------------------+
-//EXAMPLE USAGE: lgsl_query_group( array("request"=>"sep", "hide_offline"=>0, "random"=>0, "type"=>"source", "game"=>"cstrike") )
+//EXAMPLE USAGE: lgsl_query_group( array("request"=>"sep", "hide_offline"=>0, "random"=>0, "type"=>"source", "game"=>"cstrike", "sort"=>"id") )
 
   function lgsl_query_group($options = array())
   {
@@ -316,7 +327,8 @@
     $type         = empty($options['type'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['type']));
     $game         = empty($options['game'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['game']));
     $page         = empty($options['page'])         ? ""                               : "LIMIT {$lgsl_config['pagination_lim']} OFFSET " . strval($lgsl_config['pagination_lim']*((int)$options['page'] - 1));
-    $mysqli_order = empty($random)                  ? "id"                             : "rand()";
+    $sort         = empty($options['sort'])         ? $lgsl_config['sort']['servers']  : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['type']));
+    $mysqli_order = empty($random)                  ? $lgsl_config['sort']['servers']  : "rand()";
     $server_limit = empty($random)                  ? 0                                : $random;
 
                        $mysqli_where   = array("`disabled`=0");
@@ -789,6 +801,7 @@
     }
     else
     {
+      //$server = @iconv('UTF-8', 'UTF-8//TRANSLIT//IGNORE', $server);
       $server = @mb_convert_encoding($server, "UTF-8", $charset);
     }
 

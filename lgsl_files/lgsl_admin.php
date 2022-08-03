@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ � RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -22,7 +22,7 @@
 
   $id        = 0;
   $last_type = "source";
-  $zone_list = array(0,1,2,3,4,5,6,7,8);
+  $zone_list = array(0,1,2,3,4,5,6,7,8,9);
 
 //------------------------------------------------------------------------------------------------------------+
 

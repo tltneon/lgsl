@@ -8,10 +8,11 @@
 	$mysql_password = empty($_POST["password"]) ? "" : $_POST["password"];
 	$mysql_database = empty($_POST["database"]) ? "lgsl" : $_POST["database"];
 	$mysql_table = empty($_POST["table"]) ? "lgsl" : $_POST["table"];
-	$installed = "";
+	$step = 1;
+	$query_success = false;
 
-	if (isset($_POST["_createtables"])){
-		if (empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])){
+	if (isset($_POST["_createtables"]) || isset($_POST["_updatetables"])) {
+		if (empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])) {
 			echo('<l k="filli"></l>');
 		} else {
 			try {
@@ -22,15 +23,30 @@
 					printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
 				} else {
 					$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
-					if (mysqli_query($lgsl_database, "
-						CREATE TABLE `".$_POST["table"]."` (
+					if (isset($_POST["_updatetables"])) {
+						$query = "
+						ALTER TABLE `{$_POST["table"]}`
+						ADD    `game`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `type`,
+						ADD    `mode`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `game`,
+						ADD    `map`            VARCHAR (255) NOT NULL DEFAULT '' AFTER `s_port`,
+						ADD    `players`        SMALLINT (5)  NOT NULL DEFAULT '0' AFTER `map`,
+						ADD    `playersmax`     SMALLINT (5)  NOT NULL DEFAULT '0' AFTER `players`,
+						CHANGE `cache` `cache`  MEDIUMTEXT    NOT NULL;";
+					} else {
+						$query = "
+						CREATE TABLE `{$_POST["table"]}` (
 
 							`id`         INT     (11)  NOT NULL auto_increment,
 							`type`       VARCHAR (50)  NOT NULL DEFAULT '',
+							`game`       VARCHAR (50)  NOT NULL DEFAULT '',
+							`mode`       VARCHAR (50)  NOT NULL DEFAULT '',
 							`ip`         VARCHAR (255) NOT NULL DEFAULT '',
 							`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
 							`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
 							`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+							`map`        VARCHAR (255) NOT NULL DEFAULT '',
+							`players`    SMALLINT (5)  NOT NULL DEFAULT '0',
+							`playersmax` SMALLINT (5)  NOT NULL DEFAULT '0',
 							`zone`       VARCHAR (255) NOT NULL DEFAULT '',
 							`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
 							`comment`    VARCHAR (255) NOT NULL DEFAULT '',
@@ -40,9 +56,12 @@
 
 							PRIMARY KEY (`id`)
 
-						) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;") === TRUE){
-							printf("");
-							$installed = "disabled";
+						) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+					}
+					if (mysqli_query($lgsl_database, $query) === TRUE) {
+							printf('');
+							$step = 2;
+							$query_success = true;
 						}
 						else {
 							printf('<l k="table"></l>');
@@ -55,38 +74,8 @@
 			}
 		}
 	}
-	if (isset($_GET['test'])) {
-		if (function_exists("fsockopen")) {
-			$fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
-			if (!$fp) {
-				echo "ERROR: $errno - $errstr<br />\n";
-				echo "<l k='coutd'></l>\n";
-			} else {
-				fwrite($fp, "\n");
-				echo "<l k='consu'></l>\n";
-				fclose($fp);
-			} 
-		} else {
-			echo("FSOCKOPEN: FAILED\n");
-		}
-		
-		if (function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) {
-			echo("CURL: SUCCESS\n");
-		} else {
-			echo("CURL: FAILED\n");
-		}
-		
-		if (function_exists("bzdecompress")) {
-			echo("BZ2: SUCCESS\n");
-		} else {
-			echo("BZ2: FAILED\n");
-		}
-
-		if (extension_loaded('gd')) {
-			echo("GD: SUCCESS\n");
-		} else {
-			echo("GD: FAILED\n");
-		}
+	if (isset($_POST['_skipstep1'])) {
+		$step = 2;
 	}
 
 ?>
@@ -112,7 +101,7 @@
 			div#container{
 				width: inherit !important;
 			}
-			div#container > div{
+			div#container > div {
 				max-width: 375px;
 				margin: auto;
 			}
@@ -123,8 +112,8 @@
 			}
 			button{
 				margin: auto;
-				display: block;
-				width: 50%;
+				display: inline-block;
+				width: 32%;
 			}
 			.hinfolink {
 				font-size: 10px;
@@ -150,175 +139,221 @@
 //------------------------------------------------------------------------------------------------------------+
 
 	$output = '
-	<h6><a href="./"><l k="back"></l></a> | <a href="?test"><l k="check"></l></a></h6>
+	<h6><a href="./"><l k="back"></l></a></h6>
 	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank"><l k="owiki"></l></a></h5>
-	<h4><l k="step1"></l></h4>
-	<form method="post" action="?">
+	<div>';
+
+		if ($step == 1) {
+			$output .= '<h4><l k="check"></l></h4>';
+			if (function_exists("fsockopen")) {
+				$fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
+				if (!$fp) {
+					$output .= "ERROR: $errno - $errstr<br />";
+					$output .= "<l k='coutd'></l>";
+				} else {
+					fwrite($fp, "\n");
+					$output .= "<l k='consu'></l>";
+					fclose($fp);
+				} 
+			} else {
+				$output .= "<p>FSOCKOPEN: FAILED</p>";
+			}
+			
+			if (function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) {
+				$output .= "<p>CURL: SUCCESS</p>";
+			} else {
+				$output .= "<p>CURL: FAILED</p>";
+			}
+			
+			if (function_exists("bzdecompress")) {
+				$output .= "<p>BZ2: SUCCESS</p>";
+			} else {
+				$output .= "<p>BZ2: FAILED</p>";
+			}
+	
+			if (extension_loaded('gd')) {
+				$output .= "<p>GD: SUCCESS</p>";
+			} else {
+				$output .= "<p>GD: FAILED</p>";
+			}
+		}
+
+	$output .= '	
+		<br /><h4><l k="step1"></l></h4>
+		<form method="post" action="?">
+			<p>
+				MySQL Server*:
+				<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" />
+			</p>
+			<p>
+				MySQL Login*:
+				<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" />
+			</p>
+			<p>
+				MySQL Password:
+				<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" />
+			</p>
+			<p>
+				MySQL Database*:
+				<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" />
+			</p>
+			<p>
+				MySQL Table*:
+				<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" />
+			</p>
+			<div style="display: '. ($step == 1 ? 'block' : 'none') .'">
+				<button type="submit" name="_createtables">
+					<l k="creat"></l>
+				</button>
+				<button type="submit" name="_updatetables">
+					<l k="updat"></l>
+				</button>
+				<button type="submit" name="_skipstep1">
+					<l k="skips"></l>
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<div style="display: '. ($step == 2 ? 'block' : 'none') .'">
+		'. ($query_success == 2 ? '<div><l k="cretd"></l></div>' : '') .'
+
+		<h4><l k="step2"></l></h4>
+
 		<p>
-			MySQL Server*:
-			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" '.$installed.' />
+			LGSL Admin Login*:
+			<input type="text" onChange="vars.lgsl_user = event.target.value" />
 		</p>
 		<p>
-			MySQL Login*:
-			<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" '.$installed.' />
+			LGSL Admin Password*:
+			<input type="text" onChange="vars.lgsl_password = event.target.value" />
+		</p>
+
+		<hr />
+
+		<p>
+			<l k="selst"></l>:
+			<select type="text" name="style" onChange="changeValue(event, {styleChanged: true})" />
+				<option value="darken_style.css">Darken</option>
+				<option value="ogp_style.css">OGP</option>
+				<option value="material_style.css">Material Design</option>
+				<option value="breeze_style.css">Breeze</option>
+				<option value="parallax_style.css">Parallax</option>
+				<option value="cards_style.css">Cards</option>
+				<option value="classic_style.css">Classic</option>
+				<option value="disc_ff_style.css">Disc FF</option>
+				<option value="wallpaper_style.css">Wallpaper</option>
+				<option value="showcase" style="color: green;">(external) Showcase</option>
+			</select>
 		</p>
 		<p>
-			MySQL Password:
-			<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" '.$installed.' />
+			<l k="sella"></l>:
+			<select type="text" name="language" onChange="changeValue(event, {translationInput: true})" />
+				<option value="english">English</option>
+				<option value="russian">Русский</option>
+				<option value="french">Français</option>
+				<option value="german">Deutsch</option>
+				<option value="spanish">Español</option>
+				<option value="czech">Čeština</option>
+				<option value="bulgarian">български</option>
+				<option value="slovak">Slovenčina</option>
+				<option value="arabic">اَلْعَرَبِيَّةُ</option>
+				<option value="turkish">Türkçe</option>
+				<option value="korean">한국어</option>
+				<option value="romanian">Română</option>
+				<option value="chinese_simplified">简体中文</option>
+				<option value="help" style="color: green;">!Help to translate LGSL!</option>
+			</select>
+		</p>
+
+		<p>
+			<l k="selsc"></l> <a href="https://github.com/tltneon/lgsl/wiki/scripts" target="_blank" class="hinfolink">?</a>:
+			<br /><input type="checkbox" id="parallax.js" name="scripts" onChange="changeCheckbox(event)" /> parallax (for Parallax Style)
+			<br /><input type="checkbox" id="preview.js" name="scripts" onChange="changeCheckbox(event)" /> map preview (on server list)
+			<br /><input type="checkbox" id="refresh.js" name="scripts" onChange="changeCheckbox(event)" /> refresh (manually refresh server status)
+			<br /><input type="checkbox" id="flag-icon.js" name="scripts" onChange="changeCheckbox(event)" /> flag-icon (replacing with svg)
+		</p>
+
+		<hr />
+
+		<p>
+			<l k="sorts"></l>:
+			<select type="text" name="sort_servers_by" onChange="changeValue(event)" />
+				<option value="id">ID</option>
+				<option value="type">Type</option>
+				<option value="zone">Zone</option>
+				<option value="players">Players</option>
+				<option value="status">Status</option>
+			</select>
 		</p>
 		<p>
-			MySQL Database*:
-			<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" '.$installed.' />
+			<l k="sortp"></l>:
+			<select type="text" name="sort_players_by" onChange="changeValue(event)" />
+				<option value="name">Name</option>
+				<option value="score">Score</option>
+				<option value="time">Time</option>
+			</select>
 		</p>
 		<p>
-			MySQL Table*:
-			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" '.$installed.' />
+			<l k="enaim"></l> <a href="https://github.com/tltneon/lgsl/wiki/LGSL-with-Image-Mod" target="_blank" class="hinfolink">?</a>:
+			<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)" />
 		</p>
-		<input type="hidden" name="_createtables" value="1" />
-		<button type="submit" '.$installed.'>
-			<l k="creat"></l>
+		<p>
+			Enable Preloader <a href="https://github.com/tltneon/lgsl/wiki/features#preloader" target="_blank" class="hinfolink">?</a>:
+			<input type="checkbox" name="preloader" onChange="changeCheckbox(event)" />
+		</p>
+		<p>
+			Enable Pagination <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
+			<input type="checkbox" name="page_mod" onChange="changeCheckbox(event)" />
+			<input type="number" min="5" max="35" value="15" onChange="vars.page_lim = event.target.value" />
+		</p>
+		<p>
+			Automatically reload page:
+			<input type="checkbox" name="autoreload" onChange="changeCheckbox(event)" />
+		</p>
+		<p>
+			Time before a server needs updating:
+			<input type="number" min="0" max="3600" value="60" onChange="vars.cache_time = event.target.value" />
+		</p>
+		<p>
+			Enable server tracking (history) <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
+			<input type="checkbox" name="history" onChange="changeCheckbox(event)" />
+		</p>
+		<p>
+			<l k="hideo"></l>:
+			<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)" />
+		</p>
+		<p>
+			<l k="pubad"></l>:
+			<select type="text" name="public_add" onChange="changeValue(event)" />
+				<option value="0" style="color: red;">Disabled</option>
+				<option value="1" style="color: orange;">Enabled (require approval)</option>
+				<option value="2" style="color: green;">Enabled (shows instantly)</option>
+			</select>
+		</p>
+		<p>
+			<l k="showt"></l>:
+			<input type="checkbox" name="totals" onChange="changeCheckbox(event)" />
+		</p>
+		<p>
+			<l k="showl"></l>:
+			<select type="text" name="locations" onChange="changeValue(event)" />
+				<option value="0" style="color: red;">Disabled</option>
+				<option value="1" style="color: green;">Enabled</option>
+				<option disabled style="background: gray;"></option>
+				<option disabled>Select manually:</option>
+	<option value="\'AD\'">AD</option><option value="\'AE\'">AE</option><option value="\'AF\'">AF</option><option value="\'AG\'">AG</option><option value="\'AI\'">AI</option><option value="\'AL\'">AL</option><option value="\'AM\'">AM</option><option value="\'AN\'">AN</option><option value="\'AO\'">AO</option><option value="\'AR\'">AR</option><option value="\'AS\'">AS</option><option value="\'AT\'">AT</option><option value="\'AU\'">AU</option><option value="\'AW\'">AW</option><option value="\'AX\'">AX</option><option value="\'AZ\'">AZ</option><option value="\'BA\'">BA</option><option value="\'BB\'">BB</option><option value="\'BD\'">BD</option><option value="\'BE\'">BE</option><option value="\'BF\'">BF</option><option value="\'BG\'">BG</option><option value="\'BH\'">BH</option><option value="\'BI\'">BI</option><option value="\'BJ\'">BJ</option><option value="\'BM\'">BM</option><option value="\'BN\'">BN</option><option value="\'BO\'">BO</option><option value="\'BR\'">BR</option><option value="\'BS\'">BS</option><option value="\'BT\'">BT</option><option value="\'BV\'">BV</option><option value="\'BW\'">BW</option><option value="\'BY\'">BY</option><option value="\'BZ\'">BZ</option><option value="\'CA\'">CA</option><option value="\'CC\'">CC</option><option value="\'CD\'">CD</option><option value="\'CF\'">CF</option><option value="\'CG\'">CG</option><option value="\'CH\'">CH</option><option value="\'CI\'">CI</option><option value="\'CK\'">CK</option><option value="\'CL\'">CL</option><option value="\'CM\'">CM</option><option value="\'CN\'">CN</option><option value="\'CO\'">CO</option><option value="\'CR\'">CR</option><option value="\'CS\'">CS</option><option value="\'CU\'">CU</option><option value="\'CV\'">CV</option><option value="\'CX\'">CX</option><option value="\'CY\'">CY</option><option value="\'CZ\'">CZ</option><option value="\'DE\'">DE</option><option value="\'DJ\'">DJ</option><option value="\'DK\'">DK</option><option value="\'DM\'">DM</option><option value="\'DO\'">DO</option><option value="\'DZ\'">DZ</option><option value="\'EC\'">EC</option><option value="\'EE\'">EE</option><option value="\'EG\'">EG</option><option value="\'EH\'">EH</option><option value="\'ER\'">ER</option><option value="\'ES\'">ES</option><option value="\'ET\'">ET</option><option value="\'EU\'">EU</option><option value="\'FI\'">FI</option><option value="\'FJ\'">FJ</option><option value="\'FK\'">FK</option><option value="\'FM\'">FM</option><option value="\'FO\'">FO</option><option value="\'FR\'">FR</option><option value="\'GA\'">GA</option><option value="\'GB\'">GB</option><option value="\'GD\'">GD</option><option value="\'GE\'">GE</option><option value="\'GF\'">GF</option><option value="\'GH\'">GH</option><option value="\'GI\'">GI</option><option value="\'GL\'">GL</option><option value="\'GM\'">GM</option><option value="\'GN\'">GN</option><option value="\'GP\'">GP</option><option value="\'GQ\'">GQ</option><option value="\'GR\'">GR</option><option value="\'GS\'">GS</option><option value="\'GT\'">GT</option><option value="\'GU\'">GU</option><option value="\'GW\'">GW</option><option value="\'GY\'">GY</option><option value="\'HK\'">HK</option><option value="\'HM\'">HM</option><option value="\'HN\'">HN</option><option value="\'HR\'">HR</option><option value="\'HT\'">HT</option><option value="\'HU\'">HU</option><option value="\'ID\'">ID</option><option value="\'IE\'">IE</option><option value="\'IL\'">IL</option><option value="\'IN\'">IN</option><option value="\'IO\'">IO</option><option value="\'IQ\'">IQ</option><option value="\'IR\'">IR</option><option value="\'IS\'">IS</option><option value="\'IT\'">IT</option><option value="\'JM\'">JM</option><option value="\'JO\'">JO</option><option value="\'JP\'">JP</option><option value="\'KE\'">KE</option><option value="\'KG\'">KG</option><option value="\'KH\'">KH</option><option value="\'KI\'">KI</option><option value="\'KM\'">KM</option><option value="\'KN\'">KN</option><option value="\'KP\'">KP</option><option value="\'KR\'">KR</option><option value="\'KW\'">KW</option><option value="\'KY\'">KY</option><option value="\'KZ\'">KZ</option><option value="\'LA\'">LA</option><option value="\'LB\'">LB</option><option value="\'LC\'">LC</option><option value="\'LI\'">LI</option><option value="\'LK\'">LK</option><option value="\'LR\'">LR</option><option value="\'LS\'">LS</option><option value="\'LT\'">LT</option><option value="\'LU\'">LU</option><option value="\'LV\'">LV</option><option value="\'LY\'">LY</option><option value="\'MA\'">MA</option><option value="\'MC\'">MC</option><option value="\'MD\'">MD</option><option value="\'ME\'">ME</option><option value="\'MG\'">MG</option><option value="\'MH\'">MH</option><option value="\'MK\'">MK</option><option value="\'ML\'">ML</option><option value="\'MM\'">MM</option><option value="\'MN\'">MN</option><option value="\'MO\'">MO</option><option value="\'MP\'">MP</option><option value="\'MQ\'">MQ</option><option value="\'MR\'">MR</option><option value="\'MS\'">MS</option><option value="\'MT\'">MT</option><option value="\'MU\'">MU</option><option value="\'MV\'">MV</option><option value="\'MW\'">MW</option><option value="\'MX\'">MX</option><option value="\'MY\'">MY</option><option value="\'MZ\'">MZ</option><option value="\'NA\'">NA</option><option value="\'NC\'">NC</option><option value="\'NE\'">NE</option><option value="\'NF\'">NF</option><option value="\'NG\'">NG</option><option value="\'NI\'">NI</option><option value="\'NL\'">NL</option><option value="\'NO\'">NO</option><option value="\'NP\'">NP</option><option value="\'NR\'">NR</option><option value="\'NU\'">NU</option><option value="\'NZ\'">NZ</option><option value="\'OFF\'">OFF</option><option value="\'OM\'">OM</option><option value="\'PA\'">PA</option><option value="\'PE\'">PE</option><option value="\'PF\'">PF</option><option value="\'PG\'">PG</option><option value="\'PH\'">PH</option><option value="\'PK\'">PK</option><option value="\'PL\'">PL</option><option value="\'PM\'">PM</option><option value="\'PN\'">PN</option><option value="\'PR\'">PR</option><option value="\'PS\'">PS</option><option value="\'PT\'">PT</option><option value="\'PW\'">PW</option><option value="\'PY\'">PY</option><option value="\'QA\'">QA</option><option value="\'RE\'">RE</option><option value="\'RO\'">RO</option><option value="\'RS\'">RS</option><option value="\'RU\'">RU</option><option value="\'RW\'">RW</option><option value="\'SA\'">SA</option><option value="\'SB\'">SB</option><option value="\'SC\'">SC</option><option value="\'SD\'">SD</option><option value="\'SE\'">SE</option><option value="\'SG\'">SG</option><option value="\'SH\'">SH</option><option value="\'SI\'">SI</option><option value="\'SJ\'">SJ</option><option value="\'SK\'">SK</option><option value="\'SL\'">SL</option><option value="\'SM\'">SM</option><option value="\'SN\'">SN</option><option value="\'SO\'">SO</option><option value="\'SR\'">SR</option><option value="\'ST\'">ST</option><option value="\'SV\'">SV</option><option value="\'SY\'">SY</option><option value="\'SZ\'">SZ</option><option value="\'TC\'">TC</option><option value="\'TD\'">TD</option><option value="\'TF\'">TF</option><option value="\'TG\'">TG</option><option value="\'TH\'">TH</option><option value="\'TJ\'">TJ</option><option value="\'TK\'">TK</option><option value="\'TL\'">TL</option><option value="\'TM\'">TM</option><option value="\'TN\'">TN</option><option value="\'TO\'">TO</option><option value="\'TR\'">TR</option><option value="\'TT\'">TT</option><option value="\'TV\'">TV</option><option value="\'TW\'">TW</option><option value="\'TZ\'">TZ</option><option value="\'UA\'">UA</option><option value="\'UG\'">UG</option><option value="\'UM\'">UM</option><option value="\'US\'">US</option><option value="\'UY\'">UY</option><option value="\'UZ\'">UZ</option><option value="\'VA\'">VA</option><option value="\'VC\'">VC</option><option value="\'VE\'">VE</option><option value="\'VG\'">VG</option><option value="\'VI\'">VI</option><option value="\'VN\'">VN</option><option value="\'VU\'">VU</option><option value="\'WF\'">WF</option><option value="\'WS\'">WS</option><option value="\'YE\'">YE</option><option value="\'YT\'">YT</option><option value="\'ZA\'">ZA</option><option value="\'ZM\'">ZM</option><option value="\'ZW\'">ZW</option>
+			</select>
+		</p>
+
+		<button onClick="generateConfig()">
+			<l k="gener"></l>
 		</button>
-	</form>
 
-	'.($installed == "disabled" ? '<div><l k="cretd"></l></div>' : '').'
-
-	<br />
-
-	<h4><l k="step2"></l></h4>
-
-	<p>
-		LGSL Admin Login*:
-		<input type="text" onChange="vars.lgsl_user = event.target.value" />
-	</p>
-	<p>
-		LGSL Admin Password*:
-		<input type="text" onChange="vars.lgsl_password = event.target.value" />
-	</p>
-
-	<hr />
-
-	<p>
-		<l k="selst"></l>:
-		<select type="text" name="style" onChange="changeValue(event, {styleChanged: true})" />
-			<option value="darken_style.css">Darken</option>
-			<option value="ogp_style.css">OGP</option>
-			<option value="material_style.css">Material Design</option>
-			<option value="breeze_style.css">Breeze</option>
-			<option value="parallax_style.css">Parallax</option>
-			<option value="cards_style.css">Cards</option>
-			<option value="classic_style.css">Classic</option>
-			<option value="disc_ff_style.css">Disc FF</option>
-			<option value="wallpaper_style.css">Wallpaper</option>
-			<option value="showcase" style="color: green;">(external) Showcase</option>
-		</select>
-	</p>
-	<p>
-		<l k="sella"></l>:
-		<select type="text" name="language" onChange="changeValue(event, {translationInput: true})" />
-			<option value="english">English</option>
-			<option value="russian">Русский</option>
-			<option value="french">Français</option>
-			<option value="german">Deutsch</option>
-			<option value="spanish">Español</option>
-			<option value="czech">Čeština</option>
-			<option value="bulgarian">български</option>
-			<option value="slovak">Slovenčina</option>
-			<option value="arabic">اَلْعَرَبِيَّةُ</option>
-			<option value="turkish">Türkçe</option>
-			<option value="korean">한국어</option>
-			<option value="romanian">Română</option>
-			<option value="chinese_simplified">简体中文</option>
-			<option value="help" style="color: green;">!Help to translate LGSL!</option>
-		</select>
-	</p>
-
-	<p>
-		<l k="selsc"></l> <a href="https://github.com/tltneon/lgsl/wiki/scripts" target="_blank" class="hinfolink">?</a>:
-		<br /><input type="checkbox" id="parallax.js" name="scripts" onChange="changeCheckbox(event)" /> parallax (for Parallax Style)
-		<br /><input type="checkbox" id="preview.js" name="scripts" onChange="changeCheckbox(event)" /> map preview (on server list)
-		<br /><input type="checkbox" id="refresh.js" name="scripts" onChange="changeCheckbox(event)" /> refresh (manually refresh server status)
-		<br /><input type="checkbox" id="flag-icon.js" name="scripts" onChange="changeCheckbox(event)" /> flag-icon (replacing with svg)
-	</p>
-
-	<hr />
-
-	<p>
-		<l k="sorts"></l>:
-		<select type="text" name="sort_servers_by" onChange="changeValue(event)" />
-			<option value="id">ID</option>
-			<option value="type">Type</option>
-			<option value="zone">Zone</option>
-			<option value="players">Players</option>
-			<option value="status">Status</option>
-		</select>
-	</p>
-	<p>
-		<l k="sortp"></l>:
-		<select type="text" name="sort_players_by" onChange="changeValue(event)" />
-			<option value="name">Name</option>
-			<option value="score">Score</option>
-			<option value="time">Time</option>
-		</select>
-	</p>
-	<p>
-		<l k="enaim"></l> <a href="https://github.com/tltneon/lgsl/wiki/LGSL-with-Image-Mod" target="_blank" class="hinfolink">?</a>:
-		<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)" />
-	</p>
-	<p>
-		Enable Preloader <a href="https://github.com/tltneon/lgsl/wiki/features#preloader" target="_blank" class="hinfolink">?</a>:
-		<input type="checkbox" name="preloader" onChange="changeCheckbox(event)" />
-	</p>
-	<p>
-		Enable Pagination <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
-		<input type="checkbox" name="page_mod" onChange="changeCheckbox(event)" />
-		<input type="number" min="5" max="35" value="15" onChange="vars.page_lim = event.target.value" />
-	</p>
-	<p>
-		Automatically reload page:
-		<input type="checkbox" name="autoreload" onChange="changeCheckbox(event)" />
-	</p>
-	<p>
-		Time before a server needs updating:
-		<input type="number" min="0" max="3600" value="60" onChange="vars.cache_time = event.target.value" />
-	</p>
-	<p>
-		Enable server tracking (history) <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
-		<input type="checkbox" name="history" onChange="changeCheckbox(event)" />
-	</p>
-	<p>
-		<l k="hideo"></l>:
-		<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)" />
-	</p>
-	<p>
-		<l k="pubad"></l>:
-		<select type="text" name="public_add" onChange="changeValue(event)" />
-			<option value="0" style="color: red;">Disabled</option>
-			<option value="1" style="color: orange;">Enabled (require approval)</option>
-			<option value="2" style="color: green;">Enabled (shows instantly)</option>
-		</select>
-	</p>
-	<p>
-		<l k="showt"></l>:
-		<input type="checkbox" name="totals" onChange="changeCheckbox(event)" />
-	</p>
-	<p>
-		<l k="showl"></l>:
-		<select type="text" name="locations" onChange="changeValue(event)" />
-			<option value="0" style="color: red;">Disabled</option>
-			<option value="1" style="color: green;">Enabled</option>
-			<option disabled style="background: gray;"></option>
-			<option disabled>Select manually:</option>
-<option value="\'AD\'">AD</option><option value="\'AE\'">AE</option><option value="\'AF\'">AF</option><option value="\'AG\'">AG</option><option value="\'AI\'">AI</option><option value="\'AL\'">AL</option><option value="\'AM\'">AM</option><option value="\'AN\'">AN</option><option value="\'AO\'">AO</option><option value="\'AR\'">AR</option><option value="\'AS\'">AS</option><option value="\'AT\'">AT</option><option value="\'AU\'">AU</option><option value="\'AW\'">AW</option><option value="\'AX\'">AX</option><option value="\'AZ\'">AZ</option><option value="\'BA\'">BA</option><option value="\'BB\'">BB</option><option value="\'BD\'">BD</option><option value="\'BE\'">BE</option><option value="\'BF\'">BF</option><option value="\'BG\'">BG</option><option value="\'BH\'">BH</option><option value="\'BI\'">BI</option><option value="\'BJ\'">BJ</option><option value="\'BM\'">BM</option><option value="\'BN\'">BN</option><option value="\'BO\'">BO</option><option value="\'BR\'">BR</option><option value="\'BS\'">BS</option><option value="\'BT\'">BT</option><option value="\'BV\'">BV</option><option value="\'BW\'">BW</option><option value="\'BY\'">BY</option><option value="\'BZ\'">BZ</option><option value="\'CA\'">CA</option><option value="\'CC\'">CC</option><option value="\'CD\'">CD</option><option value="\'CF\'">CF</option><option value="\'CG\'">CG</option><option value="\'CH\'">CH</option><option value="\'CI\'">CI</option><option value="\'CK\'">CK</option><option value="\'CL\'">CL</option><option value="\'CM\'">CM</option><option value="\'CN\'">CN</option><option value="\'CO\'">CO</option><option value="\'CR\'">CR</option><option value="\'CS\'">CS</option><option value="\'CU\'">CU</option><option value="\'CV\'">CV</option><option value="\'CX\'">CX</option><option value="\'CY\'">CY</option><option value="\'CZ\'">CZ</option><option value="\'DE\'">DE</option><option value="\'DJ\'">DJ</option><option value="\'DK\'">DK</option><option value="\'DM\'">DM</option><option value="\'DO\'">DO</option><option value="\'DZ\'">DZ</option><option value="\'EC\'">EC</option><option value="\'EE\'">EE</option><option value="\'EG\'">EG</option><option value="\'EH\'">EH</option><option value="\'ER\'">ER</option><option value="\'ES\'">ES</option><option value="\'ET\'">ET</option><option value="\'EU\'">EU</option><option value="\'FI\'">FI</option><option value="\'FJ\'">FJ</option><option value="\'FK\'">FK</option><option value="\'FM\'">FM</option><option value="\'FO\'">FO</option><option value="\'FR\'">FR</option><option value="\'GA\'">GA</option><option value="\'GB\'">GB</option><option value="\'GD\'">GD</option><option value="\'GE\'">GE</option><option value="\'GF\'">GF</option><option value="\'GH\'">GH</option><option value="\'GI\'">GI</option><option value="\'GL\'">GL</option><option value="\'GM\'">GM</option><option value="\'GN\'">GN</option><option value="\'GP\'">GP</option><option value="\'GQ\'">GQ</option><option value="\'GR\'">GR</option><option value="\'GS\'">GS</option><option value="\'GT\'">GT</option><option value="\'GU\'">GU</option><option value="\'GW\'">GW</option><option value="\'GY\'">GY</option><option value="\'HK\'">HK</option><option value="\'HM\'">HM</option><option value="\'HN\'">HN</option><option value="\'HR\'">HR</option><option value="\'HT\'">HT</option><option value="\'HU\'">HU</option><option value="\'ID\'">ID</option><option value="\'IE\'">IE</option><option value="\'IL\'">IL</option><option value="\'IN\'">IN</option><option value="\'IO\'">IO</option><option value="\'IQ\'">IQ</option><option value="\'IR\'">IR</option><option value="\'IS\'">IS</option><option value="\'IT\'">IT</option><option value="\'JM\'">JM</option><option value="\'JO\'">JO</option><option value="\'JP\'">JP</option><option value="\'KE\'">KE</option><option value="\'KG\'">KG</option><option value="\'KH\'">KH</option><option value="\'KI\'">KI</option><option value="\'KM\'">KM</option><option value="\'KN\'">KN</option><option value="\'KP\'">KP</option><option value="\'KR\'">KR</option><option value="\'KW\'">KW</option><option value="\'KY\'">KY</option><option value="\'KZ\'">KZ</option><option value="\'LA\'">LA</option><option value="\'LB\'">LB</option><option value="\'LC\'">LC</option><option value="\'LI\'">LI</option><option value="\'LK\'">LK</option><option value="\'LR\'">LR</option><option value="\'LS\'">LS</option><option value="\'LT\'">LT</option><option value="\'LU\'">LU</option><option value="\'LV\'">LV</option><option value="\'LY\'">LY</option><option value="\'MA\'">MA</option><option value="\'MC\'">MC</option><option value="\'MD\'">MD</option><option value="\'ME\'">ME</option><option value="\'MG\'">MG</option><option value="\'MH\'">MH</option><option value="\'MK\'">MK</option><option value="\'ML\'">ML</option><option value="\'MM\'">MM</option><option value="\'MN\'">MN</option><option value="\'MO\'">MO</option><option value="\'MP\'">MP</option><option value="\'MQ\'">MQ</option><option value="\'MR\'">MR</option><option value="\'MS\'">MS</option><option value="\'MT\'">MT</option><option value="\'MU\'">MU</option><option value="\'MV\'">MV</option><option value="\'MW\'">MW</option><option value="\'MX\'">MX</option><option value="\'MY\'">MY</option><option value="\'MZ\'">MZ</option><option value="\'NA\'">NA</option><option value="\'NC\'">NC</option><option value="\'NE\'">NE</option><option value="\'NF\'">NF</option><option value="\'NG\'">NG</option><option value="\'NI\'">NI</option><option value="\'NL\'">NL</option><option value="\'NO\'">NO</option><option value="\'NP\'">NP</option><option value="\'NR\'">NR</option><option value="\'NU\'">NU</option><option value="\'NZ\'">NZ</option><option value="\'OFF\'">OFF</option><option value="\'OM\'">OM</option><option value="\'PA\'">PA</option><option value="\'PE\'">PE</option><option value="\'PF\'">PF</option><option value="\'PG\'">PG</option><option value="\'PH\'">PH</option><option value="\'PK\'">PK</option><option value="\'PL\'">PL</option><option value="\'PM\'">PM</option><option value="\'PN\'">PN</option><option value="\'PR\'">PR</option><option value="\'PS\'">PS</option><option value="\'PT\'">PT</option><option value="\'PW\'">PW</option><option value="\'PY\'">PY</option><option value="\'QA\'">QA</option><option value="\'RE\'">RE</option><option value="\'RO\'">RO</option><option value="\'RS\'">RS</option><option value="\'RU\'">RU</option><option value="\'RW\'">RW</option><option value="\'SA\'">SA</option><option value="\'SB\'">SB</option><option value="\'SC\'">SC</option><option value="\'SD\'">SD</option><option value="\'SE\'">SE</option><option value="\'SG\'">SG</option><option value="\'SH\'">SH</option><option value="\'SI\'">SI</option><option value="\'SJ\'">SJ</option><option value="\'SK\'">SK</option><option value="\'SL\'">SL</option><option value="\'SM\'">SM</option><option value="\'SN\'">SN</option><option value="\'SO\'">SO</option><option value="\'SR\'">SR</option><option value="\'ST\'">ST</option><option value="\'SV\'">SV</option><option value="\'SY\'">SY</option><option value="\'SZ\'">SZ</option><option value="\'TC\'">TC</option><option value="\'TD\'">TD</option><option value="\'TF\'">TF</option><option value="\'TG\'">TG</option><option value="\'TH\'">TH</option><option value="\'TJ\'">TJ</option><option value="\'TK\'">TK</option><option value="\'TL\'">TL</option><option value="\'TM\'">TM</option><option value="\'TN\'">TN</option><option value="\'TO\'">TO</option><option value="\'TR\'">TR</option><option value="\'TT\'">TT</option><option value="\'TV\'">TV</option><option value="\'TW\'">TW</option><option value="\'TZ\'">TZ</option><option value="\'UA\'">UA</option><option value="\'UG\'">UG</option><option value="\'UM\'">UM</option><option value="\'US\'">US</option><option value="\'UY\'">UY</option><option value="\'UZ\'">UZ</option><option value="\'VA\'">VA</option><option value="\'VC\'">VC</option><option value="\'VE\'">VE</option><option value="\'VG\'">VG</option><option value="\'VI\'">VI</option><option value="\'VN\'">VN</option><option value="\'VU\'">VU</option><option value="\'WF\'">WF</option><option value="\'WS\'">WS</option><option value="\'YE\'">YE</option><option value="\'YT\'">YT</option><option value="\'ZA\'">ZA</option><option value="\'ZM\'">ZM</option><option value="\'ZW\'">ZW</option>
-		</select>
-	</p>
-
-	<button onClick="generateConfig()">
-		<l k="gener"></l>
-	</button>
-
-	<p style="color: red; font-size: 12pt;"><l k="remem"></l></p>
-	<hr />
-	<p style="font-size: 9pt;"><l k="after"></l></p>
+		<p style="color: red; font-size: 12pt;"><l k="remem"></l></p>
+		<hr />
+		<p style="font-size: 9pt;"><l k="after"></l></p>
+	</div>
 	';
 
   echo $output;
@@ -333,9 +368,9 @@
 <script>
 document.addEventListener("DOMContentLoaded", reloadLocale);
 document.addEventListener("reloadLocale", reloadLocale);
-	function reloadLocale(){
+	function reloadLocale() {
 		document.querySelectorAll("l").forEach(
-			(item, i, arr)=>{
+			(item, i, arr) => {
 				updateLValue(item, item.getAttribute("k"));
 			}
 		);
@@ -368,20 +403,19 @@ document.addEventListener("reloadLocale", reloadLocale);
     	preloader: false
 	}
 	function changeValue(event, options = {}) {
-		console.log(event);
-		if(options.styleChanged){
-			if(event.target.value == "showcase"){
+		if (options.styleChanged) {
+			if (event.target.value == "showcase") {
 				event.target.value = "darken_style.css";
 				window.open("https://github.com/tltneon/lgsl/wiki/Styles");
 			}
-			if(event.target.value == "parallax_style.css"){
+			if (event.target.value == "parallax_style.css") {
 				vars["scripts"]["parallax.js"] = true;
 				document.querySelector("input[id='parallax.js']").checked = true;
 			}
 			document.getElementsByTagName("link")[0].href = `lgsl_files/styles/${event.target.value}`;
 		}
-		if(options.translationInput){
-			if(event.target.value == "help"){
+		if (options.translationInput) {
+			if (event.target.value == "help") {
 				event.target.value = "english";
 				window.open("https://github.com/tltneon/lgsl/wiki#how-do-i-change-language");
 			}
@@ -391,23 +425,22 @@ document.addEventListener("reloadLocale", reloadLocale);
 		vars[event.target.name] = event.target.value;
 	}
 	function changeCheckbox(event) {
-		if(event.target.name == 'scripts'){
+		if (event.target.name == 'scripts') {
 			vars[event.target.name][event.target.id] = event.target.checked;
 		}
 		else
 		vars[event.target.name] = event.target.checked;
 	}
-	function updateLValue(el, key){
+	function updateLValue(el, key) {
 		el.innerText = "";
 		el.insertAdjacentHTML('beforeend', l(key));
 	}
-	function generateConfig()
-	{
-		if(vars.mysql_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
+	function generateConfig() {
+		if (vars.mysql_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
 		let textarea = document.body.getElementsByTagName("textarea")[0] ? document.body.getElementsByTagName("textarea")[0] : document.createElement("textarea");
 		let slist = '';
-		for(s in vars['scripts']){
-			if(vars['scripts'][s])
+		for (s in vars['scripts']) {
+			if (vars['scripts'][s])
 				slist += '"' + s + '",';
 		}
 		document.body.getElementsByTagName("div")[0].appendChild(textarea);
@@ -498,7 +531,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
-	function l(key){
+	function l(key) {
 		let t = {
 			"english": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -517,13 +550,15 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"pubad": "Public add servers",
 				"showt": "Show totals",
 				"showl": "Show locations",
-				"step1": "Step 1: Install LGSL Tables",
+				"step1": "Step 1: Install / Update LGSL Tables",
 				"step2": "Step 2: Configurating LGSL",
 				"back": "< Back",
 				"owiki": "Online Wiki: How to",
 				"gener": "Generate config",
 				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 1 or 2).",
+				"updat": "Update table",
+				"skips": "Skip step",
+				"filla": "You need to fill required* inputs.",
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
