@@ -82,6 +82,25 @@
   
       return $location;
     }
+    static public function group_totals($server_list = FALSE) {
+      if (!is_array($server_list)) { return Database::get_statistics(); }
+
+      $total = array("players"=>0, "playersmax"=>0, "servers"=>0, "servers_online"=>0, "servers_offline"=>0);
+
+      foreach ($server_list as $server) {
+        $total['players']    += $server->get_players_count('active');
+        $total['playersmax'] += $server->get_players_count('max');
+
+        $total['servers']++;
+        if (in_array($server->get_status(), array('onp', 'onl'))) {
+          $total['servers_online']++;
+        } else {
+          $total['servers_offline']++;
+        }
+      }
+
+      return $total;
+    }
   }
 //------------------------------------------------------------------------------------------------------------+
   class Database {
@@ -254,6 +273,14 @@
       }
       return $output;
     }
+    static public function get_statistics() {
+      global $lgsl_config;
+      $db = LGSL::db();
+
+      $mysqli_query  = "SELECT COUNT(*) as servers, SUM(players) as players, SUM(playersmax) as playersmax, SUM(STATUS) as servers_online, COUNT(*)-SUM(status) as servers_offline FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE disabled = 0;";
+      $mysqli_result = $db->query($mysqli_query, true);
+      return $mysqli_result;
+    }
 
     function lgsl_save_cache(&$server) {
       global $lgsl_config;
@@ -279,17 +306,14 @@
     function lgsl_unserialize_server_data($data) {
       $server = array();
 
-      $server['s']['name'] = $data['name'];
-      $server['s']['game'] = $data['game'];
-      $server['s']['mode'] = $data['mode'];
-      $server['s']['map'] = $data['map'];
-      $server['s']['players'] = $data['players'];
-      $server['s']['playersmax'] = $data['playersmax'];
-      unset($server['b']['name']);
-      unset($server['b']['map']);
-      unset($server['b']['players']);
-      unset($server['b']['playersmax']);
-
+      foreach (array('name', 'game', 'mode', 'map', 'players', 'playersmax', 'password') as $i) {
+        $server['s'][$i] = $data[$i];
+        unset($data[$i]);
+      }
+      foreach (array('zone', 'comment') as $i) {
+        $server['o'][$i] = $data[$i];
+        unset($data[$i]);
+      }
       $server['b'] = $data;
       unset($server['b']['cache']);
       unset($server['b']['cache_time']);
@@ -750,9 +774,9 @@
       if (!isset($this->_other['location']) || !$lgsl_config["locations"]) { return "{$lgsl_url_path}locations/OFF.png"; }
   
       if ($this->_other['location']) {
-        $this->_other['location'] = "locations/".strtoupper(preg_replace("/[^a-zA-Z0-9_]/", "_", $this->_other['location'])).".png";
+        $loc = "locations/".strtoupper(preg_replace("/[^a-zA-Z0-9_]/", "_", $this->_other['location'])).".png";
   
-        if (file_exists($lgsl_file_path.$this->_other['location'])) { return $lgsl_url_path.$this->_other['location']; }
+        if (file_exists($lgsl_file_path.$loc)) { return $lgsl_url_path.$loc; }
       }
   
       return "{$lgsl_url_path}locations/XX.png";
@@ -1040,27 +1064,6 @@
     }
 
     return $server_list;
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
-  function lgsl_group_totals($server_list = FALSE)
-  {
-    if (!is_array($server_list)) { $server_list = lgsl_query_group( array( "request"=>"sc" ) ); }
-
-    $total = array("players"=>0, "playersmax"=>0, "servers"=>0, "servers_online"=>0, "servers_offline"=>0);
-
-    foreach ($server_list as $server)
-    {
-      $total['players']    += $server['s']['players'];
-      $total['playersmax'] += $server['s']['playersmax'];
-
-                                    $total['servers']         ++;
-      if ($server['b']['status']) { $total['servers_online']  ++; }
-      else                        { $total['servers_offline'] ++; }
-    }
-
-    return $total;
   }
 
 //------------------------------------------------------------------------------------------------------------+

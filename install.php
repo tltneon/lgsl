@@ -64,14 +64,12 @@
 							printf('');
 							$step = 2;
 							$query_success = true;
-						}
-						else {
+						} else {
 							printf('<l k="table"></l>');
 						}
 					mysqli_close($lgsl_database);
 				}
-			}
-			catch (Error $e) {
+			} catch (Error $e) {
 				printf('<l k="mysld"></l>');
 			}
 		}
@@ -139,6 +137,25 @@
 			<div>
 <?php
 //------------------------------------------------------------------------------------------------------------+
+	function generateLocations() {
+		$l = array(
+			"AD","AE","AF","AG","AI","AL","AM","AN","AO","AR","AS","AT","AU","AW","AX","AZ","BA","BB","BD","BE","BF","BG","BH","BI","BJ","BM","BN",
+			"BO","BR","BS","BT","BV","BW","BY","BZ","CA","CC","CD","CF","CG","CH","CI","CK","CL","CM","CN","CO","CR","CS","CU","CV","CX","CY","CZ",
+			"DE","DJ","DK","DM","DO","DZ","EC","EE","EG","EH","ER","ES","ET","EU","FI","FJ","FK","FM","FO","FR","GA","GB","GD","GE","GF","GH","GI",
+			"GL","GM","GN","GP","GQ","GR","GS","GT","GU","GW","GY","HK","HM","HN","HR","HT","HU","ID","IE","IL","IN","IO","IQ","IR","IS","IT","JM",
+			"JO","JP","KE","KG","KH","KI","KM","KN","KP","KR","KW","KY","KZ","LA","LB","LC","LI","LK","LR","LS","LT","LU","LV","LY","MA","MC","MD",
+			"ME","MG","MH","MK","ML","MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ","NA","NC","NE","NF","NG","NI","NL","NO",
+			"NP","NR","NU","NZ","OFF","OM","PA","PE","PF","PG","PH","PK","PL","PM","PN","PR","PS","PT","PW","PY","QA","RE","RO","RS","RU","RW","SA",
+			"SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","SO","SR","ST","SV","SY","SZ","TC","TD","TF","TG","TH","TJ","TK","TL","TM",
+			"TN","TO","TR","TT","TV","TW","TZ","UA","UG","UM","US","UY","UZ","VA","VC","VE","VG","VI","VN","VU","WF","WS","YE","YT","ZA","ZM","ZW"
+		);
+		$out = "";
+		foreach ($l as $b) {
+			$out .= "<option value='{$b}'>{$b}</option>";
+		}
+		return $out;
+	}
+	$loc = generateLocations();
 
 	$output = '
 	<h6><a href="./"><l k="back"></l></a></h6>
@@ -180,183 +197,183 @@
 			}
 		}
 
-	$output .= '	
-		<br /><h4><l k="step1"></l></h4>
-		<form method="post" action="?">
+	$output .= "	
+		<br /><h4><l k='step1'></l></h4>
+		<form method='post' action='?'>
 			<p>
 				MySQL Server*:
-				<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" />
+				<input type='text' name='server' onChange='vars.mysql_server = event.target.value' value='{$mysql_server}' />
 			</p>
 			<p>
 				MySQL Login*:
-				<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" />
+				<input type='text' name='login' onChange='vars.mysql_user = event.target.value' value='{$mysql_user}' />
 			</p>
 			<p>
 				MySQL Password:
-				<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" />
+				<input type='password' name='password' onChange='vars.mysql_password = event.target.value' value='{$mysql_password}' />
 			</p>
 			<p>
 				MySQL Database*:
-				<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" />
+				<input type='text' name='database' onChange='vars.mysql_database = event.target.value' value='{$mysql_database}' />
 			</p>
 			<p>
 				MySQL Table*:
-				<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" />
+				<input type='text' name='table' onChange='vars.mysql_table = event.target.value' value='{$mysql_table}' />
 			</p>
-			<div style="display: '. ($step == 1 ? 'block' : 'none') .'">
-				<button type="submit" name="_createtables">
-					<l k="creat"></l>
+			<div style='display: ". ($step == 1 ? 'block' : 'none') ."'>
+				<button type='submit' name='_createtables'>
+					<l k='creat'></l>
 				</button>
-				<button type="submit" name="_updatetables">
-					<l k="updat"></l>
+				<button type='submit' name='_updatetables'>
+					<l k='updat'></l>
 				</button>
-				<button type="submit" name="_skipstep1">
-					<l k="skips"></l>
+				<button type='submit' name='_skipstep1'>
+					<l k='skips'></l>
 				</button>
 			</div>
 		</form>
 	</div>
 
-	<div style="display: '. ($step == 2 ? 'block' : 'none') .'">
-		'. ($query_success == 2 ? '<div><l k="cretd"></l></div>' : '') .'
+	<div style='display: ". ($step == 2 ? 'block' : 'none') ."'>
+		". ($query_success == 2 ? "<div><l k='cretd'></l></div>" : "") ."
 
-		<h4><l k="step2"></l></h4>
+			<h4><l k='step2'></l></h4>
 
-		<p>
-			LGSL Admin Login*:
-			<input type="text" onChange="vars.lgsl_user = event.target.value" />
-		</p>
-		<p>
-			LGSL Admin Password*:
-			<input type="text" onChange="vars.lgsl_password = event.target.value" />
-		</p>
+			<p>
+				LGSL Admin Login*:
+				<input type='text' onChange='vars.lgsl_user = event.target.value' />
+			</p>
+			<p>
+				LGSL Admin Password*:
+				<input type='text' onChange='vars.lgsl_password = event.target.value' />
+			</p>
 
-		<hr />
+			<hr />
 
-		<p>
-			<l k="selst"></l>:
-			<select type="text" name="style" onChange="changeValue(event, {styleChanged: true})" />
-				<option value="darken_style.css">Darken</option>
-				<option value="ogp_style.css">OGP</option>
-				<option value="material_style.css">Material Design</option>
-				<option value="breeze_style.css">Breeze</option>
-				<option value="parallax_style.css">Parallax</option>
-				<option value="cards_style.css">Cards</option>
-				<option value="classic_style.css">Classic</option>
-				<option value="disc_ff_style.css">Disc FF</option>
-				<option value="wallpaper_style.css">Wallpaper</option>
-				<option value="showcase" style="color: green;">(external) Showcase</option>
-			</select>
-		</p>
-		<p>
-			<l k="sella"></l>:
-			<select type="text" name="language" onChange="changeValue(event, {translationInput: true})" />
-				<option value="english">English</option>
-				<option value="russian">Русский</option>
-				<option value="french">Français</option>
-				<option value="german">Deutsch</option>
-				<option value="spanish">Español</option>
-				<option value="czech">Čeština</option>
-				<option value="bulgarian">български</option>
-				<option value="slovak">Slovenčina</option>
-				<option value="arabic">اَلْعَرَبِيَّةُ</option>
-				<option value="turkish">Türkçe</option>
-				<option value="korean">한국어</option>
-				<option value="romanian">Română</option>
-				<option value="chinese_simplified">简体中文</option>
-				<option value="help" style="color: green;">!Help to translate LGSL!</option>
-			</select>
-		</p>
+			<p>
+				<l k='selst'></l>:
+				<select type='text' name='style' onChange='changeValue(event, {styleChanged: true})' />
+					<option value='darken_style.css'>Darken</option>
+					<option value='ogp_style.css'>OGP</option>
+					<option value='material_style.css'>Material Design</option>
+					<option value='breeze_style.css'>Breeze</option>
+					<option value='parallax_style.css'>Parallax</option>
+					<option value='cards_style.css'>Cards</option>
+					<option value='classic_style.css'>Classic</option>
+					<option value='disc_ff_style.css'>Disc FF</option>
+					<option value='wallpaper_style.css'>Wallpaper</option>
+					<option value='showcase' style='color: green;'>(external) Showcase</option>
+				</select>
+			</p>
+			<p>
+				<l k='sella'></l>:
+				<select type='text' name='language' onChange='changeValue(event, {translationInput: true})' />
+					<option value='english'>English</option>
+					<option value='russian'>Русский</option>
+					<option value='french'>Français</option>
+					<option value='german'>Deutsch</option>
+					<option value='spanish'>Español</option>
+					<option value='czech'>Čeština</option>
+					<option value='bulgarian'>български</option>
+					<option value='slovak'>Slovenčina</option>
+					<option value='arabic'>اَلْعَرَبِيَّةُ</option>
+					<option value='turkish'>Türkçe</option>
+					<option value='korean'>한국어</option>
+					<option value='romanian'>Română</option>
+					<option value='chinese_simplified'>简体中文</option>
+					<option value='help' style='color: green;'>!Help to translate LGSL!</option>
+				</select>
+			</p>
 
-		<p>
-			<l k="selsc"></l> <a href="https://github.com/tltneon/lgsl/wiki/scripts" target="_blank" class="hinfolink">?</a>:
-			<br /><input type="checkbox" id="parallax.js" name="scripts" onChange="changeCheckbox(event)" /> parallax (for Parallax Style)
-			<br /><input type="checkbox" id="preview.js" name="scripts" onChange="changeCheckbox(event)" /> map preview (on server list)
-			<br /><input type="checkbox" id="refresh.js" name="scripts" onChange="changeCheckbox(event)" /> refresh (manually refresh server status)
-			<br /><input type="checkbox" id="flag-icon.js" name="scripts" onChange="changeCheckbox(event)" /> flag-icon (replacing with svg)
-		</p>
+			<p>
+				<l k='selsc'></l> <a href='https://github.com/tltneon/lgsl/wiki/scripts' target='_blank' class='hinfolink'>?</a>:
+				<br /><input type='checkbox' id='parallax.js' name='scripts' onChange='changeCheckbox(event)' /> parallax (for Parallax Style)
+				<br /><input type='checkbox' id='preview.js' name='scripts' onChange='changeCheckbox(event)' /> map preview (on server list)
+				<br /><input type='checkbox' id='refresh.js' name='scripts' onChange='changeCheckbox(event)' /> refresh (manually refresh server status)
+				<br /><input type='checkbox' id='flag-icon.js' name='scripts' onChange='changeCheckbox(event)' /> flag-icon (replacing with svg)
+			</p>
 
-		<hr />
+			<hr />
 
-		<p>
-			<l k="sorts"></l>:
-			<select type="text" name="sort_servers_by" onChange="changeValue(event)" />
-				<option value="id">ID</option>
-				<option value="type">Type</option>
-				<option value="zone">Zone</option>
-				<option value="players">Players</option>
-				<option value="status">Status</option>
-			</select>
-		</p>
-		<p>
-			<l k="sortp"></l>:
-			<select type="text" name="sort_players_by" onChange="changeValue(event)" />
-				<option value="name">Name</option>
-				<option value="score">Score</option>
-				<option value="time">Time</option>
-			</select>
-		</p>
-		<p>
-			<l k="enaim"></l> <a href="https://github.com/tltneon/lgsl/wiki/LGSL-with-Image-Mod" target="_blank" class="hinfolink">?</a>:
-			<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)" />
-		</p>
-		<p>
-			Enable Preloader <a href="https://github.com/tltneon/lgsl/wiki/features#preloader" target="_blank" class="hinfolink">?</a>:
-			<input type="checkbox" name="preloader" onChange="changeCheckbox(event)" />
-		</p>
-		<p>
-			Enable Pagination <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
-			<input type="checkbox" name="page_mod" onChange="changeCheckbox(event)" />
-			<input type="number" min="5" max="35" value="15" onChange="vars.page_lim = event.target.value" />
-		</p>
-		<p>
-			Automatically reload page:
-			<input type="checkbox" name="autoreload" onChange="changeCheckbox(event)" />
-		</p>
-		<p>
-			Time before a server needs updating:
-			<input type="number" min="0" max="3600" value="60" onChange="vars.cache_time = event.target.value" />
-		</p>
-		<p>
-			Enable server tracking (history) <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
-			<input type="checkbox" name="history" onChange="changeCheckbox(event)" />
-		</p>
-		<p>
-			<l k="hideo"></l>:
-			<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)" />
-		</p>
-		<p>
-			<l k="pubad"></l>:
-			<select type="text" name="public_add" onChange="changeValue(event)" />
-				<option value="0" style="color: red;">Disabled</option>
-				<option value="1" style="color: orange;">Enabled (require approval)</option>
-				<option value="2" style="color: green;">Enabled (shows instantly)</option>
-			</select>
-		</p>
-		<p>
-			<l k="showt"></l>:
-			<input type="checkbox" name="totals" onChange="changeCheckbox(event)" />
-		</p>
-		<p>
-			<l k="showl"></l>:
-			<select type="text" name="locations" onChange="changeValue(event)" />
-				<option value="0" style="color: red;">Disabled</option>
-				<option value="1" style="color: green;">Enabled</option>
-				<option disabled style="background: gray;"></option>
-				<option disabled>Select manually:</option>
-	<option value="\'AD\'">AD</option><option value="\'AE\'">AE</option><option value="\'AF\'">AF</option><option value="\'AG\'">AG</option><option value="\'AI\'">AI</option><option value="\'AL\'">AL</option><option value="\'AM\'">AM</option><option value="\'AN\'">AN</option><option value="\'AO\'">AO</option><option value="\'AR\'">AR</option><option value="\'AS\'">AS</option><option value="\'AT\'">AT</option><option value="\'AU\'">AU</option><option value="\'AW\'">AW</option><option value="\'AX\'">AX</option><option value="\'AZ\'">AZ</option><option value="\'BA\'">BA</option><option value="\'BB\'">BB</option><option value="\'BD\'">BD</option><option value="\'BE\'">BE</option><option value="\'BF\'">BF</option><option value="\'BG\'">BG</option><option value="\'BH\'">BH</option><option value="\'BI\'">BI</option><option value="\'BJ\'">BJ</option><option value="\'BM\'">BM</option><option value="\'BN\'">BN</option><option value="\'BO\'">BO</option><option value="\'BR\'">BR</option><option value="\'BS\'">BS</option><option value="\'BT\'">BT</option><option value="\'BV\'">BV</option><option value="\'BW\'">BW</option><option value="\'BY\'">BY</option><option value="\'BZ\'">BZ</option><option value="\'CA\'">CA</option><option value="\'CC\'">CC</option><option value="\'CD\'">CD</option><option value="\'CF\'">CF</option><option value="\'CG\'">CG</option><option value="\'CH\'">CH</option><option value="\'CI\'">CI</option><option value="\'CK\'">CK</option><option value="\'CL\'">CL</option><option value="\'CM\'">CM</option><option value="\'CN\'">CN</option><option value="\'CO\'">CO</option><option value="\'CR\'">CR</option><option value="\'CS\'">CS</option><option value="\'CU\'">CU</option><option value="\'CV\'">CV</option><option value="\'CX\'">CX</option><option value="\'CY\'">CY</option><option value="\'CZ\'">CZ</option><option value="\'DE\'">DE</option><option value="\'DJ\'">DJ</option><option value="\'DK\'">DK</option><option value="\'DM\'">DM</option><option value="\'DO\'">DO</option><option value="\'DZ\'">DZ</option><option value="\'EC\'">EC</option><option value="\'EE\'">EE</option><option value="\'EG\'">EG</option><option value="\'EH\'">EH</option><option value="\'ER\'">ER</option><option value="\'ES\'">ES</option><option value="\'ET\'">ET</option><option value="\'EU\'">EU</option><option value="\'FI\'">FI</option><option value="\'FJ\'">FJ</option><option value="\'FK\'">FK</option><option value="\'FM\'">FM</option><option value="\'FO\'">FO</option><option value="\'FR\'">FR</option><option value="\'GA\'">GA</option><option value="\'GB\'">GB</option><option value="\'GD\'">GD</option><option value="\'GE\'">GE</option><option value="\'GF\'">GF</option><option value="\'GH\'">GH</option><option value="\'GI\'">GI</option><option value="\'GL\'">GL</option><option value="\'GM\'">GM</option><option value="\'GN\'">GN</option><option value="\'GP\'">GP</option><option value="\'GQ\'">GQ</option><option value="\'GR\'">GR</option><option value="\'GS\'">GS</option><option value="\'GT\'">GT</option><option value="\'GU\'">GU</option><option value="\'GW\'">GW</option><option value="\'GY\'">GY</option><option value="\'HK\'">HK</option><option value="\'HM\'">HM</option><option value="\'HN\'">HN</option><option value="\'HR\'">HR</option><option value="\'HT\'">HT</option><option value="\'HU\'">HU</option><option value="\'ID\'">ID</option><option value="\'IE\'">IE</option><option value="\'IL\'">IL</option><option value="\'IN\'">IN</option><option value="\'IO\'">IO</option><option value="\'IQ\'">IQ</option><option value="\'IR\'">IR</option><option value="\'IS\'">IS</option><option value="\'IT\'">IT</option><option value="\'JM\'">JM</option><option value="\'JO\'">JO</option><option value="\'JP\'">JP</option><option value="\'KE\'">KE</option><option value="\'KG\'">KG</option><option value="\'KH\'">KH</option><option value="\'KI\'">KI</option><option value="\'KM\'">KM</option><option value="\'KN\'">KN</option><option value="\'KP\'">KP</option><option value="\'KR\'">KR</option><option value="\'KW\'">KW</option><option value="\'KY\'">KY</option><option value="\'KZ\'">KZ</option><option value="\'LA\'">LA</option><option value="\'LB\'">LB</option><option value="\'LC\'">LC</option><option value="\'LI\'">LI</option><option value="\'LK\'">LK</option><option value="\'LR\'">LR</option><option value="\'LS\'">LS</option><option value="\'LT\'">LT</option><option value="\'LU\'">LU</option><option value="\'LV\'">LV</option><option value="\'LY\'">LY</option><option value="\'MA\'">MA</option><option value="\'MC\'">MC</option><option value="\'MD\'">MD</option><option value="\'ME\'">ME</option><option value="\'MG\'">MG</option><option value="\'MH\'">MH</option><option value="\'MK\'">MK</option><option value="\'ML\'">ML</option><option value="\'MM\'">MM</option><option value="\'MN\'">MN</option><option value="\'MO\'">MO</option><option value="\'MP\'">MP</option><option value="\'MQ\'">MQ</option><option value="\'MR\'">MR</option><option value="\'MS\'">MS</option><option value="\'MT\'">MT</option><option value="\'MU\'">MU</option><option value="\'MV\'">MV</option><option value="\'MW\'">MW</option><option value="\'MX\'">MX</option><option value="\'MY\'">MY</option><option value="\'MZ\'">MZ</option><option value="\'NA\'">NA</option><option value="\'NC\'">NC</option><option value="\'NE\'">NE</option><option value="\'NF\'">NF</option><option value="\'NG\'">NG</option><option value="\'NI\'">NI</option><option value="\'NL\'">NL</option><option value="\'NO\'">NO</option><option value="\'NP\'">NP</option><option value="\'NR\'">NR</option><option value="\'NU\'">NU</option><option value="\'NZ\'">NZ</option><option value="\'OFF\'">OFF</option><option value="\'OM\'">OM</option><option value="\'PA\'">PA</option><option value="\'PE\'">PE</option><option value="\'PF\'">PF</option><option value="\'PG\'">PG</option><option value="\'PH\'">PH</option><option value="\'PK\'">PK</option><option value="\'PL\'">PL</option><option value="\'PM\'">PM</option><option value="\'PN\'">PN</option><option value="\'PR\'">PR</option><option value="\'PS\'">PS</option><option value="\'PT\'">PT</option><option value="\'PW\'">PW</option><option value="\'PY\'">PY</option><option value="\'QA\'">QA</option><option value="\'RE\'">RE</option><option value="\'RO\'">RO</option><option value="\'RS\'">RS</option><option value="\'RU\'">RU</option><option value="\'RW\'">RW</option><option value="\'SA\'">SA</option><option value="\'SB\'">SB</option><option value="\'SC\'">SC</option><option value="\'SD\'">SD</option><option value="\'SE\'">SE</option><option value="\'SG\'">SG</option><option value="\'SH\'">SH</option><option value="\'SI\'">SI</option><option value="\'SJ\'">SJ</option><option value="\'SK\'">SK</option><option value="\'SL\'">SL</option><option value="\'SM\'">SM</option><option value="\'SN\'">SN</option><option value="\'SO\'">SO</option><option value="\'SR\'">SR</option><option value="\'ST\'">ST</option><option value="\'SV\'">SV</option><option value="\'SY\'">SY</option><option value="\'SZ\'">SZ</option><option value="\'TC\'">TC</option><option value="\'TD\'">TD</option><option value="\'TF\'">TF</option><option value="\'TG\'">TG</option><option value="\'TH\'">TH</option><option value="\'TJ\'">TJ</option><option value="\'TK\'">TK</option><option value="\'TL\'">TL</option><option value="\'TM\'">TM</option><option value="\'TN\'">TN</option><option value="\'TO\'">TO</option><option value="\'TR\'">TR</option><option value="\'TT\'">TT</option><option value="\'TV\'">TV</option><option value="\'TW\'">TW</option><option value="\'TZ\'">TZ</option><option value="\'UA\'">UA</option><option value="\'UG\'">UG</option><option value="\'UM\'">UM</option><option value="\'US\'">US</option><option value="\'UY\'">UY</option><option value="\'UZ\'">UZ</option><option value="\'VA\'">VA</option><option value="\'VC\'">VC</option><option value="\'VE\'">VE</option><option value="\'VG\'">VG</option><option value="\'VI\'">VI</option><option value="\'VN\'">VN</option><option value="\'VU\'">VU</option><option value="\'WF\'">WF</option><option value="\'WS\'">WS</option><option value="\'YE\'">YE</option><option value="\'YT\'">YT</option><option value="\'ZA\'">ZA</option><option value="\'ZM\'">ZM</option><option value="\'ZW\'">ZW</option>
-			</select>
-		</p>
+			<p>
+				<l k='sorts'></l>:
+				<select type='text' name='sort_servers_by' onChange='changeValue(event)' />
+					<option value='id'>ID</option>
+					<option value='type'>Type</option>
+					<option value='zone'>Zone</option>
+					<option value='players'>Players</option>
+					<option value='status'>Status</option>
+				</select>
+			</p>
+			<p>
+				<l k='sortp'></l>:
+				<select type='text' name='sort_players_by' onChange='changeValue(event)' />
+					<option value='name'>Name</option>
+					<option value='score'>Score</option>
+					<option value='time'>Time</option>
+				</select>
+			</p>
+			<p>
+				<l k='enaim'></l> <a href='https://github.com/tltneon/lgsl/wiki/LGSL-with-Image-Mod' target='_blank' class='hinfolink'>?</a>:
+				<input type='checkbox' name='image_mod' onChange='changeCheckbox(event)' />
+			</p>
+			<p>
+				Enable Preloader <a href='https://github.com/tltneon/lgsl/wiki/features#preloader' target='_blank' class='hinfolink'>?</a>:
+				<input type='checkbox' name='preloader' onChange='changeCheckbox(event)' />
+			</p>
+			<p>
+				Enable Pagination <a href='https://github.com/tltneon/lgsl/wiki/features#pagination' target='_blank' class='hinfolink'>?</a>:
+				<input type='checkbox' name='page_mod' onChange='changeCheckbox(event)' />
+				<input type='number' min='5' max='35' value='15' onChange='vars.page_lim = event.target.value' />
+			</p>
+			<p>
+				Automatically reload page:
+				<input type='checkbox' name='autoreload' onChange='changeCheckbox(event)' />
+			</p>
+			<p>
+				Time before a server needs updating:
+				<input type='number' min='0' max='3600' value='60' onChange='vars.cache_time = event.target.value' />
+			</p>
+			<p>
+				Enable server tracking (history) <a href='https://github.com/tltneon/lgsl/wiki/features#pagination' target='_blank' class='hinfolink'>?</a>:
+				<input type='checkbox' name='history' onChange='changeCheckbox(event)' />
+			</p>
+			<p>
+				<l k='hideo'></l>:
+				<input type='checkbox' name='hide_offline' onChange='changeCheckbox(event)' />
+			</p>
+			<p>
+				<l k='pubad'></l>:
+				<select type='text' name='public_add' onChange='changeValue(event)' />
+					<option value='0' style='color: red;'>Disabled</option>
+					<option value='1' style='color: orange;'>Enabled (require approval)</option>
+					<option value='2' style='color: green;'>Enabled (shows instantly)</option>
+				</select>
+			</p>
+			<p>
+				<l k='showt'></l>:
+				<input type='checkbox' name='totals' onChange='changeCheckbox(event)' />
+			</p>
+			<p>
+				<l k='showl'></l>:
+				<select type='text' name='locations' onChange='changeValue(event)' />
+					<option value='0' style='color: red;'>Disabled</option>
+					<option value='1' style='color: green;'>Enabled</option>
+					<option disabled style='background: gray;'></option>
+					<option disabled>Select manually:</option>
+					{$loc}
+				</select>
+			</p>
 
-		<button onClick="generateConfig()">
-			<l k="gener"></l>
-		</button>
+			<button onClick='generateConfig()'>
+				<l k='gener'></l>
+			</button>
 
-		<p style="color: red; font-size: 12pt;"><l k="remem"></l></p>
-		<hr />
-		<p style="font-size: 9pt;"><l k="after"></l></p>
-	</div>
-	';
+			<p style='color: red; font-size: 12pt;'><l k='remem'></l></p>
+			<hr />
+			<p style='font-size: 9pt;'><l k='after'></l></p>
+		</div>
+	";
 
   echo $output;
   unset($output);
@@ -429,9 +446,9 @@ document.addEventListener("reloadLocale", reloadLocale);
 	function changeCheckbox(event) {
 		if (event.target.name == 'scripts') {
 			vars[event.target.name][event.target.id] = event.target.checked;
+		} else {
+			vars[event.target.name] = event.target.checked;
 		}
-		else
-		vars[event.target.name] = event.target.checked;
 	}
 	function updateLValue(el, key) {
 		el.innerText = "";

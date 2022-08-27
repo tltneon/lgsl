@@ -137,7 +137,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
   if ($lgsl_config['list']['totals']) {
-    $total = lgsl_group_totals($server_list);
+    $total = LGSL::group_totals();
 
     $output .= "
     <div id='totals'>

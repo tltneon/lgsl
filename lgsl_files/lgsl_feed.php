@@ -63,23 +63,24 @@
 //------------------------------------------------------------------------------------------------------------+
 // CHECK PUBLIC FEED SETTING AND EITHER ADD [a] REQUEST OR ENSURE [a] IS REMOVED
 
-  $request = $lgsl_config['public_feed'] ? $request."a" : str_replace("a", "", $request);
+  $request = $lgsl_config['public_feed'] ? "{$request}a" : str_replace("a", "", $request);
 
 //------------------------------------------------------------------------------------------------------------+
 // QUERY SERVER
 
-  $server = lgsl_query_cached($type, $ip, $c_port, $q_port, $s_port, $request);
+  $server = new Server(array("type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port));
+  $server->lgsl_cached_query($request);
 
 //------------------------------------------------------------------------------------------------------------+
 // ADD THE FEED PROVIDER
 
-  if (isset($server['e'])) { $server['e']['_feed_'] = "http://{$_SERVER['HTTP_HOST']}"; }
+  $server->set_extra_value('_feed_', "http://{$_SERVER['HTTP_HOST']}");
+  $server->set_extra_value('_lgsl_', "v7.0.0");
 
 //------------------------------------------------------------------------------------------------------------+
 // FEED USAGE LOGGING - 'logs' FOLDER MUST BE MANUALLY CREATED AND SET AS WRITABLE
 
   if (is_dir("logs") && is_writable("logs")) {
-//  $file_path = "logs/log_feed.html";
     $file_path = "logs/log_feed_{$_SERVER['REMOTE_ADDR']}.html";
 
     if (filesize($file_path) > 1234567) { unlink($file_path); }
@@ -102,9 +103,8 @@
 //------------------------------------------------------------------------------------------------------------+
 // SERIALIZED OUTPUT
 
+  $server = $server->to_array();
   if (!$xml) {
-    if ($format == 0) { exit("_SLGSLF_".serialize($server)."_SLGSLF_"); } // LEGACY SYSTEM ( 5.6 AND OLDER )
-
     if (($format == 3 || $format == 4) && function_exists("json_encode")) {
       if ($format == 4 && function_exists("gzcompress")) { exit("_F4_".base64_encode(gzcompress(json_encode($server)))."_F4_"); }
       else                                               { exit("_F3_".base64_encode(           json_encode($server)). "_F3_"); }

@@ -192,131 +192,131 @@
     static public function lgsl_type_list() {
       global $lgsl_config;
       $lgsl_type_list = array(
-      "aarmy"         => "Americas Army",
-      "aarmy3"        => "Americas Army 3",
-      "arcasimracing" => "Arca Sim Racing",
-      "arma"          => "ArmA: Armed Assault",
-      "arma2"         => "ArmA 2",
-      "arma3"         => "ArmA 3 / DayZ",
-      "avp2"          => "Aliens VS. Predator 2",
-      "avp2010"       => "Aliens VS. Predator ( 2010 By Rebellion )",
-      "bfbc2"         => "Battlefield Bad Company 2",
-      "bfvietnam"     => "Battlefield Vietnam",
-      "bf1942"        => "Battlefield 1942",
-      "bf2"           => "Battlefield 2",
-      "bf3"           => "Battlefield 3",
-      "bf4"           => "Battlefield 4",
-      "bf2142"        => "Battlefield 2142",
-      "callofduty"    => "Call Of Duty",
-      "callofdutybo3" => "Call Of Duty: Black Ops 3",
-      "callofdutyiw"  => "Call Of Duty (IW5, IW6x)",
-      "callofdutyuo"  => "Call Of Duty: United Offensive",
-      "callofdutywaw" => "Call Of Duty: World at War",
-      "callofduty2"   => "Call Of Duty 2",
-      "callofduty4"   => "Call Of Duty 4 / CoD4X",
-      "cncrenegade"   => "Command and Conquer: Renegade",
-      "conanexiles"   => "Conan Exiles",
-      "crysis"        => "Crysis",
-      "crysiswars"    => "Crysis Wars",
-      "cs2d"          => "Counter-Strike 2D",
-      "cube"          => "Cube Engine",
-      "discord"       => "Discord",
-      "doomskulltag"  => "Doom - Skulltag",
-      "doomzdaemon"   => "Doom - ZDaemon",
-      "doom3"         => "Doom 3",
-      "dh2005"        => "Deer Hunter 2005",
-      "factorio"      => "Factorio",
-      "farcry"        => "Far Cry",
-      "farmsim"       => "Farming Simulator",
-      "fear"          => "F.E.A.R.",
-      "fivem"         => "FiveM / RedM",
-      "flashpoint"    => "Operation Flashpoint",
-      "freelancer"    => "Freelancer",
-      "frontlines"    => "Frontlines: Fuel Of War",
-      "f1c9902"       => "F1 Challenge 99-02",
-      "gamespy1"      => "Generic GameSpy 1",
-      "gamespy2"      => "Generic GameSpy 2",
-      "gamespy3"      => "Generic GameSpy 3",
-      "ghostrecon"    => "Ghost Recon",
-      "graw"          => "Ghost Recon: Advanced Warfighter",
-      "graw2"         => "Ghost Recon: Advanced Warfighter 2",
-      "gtr2"          => "GTR 2",
-      "had2"          => "Hidden and Dangerous 2",
-      "halflife"      => "Half-life Steam Protocol (CS 1.6, etc)",
-      "halflifewon"   => "Half-Life WON Protocol [OLD] (CS 1.5)",
-      "halo"          => "Halo",
-      "il2"           => "IL-2 Sturmovik",
-      "jediknight2"   => "JediKnight 2: Jedi Outcast",
-      "jediknightja"  => "JediKnight: Jedi Academy",
-      "jc2mp"         => "Just Cause 2 Multiplayer",
-      "killingfloor"  => "Killing Floor",
-      "kingpin"       => "Kingpin: Life of Crime",
-      "m2mp"          => "Mafia II Multiplayer",
-      "minecraft"     => "Minecraft",
-      "mohaa"         => "Medal of Honor: Allied Assault",
-      "mohaab"        => "Medal of Honor: Allied Assault Breakthrough",
-      "mohaas"        => "Medal of Honor: Allied Assault Spearhead",
-      "mohpa"         => "Medal of Honor: Pacific Assault",
-      "mta"           => "Multi Theft Auto",
-      "nascar2004"    => "Nascar Thunder 2004",
-      "neverwinter"   => "NeverWinter Nights",
-      "neverwinter2"  => "NeverWinter Nights 2",
-      "nexuiz"        => "Nexuiz",
-      "openttd"       => "Open Transport Tycoon Deluxe",
-      "painkiller"    => "PainKiller",
-      "plainsight"    => "Plain Sight",
-      "prey"          => "Prey",
-      "quakeworld"    => "Quake World",
-      "quakewars"     => "Enemy Territory: Quake Wars",
-      "quake2"        => "Quake 2",
-      "quake3"        => "Quake 3",
-      "quake4"        => "Quake 4",
-      "ragemp"        => "Rage:MP",
-      "ravenshield"   => "Raven Shield",
-      "redorchestra"  => "Red Orchestra",
-      "rfactor"       => "RFactor",
-      "samp"          => "San Andreas Multiplayer",
-      "savage"        => "Savage",
-      "savage2"       => "Savage 2",
-      "scum"          => "SCUM",
-      "sf"            => "Satisfactory",
-      "serioussam"    => "Serious Sam",
-      "serioussam2"   => "Serious Sam 2",
-      "shatteredh"    => "Shattered Horizon",
-      "sof2"          => "Soldier of Fortune 2",
-      "soldat"        => "Soldat",
-      "source"        => "Source Protocol ( Half-Life 2, etc. )",
-      "stalker"       => "S.T.A.L.K.E.R.",
-      "stalkercop"    => "S.T.A.L.K.E.R. Call of Pripyat",
-      "stalkercs"     => "S.T.A.L.K.E.R. Clear Sky",
-      "startrekef"    => "StarTrek Elite-Force",
-      "starwarsbf"    => "Star Wars: Battlefront",
-      "starwarsbf2"   => "Star Wars: Battlefront 2",
-      "starwarsrc"    => "Star Wars: Republic Commando",
-      "swat4"         => "SWAT 4",
-      "teeworlds"     => "Teeworlds",
-      "terraria"      => "Terraria",
-      "tribes"        => "Tribes ( Starsiege )",
-      "tribes2"       => "Tribes 2",
-      "tribesv"       => "Tribes Vengeance",
-      "ts"            => "Teamspeak",
-      "ts3"           => "Teamspeak 3",
-      "teaspeak"      => "Teaspeak",
-      "urbanterror"   => "UrbanTerror",
-      "ut"            => "Unreal Tournament",
-      "ut2003"        => "Unreal Tournament 2003",
-      "ut2004"        => "Unreal Tournament 2004",
-      "ut3"           => "Unreal Tournament 3",
-      "vcmp"          => "Vice City Multiplayer",
-      "vietcong"      => "Vietcong",
-      "vietcong2"     => "Vietcong 2",
-      "warsow"        => "Warsow",
-      "warsowold"     => "Warsow ( 0.4.2 and older )",
-      "wolfet"        => "Wolfenstein: Enemy Territory",
-      "wolfrtcw"      => "Wolfenstein: Return To Castle Wolfenstein",
-      "wolf2009"      => "Wolfenstein ( 2009 By Raven )",
-      "wow"           => "World of Warcraft",
-      "test"          => "~ Test ( For PHP Developers )"
+        "aarmy"         => "Americas Army",
+        "aarmy3"        => "Americas Army 3",
+        "arcasimracing" => "Arca Sim Racing",
+        "arma"          => "ArmA: Armed Assault",
+        "arma2"         => "ArmA 2",
+        "arma3"         => "ArmA 3 / DayZ",
+        "avp2"          => "Aliens VS. Predator 2",
+        "avp2010"       => "Aliens VS. Predator ( 2010 By Rebellion )",
+        "bfbc2"         => "Battlefield Bad Company 2",
+        "bfvietnam"     => "Battlefield Vietnam",
+        "bf1942"        => "Battlefield 1942",
+        "bf2"           => "Battlefield 2",
+        "bf3"           => "Battlefield 3",
+        "bf4"           => "Battlefield 4",
+        "bf2142"        => "Battlefield 2142",
+        "callofduty"    => "Call Of Duty",
+        "callofdutybo3" => "Call Of Duty: Black Ops 3",
+        "callofdutyiw"  => "Call Of Duty (IW5, IW6x)",
+        "callofdutyuo"  => "Call Of Duty: United Offensive",
+        "callofdutywaw" => "Call Of Duty: World at War",
+        "callofduty2"   => "Call Of Duty 2",
+        "callofduty4"   => "Call Of Duty 4 / CoD4X",
+        "cncrenegade"   => "Command and Conquer: Renegade",
+        "conanexiles"   => "Conan Exiles",
+        "crysis"        => "Crysis",
+        "crysiswars"    => "Crysis Wars",
+        "cs2d"          => "Counter-Strike 2D",
+        "cube"          => "Cube Engine",
+        "discord"       => "Discord",
+        "doomskulltag"  => "Doom - Skulltag",
+        "doomzdaemon"   => "Doom - ZDaemon",
+        "doom3"         => "Doom 3",
+        "dh2005"        => "Deer Hunter 2005",
+        "factorio"      => "Factorio",
+        "farcry"        => "Far Cry",
+        "farmsim"       => "Farming Simulator",
+        "fear"          => "F.E.A.R.",
+        "fivem"         => "FiveM / RedM",
+        "flashpoint"    => "Operation Flashpoint",
+        "freelancer"    => "Freelancer",
+        "frontlines"    => "Frontlines: Fuel Of War",
+        "f1c9902"       => "F1 Challenge 99-02",
+        "gamespy1"      => "Generic GameSpy 1",
+        "gamespy2"      => "Generic GameSpy 2",
+        "gamespy3"      => "Generic GameSpy 3",
+        "ghostrecon"    => "Ghost Recon",
+        "graw"          => "Ghost Recon: Advanced Warfighter",
+        "graw2"         => "Ghost Recon: Advanced Warfighter 2",
+        "gtr2"          => "GTR 2",
+        "had2"          => "Hidden and Dangerous 2",
+        "halflife"      => "Half-life Steam Protocol (CS 1.6, etc)",
+        "halflifewon"   => "Half-Life WON Protocol [OLD] (CS 1.5)",
+        "halo"          => "Halo",
+        "il2"           => "IL-2 Sturmovik",
+        "jediknight2"   => "JediKnight 2: Jedi Outcast",
+        "jediknightja"  => "JediKnight: Jedi Academy",
+        "jc2mp"         => "Just Cause 2 Multiplayer",
+        "killingfloor"  => "Killing Floor",
+        "kingpin"       => "Kingpin: Life of Crime",
+        "m2mp"          => "Mafia II Multiplayer",
+        "minecraft"     => "Minecraft",
+        "mohaa"         => "Medal of Honor: Allied Assault",
+        "mohaab"        => "Medal of Honor: Allied Assault Breakthrough",
+        "mohaas"        => "Medal of Honor: Allied Assault Spearhead",
+        "mohpa"         => "Medal of Honor: Pacific Assault",
+        "mta"           => "Multi Theft Auto",
+        "nascar2004"    => "Nascar Thunder 2004",
+        "neverwinter"   => "NeverWinter Nights",
+        "neverwinter2"  => "NeverWinter Nights 2",
+        "nexuiz"        => "Nexuiz",
+        "openttd"       => "Open Transport Tycoon Deluxe",
+        "painkiller"    => "PainKiller",
+        "plainsight"    => "Plain Sight",
+        "prey"          => "Prey",
+        "quakeworld"    => "Quake World",
+        "quakewars"     => "Enemy Territory: Quake Wars",
+        "quake2"        => "Quake 2",
+        "quake3"        => "Quake 3",
+        "quake4"        => "Quake 4",
+        "ragemp"        => "Rage:MP",
+        "ravenshield"   => "Raven Shield",
+        "redorchestra"  => "Red Orchestra",
+        "rfactor"       => "RFactor",
+        "samp"          => "San Andreas Multiplayer",
+        "savage"        => "Savage",
+        "savage2"       => "Savage 2",
+        "scum"          => "SCUM",
+        "sf"            => "Satisfactory",
+        "serioussam"    => "Serious Sam",
+        "serioussam2"   => "Serious Sam 2",
+        "shatteredh"    => "Shattered Horizon",
+        "sof2"          => "Soldier of Fortune 2",
+        "soldat"        => "Soldat",
+        "source"        => "Source Protocol ( Half-Life 2, etc. )",
+        "stalker"       => "S.T.A.L.K.E.R.",
+        "stalkercop"    => "S.T.A.L.K.E.R. Call of Pripyat",
+        "stalkercs"     => "S.T.A.L.K.E.R. Clear Sky",
+        "startrekef"    => "StarTrek Elite-Force",
+        "starwarsbf"    => "Star Wars: Battlefront",
+        "starwarsbf2"   => "Star Wars: Battlefront 2",
+        "starwarsrc"    => "Star Wars: Republic Commando",
+        "swat4"         => "SWAT 4",
+        "teeworlds"     => "Teeworlds",
+        "terraria"      => "Terraria",
+        "tribes"        => "Tribes ( Starsiege )",
+        "tribes2"       => "Tribes 2",
+        "tribesv"       => "Tribes Vengeance",
+        "ts"            => "Teamspeak",
+        "ts3"           => "Teamspeak 3",
+        "teaspeak"      => "Teaspeak",
+        "urbanterror"   => "UrbanTerror",
+        "ut"            => "Unreal Tournament",
+        "ut2003"        => "Unreal Tournament 2003",
+        "ut2004"        => "Unreal Tournament 2004",
+        "ut3"           => "Unreal Tournament 3",
+        "vcmp"          => "Vice City Multiplayer",
+        "vietcong"      => "Vietcong",
+        "vietcong2"     => "Vietcong 2",
+        "warsow"        => "Warsow",
+        "warsowold"     => "Warsow ( 0.4.2 and older )",
+        "wolfet"        => "Wolfenstein: Enemy Territory",
+        "wolfrtcw"      => "Wolfenstein: Return To Castle Wolfenstein",
+        "wolf2009"      => "Wolfenstein ( 2009 By Raven )",
+        "wow"           => "World of Warcraft",
+        "test"          => "~ Test ( For PHP Developers )"
       );
       if ($lgsl_config['disabled_types']) {
         foreach ($lgsl_config['disabled_types'] as $type) {
@@ -432,6 +432,12 @@
         @fclose($this->_lgsl_fp);
       }
     }
+    private function _fp_write($string) {
+      fwrite($this->_lgsl_fp, $string);
+    }
+    private function _fp_read($length) {
+      return fread($this->_lgsl_fp, $length);
+    }
     
     public function lgsl_query_err() {
       $this->_server->set_name("LGSL PROBLEM: FUNCTION DOES NOT EXIST");
@@ -490,13 +496,13 @@
     public function lgsl_query_02() {
       $server = $this->_server->to_array();
 
-      if     ($server['b']['type'] == "quake2")              { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFstatus");        }
-      elseif ($server['b']['type'] == "warsowold")           { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo");       }
-      elseif ($server['b']['type'] == "callofdutyiw")        { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFgetinfo LGSL");  } // IW6x
-      elseif (strpos($server['b']['type'], "moh") !== FALSE) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFF\x02getstatus"); } // mohaa_ mohaab_ mohaas_ mohpa_
-      else                                                   { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFgetstatus");     }
+      if     ($server['b']['type'] == "quake2")              { $this->_fp_write("\xFF\xFF\xFF\xFFstatus");        }
+      elseif ($server['b']['type'] == "warsowold")           { $this->_fp_write("\xFF\xFF\xFF\xFFgetinfo");       }
+      elseif ($server['b']['type'] == "callofdutyiw")        { $this->_fp_write("\xFF\xFF\xFF\xFFgetinfo LGSL");  } // IW6x
+      elseif (strpos($server['b']['type'], "moh") !== FALSE) { $this->_fp_write("\xFF\xFF\xFF\xFF\x02getstatus"); } // mohaa_ mohaab_ mohaas_ mohpa_
+      else                                                   { $this->_fp_write("\xFF\xFF\xFF\xFFgetstatus");     }
 
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
       if (!$buffer) { return FALSE; }
 
       //---------------------------------------------------------+
@@ -594,9 +600,9 @@
       // BF1942 BUG: RETURNS 'GHOST' NAMES - TO SKIP THESE WE NEED AN [s] REQUEST FOR AN ACCURATE PLAYER COUNT
       if ($server['b']['type'] == "bf1942" && $this->_lgsl_need['p'] && !$this->_lgsl_need['s'] && !isset($this->_lgsl_need['sp'])) { $this->_lgsl_need['s'] = TRUE; $this->_lgsl_need['sp'] = TRUE; }
   
-      if     ($server['b']['type'] == "cncrenegade")            { fwrite($this->_lgsl_fp, "\\status\\"); }
-      elseif ($this->_lgsl_need['s'] || $this->_lgsl_need['e']) { fwrite($this->_lgsl_fp, "\\basic\\\\info\\\\rules\\"); $this->_lgsl_need['s'] = FALSE; $this->_lgsl_need['e'] = FALSE; }
-      elseif ($this->_lgsl_need['p'])                           { fwrite($this->_lgsl_fp, "\\players\\");                $this->_lgsl_need['p'] = FALSE; }
+      if     ($server['b']['type'] == "cncrenegade")            { $this->_fp_write("\\status\\"); }
+      elseif ($this->_lgsl_need['s'] || $this->_lgsl_need['e']) { $this->_fp_write("\\basic\\\\info\\\\rules\\"); $this->_lgsl_need['s'] = FALSE; $this->_lgsl_need['e'] = FALSE; }
+      elseif ($this->_lgsl_need['p'])                           { $this->_fp_write("\\players\\");                $this->_lgsl_need['p'] = FALSE; }
   
       //---------------------------------------------------------+
   
@@ -605,7 +611,7 @@
       $packet_total = 20;
   
       do {
-        $packet = fread($this->_lgsl_fp, 4096);
+        $packet = $this->_fp_read(4096);
   
         // QUERY PORT CHECK AS THE CONNECTION PORT WILL ALSO RESPOND
         if (strpos($packet, "\\") === FALSE) { return FALSE; }
@@ -706,9 +712,9 @@
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
   
-      fwrite($this->_lgsl_fp, "REPORT");
+      $this->_fp_write("REPORT");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -796,14 +802,14 @@
       //  REFERENCE: http://developer.valvesoftware.com/wiki/Server_Queries
 
       if ($server['b']['type'] == "halflifewon") {
-        if     ($this->_lgsl_need['s']) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFdetails\x00"); }
-        elseif ($this->_lgsl_need['e']) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFrules\x00");   }
-        elseif ($this->_lgsl_need['p']) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFplayers\x00"); }
+        if     ($this->_lgsl_need['s']) { $this->_fp_write("\xFF\xFF\xFF\xFFdetails\x00"); }
+        elseif ($this->_lgsl_need['e']) { $this->_fp_write("\xFF\xFF\xFF\xFFrules\x00");   }
+        elseif ($this->_lgsl_need['p']) { $this->_fp_write("\xFF\xFF\xFF\xFFplayers\x00"); }
       } else {
         $challenge_code = isset($this->_lgsl_need['challenge']) ? $this->_lgsl_need['challenge'] : "\x00\x00\x00\x00";
-        if     ($this->_lgsl_need['s']) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFF\x54Source Engine Query\x00" . (isset($this->_lgsl_need['challenge']) ? $challenge_code : "")); }
-        elseif ($this->_lgsl_need['e']) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFF\x56{$challenge_code}");                                                                 }
-        elseif ($this->_lgsl_need['p']) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFF\x55{$challenge_code}");                                                                 }
+        if     ($this->_lgsl_need['s']) { $this->_fp_write("\xFF\xFF\xFF\xFF\x54Source Engine Query\x00" . (isset($this->_lgsl_need['challenge']) ? $challenge_code : "")); }
+        elseif ($this->_lgsl_need['e']) { $this->_fp_write("\xFF\xFF\xFF\xFF\x56{$challenge_code}");                                                                 }
+        elseif ($this->_lgsl_need['p']) { $this->_fp_write("\xFF\xFF\xFF\xFF\x55{$challenge_code}");                                                                 }
       }
 
       //---------------------------------------------------------+
@@ -816,7 +822,7 @@
       $packet_total = 4;
 
       do {
-        if (!($packet = fread($this->_lgsl_fp, 4096))) {
+        if (!($packet = $this->_fp_read(4096))) {
           if ($this->_lgsl_need['s']) { return FALSE; }
           elseif ($this->_lgsl_need['e']) { $this->_lgsl_need['e'] = FALSE; return TRUE; }
           else { return TRUE; }
@@ -999,9 +1005,9 @@
       $challenge_code = "";
 
       if ($server['b']['type'] != "bf2" && $server['b']['type'] != "graw") {
-        fwrite($this->_lgsl_fp, "\xFE\xFD\x09\x21\x21\x21\x21\xFF\xFF\xFF\x01");
+        $this->_fp_write("\xFE\xFD\x09\x21\x21\x21\x21\xFF\xFF\xFF\x01");
 
-        $challenge_packet = fread($this->_lgsl_fp, 4096);
+        $challenge_packet = $this->_fp_read(4096);
 
         if (!$challenge_packet) { return FALSE; }
 
@@ -1013,7 +1019,7 @@
         $challenge_code = $challenge_code ? chr($challenge_code >> 24).chr($challenge_code >> 16).chr($challenge_code >> 8).chr($challenge_code >> 0) : "";
       }
 
-      fwrite($this->_lgsl_fp, "\xFE\xFD\x00\x21\x21\x21\x21{$challenge_code}\xFF\xFF\xFF\x01");
+      $this->_fp_write("\xFE\xFD\x00\x21\x21\x21\x21{$challenge_code}\xFF\xFF\xFF\x01");
 
       //---------------------------------------------------------+
       //  GET RAW PACKET DATA
@@ -1024,7 +1030,7 @@
 
       do {
         $packet_count ++;
-        $packet = fread($this->_lgsl_fp, 8192);
+        $packet = $this->_fp_read(8192);
 
         if (!$packet) { return FALSE; }
 
@@ -1186,9 +1192,9 @@
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
   
-      fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFstatus\x00");
+      $this->_fp_write("\xFF\xFF\xFF\xFFstatus\x00");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -1243,9 +1249,9 @@
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
   
-      fwrite($this->_lgsl_fp, "s"); // ASE ( ALL SEEING EYE ) PROTOCOL
+      $this->_fp_write("s"); // ASE ( ALL SEEING EYE ) PROTOCOL
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -1314,9 +1320,9 @@
       if ($this->_lgsl_need['s'] || $this->_lgsl_need['e']) {
         $this->_lgsl_need['s'] = FALSE; $this->_lgsl_need['e'] = FALSE;
   
-        fwrite($this->_lgsl_fp, "\xFE\xFD\x00\x21\x21\x21\x21\xFF\x00\x00\x00");
+        $this->_fp_write("\xFE\xFD\x00\x21\x21\x21\x21\xFF\x00\x00\x00");
   
-        $buffer = fread($this->_lgsl_fp, 4096);
+        $buffer = $this->_fp_read(4096);
   
         $buffer = substr($buffer, 5, -2); // REMOVE HEADER AND FOOTER
   
@@ -1355,9 +1361,9 @@
       elseif ($this->_lgsl_need['p']) {
         $this->_lgsl_need['p'] = FALSE;
   
-        fwrite($this->_lgsl_fp, "\xFE\xFD\x00\x21\x21\x21\x21\x00\xFF\x00\x00");
+        $this->_fp_write("\xFE\xFD\x00\x21\x21\x21\x21\x00\xFF\x00\x00");
   
-        $buffer = fread($this->_lgsl_fp, 4096);
+        $buffer = $this->_fp_read(4096);
   
         $buffer = substr($buffer, 7, -1); // REMOVE HEADER / PLAYER TOTAL / FOOTER
   
@@ -1395,10 +1401,10 @@
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
   
-      if ($server['b']['type'] == "quakewars") { fwrite($this->_lgsl_fp, "\xFF\xFFgetInfoEX\xFF"); }
-      else                                     { fwrite($this->_lgsl_fp, "\xFF\xFFgetInfo\xFF");   }
+      if ($server['b']['type'] == "quakewars") { $this->_fp_write("\xFF\xFFgetInfoEX\xFF"); }
+      else                                     { $this->_fp_write("\xFF\xFFgetInfo\xFF");   }
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -1614,13 +1620,13 @@
       elseif ($this->_lgsl_need['p'] && $server['b']['type'] == "samp") { $challenge_packet .= "d"; }
       elseif ($this->_lgsl_need['p'] && $server['b']['type'] == "vcmp") { $challenge_packet .= "c"; }
   
-      fwrite($this->_lgsl_fp, $challenge_packet);
+      $this->_fp_write($challenge_packet);
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (strlen($buffer) == 0) { // IN CASE OF PACKET LOSS
-        fwrite($this->_lgsl_fp, $challenge_packet);
-        $buffer = fread($this->_lgsl_fp, 4096);
+        $this->_fp_write($challenge_packet);
+        $buffer = $this->_fp_read(4096);
       }
   
       if (!$buffer && substr($challenge_packet, 10, 1) == "i") { return FALSE; }
@@ -1702,13 +1708,13 @@
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
   
-      $buffer_s = ""; fwrite($this->_lgsl_fp, "\x21\x21\x21\x21\x00"); // REQUEST [s]
-      $buffer_e = ""; fwrite($this->_lgsl_fp, "\x21\x21\x21\x21\x01"); // REQUEST [e]
-      $buffer_p = ""; fwrite($this->_lgsl_fp, "\x21\x21\x21\x21\x02"); // REQUEST [p]
+      $buffer_s = ""; $this->_fp_write("\x21\x21\x21\x21\x00"); // REQUEST [s]
+      $buffer_e = ""; $this->_fp_write("\x21\x21\x21\x21\x01"); // REQUEST [e]
+      $buffer_p = ""; $this->_fp_write("\x21\x21\x21\x21\x02"); // REQUEST [p]
   
       //---------------------------------------------------------+
   
-      while ($packet = fread($this->_lgsl_fp, 4096)) {
+      while ($packet = $this->_fp_read(4096)) {
         if     ($packet[4] == "\x00") { $buffer_s .= substr($packet, 5); }
         elseif ($packet[4] == "\x01") { $buffer_e .= substr($packet, 5); }
         elseif ($packet[4] == "\x02") { $buffer_p .= substr($packet, 5); }
@@ -1782,9 +1788,9 @@
       //---------------------------------------------------------+
       //  REFERENCE: http://flstat.cryosphere.co.uk/global-list.php
   
-      fwrite($this->_lgsl_fp, "\x00\x02\xf1\x26\x01\x26\xf0\x90\xa6\xf0\x26\x57\x4e\xac\xa0\xec\xf8\x68\xe4\x8d\x21");
+      $this->_fp_write("\x00\x02\xf1\x26\x01\x26\xf0\x90\xa6\xf0\x26\x57\x4e\xac\xa0\xec\xf8\x68\xe4\x8d\x21");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -1827,9 +1833,9 @@
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
   
-      fwrite($this->_lgsl_fp, "GTR2_Direct_IP_Search\x00");
+      $this->_fp_write("GTR2_Direct_IP_Search\x00");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -1861,9 +1867,9 @@
       //  http://users.pandora.be/viperius/mUtil/
       //  USES FIXED DATA POSITIONS WITH RANDOM CHARACTERS FILLING THE GAPS
   
-      fwrite($this->_lgsl_fp, "rF_S");
+      $this->_fp_write("rF_S");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -1943,9 +1949,9 @@
       //---------------------------------------------------------+
       //  REFERENCE: http://masterserver.savage.s2games.com
   
-      fwrite($this->_lgsl_fp, "\x9e\x4c\x23\x00\x00\xce\x21\x21\x21\x21");
+      $this->_fp_write("\x9e\x4c\x23\x00\x00\xce\x21\x21\x21\x21");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -1997,9 +2003,9 @@
       //---------------------------------------------------------+
       //  REFERENCE: http://masterserver.savage2.s2games.com
   
-      fwrite($this->_lgsl_fp, "\x01");
+      $this->_fp_write("\x01");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -2029,9 +2035,9 @@
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
   
-      fwrite($this->_lgsl_fp, "\xC0\xDE\xF1\x11\x42\x06\x00\xF5\x03\x21\x21\x21\x21");
+      $this->_fp_write("\xC0\xDE\xF1\x11\x42\x06\x00\xF5\x03\x21\x21\x21\x21");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -2146,21 +2152,21 @@
       //---------------------------------------------------------+
   
       if ($this->_lgsl_need['s']) {
-        fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFFFLSQ");
+        $this->_fp_write("\xFF\xFF\xFF\xFFFLSQ");
       } else {
-        fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFF\x57");
+        $this->_fp_write("\xFF\xFF\xFF\xFF\x57");
   
-        $challenge_packet = fread($this->_lgsl_fp, 4096);
+        $challenge_packet = $this->_fp_read(4096);
   
         if (!$challenge_packet) { return FALSE; }
   
         $challenge_code = substr($challenge_packet, 5, 4);
   
-        if     ($this->_lgsl_need['e']) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFF\x56{$challenge_code}"); }
-        elseif ($this->_lgsl_need['p']) { fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFF\x55{$challenge_code}"); }
+        if     ($this->_lgsl_need['e']) { $this->_fp_write("\xFF\xFF\xFF\xFF\x56{$challenge_code}"); }
+        elseif ($this->_lgsl_need['p']) { $this->_fp_write("\xFF\xFF\xFF\xFF\x55{$challenge_code}"); }
       }
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
       $buffer = substr($buffer, 4); // REMOVE HEADER
   
       if (!$buffer) { return FALSE; }
@@ -2231,7 +2237,7 @@
   
       fwrite($this->_lgsl_fp,"\xff\xff\xff\xff\xff\xff\xff\xff\xff\xffgief");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
       $buffer = substr($buffer, 20); // REMOVE HEADER
   
       if (!$buffer) { return FALSE; }
@@ -2273,7 +2279,7 @@
   
       fwrite($this->_lgsl_fp,"\x03\x00\x00");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
       $buffer = substr($buffer, 3); // REMOVE HEADER
   
       if (!$buffer) { return FALSE; }
@@ -2325,9 +2331,9 @@
       //  http://siteinthe.us
       //  http://www.tribesmasterserver.com
   
-      fwrite($this->_lgsl_fp, "b++");
+      $this->_fp_write("b++");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -2432,9 +2438,9 @@
       //---------------------------------------------------------+
       //  REFERENCE: http://cubelister.sourceforge.net
   
-      fwrite($this->_lgsl_fp, "\x21\x21");
+      $this->_fp_write("\x21\x21");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -2508,10 +2514,10 @@
         $player_key = 0;
   
         for ($player_id=0; $player_id<32; $player_id++) {
-          fwrite($this->_lgsl_fp, "\x00\x01".chr($player_id));
+          $this->_fp_write("\x00\x01".chr($player_id));
   
           // READ PACKET
-          $buffer = fread($this->_lgsl_fp, 4096);
+          $buffer = $this->_fp_read(4096);
           if (!$buffer) { break; }
   
           // CHECK IF PLAYER ID IS ACTIVE
@@ -2522,7 +2528,7 @@
   
           // IF PREVIEW PACKET GET THE FULL PACKET THAT FOLLOWS
           if (strlen($buffer) < 15) {
-            $buffer = fread($this->_lgsl_fp, 4096);
+            $buffer = $this->_fp_read(4096);
             if (!$buffer) { break; }
           }
   
@@ -2572,14 +2578,13 @@
   
       fwrite($this->_lgsl_fp,"\x12\x02\x21\x21\x21\x21");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
       $buffer = substr($buffer, 6); // REMOVE HEADER
   
       //---------------------------------------------------------+
-  
       $server['s']['game']       = lgsl_cut_pascal($buffer);
       $server['e']['gamemode']   = lgsl_cut_pascal($buffer);
       $server['s']['map']        = lgsl_cut_pascal($buffer);
@@ -2636,7 +2641,7 @@
   
       $packet = "\x0A\x00playerName\x06\x06\x00query\x00";
       lgsl_gs_crypt($server['b']['type'], $packet, TRUE);
-      fwrite($this->_lgsl_fp, "\x4A\x35\xFF\xFF\x02\x00\x02\x00\x01\x00{$packet}");
+      $this->_fp_write("\x4A\x35\xFF\xFF\x02\x00\x02\x00\x01\x00{$packet}");
   
       $buffer = array();
       $packet_count = 0;
@@ -2644,7 +2649,7 @@
   
       do {
         $packet_count ++;
-        $packet = fread($this->_lgsl_fp, 4096);
+        $packet = $this->_fp_read(4096);
   
         if (!isset($packet[5])) { return FALSE; }
   
@@ -2771,9 +2776,9 @@
   
       //---------------------------------------------------------+
   
-      fwrite($this->_lgsl_fp, "\x02\xB8\x49\x1A\x9C\x8B\xB5\x3F\x1E\x8F\x07");
+      $this->_fp_write("\x02\xB8\x49\x1A\x9C\x8B\xB5\x3F\x1E\x8F\x07");
   
-      $packet = fread($this->_lgsl_fp, 4096);
+      $packet = $this->_fp_read(4096);
   
       if (!$packet) { return FALSE; }
   
@@ -2903,9 +2908,9 @@
       //---------------------------------------------------------+
       //  REFERENCE: http://doomutils.ucoz.com
   
-      fwrite($this->_lgsl_fp, "\xA3\xDB\x0B\x00"."\xFC\xFD\xFE\xFF"."\x01\x00\x00\x00"."\x21\x21\x21\x21");
+      $this->_fp_write("\xA3\xDB\x0B\x00"."\xFC\xFD\xFE\xFF"."\x01\x00\x00\x00"."\x21\x21\x21\x21");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -2993,9 +2998,9 @@
         $this->_lgsl_need['s'] = FALSE;
         $this->_lgsl_need['e'] = FALSE;
   
-        fwrite($this->_lgsl_fp, "\x01\x00\x03\x10\x21\xFB\x01\x75\x00");
+        $this->_fp_write("\x01\x00\x03\x10\x21\xFB\x01\x75\x00");
   
-        $buffer = fread($this->_lgsl_fp, 4096);
+        $buffer = $this->_fp_read(4096);
   
         if (!$buffer) { return FALSE; }
   
@@ -3018,9 +3023,9 @@
       if ($this->_lgsl_need['p']) {
         $this->_lgsl_need['p'] = FALSE;
   
-        fwrite($this->_lgsl_fp, "\x01\x00\xFB\x05");
+        $this->_fp_write("\x01\x00\xFB\x05");
   
-        $buffer = fread($this->_lgsl_fp, 4096);
+        $buffer = $this->_fp_read(4096);
   
         if (!$buffer) { return FALSE; }
   
@@ -3048,21 +3053,21 @@
       //  THIS USES TCP COMMUNICATION
   
       if ($this->_lgsl_need['s'] || $this->_lgsl_need['e']) {
-        fwrite($this->_lgsl_fp, "\x00\x00\x00\x00\x1B\x00\x00\x00\x01\x00\x00\x00\x0A\x00\x00\x00serverInfo\x00");
+        $this->_fp_write("\x00\x00\x00\x00\x1B\x00\x00\x00\x01\x00\x00\x00\x0A\x00\x00\x00serverInfo\x00");
       } elseif ($this->_lgsl_need['p']) {
-        fwrite($this->_lgsl_fp, "\x00\x00\x00\x00\x24\x00\x00\x00\x02\x00\x00\x00\x0B\x00\x00\x00listPlayers\x00\x03\x00\x00\x00all\x00");
+        $this->_fp_write("\x00\x00\x00\x00\x24\x00\x00\x00\x02\x00\x00\x00\x0B\x00\x00\x00listPlayers\x00\x03\x00\x00\x00all\x00");
       }
   
       //---------------------------------------------------------+
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
       $length = lgsl_unpack(substr($buffer, 4, 4), "L");
   
       while (strlen($buffer) < $length) {
-        $packet = fread($this->_lgsl_fp, 4096);
+        $packet = $this->_fp_read(4096);
   
         if ($packet) { $buffer .= $packet; } else { break; }
       }
@@ -3147,9 +3152,9 @@
       //  AVP 2010 ONLY ROUGHLY FOLLOWS THE SOURCE QUERY FORMAT
       //  SERVER RULES ARE ON THE END OF THE INFO RESPONSE
   
-      fwrite($this->_lgsl_fp, "\xFF\xFF\xFF\xFF\x54Source Engine Query\x00");
+      $this->_fp_write("\xFF\xFF\xFF\xFF\x54Source Engine Query\x00");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -3184,9 +3189,9 @@
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
   
-      fwrite($this->_lgsl_fp, "\x05\x00\x00\x01\x0A");
+      $this->_fp_write("\x05\x00\x00\x01\x0A");
   
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
   
       if (!$buffer) { return FALSE; }
   
@@ -3205,9 +3210,9 @@
     }
     public function lgsl_query_33() {
       $server = $this->_server->to_array();
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $buffer = $this->_fp_read(4096);
       if ($server['b']['type'] === 'teaspeak') {
-        if (strpos($buffer, 'TeaSpeak') === FALSE && strpos(fread($this->_lgsl_fp, 4096), 'TeaSpeak') === FALSE) {
+        if (strpos($buffer, 'TeaSpeak') === FALSE && strpos($this->_fp_read(4096), 'TeaSpeak') === FALSE) {
           return FALSE;
         }
       } else {
@@ -3218,15 +3223,15 @@
       $ver = $server['b']['type'] === 'ts' ? 0 : 1;
       $param[0] = array('sel ', 'si', "\r\n", 'pl');
       $param[1] = array('use port=', 'serverinfo', ' ', 'clientlist -country', 'channellist -topic');
-      if ($ver) { fread($this->_lgsl_fp, 4096); }
-      fwrite($this->_lgsl_fp, "{$param[$ver][0]}{$server['b']['c_port']}\n"); // select virtualserver
-      if (strtoupper(substr(fread($this->_lgsl_fp, 4096), -4, -2)) != 'OK') { return FALSE; }
+      if ($ver) { $this->_fp_read(4096); }
+      $this->_fp_write("{$param[$ver][0]}{$server['b']['c_port']}\n"); // select virtualserver
+      if (strtoupper(substr($this->_fp_read(4096), -4, -2)) != 'OK') { return FALSE; }
 
-      fwrite($this->_lgsl_fp, "{$param[$ver][1]}\n"); // request serverinfo
-      $buffer = fread($this->_lgsl_fp, 4096);
+      $this->_fp_write("{$param[$ver][1]}\n"); // request serverinfo
+      $buffer = $this->_fp_read(4096);
       if (!$buffer || substr($buffer, 0, 5) === 'error') { return FALSE; }
       while (strtoupper(substr($buffer, -4, -2)) != 'OK') {
-        $part = fread($this->_lgsl_fp, 4096);
+        $part = $this->_fp_read(4096);
         if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
       }
 
@@ -3247,10 +3252,10 @@
       if ($ver) { $server['e']['version'] = $this->lgsl_unescape($items['version']); }
 
       if ($this->_lgsl_need['p'] && $server['s']['players'] > 0) {
-        fwrite($this->_lgsl_fp, "{$param[$ver][3]}\n"); // request playerlist
-        $buffer = fread($this->_lgsl_fp, 4096);
+        $this->_fp_write("{$param[$ver][3]}\n"); // request playerlist
+        $buffer = $this->_fp_read(4096);
         while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") {
-          $part = fread($this->_lgsl_fp, 4096);
+          $part = $this->_fp_read(4096);
           if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
         }
 
@@ -3274,10 +3279,10 @@
       }
 
       if ($this->_lgsl_need['e'] && $ver) {
-        fwrite($this->_lgsl_fp, "{$param[$ver][4]}\n"); // request channellist
-        $buffer = fread($this->_lgsl_fp, 4096);
+        $this->_fp_write("{$param[$ver][4]}\n"); // request channellist
+        $buffer = $this->_fp_read(4096);
         while (substr($buffer, -4) != "OK\r\n" && substr($buffer, -2) != "\n\r") {
-          $part = fread($this->_lgsl_fp, 4096);
+          $part = $this->_fp_read(4096);
           if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
         }
         $lvl = array();
@@ -3471,8 +3476,8 @@
       return TRUE;
     }
     public function lgsl_query_39() {
-      fwrite($this->_lgsl_fp, "M2MPi");
-      $buffer = fread($this->_lgsl_fp, 1024);
+      $this->_fp_write("M2MPi");
+      $buffer = $this->_fp_read(1024);
   
       if (!$buffer) return FALSE;
   
@@ -3509,15 +3514,15 @@
     public function lgsl_query_41() {
       $server = $this->_server->to_array();
       if ($server['b']['type'] == 'wow') {
-        $buffer = fread($this->_lgsl_fp, 5);
+        $buffer = $this->_fp_read(5);
         if (!$buffer || $buffer != "\x00\x2A\xEC\x01\x01") {
           return false;
         }
         $server['s']['name']        = "World of Warcraft Server";
         $server['s']['map']         = "Twisting Nether";
       } elseif ($server['b']['type'] == 'sf') {
-        fwrite($this->_lgsl_fp, "\x00\x00\xd6\x9c\x28\x25\x00\x00\x00\x00");
-        $buffer = fread($this->_lgsl_fp, 128);
+        $this->_fp_write("\x00\x00\xd6\x9c\x28\x25\x00\x00\x00\x00");
+        $buffer = $this->_fp_read(128);
         if (!$buffer) {
           return FALSE;
         }
@@ -3536,13 +3541,13 @@
       return true;
     }
     public function lgsl_query_42() {
-      fwrite($this->_lgsl_fp, "\x30");
-      $packet = fread($this->_lgsl_fp, 4096);
+      $this->_fp_write("\x30");
+      $packet = $this->_fp_read(4096);
       if (!$packet) return FALSE;
 
       $buffer = $packet;
       while (strlen($packet) >= 504) {
-        $packet = fread($this->_lgsl_fp, 512);
+        $packet = $this->_fp_read(512);
         lgsl_cut_byte($packet, 4);
         $buffer .= $packet;
       }
@@ -3906,7 +3911,7 @@ function lgsl_unescape($text) {
 
     if (empty($host['host']) || empty($host['path'])) { exit("LGSL FEED PROBLEM: INVALID URL"); }
 
-    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=6.2.0";
+    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=7.0.0";
 
     if (function_exists("json_decode")) { $host_query .= function_exists("gzuncompress") ? "&format=4" : "&format=3"; }
     else                                { $host_query .= function_exists("gzuncompress") ? "&format=2" : "&format=1"; }
@@ -4274,7 +4279,7 @@ function lgsl_unescape($text) {
 //-------- WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P ----------+
 
   function lgsl_version() {
-    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 6.2.0"; // little dirty trick
+    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 7.0.0"; // little dirty trick
   }
 
 //------------------------------------------------------------------------------------------------------------+
