@@ -44,8 +44,7 @@
         })();
       </script>
       {$loader}";
-    }
-    else {
+    } else {
       global $lgsl_server_id;
       $lgsl_server_id = isset($_GET['s']) ? $_GET['s'] : "";
       require("lgsl_files/lgsl_{$file}.php");

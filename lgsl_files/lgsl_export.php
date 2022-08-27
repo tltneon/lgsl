@@ -1,21 +1,19 @@
 <?php
+  namespace tltneon\LGSL;
 
- /*----------------------------------------------------------------------------------------------------------\
- |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
- |                                                                                                            |
- |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
- |                                                                                                            |
- \-----------------------------------------------------------------------------------------------------------*/
+  /*----------------------------------------------------------------------------------------------------------\
+  |                                                                                                            |
+  |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                         |
+  |                                                                                                            |
+  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
+  |                                                                                                            |
+  \-----------------------------------------------------------------------------------------------------------*/
 
 //------------------------------------------------------------------------------------------------------------+
 
   require "lgsl_class.php";
 
-  global $lgsl_database;
-
-  lgsl_database();
-
+  $db = LGSL::db();
 //------------------------------------------------------------------------------------------------------------+
 
   $json        = empty($_GET['json'])        ? FALSE : TRUE;
@@ -43,14 +41,12 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $mysql_result = mysqli_query($lgsl_database, "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` {$mysql_filter}");
+  $mysql_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` {$mysql_filter}");
 
-  while($mysql_row = mysqli_fetch_array($mysql_result))
-  {
+  foreach ($mysql_result as $mysql_row) {
     if ($randomzones) { $mysql_row['zone'] = rand(1, $randomzones); } // FILL ZONES WITH RANDOM NUMBERS ( 1 TO $randomzones )
 
-    if ($xml)
-    {
+    if ($xml) {
       $output .= "
       <server>
         <type>{$mysql_row['type']}</type>
@@ -61,9 +57,7 @@
         <zone>{$mysql_row['zone']}</zone>
         <disabled>{$mysql_row['disabled']}</disabled>
       </server>";
-    }
-    elseif ($json)
-    {
+    } elseif ($json) {
       array_push($jsarray, 
         array(
           'type'     => $mysql_row['type'],
@@ -74,30 +68,25 @@
           'zone'     => $mysql_row['zone'],
           'disabled' => $mysql_row['disabled'])
         );
-    }
-    else
-    {
+    } else {
       $output .= "{$mysql_row['type']} : {$mysql_row['ip']} : {$mysql_row['c_port']} : {$mysql_row['q_port']} : {$mysql_row['s_port']} : {$mysql_row['zone']} : {$mysql_row['disabled']} \r\n";
     }
   }
 
 //------------------------------------------------------------------------------------------------------------+
 
-  if ($json)
-  {
+  if ($json) {
     $output = json_encode($jsarray);
   }
   
-  if ($download)
-  {
+  if ($download) {
     header("Content-type: application/octet-stream");
     header("Content-Disposition: attachment; filename=\"servers.txt\"");
     echo $output;
     exit;
   }
 
-  if ($xml)
-  {
+  if ($xml) {
     header("content-type: text/xml");
     echo "<?xml version='1.0' encoding='UTF-8' ?>
     <servers>{$output}</servers>";
@@ -106,11 +95,11 @@
 
 //------------------------------------------------------------------------------------------------------------+
 ?>
-<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<!DOCTYPE html>
 
-<html xmlns='http://www.w3.org/1999/xhtml'>
+<html>
   <head>
-    <title>Live Game Server List</title>
+    <title>Live Game Server List: Export Page</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
   </head>
 

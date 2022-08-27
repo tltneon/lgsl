@@ -1,20 +1,19 @@
 <?php
+  namespace tltneon\LGSL;
 
- /*----------------------------------------------------------------------------------------------------------\
- |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
- |                                                                                                            |
- |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
- |                                                                                                            |
- \-----------------------------------------------------------------------------------------------------------*/
+  /*----------------------------------------------------------------------------------------------------------\
+  |                                                                                                            |
+  |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                         |
+  |                                                                                                            |
+  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
+  |                                                                                                            |
+  \-----------------------------------------------------------------------------------------------------------*/
 
 //------------------------------------------------------------------------------------------------------------+
 
   require "lgsl_class.php";
 
-  global $lgsl_database;
-
-  lgsl_database();
+  $db = LGSL::db();
 
 //------------------------------------------------------------------------------------------------------------+
 // CRON SETTINGS:
@@ -30,10 +29,9 @@
 //------------------------------------------------------------------------------------------------------------+
 
   $mysql_query  = "SELECT `type`,`ip`,`c_port`,`q_port`,`s_port` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `disabled`=0 ORDER BY `cache_time` ASC";
-  $mysql_result = mysqli_query($lgsl_database, $mysql_query) or die(mysqli_error($lgsl_database));
+  $mysql_result = $db->query($mysql_query);
 
-  while($mysql_row = mysqli_fetch_array($mysql_result))
-  {
+  foreach ($mysql_result as $mysql_row) {
     echo str_pad(lgsl_timer("taken"),  8,  " ").":".
          str_pad($mysql_row['type'],   15, " ").":".
          str_pad($mysql_row['ip'],     30, " ").":".

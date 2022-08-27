@@ -1,12 +1,13 @@
 <?php
+  namespace tltneon\LGSL;
 
- /*----------------------------------------------------------------------------------------------------------\
- |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
- |                                                                                                            |
- |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
- |                                                                                                            |
- \-----------------------------------------------------------------------------------------------------------*/
+  /*----------------------------------------------------------------------------------------------------------\
+  |                                                                                                            |
+  |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                       |
+  |                                                                                                            |
+  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
+  |                                                                                                            |
+  \-----------------------------------------------------------------------------------------------------------*/
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -27,35 +28,29 @@
 //------------------------------------------------------------------------------------------------------------+
 // VALIDATE REQUEST
 
-  if (!$type || !$ip || !$c_port || !$q_port  || !$request)
-  {
+  if (!$type || !$ip || !$c_port || !$q_port  || !$request) {
     exit("LGSL FEED PROBLEM: INCOMPLETE REQUEST");
   }
 
-  if ($q_port > 99999 || $q_port < 1)
-  {
+  if ($q_port > 99999 || $q_port < 1) {
     exit("LGSL FEED PROBLEM: INVALID QUERY PORT: '{$q_port}'");
   }
 
-  if (preg_match("/[^0-9a-z\.\-\[\]\:]/i", $ip))
-  {
+  if (preg_match("/[^0-9a-z\.\-\[\]\:]/i", $ip)) {
     exit("LGSL FEED PROBLEM: INVALID IP OR HOSTNAME: '{$ip}'");
   }
 
-  if (preg_match("/[^a-z]/", $request))
-  {
+  if (preg_match("/[^a-z]/", $request)) {
     exit("LGSL FEED PROBLEM: INVALID REQUEST: '{$request}'");
   }
 
-  if ($type == "test")
-  {
+  if ($type == "test") {
     exit("LGSL FEED PROBLEM: TYPE 'test' IS NOT ALLOWED");
   }
 
-  $lgsl_protocol_list = lgsl_protocol_list();
+  $lgsl_protocol_list = Protocol::lgsl_protocol_list();
 
-  if (!isset($lgsl_protocol_list[$type]))
-  {
+  if (!isset($lgsl_protocol_list[$type])) {
     exit("LGSL FEED PROBLEM: ".($type ? "UNKNOWN TYPE '{$type}'" : "MISSING TYPE")." FOR {$ip} : {$c_port} : {$q_port} : {$s_port}");
   }
 
@@ -83,8 +78,7 @@
 //------------------------------------------------------------------------------------------------------------+
 // FEED USAGE LOGGING - 'logs' FOLDER MUST BE MANUALLY CREATED AND SET AS WRITABLE
 
-  if (is_dir("logs") && is_writable("logs"))
-  {
+  if (is_dir("logs") && is_writable("logs")) {
 //  $file_path = "logs/log_feed.html";
     $file_path = "logs/log_feed_{$_SERVER['REMOTE_ADDR']}.html";
 
@@ -108,17 +102,13 @@
 //------------------------------------------------------------------------------------------------------------+
 // SERIALIZED OUTPUT
 
-  if (!$xml)
-  {
+  if (!$xml) {
     if ($format == 0) { exit("_SLGSLF_".serialize($server)."_SLGSLF_"); } // LEGACY SYSTEM ( 5.6 AND OLDER )
 
-    if (($format == 3 || $format == 4) && function_exists("json_encode"))
-    {
+    if (($format == 3 || $format == 4) && function_exists("json_encode")) {
       if ($format == 4 && function_exists("gzcompress")) { exit("_F4_".base64_encode(gzcompress(json_encode($server)))."_F4_"); }
       else                                               { exit("_F3_".base64_encode(           json_encode($server)). "_F3_"); }
-    }
-    else
-    {
+    } else {
       if ($format == 2 && function_exists("gzcompress")) { exit("_F2_".base64_encode(gzcompress(serialize($server)))."_F2_"); }
       else                                               { exit("_F1_".base64_encode(           serialize($server)). "_F1_"); }
     }
@@ -131,25 +121,19 @@
 
   echo "<?xml version='1.0' encoding='UTF-8' ?>\r\n<server>\r\n";
 
-  foreach ($server as $a => $b)
-  {
+  foreach ($server as $a => $b) {
     echo "<".lgsl_string_html($a, TRUE).">";
 
-    foreach ($b as $c => $d)
-    {
-      if (is_array($d))
-      {
+    foreach ($b as $c => $d) {
+      if (is_array($d)) {
         echo "<player>\r\n";
 
-        foreach ($d as $e => $f)
-        {
+        foreach ($d as $e => $f) {
           echo "<".lgsl_string_html($e, TRUE).">".lgsl_string_html($f, TRUE)."</".lgsl_string_html($e, TRUE).">\r\n";
         }
 
         echo "</player>\r\n";
-      }
-      else
-      {
+      } else {
         echo "<".lgsl_string_html($c, TRUE).">".lgsl_string_html($d, TRUE)."</".lgsl_string_html($c, TRUE).">\r\n";
       }
     }

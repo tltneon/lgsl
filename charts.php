@@ -1,4 +1,5 @@
 <?php
+  namespace tltneon\LGSL;
 
 	function makeImage($src, $width, $height) {
 		list($w, $h) = getimagesize($src);
@@ -30,38 +31,48 @@
 
   header("Content-Type: image/png");
   require "lgsl_files/lgsl_class.php";
-  $server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", "cs", (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", "cs");
+  $server = new Server(array("ip" => $ip, "c_port" => $port, "id" => $s));
+  $server->lgsl_cached_query("cs");
   if (!$server) {
     $white = imagecolorallocate($im, 255, 255, 255);
     imagefill($im, 0, 0, $white);
-    imagestring($im, 1, (int)($w / 2 - strlen($lgsl_config['text']['mid']) * 2.2), (int)($h / 2), $lgsl_config['text']['mid'], $black);
+    imagestring($im, 1, (int) ($w / 2 - strlen($lgsl_config['text']['mid']) * 2.2), (int) ($h / 2), $lgsl_config['text']['mid'], $black);
     imagepng($im);
     imagedestroy($im);
     exit();
   }
-  $misc   = lgsl_server_misc($server);
-  $server['s']['playersmax'] = $server['s']['playersmax'] > 0 ? $server['s']['playersmax'] : 1;
-
+  $max = $server->get_players_count('max') > 0 ? $server->get_players_count('max') : 1;
   $x0 = 30;
   $y0 = 20;
   $period = 60 * 60 * 24; // 1 day
   $xStep = 30;
-  $yStep = (int) ($server['s']['playersmax'] > 32 ? 9 : 100 / $server['s']['playersmax']) + 1;
+  $yStep = (int) ($max > 32 ? 9 : 100 / $max) + 1;
 
   $s = array();
   $x = array();
   $y = array();
-  $history = $server['s']['history'] or array();
+  $history = $server->get_history();
+  $avg = 0; $avgc = 0;
   foreach ($history as $key) {
-    array_push($s, $key['status']);
-    array_push($x, $key['time'] - time() + $period);
-    array_push($y, $key['players']);
+    if (time() - $key['t'] > $period * 1000) {
+      $avg += $key['p'];
+      $avgc += 1;
+    } else {
+      array_push($s, $key['s']);
+      array_push($x, $key['t'] - time() + $period);
+      array_push($y, $key['p']);
+    }
+  }
+  if ($avgc > 0) {
+    array_unshift($s, 1);
+    array_unshift($x, 1);
+    array_unshift($y, (int) ($avg / $avgc));
   }
 
   $maxX = $w - $x0;
   $maxY = $h - $y0;
-  $scaleX = ($maxX-$x0) / max($x);
-  $scaleY = ($maxY-$y0) / $server['s']['playersmax'];
+  $scaleX = ($maxX - $x0) / (count($x) > 0 ? max($x) : 1);
+  $scaleY = ($maxY - $y0) / $max;
 
   // DRAW AXIS
 
@@ -71,20 +82,20 @@
 
   // DRAW GRID
 
-  $xSteps = ($maxX-$x0) / $xStep-1;
-  for ($i=1; $i < $xSteps+1; $i++) {
-    imageline($im, $x0+$xStep*$i, $y0, $x0+$xStep*$i, $maxY-1, $gray);
-    $str = Date("H:i", time() - $period + (int) ($i * round($xStep/$scaleX, 1)));
-    imagestring($im, 1, (($x0+$xStep*$i) - 6), $maxY+2, $str, $black);
+  $xSteps = ($maxX - $x0) / $xStep - 1;
+  for ($i = 1; $i < $xSteps + 1; $i++) {
+    imageline($im, $x0 + $xStep * $i, $y0, $x0 + $xStep * $i, $maxY - 1, $gray);
+    $str = Date("H:i", time() - $period + (int) ($i * round($xStep / $scaleX, 1)));
+    imagestring($im, 1, (($x0 + $xStep * $i) - 6), $maxY + 2, $str, $black);
   }
-  imagestring($im, 1, $x0 - 6, $maxY+2, $str, $black);
+  imagestring($im, 1, $x0 - 6, $maxY + 2, $str, $black);
 
-  if ($server['s']['playersmax'] > 1) {
-    $ySteps = ($maxY-$y0) / $yStep-1;
-    for ($i=1; $i < $ySteps+1; $i++) {
-      imageline($im, $x0+1, (int) $maxY-$yStep*$i, $maxX, (int) $maxY-$yStep*$i, $gray);
-      if ($server['s']['playersmax'] > 32 or $i % (int)(1 + $server['s']['playersmax']/10) == 0) {
-        imagestring($im, 1, 3, ($maxY-$yStep*$i)-3, round($i * $yStep/$scaleY, 0), $black);
+  if ($max > 1) {
+    $ySteps = ($maxY-$y0) / $yStep - 1;
+    for ($i = 1; $i < $ySteps + 1; $i++) {
+      imageline($im, $x0 + 1, (int) $maxY - $yStep * $i, $maxX, (int) $maxY - $yStep * $i, $gray);
+      if ($max > 32 or $i % (int) (1 + $max / 10) == 0) {
+        imagestring($im, 1, 3, ($maxY - $yStep * $i) - 3, round($i * $yStep / $scaleY, 0), $black);
       }
     }
   } else {
@@ -98,20 +109,20 @@
   // DRAW GRAPH
 
   imagesetthickness($im, 2);
-  for ($i=1; $i < count($x); $i++) {
+  for ($i = 1; $i < count($x); $i++) {
     if ($s[$i-1]) {
-      imageline($im, (int) ($x0+$x[$i-1]*$scaleX), (int) ($maxY-$y[$i-1]*$scaleY), (int) ($x0+$x[$i]*$scaleX), (int) ($maxY-$y[$i]*$scaleY), $green);
+      imageline($im, (int) ($x0 + $x[$i-1] * $scaleX), (int) ($maxY - $y[$i-1] * $scaleY), (int) ($x0 + $x[$i] * $scaleX), (int) ($maxY - $y[$i] * $scaleY), $green);
     } else {
-      imagefilledellipse($im, (int) ($x0+$x[$i]*$scaleX), (int) ($maxY-$y[$i]*$scaleY), 6, 6, $red);
+      imagefilledellipse($im, (int) ($x0 + $x[$i] * $scaleX), (int) ($maxY - $y[$i] * $scaleY), 6, 6, $red);
     }
   }
 
-  $game_id = makeImage($misc['icon_game'], 16, 16);                          // create game icon
+  $game_id = makeImage($server->game_icon(), 16, 16);                          // create game icon
   imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);                             // place game icon
 
   $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
-	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim ($server['s']['name']));
-	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $misc['connect_filtered']));
+	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim($server->get_name(false)));
+	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $server->connection_link()));
 	imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
 
   imagepng($im);

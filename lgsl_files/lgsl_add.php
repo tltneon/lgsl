@@ -1,12 +1,13 @@
 <?php
+  namespace tltneon\LGSL;
 
- /*----------------------------------------------------------------------------------------------------------\
- |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
- |                                                                                                            |
- |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
- |                                                                                                            |
- \-----------------------------------------------------------------------------------------------------------*/
+  /*----------------------------------------------------------------------------------------------------------\
+  |                                                                                                            |
+  |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                         |
+  |                                                                                                            |
+  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
+  |                                                                                                            |
+  \-----------------------------------------------------------------------------------------------------------*/
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -15,14 +16,12 @@
 
 //-----------------------------------------------------------------------------------------------------------+
 
-  if ($lgsl_config['public_add'])
-  {
+  if ($lgsl_config['public_add']) {
 
   //-----------------------------------------------------------------------------------------------------------+
 
-    $lgsl_type_list = lgsl_type_list();
+    $lgsl_type_list = Protocol::lgsl_type_list();
     unset($lgsl_type_list['test']);
-    asort($lgsl_type_list);
 
     $url    = $lgsl_config['preloader'] ? '?s=add' : '';
     $type   = empty($_POST['form_type'])   ? "source" :        trim($_POST['form_type']);
@@ -38,7 +37,7 @@
     if ($c_port > 65535 || $c_port < 1024) { $c_port = 0; }
     if ($q_port > 65535 || $q_port < 1024) { $q_port = 0; }
 
-    list($c_port, $q_port, $s_port) = lgsl_port_conversion($type, $c_port, $q_port, $s_port);
+    list($c_port, $q_port, $s_port) = Protocol::lgsl_port_conversion($type, $c_port, $q_port, $s_port);
 
   //-----------------------------------------------------------------------------------------------------------+
 
@@ -61,8 +60,7 @@
             <td>
               <select name='form_type'>";
     //---------------------------------------------------------+
-              foreach ($lgsl_type_list as $key => $value)
-              {
+              foreach ($lgsl_type_list as $key => $value) {
                 $output .= "
                 <option ".($key == $type ? "selected='selected'" : "")." value='{$key}'> {$value} </option>";
               }
@@ -111,32 +109,23 @@
 
       //-----------------------------------------------------------------------------------------------------------+
 
-        global $lgsl_database;
-        lgsl_database();
+        $db = LGSL::db();
 
-        $ip     = mysqli_real_escape_string($lgsl_database, $ip);
-        $q_port = mysqli_real_escape_string($lgsl_database, $q_port);
-        $c_port = mysqli_real_escape_string($lgsl_database, $c_port);
-        $s_port = mysqli_real_escape_string($lgsl_database, $s_port);
-        $type   = mysqli_real_escape_string($lgsl_database, $type);
+        $ip     = $db->escape_string($ip);
+        $q_port = $db->escape_string($q_port);
+        $c_port = $db->escape_string($c_port);
+        $s_port = $db->escape_string($s_port);
+        $type   = $db->escape_string($type);
 
       //-----------------------------------------------------------------------------------------------------------+
 
-        $ip_check     = gethostbyname($ip);
-        $mysql_result = mysqli_query($lgsl_database, "SELECT `ip`,`disabled` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `type`='{$type}' AND `q_port`='{$q_port}'");
-        $found        = false;
-        while ($mysql_row = mysqli_fetch_array($mysql_result, MYSQLI_ASSOC))
-        {
-          if ($ip_check == gethostbyname($mysql_row['ip']))
-          {
-            $found = true;
-          }
-        }
-        if ($found) {
+        $ip_check = gethostbyname($ip);
+        $mysql_query = $db->query("SELECT `ip`,`disabled` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE (`ip`='{$ip}' OR `ip`='$ip_check') AND `q_port`='{$q_port}'", true);
+        if ($mysql_query) {
           $output .= "
             <div class='annotation'>";
 
-              if ($mysql_row['disabled'])
+              if ($mysql_query['disabled'])
               {
                 $output .= $lgsl_config['text']['aaa'];
               }
@@ -147,33 +136,28 @@
 
               $output .="
             </div>";
-        }
-        else {
+        } else {
 
         //-----------------------------------------------------------------------------------------------------------+
 
           $server = lgsl_query_live($type, $ip, $c_port, $q_port, $s_port, "s");
           $server = lgsl_server_html($server);
 
-          if ($server['b']['status']){
+          if ($server['b']['status']) {
           //-----------------------------------------------------------------------------------------------------------+
 
-            if (!empty($_POST['lgsl_submit_add']))
-            {
+            if (!empty($_POST['lgsl_submit_add'])) {
               $disabled = ($lgsl_config['public_add'] == "2") ? "0" : "1";
 
               $mysql_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`disabled`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','{$disabled}','','')";
-              $mysql_result = mysqli_query($lgsl_database, $mysql_query) or die(mysqli_error($lgsl_database));
+              $mysql_result = $db->query($mysql_query);
 
               $output .= "
               <div class='annotation'>";
 
-                if ($disabled)
-                {
+                if ($disabled) {
                   $output .= $lgsl_config['text']['ada'];
-                }
-                else
-                {
+                } else {
                   $output .= $lgsl_config['text']['adn'];
                 }
 
@@ -183,8 +167,7 @@
               <div>
               <br />
               </div>";
-            }
-            else {
+            } else {
               $status = $lgsl_config['text'][lgsl_text_status($server['b']['status'], $server['s']['password'])];
 
             //-----------------------------------------------------------------------------------------------------------+
@@ -224,21 +207,18 @@
 
               </form>";
             }
-          }
-          else {
+          } else {
             $output .= "
             <div class='annotation'> {$lgsl_config['text']['anr']} </div>";
           }
 
 
         }
-      }
-      else {
+      } else {
         $output .= "<div id='annotation'> {$lgsl_config['text']['anr']} </div>";
       }
     }
-  }
-  else {
+  } else {
     $output .= "<div id='annotation'> {$lgsl_config['text']['asd']} </div>";
   }
 

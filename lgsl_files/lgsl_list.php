@@ -1,12 +1,13 @@
 <?php
+  namespace tltneon\LGSL;
 
- /*----------------------------------------------------------------------------------------------------------\
- |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                       |
- |                                                                                                            |
- |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
- |                                                                                                            |
- \-----------------------------------------------------------------------------------------------------------*/
+  /*----------------------------------------------------------------------------------------------------------\
+  |                                                                                                            |
+  |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                         |
+  |                                                                                                            |
+  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
+  |                                                                                                            |
+  \-----------------------------------------------------------------------------------------------------------*/
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -18,6 +19,7 @@
   $mode = (isset($_GET['mode']) ? $_GET['mode'] : '');
   $sort = (isset($_GET['sort']) ? $_GET['sort'] : '');
   $order= (isset($_GET['order']) ? $_GET['order'] == "ASC" ? "DESC" : 'ASC' : "ASC");
+
   $page = ($lgsl_config['pagination_mod'] && isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
   $uri = $_SERVER['REQUEST_URI'];
@@ -26,7 +28,8 @@
     $uri = $_SERVER['HTTP_REFERER'];
   }
 
-  $server_list = lgsl_query_group(array("type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order));
+  //$server_list = lgsl_query_group(array("type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order));
+  $server_list = Database::get_servers_group(array("type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order));
 
 //------------------------------------------------------------------------------------------------------------+
   if (count($server_list) == 0 && $page < 2) {
@@ -51,49 +54,48 @@
       <th class='details_cell'>{$lgsl_config['text']['dtl']}:</th>
     </tr>";
 
-  foreach ($server_list as $server)
-  {
-    $misc    = lgsl_server_misc($server);
-    $server  = lgsl_server_html($server);
-    $percent = strval($server['s']['players'] == 0 || $server['s']['playersmax'] == 0 ? 0 : floor($server['s']['players']/$server['s']['playersmax']*100));
-    $lastupd = Date($lgsl_config['text']['tzn'], (int)$server['s']['cache_time']);
-    $gamelink= lgsl_build_link_params($uri, array("game" => $server['s']['game']));
+  foreach ($server_list as $server) {
+    //$misc    = lgsl_server_misc($server);
+    //$server  = lgsl_server_html($server);
+    $percent = $server->get_players_count('percent');
+    $lastupd = $server->get_timestamp();
+    $gamelink= lgsl_build_link_params($uri, array("game" => $server->get_game()));
 
     $output .= "
-    <tr class='server_{$misc['text_status']}'>
+    <tr class='server_{$server->get_status()}'>
 
       <td class='status_cell'>
-        <span title='{$lgsl_config['text'][$misc['text_status']]} | {$lgsl_config['text']['lst']}: {$lastupd}' class='status_icon_{$misc['text_status']}'></span>
+        <span title='{$lgsl_config['text'][$server->get_status()]} | {$lgsl_config['text']['lst']}: {$lastupd}' class='status_icon_{$server->get_status()}'></span>
         <a href='{$gamelink}'>
-          <img alt='{$misc['name_filtered']}' src='{$misc['icon_game']}' title='{$misc['text_type_game']}' class='game_icon' />
+          <img alt='{$server->get_name()}' src='{$server->game_icon()}' title='{$server->text_type_game()}' class='game_icon' />
         </a>
       </td>
 
       <td title='{$lgsl_config['text']['slk']}' class='connectlink_cell'>
-        <a href='{$misc['software_link']}'>
-          {$misc['connect_filtered']}
+        <a href='{$server->get_software_link()}'>
+          {$server->get_address()}
         </a>
       </td>
 
-      <td title='{$server['s']['name']}' class='servername_cell'>
+      <td title='{$server->get_name()}' class='servername_cell'>
         <div class='servername_nolink'>
-          {$misc['name_filtered']}
+          {$server->get_name()}
         </div>
         <div class='servername_link'>
-          <a href='".lgsl_link($server['b']['ip'], $server['b']['c_port'])."'>
-            {$misc['name_filtered']}
+          <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."'>
+            {$server->get_name()}
           </a>
         </div>
       </td>
 
-      <td class='map_cell' data-path='{$misc['image_map']}'>
-        {$server['s']['map']}
+      <td class='map_cell' data-path='{$server->get_map_image()}'>
+        {$server->get_map()}
       </td>
 
       <td class='players_cell'>
         <div class='outer_bar'>
           <div class='inner_bar' style='width:{$percent}%;'>
-            <span class='players_numeric'>{$server['s']['players']}/{$server['s']['playersmax']}</span>
+            <span class='players_numeric'>{$server->get_players_count()}</span>
             <span class='players_percent{$percent}'>{$percent}%</span>
           </div>
         </div>
@@ -103,13 +105,13 @@
 
       if ($lgsl_config['locations']) {
         $output .= "
-        <a href='".lgsl_location_link($server['o']['location'])."' target='_blank' class='contry_link'>
-          <img alt='{$misc['text_location']}' src='{$misc['icon_location']}' title='{$misc['text_location']}' class='contry_icon' />
+        <a href='".LGSL::location_link($server->location_text())."' target='_blank' class='contry_link'>
+          <img alt='{$server->location_text()}' src='{$server->location_icon()}' title='{$server->location_text()}' class='contry_icon' />
         </a>";
       }
 
       $output .= "
-        <a href='".lgsl_link($server['b']['ip'], $server['b']['c_port'])."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
+        <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
       </td>
 
     </tr>";
