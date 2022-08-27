@@ -22,17 +22,30 @@
     $chart = imagecolorallocate($im, 120, 255, 120);
     $x0 = array();
     $y0 = array();
+    $period = 60 * 60 *24;
     $history = $server->get_history();
+    $avg = 0; $avgc = 0;
     foreach ($history as $key) {
-      array_push($x0, $key['time'] - time() + 60*60*24);
-      array_push($y0, $key['players']);
+      if (time() - $key['t'] > $period) {
+        $avg += $key['p'];
+        $avgc += 1;
+      } else {
+        array_push($x0, $key['t'] - time() + $period);
+        array_push($y0, $key['p']);
+      }
+    }
+    if ($avgc > 0) {
+      array_unshift($x0, 1);
+      array_unshift($y0, (int) ($avg / $avgc));
     }
 
     $max = $server->get_players_count('max') > 0 ? $server->get_players_count('max') : 1;
+    $scaleX = $w / (count($x0) > 0 ? max($x0) : 1);
+    $scaleY = $h / $max;
 
-    imagestring($im, 1, $x - 10, $y + $h - 4, "0", $axis);
-    imagestring($im, 1, $x - 10, floor($y + $h / 2) - 4, floor($server['s']['playersmax'] / 2), $axis);
-    imagestring($im, 1, $x - 10, $y - 4, $server['s']['playersmax'], $axis);
+    imagestring($im, 1, $x - 15, $y + $h - 4, "0", $axis);
+    imagestring($im, 1, $x - 15, floor($y + $h / 2) - 4, floor($max / 2), $axis);
+    imagestring($im, 1, $x - 15, $y - 4, $max, $axis);
     imageline($im, $x, $y + $h, $x + $w, $y + $h, $axis);
     imageline($im, $x, $y - 1, $x, $y + $h, $axis);
     imageline($im, $x + 1, floor($y + $h / 2), $x + $w - 2, floor($y + $h / 2), $grid);
@@ -49,6 +62,9 @@
   $query = "cs";
   $bar   = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
   if ($bar == 3) { $query .= "p"; }
+  $s = isset($_GET['s']) ? (int) $_GET['s'] : null;
+  $ip = isset($_GET['ip']) ? $_GET['ip'] : null;
+  $port = isset($_GET['port']) ? (int) $_GET['port'] : null;
   $server = new Server(array("ip" => $ip, "c_port" => $port, "id" => $s));
   $server->lgsl_cached_query($query);
   if (!$server) {
@@ -61,7 +77,6 @@
     imagedestroy($im);
     exit();
   }
-	$misc   = lgsl_server_misc($server);
 
   switch ($bar) {
     case 2: {

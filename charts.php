@@ -31,6 +31,9 @@
 
   header("Content-Type: image/png");
   require "lgsl_files/lgsl_class.php";
+  $s = isset($_GET['s']) ? (int) $_GET['s'] : null;
+  $ip = isset($_GET['ip']) ? $_GET['ip'] : null;
+  $port = isset($_GET['port']) ? (int) $_GET['port'] : null;
   $server = new Server(array("ip" => $ip, "c_port" => $port, "id" => $s));
   $server->lgsl_cached_query("cs");
   if (!$server) {
