@@ -34,7 +34,7 @@ async function refreshData(type = 'source', ip, c_port, q_port) {
     details[6].innerText = status.s.map;
     details[7].innerText = `${status.s.players} / ${status.s.playersmax}`;
     document.querySelector('[id^=servername]').innerText = status.s.name;
-    el.innerText = `${lng[language].lst}: ` + (new Date()).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }) + `\n${lng[language].que}:` + (new Date(Number(status.s.cache_time + '000'))).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }) + " ";
+    el.innerText = `${lng[language].lst}: ` + (new Date()).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }) + `\n${lng[language].que}: ` + (new Date(Number(status.s.cache_time + '000'))).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }) + " ";
     el.appendChild(a);
     // reload chart if it exists
     if (document.querySelector('#chart'))
@@ -45,7 +45,7 @@ async function refreshData(type = 'source', ip, c_port, q_port) {
 }
 
 function loadRefresh() {
-  el = document.querySelector(".details_info_row:last-child");
+  el = document.querySelector(".details_info_row:nth-child(3) .details_info_srow:nth-child(2)");
   a = document.createElement("a");
   if (el) {
     a.onclick = () => {
