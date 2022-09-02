@@ -243,7 +243,7 @@
       $page         = empty($options['page'])         ? ""                               : "LIMIT {$limit} OFFSET " . strval($limit*((int)$options['page'] - 1));
       $status       = empty($options['status'])       ? ""                               : 1;
       $order        = empty($options['order'])        ? ""                               : $options['order'];
-      $sort         = empty($options['sort'])         ? ""                               : in_array($options['sort'], array('ip', 'name', 'map', 'players')) ? $options['sort'] : "";
+      $sort         = empty($options['sort'])         ? ""                               : (in_array($options['sort'], array('ip', 'name', 'map', 'players')) ? $options['sort'] : "");
       $server_limit = empty($options['limit'])        ? ""                               : $lgsl_config['pagination_lim'];
       $server_limit = empty($random)                  ? $server_limit                    : $random;
 
@@ -305,8 +305,7 @@
     
     function lgsl_unserialize_server_data($data) {
       $server = array();
-
-      foreach (array('name', 'game', 'mode', 'map', 'players', 'playersmax', 'password') as $i) {
+      foreach (array('name', 'game', 'mode', 'map', 'players', 'playersmax') as $i) {
         $server['s'][$i] = $data[$i];
         unset($data[$i]);
       }
@@ -350,15 +349,15 @@
         "s_port" => 0,
         "type" => "",
         "status" => 0,
-        "pending" => 1,
-        "password" => 0
+        "pending" => 1
       ), $options);
       $this->_server = array(
         "players" => 0,
         "playersmax" => 0,
         "name" => "--",
         "game" => "",
-        "mode" => "none"
+        "mode" => "none",
+        "password" => 0
       );
       $this->_other = array(
         "zone" => null,
@@ -422,7 +421,7 @@
         $this->_base = isset($data['b']) ? array_merge($this->_base, $data['b']) : $this->_base;
         $this->_extra = isset($data['e']) ? $data['e'] : array();
         $this->_other = isset($data['o']) ? $data['o'] : array();
-        $this->_server = isset($data['s']) ? $data['s'] : array();
+        $this->_server = isset($data['s']) ? array_merge($this->_server, $data['s']) : $this->_server;
         $this->_players = isset($data['p']) ? $data['p'] : array();
         $this->_history = isset($data['h']) ? $data['h'] : array();
     }    
@@ -825,7 +824,7 @@
       if ($this->_base['pending']) {
         return 'pen';
       }
-      if ($this->_base['password']) {
+      if ($this->_server['password']) {
         return 'onp';
       }
       if ($this->_base['status']) {
