@@ -4,7 +4,7 @@
 
   global $lgsl_config;
 
-  $lgsl_config['text']['ttl'] = "Listă Live Servere";
+  $lgsl_config['text']['ttl'] = "Listă Servere Live";
   $lgsl_config['text']['vsd'] = "CLICK AICI PENTRU A VEDEA DETALIILE SERVERULUI";
   $lgsl_config['text']['slk'] = "CONECTEAZĂ-TE LA JOC";
   $lgsl_config['text']['sts'] = "Status";
