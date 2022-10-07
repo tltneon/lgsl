@@ -44,15 +44,17 @@
   ],
 	"require":
 	{
-		"php": ">=5.4",
+		"php": ">=7.0",
 		"ext-mysqli": "*",
 		"ext-bz2": "*",
-		"ext-curl": "*"
-	},
+		"ext-curl": "*",
+      "ext-gd": "*",
+      "ext-json": "*",
+		"ext-mbstring": "*",
+      "ext-zlib": "*"
+    },
 	"suggest":
 	{
-		"ext-gd": "*",
-		"ext-mbstring": "*"
 	},
 	"autoload":
 	{

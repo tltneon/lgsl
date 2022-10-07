@@ -17,7 +17,7 @@
   require "lgsl_class.php";
 
   $zone_width = $lgsl_config['zone']['width']."px";
-  $zone_grid  = isset($lgsl_config['grid'][$lgsl_zone_number]) ? $lgsl_config['grid'][$lgsl_zone_number] : 1;
+  $zone_grid  = $lgsl_config['grid'][$lgsl_zone_number] ?? 1;
   $zone_count = 0;
 
 //------------------------------------------------------------------------------------------------------------+
@@ -30,7 +30,7 @@
 
   if (!$server_list)
   {
-    $output .= "<div style='margin:auto; text-align:center'>NO SERVERS IN ZONE {$lgsl_zone_number}</div>"; return;
+    $output .= "<div style='margin:auto; text-align:center'>NO SERVERS IN ZONE $lgsl_zone_number</div>"; return;
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -75,7 +75,7 @@
 
     @keyframes marquee{
       0%{transform: translateX(15px);}
-      100%{transform: translateX(calc(-100% + {$zone_width} - 15px));}
+      100%{transform: translateX(calc(-100% + $zone_width - 15px));}
     }
   </style>
   <table cellpadding='0' cellspacing='0' style='width:100%; margin:auto; text-align:center' class='sidebarserver'>
@@ -102,30 +102,30 @@
       $output .= "
       <td style='padding-top:5px; padding-bottom:5px; vertical-align:top; text-align:center'>
 
-        <table style='width:{$zone_width}; margin:auto; text-align:center' cellpadding='0' cellspacing='2'>
+        <table style='width:$zone_width; margin:auto; text-align:center' cellpadding='0' cellspacing='2'>
 
           <tr>
-            <td title='{$lgsl_config['text']['slk']}' style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
+            <td title='{$lgsl_config['text']['slk']}' style='padding:0; text-align:center'>
+              <div style='left:0; right:0; top:0; bottom:0; width:$zone_width; white-space:nowrap; overflow:hidden; text-align:center'>
                 <a href='{$misc['software_link']}' style='text-decoration:none'>
-                  ". ($server['b']['type'] == 'discord' ? "#{$server['b']['ip']}" : "{$server['b']['ip']}:{$server['b']['c_port']}") ."
+                  " . ($server['b']['type'] == 'discord' ? "#{$server['b']['ip']}" : "{$server['b']['ip']}:{$server['b']['c_port']}") . "
                 </a>
               </div>
             </td>
           </tr>
 
           <tr>
-            <td title='{$server['s']['name']}' style='padding:0px; text-align:center'>
-              <div class='marquee' style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
-                <span ". ($marquee ? "class='on'" : "") .">{$misc['name_filtered']}</span>
+            <td title='{$server['s']['name']}' style='padding:0; text-align:center'>
+              <div class='marquee' style='left:0; right:0; top:0; bottom:0; width:$zone_width; white-space:nowrap; overflow:hidden; text-align:center'>
+                <span " . ($marquee ? "class='on'" : "") . ">{$misc['name_filtered']}</span>
               </div>
             </td>
           </tr>
 
           <tr>
-            <td style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; padding:0px; position:relative'>
-                <a href='".lgsl_link($server['o']['id'])."'>
+            <td style='padding:0; text-align:center'>
+              <div style='left:0; right:0; top:0; bottom:0; width:$zone_width; padding:0; position:relative'>
+                <a href='" .lgsl_link($server['o']['id']). "'>
                   <img alt='' src='{$misc['image_map']}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
                   <img alt='' src='{$misc['image_map_password']}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
                   <img alt='' src='{$misc['icon_game']}'          title='{$misc['text_type_game']}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
@@ -136,8 +136,8 @@
           </tr>
 
           <tr>
-            <td title='{$server['s']['map']}' style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
+            <td title='{$server['s']['map']}' style='padding:0; text-align:center'>
+              <div style='left:0; right:0; top:0; bottom:0; width:$zone_width; white-space:nowrap; overflow:hidden; text-align:center'>
                 {$server['s']['map']}
               </div>
             </td>
@@ -154,12 +154,12 @@
               <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
               <span style='padding:1px; float:right'> {$server['s']['players']} / {$server['s']['playersmax']} </span>";
               if(count($server['p']) > 0){
-                $output .= "<div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
+                $output .= "<div style='left:0; right:0; top:0; bottom:0; width:$zone_width; height:$zone_height; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
 
                 foreach ($server['p'] as $player)
                 {
                   $output .= "
-                  <div style='left:0px; right:0px; top:0px; bottom:0px; padding:1px; white-space:nowrap; overflow:hidden; text-align:left' title='{$player['name']}'> {$player['name']} </div>";
+                  <div style='left:0; right:0; top:0; bottom:0; padding:1px; white-space:nowrap; overflow:hidden; text-align:left' title='{$player['name']}'> {$player['name']} </div>";
                 }
 
                 $output .= "</div";
@@ -180,7 +180,7 @@
         {
           $output .= "
           <tr>
-            <td style='padding:0px; border:1px solid'>
+            <td style='padding:0; border:1px solid'>
               <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
               <span style='padding:1px; float:right'> {$server['s']['players']} / {$server['s']['playersmax']} </span>
             </td>

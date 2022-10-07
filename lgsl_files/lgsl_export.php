@@ -18,11 +18,11 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $json        = empty($_GET['json'])        ? FALSE : TRUE;
-  $xml         = empty($_GET['xml'])         ? FALSE : TRUE;
-  $online      = empty($_GET['online'])      ? FALSE : TRUE;
-  $nodisabled  = empty($_GET['nodisabled'])  ? FALSE : TRUE;
-  $download    = empty($_GET['download'])    ? FALSE : TRUE;
+  $json        = !empty($_GET['json']);
+  $xml         = !empty($_GET['xml']);
+  $online      = !empty($_GET['online']);
+  $nodisabled  = !empty($_GET['nodisabled']);
+  $download    = !empty($_GET['download']);
   $sort        = empty($_GET['sort'])        ? FALSE : $_GET['sort'];
   $randomzones = empty($_GET['randomzones']) ? FALSE : intval($_GET['randomzones']);
 
@@ -43,7 +43,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $mysql_result = mysqli_query($lgsl_database, "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` {$mysql_filter}");
+  $mysql_result = mysqli_query($lgsl_database, "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` $mysql_filter");
 
   while($mysql_row = mysqli_fetch_array($mysql_result))
   {
@@ -64,16 +64,14 @@
     }
     elseif ($json)
     {
-      array_push($jsarray, 
-        array(
-          'type'     => $mysql_row['type'],
-          'ip'       => $mysql_row['ip'],
-          'c_port'   => $mysql_row['c_port'],
-          'q_port'   => $mysql_row['q_port'],
-          's_port'   => $mysql_row['s_port'],
-          'zone'     => $mysql_row['zone'],
-          'disabled' => $mysql_row['disabled'])
-        );
+      $jsarray[] = array(
+          'type' => $mysql_row['type'],
+          'ip' => $mysql_row['ip'],
+          'c_port' => $mysql_row['c_port'],
+          'q_port' => $mysql_row['q_port'],
+          's_port' => $mysql_row['s_port'],
+          'zone' => $mysql_row['zone'],
+          'disabled' => $mysql_row['disabled']);
     }
     else
     {
@@ -100,7 +98,7 @@
   {
     header("content-type: text/xml");
     echo "<?xml version='1.0' encoding='UTF-8' ?>
-    <servers>{$output}</servers>";
+    <servers>$output</servers>";
     exit;
   }
 
@@ -108,7 +106,7 @@
 ?>
 <!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
 
-<html xmlns='http://www.w3.org/1999/xhtml'>
+<html xmlns='http://www.w3.org/1999/xhtml' lang="">
   <head>
     <title>Live Game Server List</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />

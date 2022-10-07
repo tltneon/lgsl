@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_link($s = "", $p = "")
+  function lgsl_link($s = "", $p = ""): string
   {
     global $lgsl_config, $lgsl_url_path;
 
@@ -25,27 +25,27 @@
     switch($lgsl_config['cms'])
     {
       case "e107":
-        $link = $s ? e_PLUGIN_ABS."lgsl/{$index}?s={$s}" : e_PLUGIN_ABS."lgsl/{$index}";
+        $link = $s ? e_PLUGIN_ABS."lgsl/$index?s=$s" : e_PLUGIN_ABS."lgsl/$index";
       break;
 
       case "joomla":
-        $link = $s ? JRoute::_("index.php?option=com_lgsl&s={$s}") : JRoute::_("index.php?option=com_lgsl");
+        $link = $s ? JRoute::_("index.php?option=com_lgsl&s=$s") : JRoute::_("index.php?option=com_lgsl");
       break;
 
       case "drupal":
-        $link = $s ? url("LGSL/{$s}") : url("LGSL");
+        $link = $s ? url("LGSL/$s") : url("LGSL");
       break;
 
       case "phpnuke":
-        $link = $s ? "modules.php?name=LGSL&s={$s}" : "modules.php?name=LGSL";
+        $link = $s ? "modules.php?name=LGSL&s=$s" : "modules.php?name=LGSL";
       break;
 
       default: // "sa"
         $link = $s ? 
                   $p ?
-                    "{$lgsl_url_path}../{$index}?ip={$s}&port={$p}" :
-                    "{$lgsl_url_path}../{$index}?s={$s}" :
-                    "{$lgsl_url_path}../{$index}";
+                    "$lgsl_url_path../$index?ip=$s&port=$p" :
+                    "$lgsl_url_path../$index?s=$s" :
+                    "$lgsl_url_path../$index";
       break;
     }
 
@@ -68,7 +68,7 @@
       switch($lgsl_config['cms'])
       {
         case "e107":
-          @include "{$lgsl_file_path}../../../e107_config.php";
+          @include "$lgsl_file_path../../../e107_config.php";
           $lgsl_config['db']['server'] = $mySQLserver;
           $lgsl_config['db']['user']   = $mySQLuser;
           $lgsl_config['db']['pass']   = $mySQLpassword;
@@ -77,7 +77,7 @@
         break;
 
         case "joomla":
-          @include_once "{$lgsl_file_path}../../../configuration.php";
+          @include_once "$lgsl_file_path../../../configuration.php";
           $joomla_config = new JConfig();
           $lgsl_config['db']['server'] = $joomla_config->host;
           $lgsl_config['db']['user']   = $joomla_config->user;
@@ -88,19 +88,19 @@
 
         case "drupal":
           global $db_url, $db_prefix;
-          if (empty($db_url)) { @include "{$lgsl_file_path}../../../sites/default/settings.php"; }
+          if (empty($db_url)) { @include "$lgsl_file_path../../../sites/default/settings.php"; }
           $drupal_config = is_array($db_url) ? parse_url($db_url['default']) : parse_url($db_url);
           $lgsl_config['db']['server'] = $drupal_config['host'];
           $lgsl_config['db']['user']   = $drupal_config['user'];
-          $lgsl_config['db']['pass']   = isset($drupal_config['pass']) ? $drupal_config['pass'] : "";
+          $lgsl_config['db']['pass']   = $drupal_config['pass'] ?? "";
           $lgsl_config['db']['db']     = substr($drupal_config['path'], 1);
-          $lgsl_config['db']['prefix'] = isset($db_prefix['default']) ? $db_prefix['default'] : "";
+          $lgsl_config['db']['prefix'] = $db_prefix['default'] ?? "";
         break;
 
         case "phpnuke":
-          @include "{$lgsl_file_path}../../../config.php";
-          @include "{$lgsl_file_path}../../../conf.inc.php";
-          @include "{$lgsl_file_path}../../../includes/config.php";
+          @include "$lgsl_file_path../../../config.php";
+          @include "$lgsl_file_path../../../conf.inc.php";
+          @include "$lgsl_file_path../../../includes/config.php";
           $lgsl_config['db']['server'] = $dbhost;
           $lgsl_config['db']['user']   = $dbuname;
           $lgsl_config['db']['pass']   = $dbpass;
@@ -126,21 +126,21 @@
 
     if ($id != NULL) {
       $id            = intval($id);
-      $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `id`='{$id}' LIMIT 1";
+      $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `id`='$id' LIMIT 1";
     } else if ($ip != "" && $c_port != "" && ($type == "" || $q_port == "")) {
       list($ip, $c_port) = array(mysqli_real_escape_string($lgsl_database, $ip), intval($c_port));
-      $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `ip`='{$ip}' AND `c_port`='{$c_port}' LIMIT 1";
+      $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `ip`='$ip' AND `c_port`='$c_port' LIMIT 1";
     } else {
       list($type, $ip, $c_port, $q_port, $s_port) = array(mysqli_real_escape_string($lgsl_database, $type), mysqli_real_escape_string($lgsl_database, $ip), intval($c_port), intval($q_port), intval($s_port));
-      if (!$type || !$ip || !$c_port || !$q_port) { exit("LGSL PROBLEM: INVALID SERVER '{$type} : {$ip} : {$c_port} : {$q_port} : {$s_port}'"); }
-      $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `type`='{$type}' AND `ip`='{$ip}' AND `q_port`='{$q_port}' LIMIT 1";
+      if (!$type || !$ip || !$c_port || !$q_port) { exit("LGSL PROBLEM: INVALID SERVER '$type : $ip : $c_port : $q_port : $s_port'"); }
+      $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `type`='$type' AND `ip`='$ip' AND `q_port`='$q_port' LIMIT 1";
     }
 
     $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
     $mysqli_row    = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC);
     if (!$mysqli_row) {
-      if (strpos($request, "a") === FALSE) { exit("LGSL PROBLEM: SERVER NOT IN DATABASE '{$type} : {$ip} : {$c_port} : {$q_port} : {$s_port}'"); }
-      $mysqli_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','','')";
+      if (strpos($request, "a") === FALSE) { exit("LGSL PROBLEM: SERVER NOT IN DATABASE '$type : $ip : $c_port : $q_port : $s_port'"); }
+      $mysqli_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`cache`,`cache_time`) VALUES ('$type','$ip','$c_port','$q_port','$s_port','','')";
       $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
       $mysqli_row    = array("id" => mysqli_insert_id(), "zone" => "0", "comment" => "");
     }
@@ -221,8 +221,8 @@
       // UPDATE CACHE TIMES BEFORE QUERY - PREVENTS OTHER INSTANCES FROM QUERY FLOODING THE SAME SERVER
 
       $packed_times = time() + $lgsl_config['cache_time'] + 10;
-      $packed_times = "{$packed_times}_{$packed_times}_{$packed_times}";
-      $mysqli_query  = "UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` SET `cache_time`='{$packed_times}' WHERE `id`='{$mysqli_row['id']}' LIMIT 1";
+      $packed_times = "{$packed_times}_{$packed_times}_$packed_times";
+      $mysqli_query  = "UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` SET `cache_time`='$packed_times' WHERE `id`='{$mysqli_row['id']}' LIMIT 1";
       $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
 
       // GET WHAT IS NEEDED
@@ -261,15 +261,15 @@
         if(isset($cache['s']['history'])){
           foreach($cache['s']['history'] as $item){
             if(time() - $item['time'] < 60 * 60 * 24) // NOT OLDER THAN 1 DAY
-              array_push($live['s']['history'], $item);
+              $live['s']['history'][] = $item;
           }
          $last = ($cache['s']['history'] ? end($cache['s']['history']) : null);
          if(!$last or time() - $last['time'] >= 60 * 15 ) { // RECORD IF 15 MINS IS PASSED
-           array_push($live['s']['history'], array(
-             "status"  => (int) $live['b']['status'],
-             "time"    => $live['s']['cache_time'],
-             "players" => (int) $live['s']['players']
-           ));
+           $live['s']['history'][] = array(
+               "status" => (int)$live['b']['status'],
+               "time" => $live['s']['cache_time'],
+               "players" => (int)$live['s']['players']
+           );
          }
         }
       }
@@ -285,7 +285,7 @@
 
       $packed_cache = mysqli_real_escape_string($lgsl_database, base64_encode(serialize($cache)));
       $packed_times = mysqli_real_escape_string($lgsl_database, implode("_", $cache_time));
-      $mysqli_query  = "UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` SET `status`='{$cache['b']['status']}',`cache`='{$packed_cache}',`cache_time`='{$packed_times}' WHERE `id`='{$mysqli_row['id']}' LIMIT 1";
+      $mysqli_query  = "UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` SET `status`='{$cache['b']['status']}',`cache`='$packed_cache',`cache_time`='$packed_times' WHERE `id`='{$mysqli_row['id']}' LIMIT 1";
       $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
     }
 
@@ -309,21 +309,21 @@
 
     lgsl_database();
 
-    $request      = isset($options['request'])      ? $options['request']              : "s";
+    $request      = $options['request'] ?? "s";
     $zone         = isset($options['zone'])         ? intval($options['zone'])         : 0;
     $hide_offline = isset($options['hide_offline']) ? intval($options['hide_offline']) : intval($lgsl_config['hide_offline'][$zone]);
     $random       = isset($options['random'])       ? intval($options['random'])       : intval($lgsl_config['random'][$zone]);
     $type         = empty($options['type'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['type']));
     $game         = empty($options['game'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['game']));
-    $page         = empty($options['page'])         ? ""                               : "LIMIT {$lgsl_config['pagination_lim']} OFFSET " . strval($lgsl_config['pagination_lim']*((int)$options['page'] - 1));
+    $page         = empty($options['page'])         ? ""                               : "LIMIT {$lgsl_config['pagination_lim']} OFFSET " . $lgsl_config['pagination_lim']*((int)$options['page'] - 1);
     $mysqli_order = empty($random)                  ? "id"                             : "rand()";
     $server_limit = empty($random)                  ? 0                                : $random;
 
                        $mysqli_where   = array("`disabled`=0");
-    if ($zone != 0)  { $mysqli_where[] = "FIND_IN_SET('{$zone}',`zone`)"; }
-    if ($type != "") { $mysqli_where[] = "`type`='{$type}'"; }
+    if ($zone != 0)  { $mysqli_where[] = "FIND_IN_SET('$zone',`zone`)"; }
+    if ($type != "") { $mysqli_where[] = "`type`='$type'"; }
 
-    $mysqli_query  = "SELECT `id` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $mysqli_where)." ORDER BY {$mysqli_order} {$page}";
+    $mysqli_query  = "SELECT `id` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $mysqli_where)." ORDER BY $mysqli_order $page";
     $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
     $server_list  = array();
 
@@ -346,7 +346,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_group_totals($server_list = FALSE)
+  function lgsl_group_totals($server_list = FALSE): array
   {
     if (!is_array($server_list)) { $server_list = lgsl_query_group( array( "request"=>"sc" ) ); }
 
@@ -407,7 +407,7 @@
 
     if ($action == "check")
     {
-      return ($time_taken > $time_limit) ? TRUE : FALSE;
+      return $time_taken > $time_limit;
     }
     else
     {
@@ -417,7 +417,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_server_misc($server)
+  function lgsl_server_misc($server): array
   {
     global $lgsl_url_path;
 
@@ -440,7 +440,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_icon_game($type, $game)
+  function lgsl_icon_game($type, $game): string
   {
     global $lgsl_file_path, $lgsl_url_path;
 
@@ -448,10 +448,10 @@
     $game = preg_replace("/[^a-z0-9_]/", "_", strtolower($game));
 
     $path_list = array(
-    "icons/{$type}/{$game}.gif",
-    "icons/{$type}/{$game}.png",
-    "icons/{$type}/{$type}.gif",
-    "icons/{$type}/{$type}.png");
+    "icons/$type/$game.gif",
+    "icons/$type/$game.png",
+    "icons/$type/$type.gif",
+    "icons/$type/$type.png");
 
     foreach ($path_list as $path)
     {
@@ -463,7 +463,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_icon_status($status, $password, $pending = 0)
+  function lgsl_icon_status($status, $password, $pending = 0): string
   {
     global $lgsl_url_path;
 
@@ -476,25 +476,22 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_icon_location($location)
+  function lgsl_icon_location($location): string
   {
     global $lgsl_config, $lgsl_file_path, $lgsl_url_path;
 
     if (!$location || !$lgsl_config["locations"]) { return "{$lgsl_url_path}locations/OFF.png"; }
 
-    if ($location)
-    {
       $location = "locations/".strtoupper(preg_replace("/[^a-zA-Z0-9_]/", "_", $location)).".png";
-
-      if (file_exists($lgsl_file_path.$location)) { return $lgsl_url_path.$location; }
-    }
+      return file_exists($lgsl_file_path . $location) ? $lgsl_url_path . $location : '';
+  }
 
     return "{$lgsl_url_path}locations/XX.png";
   }
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_image_map($status, $type, $game, $map, $check_exists = TRUE, $id = 0)
+  function lgsl_image_map($status, $type, $game, $map, $check_exists = TRUE, $id = 0): string
   {
     global $lgsl_file_path, $lgsl_url_path;
 
@@ -502,40 +499,40 @@
     $game = preg_replace("/[^a-z0-9_]/", "_", strtolower($game));
     $map  = preg_replace("/[^a-z0-9_]/", "_", strtolower($map));
 
-    if ($check_exists !== TRUE) { return "{$lgsl_url_path}maps/{$type}/{$game}/{$map}.jpg"; }
+    if ($check_exists !== TRUE) { return "{$lgsl_url_path}maps/$type/$game/$map.jpg"; }
 
     if ($status)
     {
       $path_list = array(
-      "maps/{$type}/{$game}/{$map}.jpg",
-      "maps/{$type}/{$game}/{$map}.gif",
-      "maps/{$type}/{$game}/{$map}.png",
-      "maps/{$type}/{$map}.jpg",
-      "maps/{$type}/{$map}.gif",
-      "maps/{$type}/{$map}.png",
-      "maps/{$type}/map_no_image.jpg",
-      "maps/{$type}/map_no_image.gif",
-      "maps/{$type}/map_no_image.png",
-      "other/map_no_image_{$id}.jpg",
-      "other/map_no_image_{$id}.gif",
-      "other/map_no_image_{$id}.png",
+      "maps/$type/$game/$map.jpg",
+      "maps/$type/$game/$map.gif",
+      "maps/$type/$game/$map.png",
+      "maps/$type/$map.jpg",
+      "maps/$type/$map.gif",
+      "maps/$type/$map.png",
+      "maps/$type/map_no_image.jpg",
+      "maps/$type/map_no_image.gif",
+      "maps/$type/map_no_image.png",
+      "other/map_no_image_$id.jpg",
+      "other/map_no_image_$id.gif",
+      "other/map_no_image_$id.png",
       "other/map_no_image.jpg");
     }
     else
     {
       $path_list = array(
-      "maps/{$type}/map_no_response.jpg",
-      "maps/{$type}/map_no_response.gif",
-      "maps/{$type}/map_no_response.png",
-      "other/map_no_response_{$id}.jpg",
-      "other/map_no_response_{$id}.gif",
-      "other/map_no_response_{$id}.png",
+      "maps/$type/map_no_response.jpg",
+      "maps/$type/map_no_response.gif",
+      "maps/$type/map_no_response.png",
+      "other/map_no_response_$id.jpg",
+      "other/map_no_response_$id.gif",
+      "other/map_no_response_$id.png",
       "other/map_no_response.jpg");
     }
 
     foreach ($path_list as $path)
     {
-      if (file_exists($lgsl_file_path.$path)) { return "{$lgsl_url_path}{$path}"; }
+      if (file_exists($lgsl_file_path.$path)) { return "$lgsl_url_path$path"; }
     }
 
     return "#LGSL_DEFAULT_IMAGES_MISSING#";
@@ -543,7 +540,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_image_map_password($status, $password)
+  function lgsl_image_map_password($status, $password): string
   {
     global $lgsl_url_path;
 
@@ -554,7 +551,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_text_status($status, $password, $pending = 0)
+  function lgsl_text_status($status, $password, $pending = 0): string
   {
     if ($pending)  { return 'pen'; }
     if (!$status)  { return 'nrs'; }
@@ -565,20 +562,20 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_text_type_game($type, $game)
+  function lgsl_text_type_game($type, $game): string
   {
     global $lgsl_config;
 
-    return "[ {$lgsl_config['text']['typ']}: {$type} ] [ {$lgsl_config['text']['gme']}: {$game} ]";
+    return "[ {$lgsl_config['text']['typ']}: $type ] [ {$lgsl_config['text']['gme']}: $game ]";
   }
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_text_location($location)
+  function lgsl_text_location($location): string
   {
     global $lgsl_config;
 
-    return $location ? "{$lgsl_config['text']['loc']} {$location}" : "";
+    return $location ? "{$lgsl_config['text']['loc']} $location" : "";
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -604,7 +601,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_fields($server, $fields_show, $fields_hide, $fields_other)
+  function lgsl_sort_fields($server, $fields_show, $fields_hide, $fields_other): array
   {
     $fields_list = array();
 
@@ -623,7 +620,7 @@
 
     $fields_show = array_intersect($fields_show, $fields_list);
 
-    if ($fields_other == FALSE) { return $fields_show; }
+    if (!$fields_other) { return $fields_show; }
 
     $fields_list = array_diff($fields_list, $fields_show);
 
@@ -632,7 +629,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_servers_by_id($server_a, $server_b)
+  function lgsl_sort_servers_by_id($server_a, $server_b): int
   {
     if ($server_a['o']['id'] == $server_b['o']['id']) { return 0; }
 
@@ -641,7 +638,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_servers_by_zone($server_a, $server_b)
+  function lgsl_sort_servers_by_zone($server_a, $server_b): int
   {
     if ($server_a['o']['zone'] == $server_b['o']['zone']) { return 0; }
 
@@ -650,7 +647,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_servers_by_type($server_a, $server_b)
+  function lgsl_sort_servers_by_type($server_a, $server_b): int
   {
     $result = strcasecmp($server_a['b']['type'], $server_b['b']['type']);
 
@@ -664,7 +661,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_servers_by_status($server_a, $server_b)
+  function lgsl_sort_servers_by_status($server_a, $server_b): int
   {
     if ($server_a['b']['status'] == $server_b['b']['status']) { return 0; }
 
@@ -673,7 +670,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_servers_by_players($server_a, $server_b)
+  function lgsl_sort_servers_by_players($server_a, $server_b): int
   {
     if ($server_a['s']['players'] == $server_b['s']['players'])
       if ($server_a['b']['status'] < $server_b['b']['status'])
@@ -712,7 +709,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_players_by_score($player_a, $player_b)
+  function lgsl_sort_players_by_score($player_a, $player_b): int
   {
     if ($player_a['score'] == $player_b['score']) { return 0; }
 
@@ -729,11 +726,13 @@
 
       return ($player_a['time'] < $player_b['time']) ? 1 : -1;
     }
+    else
+        return '';
   }
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_sort_players_by_name($player_a, $player_b)
+  function lgsl_sort_players_by_name($player_a, $player_b): int
   {
     // REMOVE NON ALPHA NUMERIC ASCII WHILE LEAVING UPPER UTF-8 CHARACTERS
     $name_a = preg_replace("/[\x{00}-\x{2F}\x{3A}-\x{40}\x{5B}-\x{60}\x{7B}-\x{7F}]/", "", $player_a['name']);
@@ -753,7 +752,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_charset_detect($server)
+  function lgsl_charset_detect($server): string
   {
     if (!function_exists("mb_detect_encoding")) { return "AUTO"; }
 
@@ -771,7 +770,7 @@
 
     $charset = @mb_detect_encoding($server['s']['name'], "UTF-8, Windows-1252, ISO-8859-1, ISO-8859-15");
 
-    return $charset ? $charset : "AUTO";
+    return $charset ?: "AUTO";
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -813,7 +812,7 @@
   {
     if ($word_wrap) { $string = lgsl_word_wrap($string, $word_wrap); }
 
-    if ($xml_feed != FALSE)
+    if ($xml_feed)
     {
       $string = htmlspecialchars($string, ENT_QUOTES);
     }
@@ -868,11 +867,11 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_location_link($location)
+  function lgsl_location_link($location): string
   {
     if (!$location) { return "#"; }
 
-    return "https://www.google.com/maps/search/{$location}/";
+    return "https://www.google.com/maps/search/$location/";
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -901,7 +900,7 @@
 
       $answer = curl_exec($lgsl_curl);
       $answer = json_decode($answer, true);
-      $location = (isset($answer["countryCode"]) ? $answer["countryCode"] : "XX");
+      $location = ($answer["countryCode"] ?? "XX");
 
       if (curl_error($lgsl_curl)) { $location = "XX"; }
 
@@ -942,9 +941,7 @@
 
     // CONVERT WINDOWS BACKSLASHES TO FORWARDSLASHES
 
-    $lgsl_path = str_replace("\\", "/", $lgsl_path);
-
-    return $lgsl_path;
+      return str_replace("\\", "/", $lgsl_path);
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -954,14 +951,14 @@
     // IS NO PARAMS
 
     if (!strpos($url, '?')) {
-      return "{$url}?" . http_build_query($params);
+      return "$url?" . http_build_query($params);
     }
 
     // IS '?' EXISTS
 
     if (isset($params['game'])) {
       if (strpos($url, 'game=')) {
-        $url = preg_replace('/game=([\w\d\_\-])+/', "game={$params['game']}", $url);
+        $url = preg_replace('/game=([\w_\-])+/', "game={$params['game']}", $url);
       }
       else {
         $url .= "&game={$params['game']}";
@@ -969,7 +966,7 @@
     }
     if (isset($params['type'])) {
       if (strpos($url, 'type=')) {
-        $url = preg_replace('/type=([\w\d\_\-])+/', "type={$params['type']}", $url);
+        $url = preg_replace('/type=([\w_\-])+/', "type={$params['type']}", $url);
       }
       else {
         $url .= "&type={$params['type']}";
@@ -989,7 +986,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_url_path()
+    function lgsl_url_path(): string
   {
     // CHECK IF PATH HAS BEEN SET IN CONFIG
 
@@ -1042,7 +1039,7 @@
       return $host_path.$url_path."/";
     }
 
-    return "/#LGSL_PATH_PROBLEM#{$base_path}#{$lgsl_path}#/";
+    return "/#LGSL_PATH_PROBLEM#$base_path#$lgsl_path#/";
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -1061,7 +1058,7 @@
   require $lgsl_file_path."lgsl_protocol.php";
 
   $auth   = md5($_SERVER['REMOTE_ADDR'].md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
-  $cookie = isset($_COOKIE['lgsl_admin_auth']) ? $_COOKIE['lgsl_admin_auth'] : "";
+  $cookie = $_COOKIE['lgsl_admin_auth'] ?? "";
   $lgsl_url_path = lgsl_url_path();
 
   if (isset($_GET['lgsl_debug']) and $auth === $cookie)
@@ -1074,10 +1071,10 @@
             <hr />#d0# ".__FILE__."
             <hr />#d1# ".@realpath(__FILE__)."
             <hr />#d2# ".dirname(__FILE__)."
-            <hr />#d3# {$lgsl_file_path}
+            <hr />#d3# $lgsl_file_path
             <hr />#d4# {$_SERVER['DOCUMENT_ROOT']}
             <hr />#d5# ".@realpath($_SERVER['DOCUMENT_ROOT'])."
-            <hr />#d6# {$lgsl_url_path}
+            <hr />#d6# $lgsl_url_path
             <hr />#c0# {$lgsl_config['url_path']}
             <hr />#c1# {$lgsl_config['no_realpath']}
             <hr />#c2# {$lgsl_config['feed']['method']}

@@ -34,12 +34,12 @@
 
   while($mysql_row = mysqli_fetch_array($mysql_result))
   {
-    echo str_pad(lgsl_timer("taken"),  8,  " ").":".
-         str_pad($mysql_row['type'],   15, " ").":".
-         str_pad($mysql_row['ip'],     30, " ").":".
-         str_pad($mysql_row['c_port'], 6,  " ").":".
-         str_pad($mysql_row['q_port'], 6,  " ").":".
-         str_pad($mysql_row['s_port'], 12, " ")."\r\n";
+    echo str_pad(lgsl_timer("taken"),  8).":".
+         str_pad($mysql_row['type'],   15).":".
+         str_pad($mysql_row['ip'],     30).":".
+         str_pad($mysql_row['c_port'], 6).":".
+         str_pad($mysql_row['q_port'], 6).":".
+         str_pad($mysql_row['s_port'], 12)."\r\n";
 
     lgsl_query_cached($mysql_row['type'], $mysql_row['ip'], $mysql_row['c_port'], $mysql_row['q_port'], $mysql_row['s_port'], $request);
 

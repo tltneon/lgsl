@@ -15,16 +15,16 @@
 		return $result;
 	}
 
-  function drawHistory(&$im, $x, $y, $w, $h, &$server) {
+  function drawHistory($im, $x, $y, $w, $h, &$server) {
     $axis = imagecolorallocate($im, 255, 255, 255);
     $grid = imagecolorallocate($im, 90, 90, 90);
     $chart = imagecolorallocate($im, 120, 255, 120);
     $x0 = array();
     $y0 = array();
-    $history = $server['s']['history'] or array();
+    $history = $server['s']['history'];
     foreach ($history as $key) {
-      array_push($x0, $key['time'] - time() + 60*60*24);
-      array_push($y0, $key['players']);
+      $x0[] = $key['time'] - time() + 60 * 60 * 24;
+      $y0[] = $key['players'];
     }
 
     $server['s']['playersmax'] = $server['s']['playersmax'] > 0 ? $server['s']['playersmax'] : 1;
@@ -100,7 +100,7 @@
       imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$server['s']['map']}");
       imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server['s']['players']}".($server['s']['playersmax'] > 999 ? "" : "/{$server['s']['playersmax']}"));
       imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game     */  ucfirst($server['s']['game']));
-      imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:{$time} /{$server['s']['game']}");
+      imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:$time /{$server['s']['game']}");
 
       drawHistory($im, 374, 24, 80, 24, $server);
       break;
@@ -136,9 +136,9 @@
       
       imagettftext($im, 8, 90, 12, $h, $color_nm, $font, /* name  */ $server['s']['name']);
       if (version_compare(phpversion(), '8.0.0', '<')) {
-        imagefilledpolygon($im, array(0,0, 16,0, 0,16), 3, $stat);
+        imagefilledpolygon($im, array(0, 0, 16, 0, 0, 16), 3, $stat);
       } else {
-        imagefilledpolygon($im, array(0,0, 16,0, 0,16), $stat);
+        imagefilledpolygon($im, array(0, 0, 16, 0, 0, 16), $stat);
       }
       $game_id = @makeImage($misc['icon_game'], 16, 16);                              // create game icon
       imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                           // place game icon
@@ -178,7 +178,7 @@
         imagettftext($im, 7, 0, 25, 190, $color_pl, $font, /* players  */  $lgsl_config['text']['npi']);
       }
       
-      imagettftext($im, 6, 0, 25, 242, $color_tm, $font, /* updated  */  "upd:{$time}");
+      imagettftext($im, 6, 0, 25, 242, $color_tm, $font, /* updated  */  "upd:$time");
       break;
     }
     default: {
@@ -205,14 +205,13 @@
       imagecopy($im, $on_id, 7, 2, 0, 0, 16, 16);                                 // place status icon
       imagecopy($im, $game_id, 25, 2, 0, 0, 16, 16);                              // place game icon
 
-      imagettftext($im, 7, 0, 43,  17, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$map}");
+      imagettftext($im, 7, 0, 43,  17, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:$map");
       imagettftext($im, 7, 0, 43,  9,  $color_ip, $font, /* ip&port  */  str_replace('https://', '', $misc['connect_filtered']));
       imagettftext($im, 8, 0, 156, 9,  $color_nm, $font, /* name     */  $server['s']['name']);
       imagettftext($im, 7, 0, 156, 17, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server['s']['players']}".($server['s']['playersmax'] > 999 ? "" : "/{$server['s']['playersmax']}"));
-      imagettftext($im, 5, 0, 238, 18, $color_tm, $font, /* updated  */  "upd:{$time} /{$server['s']['game']}");
+      imagettftext($im, 5, 0, 238, 18, $color_tm, $font, /* updated  */  "upd:$time /{$server['s']['game']}");
     }
   }
 
 	imagegif($im);
 	imagedestroy($im);
-?>
