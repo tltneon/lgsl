@@ -78,7 +78,7 @@
   $lgsl_config['text']['fso'] = "Требуется для прямых запросов к серверу";
   $lgsl_config['text']['crl'] = "Используется для обновления данных, когда fsockopen отключен";
   $lgsl_config['text']['mbs'] = "Используется UTF-8 кодировка для корректного отображения серверов и игроков";
-  $lgsl_config['text']['bz2'] = "Used to show Source server settings over a certain size";
+  $lgsl_config['text']['bz2'] = "Используется на движке Source для сжатия нестандартных ресурсов сервера";
   $lgsl_config['text']['gd2'] = "Требуется для Image Mod";
   $lgsl_config['text']['zli'] = "Требуется для America's Army 3";
 
