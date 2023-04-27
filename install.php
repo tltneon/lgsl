@@ -93,7 +93,7 @@
 
 
 <!DOCTYPE html>
-<html>
+<html lang="">
 	<head>
 		<title>LGSL Installation Page</title>
 		<link rel='stylesheet' type='text/css' href='lgsl_files/styles/darken_style.css' />
@@ -132,7 +132,7 @@
 				text-decoration: none;
 				border: 1px solid blue;
 				border-radius: 32px;
-				margin-bottom: 0px;
+				margin-bottom: 0;
 				vertical-align: super;
 				padding: 2px 2px 2px 3px;
 				line-height: 6px;
@@ -335,13 +335,14 @@ document.addEventListener("DOMContentLoaded", reloadLocale);
 document.addEventListener("reloadLocale", reloadLocale);
 	function reloadLocale(){
 		document.querySelectorAll("l").forEach(
-			(item, i, arr)=>{
+			(item)=>{
 				updateLValue(item, item.getAttribute("k"));
 			}
 		);
 	}
-	var locale = "english";
-	let vars = {
+
+let locale = "english";
+let vars = {
 		mysql_server: "<?php echo $mysql_server; ?>",
 		mysql_user: "<?php echo $mysql_user; ?>",
 		mysql_password: "<?php echo $mysql_password; ?>",
@@ -367,21 +368,24 @@ document.addEventListener("reloadLocale", reloadLocale);
 		locations: false,
     	preloader: false
 	}
-	function changeValue(event, options = {}) {
+	function changeValue(event, options = {
+        styleChanged: false,
+        translationInput: false
+    }) {
 		console.log(event);
 		if(options.styleChanged){
-			if(event.target.value == "showcase"){
+			if(event.target.value === "showcase"){
 				event.target.value = "darken_style.css";
 				window.open("https://github.com/tltneon/lgsl/wiki/Styles");
 			}
-			if(event.target.value == "parallax_style.css"){
+			if(event.target.value === "parallax_style.css"){
 				vars["scripts"]["parallax.js"] = true;
 				document.querySelector("input[id='parallax.js']").checked = true;
 			}
 			document.getElementsByTagName("link")[0].href = `lgsl_files/styles/${event.target.value}`;
 		}
 		if(options.translationInput){
-			if(event.target.value == "help"){
+			if(event.target.value === "help"){
 				event.target.value = "english";
 				window.open("https://github.com/tltneon/lgsl/wiki#how-do-i-change-language");
 			}
@@ -391,7 +395,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		vars[event.target.name] = event.target.value;
 	}
 	function changeCheckbox(event) {
-		if(event.target.name == 'scripts'){
+		if(event.target.name === 'scripts'){
 			vars[event.target.name][event.target.id] = event.target.checked;
 		}
 		else
@@ -403,10 +407,10 @@ document.addEventListener("reloadLocale", reloadLocale);
 	}
 	function generateConfig()
 	{
-		if(vars.mysql_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
+		if(vars.mysql_user === "" || vars.lgsl_user === "" || vars.lgsl_password === "") return alert(l("filla"));
 		let textarea = document.body.getElementsByTagName("textarea")[0] ? document.body.getElementsByTagName("textarea")[0] : document.createElement("textarea");
 		let slist = '';
-		for(s in vars['scripts']){
+		for(const s in vars['scripts']){
 			if(vars['scripts'][s])
 				slist += '"' + s + '",';
 		}

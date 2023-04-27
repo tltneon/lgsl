@@ -34,17 +34,17 @@
 
   if ($q_port > 99999 || $q_port < 1)
   {
-    exit("LGSL FEED PROBLEM: INVALID QUERY PORT: '{$q_port}'");
+    exit("LGSL FEED PROBLEM: INVALID QUERY PORT: '$q_port'");
   }
 
-  if (preg_match("/[^0-9a-z\.\-\[\]\:]/i", $ip))
+  if (preg_match("/[^0-9a-z.\-\[\]:]/i", $ip))
   {
-    exit("LGSL FEED PROBLEM: INVALID IP OR HOSTNAME: '{$ip}'");
+    exit("LGSL FEED PROBLEM: INVALID IP OR HOSTNAME: '$ip'");
   }
 
   if (preg_match("/[^a-z]/", $request))
   {
-    exit("LGSL FEED PROBLEM: INVALID REQUEST: '{$request}'");
+    exit("LGSL FEED PROBLEM: INVALID REQUEST: '$request'");
   }
 
   if ($type == "test")
@@ -56,14 +56,14 @@
 
   if (!isset($lgsl_protocol_list[$type]))
   {
-    exit("LGSL FEED PROBLEM: ".($type ? "UNKNOWN TYPE '{$type}'" : "MISSING TYPE")." FOR {$ip} : {$c_port} : {$q_port} : {$s_port}");
+    exit("LGSL FEED PROBLEM: ".("UNKNOWN TYPE '$type'")." FOR $ip : $c_port : $q_port : $s_port");
   }
 
 //------------------------------------------------------------------------------------------------------------+
 // FILTER HOSTNAME AND IP FORMATS THAT PHP ACCEPTS BUT ARE NOT WANTED
 
-  if     (preg_match("/(\[[0-9a-z\:]+\])/iU", $ip, $match)) { $ip = $match[1]; }
-  elseif (preg_match("/([0-9a-z\.\-]+)/i", $ip, $match))    { $ip = $match[1]; }
+  if     (preg_match("/(\[[0-9a-z:]+])/iU", $ip, $match)) { $ip = $match[1]; }
+  elseif (preg_match("/([0-9a-z.\-]+)/i", $ip, $match))    { $ip = $match[1]; }
 
 //------------------------------------------------------------------------------------------------------------+
 // CHECK PUBLIC FEED SETTING AND EITHER ADD [a] REQUEST OR ENSURE [a] IS REMOVED
@@ -93,10 +93,10 @@
     $file_handle = fopen($file_path, "a");
 
     $file_string  = "
-    [ ".date("Y/m/d H:i:s")." ] {$type}:{$ip}:{$c_port}:{$q_port}:{$s_port}:{$request}
+    [ ".date("Y/m/d H:i:s")." ] $type:$ip:$c_port:$q_port:$s_port:$request
     [ <a href='http://".lgsl_string_html($_SERVER['REMOTE_ADDR']) ."'>".lgsl_string_html($_SERVER['REMOTE_ADDR']) ."</a> ]
     [ <a href='"       .lgsl_string_html($_SERVER['HTTP_REFERER'])."'>".lgsl_string_html($_SERVER['HTTP_REFERER'])."</a> ]
-    ".($version ? " [ {$version} ] " : "")."
+    ".($version ? " [ $version ] " : "")."
     ".($xml     ? " [ XML ]        " : "")."
     <br />";
 

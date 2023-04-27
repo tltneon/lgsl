@@ -30,12 +30,13 @@
   {
     if ((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")))
     {
-      $output = "<div class='center'><br /><br /><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><br /><br /></div>".lgsl_help_info(); return;
+      $output = "<div class='center'><br /><br /><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><br /><br /></div>".lgsl_help_info();
     }
     else
     {
-      $output = "<div class='center'><br /><br /><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><br /><br /></div>".lgsl_help_info(); return;
+      $output = "<div class='center'><br /><br /><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><br /><br /></div>".lgsl_help_info();
     }
+      return;
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -83,7 +84,7 @@
              $_POST['form_s_port']  [$form_key],
              $_POST['form_zone']    [$form_key],
              $_POST['form_disabled'][$form_key],
-             $_POST['form_comment'] [$form_key]) = explode(":", "{$form_line}:::::::");
+             $_POST['form_comment'] [$form_key]) = explode(":", "$form_line:::::::");
       }
     }
 
@@ -102,7 +103,7 @@
       $comment    = mysqli_real_escape_string($lgsl_database,                           trim($_POST['form_comment'] [$form_key]));
 
       // CACHE INDEXED BY TYPE:IP:Q_PORT SO IF THEY CHANGE THE CACHE IS IGNORED
-      list($status, $cache, $cache_time) = isset($db["{$type}:{$ip}:{$q_port}"]) ? $db["{$type}:{$ip}:{$q_port}"] : array("0", "", "");
+      list($status, $cache, $cache_time) = $db["$type:$ip:$q_port"] ?? array("0", "", "");
 
       $status     = mysqli_real_escape_string($lgsl_database, $status);
       $cache      = mysqli_real_escape_string($lgsl_database, $cache);
@@ -123,7 +124,7 @@
       elseif ($q_port < 1 || $q_port > 99999)     { $disabled = 1; $q_port = 0; }
       elseif (!isset($lgsl_protocol_list[$type])) { $disabled = 1; }
 
-      $mysqli_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`zone`,`disabled`,`comment`,`status`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','{$zone}','{$disabled}','{$comment}','{$status}','{$cache}','{$cache_time}')";
+      $mysqli_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`zone`,`disabled`,`comment`,`status`,`cache`,`cache_time`) VALUES ('$type','$ip','$c_port','$q_port','$s_port','$zone','$disabled','$comment','$status','$cache','$cache_time')";
       $mysqli_result = mysqli_query($lgsl_database, $mysqli_query) or die(mysqli_error($lgsl_database));
     }
   }
@@ -228,12 +229,12 @@
       $ext = strtolower(pathinfo($_FILES['map']['name'], PATHINFO_EXTENSION));
       if ($ext === "jpg" || $ext === "gif") {
         $uploadfolder = preg_replace("/[^a-z0-9_\/]/", "_", strtolower("lgsl_files/maps/{$_POST['lgsl_map_upload_path']}/"));
-        $uploadfile = preg_replace("/[^a-z0-9_]/", "_", strtolower($_POST['lgsl_map_upload_file'])) . ".{$ext}";
+        $uploadfile = preg_replace("/[^a-z0-9_]/", "_", strtolower($_POST['lgsl_map_upload_file'])) . ".$ext";
         if (!file_exists($uploadfolder . $uploadfile)) {
           mkdir($uploadfolder, 0666, true);
         }
         if (move_uploaded_file($_FILES['map']['tmp_name'], $uploadfolder . $uploadfile)) {
-          echo "Image {$uploadfile} uploaded successfully.\n";
+          echo "Image $uploadfile uploaded successfully.\n";
         } else {
           echo "File not uploaded. Something wrong.\n";
         }
@@ -257,11 +258,11 @@
       $output .= "
       <div style='padding-bottom: 5px;'>
         <div style='display: inline-block;'>
-          <img src='{$image_map}' width='32' height='32' />
+          <img src='$image_map' width='32' height='32'  alt='$image_map'/>
         </div>
         <div style='display: inline-block;vertical-align: super;'>
           <div>{$lgsl_config['text']['map']}: {$server['s']['map']}</div>
-          <div>Link: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
+          <div>Link: <a href='$image_map' target='_blank'>$image_map</a></div>
           <form action='admin.php' method='post' enctype='multipart/form-data'>
             Select image to upload:
             <input type='file' name='map' id='map' />
@@ -304,13 +305,13 @@
         while($mysqli_row = mysqli_fetch_array($mysqli_result, MYSQLI_ASSOC))
         {
           $output .=
-          lgsl_string_html(str_pad($mysqli_row['type'],     15, " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['ip'],       30, " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['c_port'],   6,  " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['q_port'],   6,  " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['s_port'],   7,  " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['zone'],     7,  " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['disabled'], 2,  " ")).":".
+          lgsl_string_html(str_pad($mysqli_row['type'],     15)).":".
+          lgsl_string_html(str_pad($mysqli_row['ip'],       30)).":".
+          lgsl_string_html(str_pad($mysqli_row['c_port'],   6)).":".
+          lgsl_string_html(str_pad($mysqli_row['q_port'],   6)).":".
+          lgsl_string_html(str_pad($mysqli_row['s_port'],   7)).":".
+          lgsl_string_html(str_pad($mysqli_row['zone'],     7)).":".
+          lgsl_string_html(str_pad($mysqli_row['disabled'], 2)).":".
                                    $mysqli_row['comment']            ."\r\n";
         }
 //---------------------------------------------------------+
@@ -365,15 +366,15 @@
         $output .= "
         <tr>
           <td>
-            <a href='".lgsl_link($id)."' style='text-decoration:none' target='_blank'>{$id}</a>
+            <a href='".lgsl_link($id)."' style='text-decoration:none' target='_blank'>$id</a>
           </td>
           <td>
-            <select name='form_type[{$id}]'>";
+            <select name='form_type[$id]'>";
 //---------------------------------------------------------+
             foreach ($lgsl_type_list as $type => $description)
             {
               $output .= "
-              <option ".($type == $mysqli_row['type'] ? "selected='selected'" : "")." value='{$type}'>{$description}</option>";
+              <option ".($type == $mysqli_row['type'] ? "selected='selected'" : "")." value='$type'>$description</option>";
             }
 
             if (!isset($lgsl_type_list[$mysqli_row['type']]))
@@ -385,17 +386,17 @@
             $output .= "
             </select>
           </td>
-          <td class='center'><input type='text' name='form_ip[{$id}]'       value='".lgsl_string_html($mysqli_row['ip'])."' size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536' {$disabled} /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536' {$disabled} /></td>
-          <td class='center'><input type='number' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536' {$disabled} /></td>
+          <td class='center'><input type='text' name='form_ip[$id]'       value='".lgsl_string_html($mysqli_row['ip'])."' size='15' maxlength='255' /></td>
+          <td class='center'><input type='number' name='form_c_port[$id]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536' $disabled /></td>
+          <td class='center'><input type='number' name='form_q_port[$id]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536' $disabled /></td>
+          <td class='center'><input type='number' name='form_s_port[$id]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536' $disabled /></td>
           <td>
             <select name='form_zone[$id]'>";
 //---------------------------------------------------------+
             foreach ($zone_list as $zone)
             {
               $output .= "
-              <option ".($zone == $mysqli_row['zone'] ? "selected='selected'" : "")." value='{$zone}'>{$zone}</option>";
+              <option ".($zone == $mysqli_row['zone'] ? "selected='selected'" : "")." value='$zone'>$zone</option>";
             }
 
             if (!isset($zone_list[$mysqli_row['zone']]))
@@ -408,8 +409,8 @@
             $output .= "
             </select>
           </td>
-          <td class='center'><input type='checkbox' name='form_disabled[{$id}]' value='1' ".(empty($mysqli_row['disabled']) ? "" : "checked='checked'")." /></td>
-          <td class='center'><input type='text'     name='form_comment[{$id}]'  value='{$mysqli_row['comment']}' size='20' maxlength='255' /></td>
+          <td class='center'><input type='checkbox' name='form_disabled[$id]' value='1' ".(empty($mysqli_row['disabled']) ? "" : "checked='checked'")." /></td>
+          <td class='center'><input type='text'     name='form_comment[$id]'  value='{$mysqli_row['comment']}' size='20' maxlength='255' /></td>
         </tr>";
 
         $last_type = $mysqli_row['type']; // SET LAST TYPE ( $mysqli_row EXISTS ONLY WITHIN THE LOOP )
@@ -421,35 +422,35 @@
         <tr>
           <td>NEW<a href='https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports' target='_blank' id='new_q' style='position: absolute;background: #fff;border-radius: 10px;width: 14px;height: 14px;border: 2px solid;margin-top: 7px;' title='How to choose query protocol?'>?</a></td>
           <td>
-            <select name='form_type[{$id}]'>";
+            <select name='form_type[$id]'>";
 //---------------------------------------------------------+
             foreach ($lgsl_type_list as $type => $description)
             {
               $output .= "
-              <option ".($type == $last_type ? "selected='selected'" : "")." value='{$type}'>{$description}</option>";
+              <option ".($type == $last_type ? "selected='selected'" : "")." value='$type'>$description</option>";
             }
 //---------------------------------------------------------+
             $output .= "
             </select>
           </td>
-          <td class='center'><input type='text'   name='form_ip[{$id}]'     value=''  size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value=''  min='0' max='65536'   /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value=''  min='0' max='65536'   /></td>
-          <td class='center'><input type='number' name='form_s_port[{$id}]' value='0' min='0' max='65536'   /></td>
+          <td class='center'><input type='text'   name='form_ip[$id]'     value=''  size='15' maxlength='255' /></td>
+          <td class='center'><input type='number' name='form_c_port[$id]' value=''  min='0' max='65536'   /></td>
+          <td class='center'><input type='number' name='form_q_port[$id]' value=''  min='0' max='65536'   /></td>
+          <td class='center'><input type='number' name='form_s_port[$id]' value='0' min='0' max='65536'   /></td>
           <td>
-            <select name='form_zone[{$id}]'>";
+            <select name='form_zone[$id]'>";
 //---------------------------------------------------------+
             foreach ($zone_list as $zone)
             {
               $output .= "
-              <option value='{$zone}'>{$zone}</option>";
+              <option value='$zone'>$zone</option>";
             }
 //---------------------------------------------------------+
             $output .= "
             </select>
           </td>
-          <td class='center'><input type='checkbox' name='form_disabled[{$id}]' value='' /></td>
-          <td class='center'><input type='text'     name='form_comment[{$id}]'  value='' size='20' maxlength='255' /></td>
+          <td class='center'><input type='checkbox' name='form_disabled[$id]' value='' /></td>
+          <td class='center'><input type='text'     name='form_comment[$id]'  value='' size='20' maxlength='255' /></td>
         </tr>
       </table>
 
@@ -470,7 +471,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_help_info()
+  function lgsl_help_info(): string
   {
     global $lgsl_config;
     return "
@@ -521,8 +522,7 @@
 
   function lgsl_stripslashes_deep($value)
   {
-    $value = is_array($value) ? array_map('lgsl_stripslashes_deep', $value) : stripslashes($value);
-    return $value;
+      return is_array($value) ? array_map('lgsl_stripslashes_deep', $value) : stripslashes($value);
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -533,9 +533,7 @@
     $string = str_replace("\x05\x06", "", $string);
     $string = preg_replace("/&([a-z\d]{2,7}|#\d{2,5});/i", "\x05\x06$1", $string);
     $string = htmlspecialchars($string, ENT_QUOTES);
-    $string = str_replace("\x05\x06", "&", $string);
-
-    return $string;
+      return str_replace("\x05\x06", "&", $string);
   }
 
 //------------------------------------------------------------------------------------------------------------+

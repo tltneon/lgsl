@@ -13,8 +13,8 @@
   require "lgsl_class.php";
   global $output;
 
-  $type = (isset($_GET['type']) ? $_GET['type'] : '');
-  $game = (isset($_GET['game']) ? $_GET['game'] : '');
+  $type = ($_GET['type'] ?? '');
+  $game = ($_GET['game'] ?? '');
   $page = ($lgsl_config['pagination_mod'] && isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
   $uri = $_SERVER['REQUEST_URI'];
@@ -54,8 +54,8 @@
     <tr class='server_{$misc['text_status']}'>
 
       <td class='status_cell'>
-        <span title='{$lgsl_config['text'][$misc['text_status']]} | {$lgsl_config['text']['lst']}: {$lastupd}' class='status_icon_{$misc['text_status']}'></span>
-        <a href='{$gamelink}'>
+        <span title='{$lgsl_config['text'][$misc['text_status']]} | {$lgsl_config['text']['lst']}: $lastupd' class='status_icon_{$misc['text_status']}'></span>
+        <a href='$gamelink'>
           <img alt='{$misc['name_filtered']}' src='{$misc['icon_game']}' title='{$misc['text_type_game']}' class='game_icon' />
         </a>
       </td>
@@ -83,9 +83,9 @@
 
       <td class='players_cell'>
         <div class='outer_bar'>
-          <div class='inner_bar' style='width:{$percent}%;'>
+          <div class='inner_bar' style='width:$percent%;'>
             <span class='players_numeric'>{$server['s']['players']}/{$server['s']['playersmax']}</span>
-            <span class='players_percent{$percent}'>{$percent}%</span>
+            <span class='players_percent$percent'>$percent%</span>
           </div>
         </div>
       </td>
@@ -113,7 +113,7 @@
     $output .= "
       <div id='pages'>
         " . ($page > 1 ? "<a href='" . lgsl_build_link_params($uri, array("page" => $page - 1)) . "'> < </a>" : "") . "
-        <span>{$lgsl_config['text']['pag']} {$page}</span>
+        <span>{$lgsl_config['text']['pag']} $page</span>
         " . (count($server_list) < $lgsl_config['pagination_lim'] ?
             "" :
             (isset($_GET['page']) ?
@@ -139,7 +139,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
 //------ WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P --------------------------------------------------------------------------------------------------+
-  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='https://github.com/tltneon/lgsl' style='text-decoration:none'>".lgsl_version()."</a></div>";
+  $output .= "<div style='text-align:center; font-family:tahoma,serif; font-size:9px; padding: 33px 0 11px 0;'><a href='https://github.com/tltneon/lgsl' style='text-decoration:none'>" .lgsl_version()."</a></div>";
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 if ($lgsl_config['preloader'])
   echo $output;

@@ -51,11 +51,11 @@
   $s = array();
   $x = array();
   $y = array();
-  $history = $server['s']['history'] or array();
+  $history = $server['s']['history'];
   foreach ($history as $key) {
-    array_push($s, $key['status']);
-    array_push($x, $key['time'] - time() + $period);
-    array_push($y, $key['players']);
+    $s[] = $key['status'];
+    $x[] = $key['time'] - time() + $period;
+    $y[] = $key['players'];
   }
 
   $maxX = $w - $x0;
@@ -82,9 +82,9 @@
   if ($server['s']['playersmax'] > 1) {
     $ySteps = ($maxY-$y0) / $yStep-1;
     for ($i=1; $i < $ySteps+1; $i++) {
-      imageline($im, $x0+1, (int) $maxY-$yStep*$i, $maxX, (int) $maxY-$yStep*$i, $gray);
+      imageline($im, $x0+1, $maxY -$yStep*$i, $maxX, $maxY -$yStep*$i, $gray);
       if ($server['s']['playersmax'] > 32 or $i % (int)(1 + $server['s']['playersmax']/10) == 0) {
-        imagestring($im, 1, 3, ($maxY-$yStep*$i)-3, round($i * $yStep/$scaleY, 0), $black);
+        imagestring($im, 1, 3, ($maxY-$yStep*$i)-3, round($i * $yStep/$scaleY), $black);
       }
     }
   } else {
@@ -116,4 +116,3 @@
 
   imagepng($im);
   imagedestroy($im);
-?>

@@ -12,7 +12,7 @@
   }
 
   $auth   = md5($_SERVER['REMOTE_ADDR'].md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
-  $cookie = isset($_COOKIE['lgsl_admin_auth']) ? $_COOKIE['lgsl_admin_auth'] : "";
+  $cookie = $_COOKIE['lgsl_admin_auth'] ?? "";
 
   if (isset($_POST['lgsl_user']) && isset($_POST['lgsl_pass']) && $lgsl_config['admin']['user'] == $_POST['lgsl_user'] && $lgsl_config['admin']['pass'] == $_POST['lgsl_pass'])
   {
@@ -29,7 +29,7 @@
 //------------------------------------------------------------------------------------------------------------+
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="">
   <head>
     <title>Live Game Server List Admin</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
