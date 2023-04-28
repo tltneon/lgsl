@@ -1250,6 +1250,9 @@
       if ($server['s']['game'] == 'Y4YNzpz6Cuc=') { // EURO TRUCK SIMULATOR 2
         $server['s']['game'] = 'Euro Truck Simulator 2';
 				$server['s']['map'] = substr($server['s']['map'], 0, -4);
+        if ($server['s']['map'] == '/map/usa') {
+					$server['s']['game'] = 'American Truck Simulator';
+				}
       }
     }
 
