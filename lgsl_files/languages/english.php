@@ -84,6 +84,7 @@
   $lgsl_config['text']['mbs'] = "Used to show UTF-8 server and player names correctly";
   $lgsl_config['text']['bz2'] = "Used to show Source server settings over a certain size";
   $lgsl_config['text']['gd2'] = "Required for Image Mod";
+  $lgsl_config['text']['frt'] = "Required for Charts";
   $lgsl_config['text']['zli'] = "Required for America's Army 3";
 
 //------------------------------------------------------------------------------------------------------------+

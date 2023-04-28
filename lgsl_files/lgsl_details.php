@@ -95,51 +95,50 @@
 
   //------------------------------------------------------------------------------------------------------------+
 
+  if (extension_loaded('gd')) {
     $g = "ip={$server['b']['ip']}&port={$server['b']['c_port']}";
     if ($lgsl_config['history']) {
       $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart' /></div>";
     }
 
     if ($lgsl_config['image_mod']) {
-      if (extension_loaded('gd')) {
-        $p = str_replace('lgsl_files/', '', lgsl_url_path()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
-        $output .= "
-        <details>
-          <summary style='margin-bottom: 12px;'>
-            {$lgsl_config['text']['cts']}
-          </summary>
-          <div>
-            <div style='overflow-x: auto;'><img src='userbar.php?{$g}' alt='{$server["s"]["name"]}'/></div>
-            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}[/img][/url]</textarea><br /><br />
+      $p = str_replace('lgsl_files/', '', lgsl_url_path()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
+      $output .= "
+      <details>
+        <summary style='margin-bottom: 12px;'>
+          {$lgsl_config['text']['cts']}
+        </summary>
+        <div>
+          <div style='overflow-x: auto;'><img src='userbar.php?{$g}' alt='{$server["s"]["name"]}'/></div>
+          <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}[/img][/url]</textarea><br /><br />
 
-            <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t=2' alt='{$server["s"]["name"]}'/></div>
-            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=2[/img][/url]</textarea><br /><br />
+          <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t=2' alt='{$server["s"]["name"]}'/></div>
+          <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=2[/img][/url]</textarea><br /><br />
 
-            <img src='userbar.php?{$g}&t=3' alt='{$server["s"]["name"]}'/><br />
-            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=3[/img][/url]</textarea>
-          </div>
-        </details>
-        <div class='spacer'></div>
-        <style>
-          textarea {
-            width: 32em;
-            height: 2.3em;
-            word-break: break-all;
-          }
-          @media (max-width: 414px){
-            textarea { width: 98.5% !important; }
-          }
-          details[open] div {
-            animation: spoiler 1s;
-          }
-          @keyframes spoiler {
-            0%   {opacity: 0;}
-            100% {opacity: 1;}
-          }
-        </style>";
-      }
-      else {$output .= "<div id='invalid_server_id'> Error while trying to display userbar: GD library not loaded (see php.ini) </div>";}
+          <img src='userbar.php?{$g}&t=3' alt='{$server["s"]["name"]}'/><br />
+          <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=3[/img][/url]</textarea>
+        </div>
+      </details>
+      <div class='spacer'></div>
+      <style>
+        textarea {
+          width: 32em;
+          height: 2.3em;
+          word-break: break-all;
+        }
+        @media (max-width: 414px){
+          textarea { width: 98.5% !important; }
+        }
+        details[open] div {
+          animation: spoiler 1s;
+        }
+        @keyframes spoiler {
+          0%   {opacity: 0;}
+          100% {opacity: 1;}
+        }
+      </style>";
     }
+  } else {$output .= "<div id='invalid_server_id'><a href='https://github.com/tltneon/lgsl/wiki/Troubleshooting#error-while-trying-to-display-userbar-gd-library-not-loaded-see-phpini'> Error while trying to display userbar: GD library not loaded (see php.ini) </a></div>";}
 
   //------------------------------------------------------------------------------------------------------------+
   // SHOW THE PLAYERS
@@ -209,7 +208,7 @@
         </tr>";
 
       foreach ($server['e'] as $field => $value) {
-        $value = preg_replace('/((https*:\/\/|https*:\/\/www\.|www\.)[\w\d\.\-\/=$?​]*)/i', "<a href='$1' target='_blank'>$1</a>", $value);
+        $value = preg_replace('/((https*:\/\/|https*:\/\/www\.|www\.)[\w\d\.\-\/=$?​]*)/i', "<a href='$1' target='_blank'>$1</a>", html_entity_decode($value));
         $output .= "
         <tr>
           <td> {$field} </td>

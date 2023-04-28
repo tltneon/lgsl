@@ -507,6 +507,11 @@
           <td> ( {$lgsl_config['text']['gd2']} ) </td>
         </tr>
         <tr>
+          <td> <a href='https://www.php.net/manual/en/image.installation.php'>FREETYPE</a> </td>
+          <td> {$lgsl_config['text']['enb']}: ".(function_exists('imagettftext') ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
+          <td> ( ".lgsl_lang('frt')." ) </td>
+        </tr>
+        <tr>
           <td> <a href='http://php.net/zlib'>ZLIB</a> </td>
           <td> {$lgsl_config['text']['enb']}: ".(function_exists("gzuncompress") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
           <td> ( {$lgsl_config['text']['zli']} ) </td>

@@ -868,6 +868,14 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
+function lgsl_lang($code) { // FOR PREVENTING WARNINGS
+  global $lgsl_config;
+  if (!isset($lgsl_config['text'][$code])) { return "/#LGSL_LANG#{$code}#/"; }
+  return $lgsl_config['text'][$code];
+}
+
+//------------------------------------------------------------------------------------------------------------+
+
   function lgsl_location_link($location)
   {
     if (!$location) { return "#"; }
