@@ -1241,11 +1241,15 @@
       }
       $server['e']['tags']        = lgsl_cut_string($buffer);
 
-      if($server['s']['game'] == 'rust'){
+      if ($server['s']['game'] == 'rust') {
         preg_match('/cp\d{1,3}/', $server['e']['tags'], $e);
         $server['s']['players'] = substr($e[0], 2);
         preg_match('/mp\d{1,3}/', $server['e']['tags'], $e);
         $server['s']['playersmax'] = substr($e[0], 2);
+      }
+      if ($server['s']['game'] == 'Y4YNzpz6Cuc=') { // EURO TRUCK SIMULATOR 2
+        $server['s']['game'] = 'Euro Truck Simulator 2';
+				$server['s']['map'] = substr($server['s']['map'], 0, -4);
       }
     }
 
