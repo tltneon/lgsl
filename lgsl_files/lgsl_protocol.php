@@ -798,13 +798,12 @@
     }
     $item = explode("\\", $part[1]); // SPLIT PART INTO ITEMS
 
-    foreach ($item as $item_key => $data_key)
-    {
-      if (!($item_key % 2)) { continue; } // SKIP EVEN KEYS
-
-      $data_key               = strtolower(lgsl_parse_color($data_key, "1"));
-      $server['e'][$data_key] = lgsl_parse_color($item[$item_key+1], "1");
-    }
+		$s = 1;
+		if ($item[0]) $s = 0; // IW4 HAS NO EXTRA "\"
+		for ($i = $s; $i < count($item); $i += 2) { // SKIP EVEN KEYS
+      $data_key               = strtolower(lgsl_parse_color($item[$i], "1"));
+      $server['e'][$data_key] = lgsl_parse_color($item[$i+1], "1");
+		}
 
 //---------------------------------------------------------+
 

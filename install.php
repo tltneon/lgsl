@@ -476,6 +476,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		"$lgsl_config['db']['table']   = \""+ vars.mysql_table +"\"; \n" +
 		"$lgsl_config['image_mod']     = "+ vars.image_mod +"; \n" +
 		"$lgsl_config['preloader']     = "+ vars.preloader +";   // true=using ajax to faster loading page\n" +
+		"$lgsl_config['disabled_types']= false;     // allow to exclude some protocols (games) from list. usage: $lgsl_config['disabled_types']= array('warsowold', 'halflifewon', 'test');\n" +
 		"$lgsl_config['pagination_mod']= "+ vars.page_mod +";   // true = using pagination\n" +
 		"$lgsl_config['pagination_lim']= "+ vars.page_lim +";   // limit per page\n" +
 		"$lgsl_config['direct_index']  = 0;                     // 1=link to index.php instead of the folder \n" +
