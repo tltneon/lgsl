@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ � RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -41,7 +41,7 @@
       break;
 
       default: // "sa"
-        $link = $s ? 
+        $link = $s ?
                   $p ?
                     "{$lgsl_url_path}../{$index}?ip={$s}&port={$p}" :
                     "{$lgsl_url_path}../{$index}?s={$s}" :
@@ -596,7 +596,7 @@
       case "type":    { usort($server_list, "lgsl_sort_servers_by_type");    break; }
       case "status":  { usort($server_list, "lgsl_sort_servers_by_status");  break; }
       case "players": { usort($server_list, "lgsl_sort_servers_by_players"); break; }
-      
+
     }
 
     return $server_list;
@@ -705,7 +705,7 @@
 
     if     ($lgsl_config['sort']['players'] == "name")  { usort($server['p'], "lgsl_sort_players_by_name");  }
     elseif ($lgsl_config['sort']['players'] == "score") { usort($server['p'], "lgsl_sort_players_by_score"); }
-    elseif ($lgsl_config['sort']['players'] == "time") { usort($server['p'], "lgsl_sort_players_by_time"); }
+    elseif ($lgsl_config['sort']['players'] == "time")  { usort($server['p'], "lgsl_sort_players_by_time");  }
 
     return $server;
   }

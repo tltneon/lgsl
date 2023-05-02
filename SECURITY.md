@@ -9,6 +9,6 @@
 
 ## Reporting a Vulnerability
 
-If you find any vulnerability please send me a [mail](mailto:neon1226@yandex.com). Describing with images or videos is better. 
+If you find any vulnerability please send me a [mail](mailto:neon1226@yandex.com). Describing with images or videos is better.
 
 I will update LGSL as soon as possible.

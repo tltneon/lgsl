@@ -133,7 +133,7 @@
         case 'onp': { $stat = $stat_ps; break; }
         case 'onl': { $stat = $stat_on; break; }
       }
-      
+
       imagettftext($im, 8, 90, 12, $h, $color_nm, $font, /* name  */ $server['s']['name']);
       if (version_compare(phpversion(), '8.0.0', '<')) {
         imagefilledpolygon($im, array(0,0, 16,0, 0,16), 3, $stat);
@@ -177,7 +177,7 @@
       } else {
         imagettftext($im, 7, 0, 25, 190, $color_pl, $font, /* players  */  $lgsl_config['text']['npi']);
       }
-      
+
       imagettftext($im, 6, 0, 25, 242, $color_tm, $font, /* updated  */  "upd:{$time}");
       break;
     }

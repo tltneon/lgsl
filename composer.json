@@ -6,8 +6,8 @@
 	"license": "GPL-3.0-only",
 	"keywords":
 	[
-    "gameserver",
-    "query",
+	"gameserver",
+	"query",
 		"discord",
 		"fivem",
 		"minecraft",
@@ -36,12 +36,12 @@
 		"source": "https://github.com/tltneon/lgsl",
 		"issues": "https://github.com/tltneon/lgsl/issues"
 	},
-  "funding": [
-    {
-      "type": "patreon",
-      "url": "https://www.patreon.com/user?u=22162275&fan_landing=true"
-    }
-  ],
+	"funding": [
+	{
+		"type": "patreon",
+		"url": "https://www.patreon.com/user?u=22162275&fan_landing=true"
+	}
+	],
 	"require":
 	{
 		"php": ">=5.4",

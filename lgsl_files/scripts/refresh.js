@@ -66,7 +66,7 @@ function loadRefresh() {
       color: crimson;
       cursor: pointer;
     }
-    
+
     @keyframes loader {
       0%   {transform:rotate(45deg)}
       25%  {transform:rotate(90deg)}

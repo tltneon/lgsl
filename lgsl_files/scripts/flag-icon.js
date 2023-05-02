@@ -11,7 +11,7 @@ function loadIcons() {
     let co = details_location_image.style.backgroundImage.slice(-8).slice(0, -6);
     details_location_image.style.backgroundImage = `url('${reImage(co)}')`;
   }
-  
+
   document.querySelectorAll(".contry_icon").forEach(item => { // server list
     let co = item.src.slice(-6).slice(0, -4);
     item.src = reImage(co);

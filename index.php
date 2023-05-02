@@ -57,8 +57,8 @@
   $s = isset($_GET['s']) ? $_GET['s'] : null;
   $ip = isset($_GET['ip']) ? $_GET['ip'] : null;
   $port = isset($_GET['port']) ? $_GET['port'] : null;
-  if     (is_numeric($s)) { $output = load_page("details"); }    
-  elseif (isset($ip) && isset($port)) { $output = load_page("details");                                              }
+  if     (is_numeric($s)) { $output = load_page("details"); }
+  elseif (isset($ip) && isset($port)) { $output = load_page("details");                                   }
   elseif ($s === "add")   { $output = load_page("add");     $title .= " | {$lgsl_config["text"]["aas"]}"; }
   else                    { $output = load_page("list");                                                  }
 //------------------------------------------------------------------------------------------------------------+
@@ -81,7 +81,7 @@
       <?php
                                         echo "<li><a href='../../'>{$lgsl_config['text']['mpg']}</a></li>";   // MAIN PAGE
         if ($lgsl_config['public_add']) echo "<li><a href='?s=add'>{$lgsl_config['text']['aas']}</a></li>";   // ADD SERVER
-        if (file_exists("install.php")) echo "<li><a href='./install.php'>INSTALLATION PAGE</a></li>";        // INSTALLATION PAGE  
+        if (file_exists("install.php")) echo "<li><a href='./install.php'>INSTALLATION PAGE</a></li>";        // INSTALLATION PAGE
         if (isset($_GET['s']))          echo "<li><a href='./'>{$lgsl_config['text']['bak']}</a></li>";       // BACK TO SERVERS LIST
       ?>
     </div>

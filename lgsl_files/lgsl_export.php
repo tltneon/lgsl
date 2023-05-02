@@ -64,7 +64,7 @@
     }
     elseif ($json)
     {
-      array_push($jsarray, 
+      array_push($jsarray,
         array(
           'type'     => $mysql_row['type'],
           'ip'       => $mysql_row['ip'],
@@ -87,7 +87,7 @@
   {
     $output = json_encode($jsarray);
   }
-  
+
   if ($download)
   {
     header("Content-type: application/octet-stream");

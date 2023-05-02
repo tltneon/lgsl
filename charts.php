@@ -106,7 +106,7 @@
     }
   }
 
-  $game_id = makeImage($misc['icon_game'], 16, 16);                          // create game icon
+  $game_id = makeImage($misc['icon_game'], 16, 16);                         // create game icon
   imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);                             // place game icon
 
   $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
