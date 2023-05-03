@@ -1,7 +1,7 @@
 /*--------------------------------------
->			Disc-ff Style				<
->			fearts & Neon						<
->			https://github.com/tltneon/lgsl	<
+>		Disc-ff Style					<
+>		fearts & Neon					<
+>		https://github.com/tltneon/lgsl	<
 ---------------------------------------*/
 
 /* global */
@@ -11,31 +11,31 @@ body
   font-size: 12px;
   font-family:verdana,tahoma,arial;
   word-wrap:break-word;
-	color: white;
-	font-weight: bold;
+  color: white;
+  font-weight: bold;
 }
 
-a:link, a:visited { text-decoration:none; color:#0088DD; }
-a:hover{ color:#adcef1; }
-a:active{ color:#adcef1; }
+a:link, a:visited {text-decoration:none; color:#0088DD;}
+a:hover{color:#adcef1;}
+a:active{color:#adcef1;}
 
 #adminlink {margin: 0;position: fixed;width: 25px;right: 0;top: 0;background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #ff000061);height: 25px;}
 #adminlink:hover {background-image: linear-gradient(45deg, #ffffff00, #ffffff00, #f30606);}
 #topmenu {padding: 1em; border-bottom: 2px dashed black;}
-#topmenu > li {display: inline-block;padding: 0px 10px;}
+#topmenu > li {display: inline-block;padding: 0 10px;}
 
 /* add */
-.addserver_table { margin: auto; }
-.annotation { text-align: center; background-color: #282828; padding-top:17px; padding-bottom:17px; }
+.addserver_table {margin: auto;}
+.annotation {text-align: center; background-color: #282828; padding-top:17px; padding-bottom:17px;}
 
 /* details */
-.players_table { margin: auto;  border-spacing: 0px 5px; }
-.settings_table { margin: auto; border: 1px solid #22252f; border-spacing: 0px 0px; border-collapse: collapse; max-width: 600px; }
-.players_table tr, .settings_table tr { white-space:nowrap; background-color: #282828; table-layout:fixed; }
-.players_table td { padding: 8px; }
-.settings_table td { padding: 8px; white-space: pre-wrap; }
+.players_table {margin: auto;  border-spacing: 0 5px;}
+.settings_table {margin: auto; border: 1px solid #22252f; border-spacing: 0 0; border-collapse: collapse; max-width: 600px;}
+.players_table tr, .settings_table tr {white-space:nowrap; background-color: #282828; table-layout:fixed;}
+.players_table td {padding: 8px;}
+.settings_table td {padding: 8px; white-space: pre-wrap;}
 
-.details_info_row { background-color: #282828; margin-top: 14px; }
+.details_info_row {background-color: #282828; margin-top: 14px;}
 .details_info, .details_info_column:nth-child(2) {vertical-align: top;}
 .details_info_ceil, .details_info_column, .details_info_scolumn {display: inline-block;}
 .details_info_column {margin-right: 12px;}
@@ -81,90 +81,90 @@ a:active{ color:#adcef1; }
   opacity: .4;
   border-radius: 6px;
 }
-.details_game_image:hover { opacity: 1; transition-duration: 500ms; }
-img[title='Location: XX'] { display: none; }
+.details_game_image:hover {opacity: 1; transition-duration: 500ms;}
+img[title='Location: XX'] {display: none;}
 
-.table_head { font-weight: bold; }
-.spacer { background-color: #282828; height:6px; width:90%; margin:auto; margin-top: 10px; margin-bottom: 10px; border:1px dotted black; }
-.noinfo { margin:auto; text-align:center; background-color: #282828; display: inline-block; padding:15px; }
-#invalid_server_id, #back_to_servers_list { margin:auto; text-align:center; }
-div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px; }
-#gamelink { width:100%; margin:auto; background-color: #282828; text-align: center; padding-top:4px; padding-bottom:4px; }
+.table_head {font-weight: bold;}
+.spacer {background-color: #282828; height:6px; width:90%; margin:auto; margin-top: 10px; margin-bottom: 10px; border:1px dotted black;}
+.noinfo {margin:auto; text-align:center; background-color: #282828; display: inline-block; padding:15px;}
+#invalid_server_id, #back_to_servers_list {margin:auto; text-align:center;}
+div[id^="servername"] {margin:auto; text-align:center; font-weight:bold; padding-bottom: 15px; font-size: 16px;}
+#gamelink {width:100%; margin:auto; background-color: #282828; text-align: center; padding-top:4px; padding-bottom:4px;}
 
 #details_playerlist {overflow: auto;}
 
 /* list */
-.contry_icon { border:none; width: 16px; height: 16px; }
-.game_icon { border:none; width: 32px; height: 32px; border-radius: 2px; }
+.contry_icon {border:none; width: 16px; height: 16px;}
+.game_icon {border:none; width: 32px; height: 32px; border-radius: 2px;}
 .details_icon,
-.status_icon_onp { width: 32px; height: 32px; display: inline-block; background-size: cover; }
-.details_icon { background-image: url(../other/icon_details.gif) !important; }
+.status_icon_onp {width: 32px; height: 32px; display: inline-block; background-size: cover;}
+.details_icon {background-image: url(../other/icon_details.gif) !important;}
 .status_icon_nrs,
 .status_icon_onl,
 .status_icon_onp,
-.status_icon_pen { width: 28px;height: 28px; border: 2px solid black; display: inline-block; }
-.status_icon_onl { background: #8ee683; }
-.status_icon_nrs { background: #f1abab; }
-.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; }
-.status_icon_pen { background-color: gray; }
+.status_icon_pen {width: 28px;height: 28px; border: 2px solid black; display: inline-block;}
+.status_icon_onl {background: #8ee683;}
+.status_icon_nrs {background: #f1abab;}
+.status_icon_onp {background-image: url(../other/icon_online_password.gif) !important;}
+.status_icon_pen {background-color: gray;}
 
-#server_list_table { margin:auto; width: 100%; border-radius: 12px; margin-top:30px; border-collapse: collapse; }
-#server_list_table tr:not(#server_list_table_top) { background-color: #282828; height: 59px; }
-#server_list_table td, #server_list_table th { padding:13px; border-bottom: 1px dotted black; }
-#server_list_table_top { text-align: left; }
-.servername_cell { text-align:left; }
-.servername_cell > div { width:100%; overflow:hidden; height:1.3em; line-height:1.3em; }
-div.servername_nolink { display: none; }
-.map_cell { white-space:nowrap; text-align:left; }
-.players_cell { white-space:nowrap; }
-.inner_bar { width: 100% !important; }
-*[class^='players_percent'] { display:none; }
-.details_cell, .status_cell { white-space:nowrap; text-align:center; }
-.details_cell { display: none; }
+#server_list_table {margin:auto; width: 100%; border-radius: 12px; margin-top:30px; border-collapse: collapse;}
+#server_list_table tr:not(#server_list_table_top) {background-color: #282828; height: 59px;}
+#server_list_table td, #server_list_table th {padding:13px; border-bottom: 1px dotted black;}
+#server_list_table_top {text-align: left;}
+.servername_cell {text-align:left;}
+.servername_cell > div {width:100%; overflow:hidden; height:1.3em; line-height:1.3em;}
+div.servername_nolink {display: none;}
+.map_cell {white-space:nowrap; text-align:left;}
+.players_cell {white-space:nowrap;}
+.inner_bar {width: 100% !important;}
+*[class^='players_percent'] {display:none;}
+.details_cell, .status_cell {white-space:nowrap; text-align:center;}
+.details_cell {display: none;}
 
-#pages { width: fit-content; margin: 2.6em auto; font-size: 1.12em; }
-#pages a { padding: 5px; background-color: #282828; font-size: 1.3em; }
-#pages span { padding: 10px; }
+#pages {width: fit-content; margin: 2.6em auto; font-size: 1.12em;}
+#pages a {padding: 5px; background-color: #282828; font-size: 1.3em;}
+#pages span {padding: 10px;}
 
-#totals { width: fit-content; margin:auto; margin-top: 16px; text-align: center; }
-#totals > div { width: fit-content;  background-color: #282828; padding:15px; margin: 2px 0; display:inline-block; }
+#totals {width: fit-content; margin:auto; margin-top: 16px; text-align: center;}
+#totals > div {width: fit-content;  background-color: #282828; padding:15px; margin: 2px 0; display:inline-block;}
 
 /* */
-.inline{ display:inline-block; }
+.inline{display:inline-block;}
 
 /* adaptiveness */
 @media(max-width: 990px) {
-	.map_cell {	display: none; }
+  .map_cell {display: none;}
 }
 
 @media(max-width: 414px) {
-	body { margin: 0; }
-	.servername_cell > div {
+  body {margin: 0;}
+  .servername_cell > div {
     width: 100%;
     overflow: hidden;
     line-height: 1em;
     font-size: larger;
     font-family: cursive;
-		height:3em;
-	}
-	.connectlink_cell,
-	td.details_cell,
-	.map_cell,
-	div.servername_nolink,
-	.status_icon_nrs,
-	.status_icon_onl,
-	.status_icon_onp { display: none; }
+    height:3em;
+  }
+  .connectlink_cell,
+  td.details_cell,
+  .map_cell,
+  div.servername_nolink,
+  .status_icon_nrs,
+  .status_icon_onl,
+  .status_icon_onp {display: none;}
 
-	div.servername_link a { color: #d5f2ff; }
-	div.servername_link { display: block; }
-	#server_list_table td {	padding: 3px;	}
-	#server_list_table td:not(.status_cell) {	padding: 10px; }
-	#server_list_table tr.server_nrs { background-color: rgba(148, 0, 0, 0.2); }
+  div.servername_link a {color: #d5f2ff;}
+  div.servername_link {display: block;}
+  #server_list_table td {padding: 3px;}
+  #server_list_table td:not(.status_cell) {padding: 10px;}
+  #server_list_table tr.server_nrs {background-color: rgba(148, 0, 0, 0.2);}
 
-	/*details*/
-	#gamelink { display: none; }
-  .details_info { display: flex; flex-flow: column; }
-  .details_info_column { margin: auto; order: 2; margin-top: 6px; }
-  .details_info_column:nth-child(2) { order: 1; }
-	#details_playerlist { overflow: auto;	}
+  /*details*/
+  #gamelink {display: none;}
+  .details_info {display: flex; flex-flow: column;}
+  .details_info_column {margin: auto; order: 2; margin-top: 6px;}
+  .details_info_column:nth-child(2) {order: 1;}
+  #details_playerlist {overflow: auto;}
 }

@@ -1,19 +1,19 @@
 <?php
 
-	function makeImage($src, $width, $height) {
-		list($w, $h) = getimagesize($src);
-		if (substr($src, -3) == 'gif') {
-			$result = imagecreatefromgif($src);
-		}	else {
-			$result = imagecreatefrompng($src);
-		}
-		if ($width != $w || $height != $h) {
-			$image = $result;
-			$result = imagecreatetruecolor($width, $height);
-			imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
-		}
-		return $result;
-	}
+  function makeImage($src, $width, $height) {
+    list($w, $h) = getimagesize($src);
+    if (substr($src, -3) == 'gif') {
+      $result = imagecreatefromgif($src);
+    }  else {
+      $result = imagecreatefrompng($src);
+    }
+    if ($width != $w || $height != $h) {
+      $image = $result;
+      $result = imagecreatetruecolor($width, $height);
+      imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
+    }
+    return $result;
+  }
 
   // SETTINGS
 
@@ -106,13 +106,13 @@
     }
   }
 
-  $game_id = makeImage($misc['icon_game'], 16, 16);                          // create game icon
+  $game_id = makeImage($misc['icon_game'], 16, 16);                         // create game icon
   imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);                             // place game icon
 
   $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
-	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim ($server['s']['name']));
-	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $misc['connect_filtered']));
-	imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
+  imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim ($server['s']['name']));
+  imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $misc['connect_filtered']));
+  imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
 
   imagepng($im);
   imagedestroy($im);

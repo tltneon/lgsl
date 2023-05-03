@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ � RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -464,7 +464,7 @@
     "ts3"           => "tcp",
     "teaspeak"      => "tcp",
     "wow"           => "tcp");
-    
+
     return isset($lgsl_scheme_list[$type]) ? $lgsl_scheme_list[$type] : "udp";
   }
 
@@ -659,7 +659,7 @@
     $lgsl_config['timeout'] = intval($lgsl_config['timeout']);
 
     if ($scheme == 'http') {
-      
+
       if(!function_exists('curl_init') || !function_exists('curl_setopt') || !function_exists('curl_exec')) return FALSE;
 
       $lgsl_fp =  curl_init('');
@@ -805,12 +805,12 @@
     }
     $item = explode("\\", $part[1]); // SPLIT PART INTO ITEMS
 
-		$s = 1;
-		if ($item[0]) $s = 0; // IW4 HAS NO EXTRA "\"
-		for ($i = $s; $i < count($item); $i += 2) { // SKIP EVEN KEYS
+    $s = 1;
+    if ($item[0]) $s = 0; // IW4 HAS NO EXTRA "\"
+    for ($i = $s; $i < count($item); $i += 2) { // SKIP EVEN KEYS
       $data_key               = strtolower(lgsl_parse_color($item[$i], "1"));
       $server['e'][$data_key] = lgsl_parse_color($item[$i+1], "1");
-		}
+    }
 
 //---------------------------------------------------------+
 
@@ -1257,9 +1257,9 @@
       if ($server['s']['game'] == 'Y4YNzpz6Cuc=') { // EURO TRUCK SIMULATOR 2
         $server['s']['game'] = 'Euro Truck Simulator 2';
         $server['s']['map'] = substr($server['s']['map'], 0, -4);
-				if ($server['s']['map'] == '/map/usa') {
-					$server['s']['game'] = 'American Truck Simulator';
-				}
+      if ($server['s']['map'] == '/map/usa') {
+        $server['s']['game'] = 'American Truck Simulator';
+      }
       }
     }
 
@@ -2094,7 +2094,7 @@
         $server['p'][$i]['ping']  = lgsl_unpack(lgsl_cut_byte($buffer, 4), "S");
       }
     }
-    
+
 //---------------------------------------------------------+
 
     elseif ($response_type == "c")
@@ -4053,14 +4053,14 @@
 
     return TRUE;
   }
-  
+
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
   function lgsl_query_38(&$server, &$lgsl_need, &$lgsl_fp) // Terraria
   {
     if (!$lgsl_fp) return FALSE;
-    
+
     curl_setopt($lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/v2/server/status?players=true");
     $buffer = curl_exec($lgsl_fp);
     $buffer = json_decode($buffer, true);
@@ -4069,7 +4069,7 @@
       $server['e']['_error']    = $buffer['error'];
       return FALSE;
     }
-    
+
     $server['s']['name']        = $buffer['name'];
     $server['s']['map']         = $buffer['world'];
     $server['s']['players']     = $buffer['playercount'];
@@ -4108,58 +4108,58 @@
 
   function lgsl_query_40(&$server, &$lgsl_need, &$lgsl_fp) // HTTP CRAWLER
   {
-		$urls = array(
-			'farmsim' => "http://{$server['b']['ip']}:{$server['b']['q_port']}/index.html",
-			'eco' => "http://{$server['b']['ip']}:{$server['b']['q_port']}/info"
-		);
-		curl_setopt($lgsl_fp, CURLOPT_URL, $urls[$server['b']['type']]); 
-		$buffer = curl_exec($lgsl_fp);
-		if (!$buffer) return FALSE;
+    $urls = array(
+      'farmsim' => "http://{$server['b']['ip']}:{$server['b']['q_port']}/index.html",
+      'eco' => "http://{$server['b']['ip']}:{$server['b']['q_port']}/info"
+    );
+    curl_setopt($lgsl_fp, CURLOPT_URL, $urls[$server['b']['type']]);
+    $buffer = curl_exec($lgsl_fp);
+    if (!$buffer) return FALSE;
 
-		switch ($server['b']['type']) {
-			// Farming Simulator // CAN QUERY ONLY SERVER NAME AND ONLINE STATUS, MEH
-			case 'farmsim': {
-				preg_match('/<h2>Login to [\w\d\s\/\\&@"\'-]+<\/h2>/', $buffer, $name);
+    switch ($server['b']['type']) {
+      // Farming Simulator // CAN QUERY ONLY SERVER NAME AND ONLINE STATUS, MEH
+      case 'farmsim': {
+        preg_match('/<h2>Login to [\w\d\s\/\\&@"\'-]+<\/h2>/', $buffer, $name);
 
-				$server['s']['name']        = substr($name[0], 12, strlen($name[0])-17);
-				$server['s']['map']         = "Farm";
+        $server['s']['name']        = substr($name[0], 12, strlen($name[0])-17);
+        $server['s']['map']         = "Farm";
 
-				return strpos($buffer, 'status-indicator online') !== FALSE;
-			}
-			// ECO
-			case 'eco': {
-				$buffer = json_decode($buffer, true);
+        return strpos($buffer, 'status-indicator online') !== FALSE;
+      }
+      // ECO
+      case 'eco': {
+        $buffer = json_decode($buffer, true);
 
-				$server['s']['name']        = strip_tags($buffer['Description']);
-				$server['s']['map']         = "World";
-				$server['s']['players']     = $buffer['OnlinePlayers'];
-				$server['s']['playersmax']  = $buffer['TotalPlayers'];
-				$server['s']['password']    = (int) $buffer['HasPassword'];
-				
-				if ($server['s']['players']) {
-					foreach ($buffer['OnlinePlayersNames'] as $key => $value) {
-						$server['p'][$key]['name'] = $value;
-					}
-				}
-				
-				function t($t, $s = 0) {return (int)($t / 86400) + $s . " days " . ($t / 86400 % 3600) . " hrs " . ($t / 3600 % 60) . " mins";}
-				$server['e']['Laws']    = $buffer['Laws'];
-				$server['e']['Plants']    = $buffer['Plants'];
-				$server['e']['Animals']    = $buffer['Animals'];
-				$server['e']['Version']    = $buffer['Version'];
-				$server['e']['Discord']    = $buffer['DiscordAddress'];
-				$server['e']['JoinUrl']    = $buffer['JoinUrl'];
-				$server['e']['WorldSize']    = $buffer['WorldSize'];
-				$server['e']['EconomyDesc']    = $buffer['EconomyDesc'];
-				$server['e']['description']    = $buffer['DetailedDescription'];
-				$server['e']['PeakActivePlayers']    = $buffer['PeakActivePlayers'];
-				$server['e']['TimeSinceStart']    = t($buffer['TimeSinceStart'], 1);
-				$server['e']['HasMeteor']    = $buffer['HasMeteor'];
-				if ($buffer['HasMeteor']) $server['e']['TimeLeft'] = t($buffer['TimeLeft']);
-				return TRUE;
-			}
-			default: return FALSE;
-		}
+        $server['s']['name']        = strip_tags($buffer['Description']);
+        $server['s']['map']         = "World";
+        $server['s']['players']     = $buffer['OnlinePlayers'];
+        $server['s']['playersmax']  = $buffer['TotalPlayers'];
+        $server['s']['password']    = (int) $buffer['HasPassword'];
+
+        if ($server['s']['players']) {
+          foreach ($buffer['OnlinePlayersNames'] as $key => $value) {
+            $server['p'][$key]['name'] = $value;
+          }
+        }
+
+      function t($t, $s = 0) {return (int)($t / 86400) + $s . " days " . ($t / 86400 % 3600) . " hrs " . ($t / 3600 % 60) . " mins";}
+      $server['e']['Laws']               = $buffer['Laws'];
+      $server['e']['Plants']             = $buffer['Plants'];
+      $server['e']['Animals']            = $buffer['Animals'];
+      $server['e']['Version']            = $buffer['Version'];
+      $server['e']['Discord']            = $buffer['DiscordAddress'];
+      $server['e']['JoinUrl']            = $buffer['JoinUrl'];
+      $server['e']['WorldSize']          = $buffer['WorldSize'];
+      $server['e']['EconomyDesc']        = $buffer['EconomyDesc'];
+      $server['e']['description']        = $buffer['DetailedDescription'];
+      $server['e']['PeakActivePlayers']  = $buffer['PeakActivePlayers'];
+      $server['e']['TimeSinceStart']     = t($buffer['TimeSinceStart'], 1);
+      $server['e']['HasMeteor']          = $buffer['HasMeteor'];
+      if ($buffer['HasMeteor']) $server['e']['TimeLeft'] = t($buffer['TimeLeft']);
+      return TRUE;
+      }
+    default: return FALSE;
+    }
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -4265,15 +4265,15 @@
   {
     if (!$lgsl_fp) return FALSE;
     fwrite($lgsl_fp, "\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08");
-		$buffer = fread($lgsl_fp, 4096);
+    $buffer = fread($lgsl_fp, 4096);
     if (!$buffer) return FALSE;
-		$server['s']['name']        = "Mumble Server";
-		$server['s']['map']         = "Mumble";
-		lgsl_cut_byte($buffer, 1); // 0
-		$server['e']['version'] = ord(lgsl_cut_byte($buffer, 1)) .".". ord(lgsl_cut_byte($buffer, 1)) .".". ord(lgsl_cut_byte($buffer, 1));
-		lgsl_cut_byte($buffer, 8); // challenge
-		$server['s']['players'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
-		$server['s']['playersmax'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
+    $server['s']['name']        = "Mumble Server";
+    $server['s']['map']         = "Mumble";
+    lgsl_cut_byte($buffer, 1); // 0
+    $server['e']['version'] = ord(lgsl_cut_byte($buffer, 1)) .".". ord(lgsl_cut_byte($buffer, 1)) .".". ord(lgsl_cut_byte($buffer, 1));
+    lgsl_cut_byte($buffer, 8); // challenge
+    $server['s']['players'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
+    $server['s']['playersmax'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
     return TRUE;
   }
 
@@ -4594,7 +4594,7 @@ function lgsl_unescape($text) {
 
     return $string;
   }
-  
+
 //---------------------------------------------------------+
 
   function lgsl_print_raw_buffer(&$buffer){

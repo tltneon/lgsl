@@ -105,8 +105,8 @@
         <table style='width:{$zone_width}; margin:auto; text-align:center' cellpadding='0' cellspacing='2'>
 
           <tr>
-            <td title='{$lgsl_config['text']['slk']}' style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
+            <td title='{$lgsl_config['text']['slk']}' style='padding:0; text-align:center'>
+              <div style='left:0; right:0; top:0; bottom:0; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
                 <a href='{$misc['software_link']}' style='text-decoration:none'>
                   ". ($server['b']['type'] == 'discord' ? "#{$server['b']['ip']}" : "{$server['b']['ip']}:{$server['b']['c_port']}") ."
                 </a>
@@ -115,16 +115,16 @@
           </tr>
 
           <tr>
-            <td title='{$server['s']['name']}' style='padding:0px; text-align:center'>
-              <div class='marquee' style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
+            <td title='{$server['s']['name']}' style='padding:0; text-align:center'>
+              <div class='marquee' style='left:0; right:0; top:0; bottom:0; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
                 <span ". ($marquee ? "class='on'" : "") .">{$misc['name_filtered']}</span>
               </div>
             </td>
           </tr>
 
           <tr>
-            <td style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; padding:0px; position:relative'>
+            <td style='padding:0; text-align:center'>
+              <div style='left:0; right:0; top:0; bottom:0; width:{$zone_width}; padding:0; position:relative'>
                 <a href='".lgsl_link($server['o']['id'])."'>
                   <img alt='' src='{$misc['image_map']}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
                   <img alt='' src='{$misc['image_map_password']}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
@@ -136,8 +136,8 @@
           </tr>
 
           <tr>
-            <td title='{$server['s']['map']}' style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
+            <td title='{$server['s']['map']}' style='padding:0; text-align:center'>
+              <div style='left:0; right:0; top:0; bottom:0; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
                 {$server['s']['map']}
               </div>
             </td>
@@ -154,12 +154,12 @@
               <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
               <span style='padding:1px; float:right'> {$server['s']['players']} / {$server['s']['playersmax']} </span>";
               if(count($server['p']) > 0){
-                $output .= "<div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
+                $output .= "<div style='left:0; right:0; top:0; bottom:0; width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
 
                 foreach ($server['p'] as $player)
                 {
                   $output .= "
-                  <div style='left:0px; right:0px; top:0px; bottom:0px; padding:1px; white-space:nowrap; overflow:hidden; text-align:left' title='{$player['name']}'> {$player['name']} </div>";
+                  <div style='left:0; right:0; top:0; bottom:0; padding:1px; white-space:nowrap; overflow:hidden; text-align:left' title='{$player['name']}'> {$player['name']} </div>";
                 }
 
                 $output .= "</div";
@@ -168,7 +168,7 @@
                 $inner_width = ($server['s']['playersmax'] > 0 ? $server['s']['players']/$server['s']['playersmax']*100 : 0);
                 $output .="
                 <br />
-                <div style='margin-top: 5px; border: 1px solid #555555; background-color: #222222; height: 4px;'>
+                <div style='margin-top: 5px; border: 1px solid #555; background-color: #222; height: 4px;'>
                   <div style='width: ". $inner_width ."%; background-color: #ff8400; height: 4px;'></div>
                 </div>";
               }
@@ -180,7 +180,7 @@
         {
           $output .= "
           <tr>
-            <td style='padding:0px; border:1px solid'>
+            <td style='padding:0; border:1px solid'>
               <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
               <span style='padding:1px; float:right'> {$server['s']['players']} / {$server['s']['playersmax']} </span>
             </td>

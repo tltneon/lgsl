@@ -1,19 +1,19 @@
 <?php
 
-	function makeImage($src, $width, $height) {
-		list($w, $h) = getimagesize($src);
+  function makeImage($src, $width, $height) {
+    list($w, $h) = getimagesize($src);
     switch (substr($src, -3)) {
       case 'gif': {$result = imagecreatefromgif($src); break;}
       case 'png': {$result = imagecreatefrompng($src); break;}
       case 'jpg': {$result = imagecreatefromjpeg($src); break;}
     }
-		if ($width != $w || $height != $h) {
-			$image = $result;
-			$result = imagecreatetruecolor($width, $height);
-			imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
-		}
-		return $result;
-	}
+    if ($width != $w || $height != $h) {
+      $image = $result;
+      $result = imagecreatetruecolor($width, $height);
+      imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
+    }
+    return $result;
+  }
 
   function drawHistory(&$im, $x, $y, $w, $h, &$server) {
     $axis = imagecolorallocate($im, 255, 255, 255);
@@ -46,11 +46,11 @@
     }
   }
 
-	require "lgsl_files/lgsl_class.php";
+  require "lgsl_files/lgsl_class.php";
   $query = "cs";
   $bar   = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
   if ($bar == 3) { $query .= "p"; }
-	$server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", $query, (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", $query);
+  $server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", $query, (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", $query);
   if (!$server) {
     header("Content-type: image/gif");
     $im = imagecreatetruecolor(350, 20);
@@ -61,7 +61,7 @@
     imagedestroy($im);
     exit();
   }
-	$misc   = lgsl_server_misc($server);
+  $misc   = lgsl_server_misc($server);
 
   switch ($bar) {
     case 2: {
@@ -133,15 +133,15 @@
         case 'onp': { $stat = $stat_ps; break; }
         case 'onl': { $stat = $stat_on; break; }
       }
-      
+
       imagettftext($im, 8, 90, 12, $h, $color_nm, $font, /* name  */ $server['s']['name']);
       if (version_compare(phpversion(), '8.0.0', '<')) {
         imagefilledpolygon($im, array(0,0, 16,0, 0,16), 3, $stat);
       } else {
         imagefilledpolygon($im, array(0,0, 16,0, 0,16), $stat);
       }
-      $game_id = @makeImage($misc['icon_game'], 16, 16);                              // create game icon
-      imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                           // place game icon
+      $game_id = @makeImage($misc['icon_game'], 16, 16);                             // create game icon
+      imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                          // place game icon
 
       $loc_id = @makeImage($misc['icon_location'], 12, 12);                          // create location icon
       imagecopy($im, $loc_id, $w-30, $h-14, 0, 0, 12, 12);                           // place location icon
@@ -177,7 +177,7 @@
       } else {
         imagettftext($im, 7, 0, 25, 190, $color_pl, $font, /* players  */  $lgsl_config['text']['npi']);
       }
-      
+
       imagettftext($im, 6, 0, 25, 242, $color_tm, $font, /* updated  */  "upd:{$time}");
       break;
     }
@@ -213,6 +213,6 @@
     }
   }
 
-	imagegif($im);
-	imagedestroy($im);
+  imagegif($im);
+  imagedestroy($im);
 ?>

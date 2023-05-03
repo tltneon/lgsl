@@ -15,7 +15,7 @@
 			echo('<l k="filli"></l>');
 		} else {
 			try {
-        		mysqli_report(MYSQLI_REPORT_ERROR);
+				mysqli_report(MYSQLI_REPORT_ERROR);
 				$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
 
 				if (!$lgsl_database) {
@@ -65,17 +65,17 @@
 				fwrite($fp, "\n");
 				echo "<l k='consu'></l>\n";
 				fclose($fp);
-			} 
+			}
 		} else {
 			echo("FSOCKOPEN: FAILED\n");
 		}
-		
+
 		if (function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) {
 			echo("CURL: SUCCESS\n");
 		} else {
 			echo("CURL: FAILED\n");
 		}
-		
+
 		if (function_exists("bzdecompress")) {
 			echo("BZ2: SUCCESS\n");
 		} else {
@@ -132,7 +132,7 @@
 				text-decoration: none;
 				border: 1px solid blue;
 				border-radius: 32px;
-				margin-bottom: 0px;
+				margin-bottom: 0;
 				vertical-align: super;
 				padding: 2px 2px 2px 3px;
 				line-height: 6px;
@@ -476,24 +476,24 @@ document.addEventListener("reloadLocale", reloadLocale);
 		"$lgsl_config['db']['table']   = \""+ vars.mysql_table +"\"; \n" +
 		"$lgsl_config['image_mod']     = "+ vars.image_mod +"; \n" +
 		"$lgsl_config['preloader']     = "+ vars.preloader +";   // true=using ajax to faster loading page\n" +
-		"$lgsl_config['disabled_types']= false;     // allow to exclude some protocols (games) from list. usage: $lgsl_config['disabled_types']= array('warsowold', 'halflifewon', 'test');\n" +
-		"$lgsl_config['pagination_mod']= "+ vars.page_mod +";   // true = using pagination\n" +
-		"$lgsl_config['pagination_lim']= "+ vars.page_lim +";   // limit per page\n" +
-		"$lgsl_config['direct_index']  = 0;                     // 1=link to index.php instead of the folder \n" +
-		"$lgsl_config['no_realpath']   = 0;                     // 1=do not use the realpath function \n" +
-		"$lgsl_config['url_path']      = \"\";                  // full url to /lgsl_files/ for when auto detection fails \n" +
-		"$lgsl_config['management']    = 0;                     // 1=show advanced management in the admin by default \n" +
-		"$lgsl_config['host_to_ip']    = 0;                     // 1=show the servers ip instead of its hostname \n" +
-		"$lgsl_config['public_add']    = "+ vars.public_add +"; // 1=servers require approval OR 2=servers shown instantly \n" +
-		"$lgsl_config['public_feed']   = 0;                     // 1=feed requests can add new servers to your list \n" +
-		"$lgsl_config['cache_time']    = "+ vars.cache_time +"; // seconds=time before a server needs updating \n" +
-		"$lgsl_config['autoreload']    = "+ vars.autoreload +"; // 1=reloads page when cache_time is passed \n" +
-		"$lgsl_config['history']       = "+ vars.history +";    // 1=reloads page when cache_time is passed \n" +
-		"$lgsl_config['live_time']     = 3;                     // seconds=time allowed for updating servers per page load \n" +
-		"$lgsl_config['timeout']       = 0;                     // 1=gives more time for servers to respond but adds loading delay \n" +
-		"$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay \n" +
-		"$lgsl_config['cms']           = \"sa\";                // sets which CMS specific code to use \n" +
-		"include(\"languages/"+ vars.language +".php\");        // sets LGSL language";
+		"$lgsl_config['disabled_types'] = false;                 // allow to exclude some protocols (games) from list. usage: $lgsl_config['disabled_types']= array('warsowold', 'halflifewon', 'test');\n" +
+		"$lgsl_config['pagination_mod'] = "+ vars.page_mod +";   // true = using pagination\n" +
+		"$lgsl_config['pagination_lim'] = "+ vars.page_lim +";   // limit per page\n" +
+		"$lgsl_config['direct_index']   = 0;                     // 1=link to index.php instead of the folder \n" +
+		"$lgsl_config['no_realpath']    = 0;                     // 1=do not use the realpath function \n" +
+		"$lgsl_config['url_path']       = \"\";                  // full url to /lgsl_files/ for when auto detection fails \n" +
+		"$lgsl_config['management']     = 0;                     // 1=show advanced management in the admin by default \n" +
+		"$lgsl_config['host_to_ip']     = 0;                     // 1=show the servers ip instead of its hostname \n" +
+		"$lgsl_config['public_add']     = "+ vars.public_add +"; // 1=servers require approval OR 2=servers shown instantly \n" +
+		"$lgsl_config['public_feed']    = 0;                     // 1=feed requests can add new servers to your list \n" +
+		"$lgsl_config['cache_time']     = "+ vars.cache_time +"; // seconds=time before a server needs updating \n" +
+		"$lgsl_config['autoreload']     = "+ vars.autoreload +"; // 1=reloads page when cache_time is passed \n" +
+		"$lgsl_config['history']        = "+ vars.history +";    // 1=reloads page when cache_time is passed \n" +
+		"$lgsl_config['live_time']      = 3;                     // seconds=time allowed for updating servers per page load \n" +
+		"$lgsl_config['timeout']        = 0;                     // 1=gives more time for servers to respond but adds loading delay \n" +
+		"$lgsl_config['retry_offline']  = 0;                     // 1=repeats query when there is no response but adds loading delay \n" +
+		"$lgsl_config['cms']            = \"sa\";                // sets which CMS specific code to use \n" +
+		"include(\"languages/"+ vars.language +".php\");         // sets LGSL language";
 		textarea.style.width = "100%";
 		textarea.style.height = "90vh";
 		window.scrollTo(0, document.body.scrollHeight);
@@ -528,7 +528,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"russian": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -557,7 +557,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"french": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -586,7 +586,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"german": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -615,7 +615,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"spanish": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -644,7 +644,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"czech": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -673,7 +673,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"bulgarian": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -702,7 +702,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"slovak": {
 				"tablc": "LGSL tabuľka bola vytvorená <span style='color: green;'>úspešne</span>.",
@@ -731,7 +731,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Pripojenie <span style='color: red;'>Zlyhalo</span>: PHP rozšírenie mysqli nie je aktívne.",
 				"table": "LGSL <span style='color: red;'>tabulka nebola vytvorená</span>: nesprávny názov databázy alebo tabuľka už existuje.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"arabic": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
@@ -760,7 +760,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"turkish": {
 				"tablc": "LGSL tablosu oluşturuldu <span style='color: green;'>Başarıyla Tamamlandı!</span>.",
@@ -789,7 +789,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Bağlantı <span style='color: red;'>failed</span>: Hatalı <span style='color: red;'>Bağlantı Başarısız</span>: mysqli uzantısı etkin değil.",
 				"table": "LGSL <span style='color: red;'>tablo oluşturulmadı</span>: yanlış veritabanı adı veya tablo zaten var.",
 				"cretd": "Tablo <span style='color: green;'>Başarıyla Oluşturuldu!</span> Oluşturuldu! 2'inci adıma geçin",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
 			"romanian": {
 				"tablc": "Tabelul LGSL a fost creat cu <span style='color: green;'>success</span>.",
@@ -818,7 +818,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Conectarea a <span style='color: red;'>eșuat</span>: extensia mysqli nu este activă.",
 				"table": "<span style='color: red;'>Tabelul LGSL nu a fost creat</span>: nume greșit al bazei de date sau tabelul există deja.",
 				"cretd": "Tabel creat cu <span style='color: green;'>succes</span> created! Continuați cu Pasul 2.",
-                "check": "Verificați cerințele",
+				"check": "Verificați cerințele",
 			},
 			"korean": {
 				"tablc": "LGSL 테이블이<span style='color: green;'>완료되었습니다!</span>를 만들었습니다.",
@@ -847,37 +847,37 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "링크 <span style='color: red;'>실패</span>: 잘못된 <span style='color: red;'>연결 실패</span>: mysqli 확장이 활성화되어 있지 않습니다.",
 				"table": "LGSL <span style='color: red;'>테이블이 생성되지 않음</span>: 잘못된 데이터베이스 이름 또는 테이블이 이미 존재합니다.",
 				"cretd": "<span style='color: green;'>성공적으로 생성되었습니다!</span> 테이블이 생성되었습니다! 2단계로 이동",
-                "check": "Check requirements",
+				"check": "Check requirements",
 			},
-            "chinese_simplified": {
-                "tablc": "LGSL 数据表创建 <span style='color: green;'>成功</span>.",
-                "filli": "您必须确保必填项 (<span style='color:red'>步骤1</span>) 正确.",
-                "consu": "连接 <span style='color: green;'>成功</span> 确认, LGSL 可以从游戏服务器获取数据。",
-                "coutd": "LGSL <span style='color: red;'>无法从大多数游戏服务器获取数据</span> ，因为UDP upflow在您的当前服务器主机上被阻止。",
-                "remem": "请务必在LGSL安装成功删除install.php",
-                "after": "接下来, 请将它替换到 lgsl_files/lgsl_config.php",
-                "selst": "选择风格",
-                "sella": "选择语言",
-                "selsc": "选择脚本",
-                "sorts": "服务器排序方式",
-                "sortp": "玩家排序方式",
-                "enaim": "开启图片mod",
-                "hideo": "隐藏离线服务器",
-                "pubad": "开放服务器添加",
-                "showt": "显示总数",
-                "showl": "显示位置",
-                "step1": "步骤1: 安装LGSL数据表",
-                "step2": "步骤2: 配置LGSL",
-                "back": "< 返回",
-                "owiki": "在线文档: 访问",
-                "gener": "生成配置文件",
-                "creat": "创建数据表",
-                "filla": "您必须完成必填项* (步骤1或步骤2).",
-                "mysld": "连接 <span style='color: red;'>失败</span>: mysqli扩展未激活。",
-                "table": "LGSL <span style='color: red;'>数据表未创建</span>: 数据库名称有误或数据表已被创建。",
-                "cretd": "数据表 <span style='color: green;'>成功</span> 创建! 请进入第2步。",
-                "check": "Check requirements",
-            }
+			"chinese_simplified": {
+				"tablc": "LGSL 数据表创建 <span style='color: green;'>成功</span>.",
+				"filli": "您必须确保必填项 (<span style='color:red'>步骤1</span>) 正确.",
+				"consu": "连接 <span style='color: green;'>成功</span> 确认, LGSL 可以从游戏服务器获取数据。",
+				"coutd": "LGSL <span style='color: red;'>无法从大多数游戏服务器获取数据</span> ，因为UDP upflow在您的当前服务器主机上被阻止。",
+				"remem": "请务必在LGSL安装成功删除install.php",
+				"after": "接下来, 请将它替换到 lgsl_files/lgsl_config.php",
+				"selst": "选择风格",
+				"sella": "选择语言",
+				"selsc": "选择脚本",
+				"sorts": "服务器排序方式",
+				"sortp": "玩家排序方式",
+				"enaim": "开启图片mod",
+				"hideo": "隐藏离线服务器",
+				"pubad": "开放服务器添加",
+				"showt": "显示总数",
+				"showl": "显示位置",
+				"step1": "步骤1: 安装LGSL数据表",
+				"step2": "步骤2: 配置LGSL",
+				"back": "< 返回",
+				"owiki": "在线文档: 访问",
+				"gener": "生成配置文件",
+				"creat": "创建数据表",
+				"filla": "您必须完成必填项* (步骤1或步骤2).",
+				"mysld": "连接 <span style='color: red;'>失败</span>: mysqli扩展未激活。",
+				"table": "LGSL <span style='color: red;'>数据表未创建</span>: 数据库名称有误或数据表已被创建。",
+				"cretd": "数据表 <span style='color: green;'>成功</span> 创建! 请进入第2步。",
+				"check": "Check requirements",
+			}
 		};
 		return t[locale][key];
 	}

@@ -13,7 +13,7 @@
   require "lgsl_class.php";
   global $output;
 
-//-----------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
 
   if ($lgsl_config['public_add'])
   {
@@ -199,7 +199,7 @@
 
                 <table class='details_table' style='text-align: center; margin: auto; max-width: 500px;'>
                   <tr> <td> <b> {$lgsl_config['text']['adr']} </b> </td> <td> {$ip}:{$c_port}                                          </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['sts']} </b> </td> <td> {$status}                                   </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['sts']} </b> </td> <td> {$status}                                                </td> </tr>
                   <tr> <td> <b> {$lgsl_config['text']['nam']} </b> </td> <td> {$server['s']['name']}                                   </td> </tr>
                   <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td> {$server['s']['game']}                                   </td> </tr>
                   <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td> {$server['s']['map']}                                    </td> </tr>
@@ -245,7 +245,7 @@
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 //------ PLEASE MAKE A DONATION OR SIGN THE GUESTBOOK AT GREYCUBE.COM IF YOU REMOVE THIS CREDIT ----------------------------------------------------------------------------------------------------+
 //------ WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P --------------------------------------------------------------------------------------------------+
-  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='https://github.com/tltneon/lgsl' style='text-decoration:none'>".lgsl_version()."</a></div>";
+  $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0 11px 0;'><a href='https://github.com/tltneon/lgsl' style='text-decoration:none'>".lgsl_version()."</a></div>";
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 if ($lgsl_config['preloader'])
