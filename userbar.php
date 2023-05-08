@@ -20,8 +20,8 @@
     $axis = imagecolorallocate($im, 255, 255, 255);
     $grid = imagecolorallocate($im, 90, 90, 90);
     $chart = imagecolorallocate($im, 120, 255, 120);
-    $x0 = array();
-    $y0 = array();
+    $x0 = [];
+    $y0 = [];
     $period = 60 * 60 *24;
     $history = $server->get_history();
     $avg = 0; $avgc = 0;
@@ -61,7 +61,7 @@
 	require "lgsl_files/lgsl_class.php";
   $query = "cs";
   $bar   = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
-  if ($bar == 3) { $query .= "p"; }
+  if ($bar === 3) { $query .= "p"; }
   $s = isset($_GET['s']) ? (int) $_GET['s'] : null;
   $ip = isset($_GET['ip']) ? $_GET['ip'] : null;
   $port = isset($_GET['port']) ? (int) $_GET['port'] : null;
@@ -77,6 +77,9 @@
     imagedestroy($im);
     exit();
   }
+	
+	// SHARED SETTINGS
+	$font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
 
   switch ($bar) {
     case 2: {
@@ -85,29 +88,29 @@
       $w = 468;
       $h = 64;
       $im = @makeImage("lgsl_files/other/banner468x64.png", $w, $h);              // create background
-      $color_nm = imagecolorallocate($im, 255, 255, 255);
-      $color_ip = imagecolorallocate($im, 255, 0, 0);
-      $color_mp = imagecolorallocate($im, 255, 255, 255);
-      $color_pl = imagecolorallocate($im, 255, 255, 255);
-      $color_tm = imagecolorallocate($im, 110, 110, 110);
-      $stat_on = imagecolorallocate($im, 139, 227, 135);
-      $stat_ps = imagecolorallocate($im, 248, 188, 133);
-      $stat_pn = imagecolorallocate($im, 66, 66, 66);
-      $stat_of = imagecolorallocate($im, 241, 171, 171);
-      $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
+			$color_nm = imagecolorallocate($im, 255, 255, 255);
+			$color_ip = imagecolorallocate($im, 255, 255, 255);
+			$color_mp = imagecolorallocate($im, 255, 255, 255);
+			$color_pl = imagecolorallocate($im, 255, 255, 255);
+			$color_tm = imagecolorallocate($im, 80, 80, 80);
+			$stat_on = imagecolorallocate($im, 139, 227, 135);
+			$stat_ps = imagecolorallocate($im, 248, 188, 133);
+			$stat_pn = imagecolorallocate($im, 66, 66, 66);
+			$stat_of = imagecolorallocate($im, 241, 171, 171);
+			$border = imagecolorallocatealpha($im, 0, 0, 0, 20);
       // MAIN SECTION
-      $link = $server->connection_link();
+      $link = $server->get_address();
       if (strlen($link) > 22 && $server->get_type() != 'discord') $link = gethostbyname(explode(":", $link)[0]) . ":" . explode(":", $link)[1];
       $max = "/{$server->get_players_count('max')}";
       if ($server->get_players_count('max') > 999) $max = '';
 
-      $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
+      $time = date(str_replace([':S', ':s', '/Y', '/y'], '', $lgsl_config['text']['tzn']));
 
       switch ($server->get_status()) {
-        case 'pen': { $stat = $stat_pn; break; }
-        case 'nrs': { $stat = $stat_of; break; }
-        case 'onp': { $stat = $stat_ps; break; }
-        case 'onl': { $stat = $stat_on; break; }
+        case Server::ONLINE: { $stat = $stat_on; break; }
+        case Server::OFFLINE: { $stat = $stat_of; break; }
+        case Server::PENDING: { $stat = $stat_pn; break; }
+        case Server::PASSWORDED: { $stat = $stat_ps; break; }
       }
       imagefilledrectangle($im, 14, 14, 47, 47, $stat);
       $game_id = @makeImage($server->game_icon(), 32, 32);                          // create game icon
@@ -129,42 +132,44 @@
       $w = 160;
       $h = 248;
       $im = @makeImage("lgsl_files/other/banner160x248.jpg", $w, $h);              // create background
-      $color_nm = imagecolorallocate($im, 255, 255, 255);
-      $color_ip = imagecolorallocate($im, 255, 255, 255);
-      $color_mp = imagecolorallocate($im, 255, 255, 255);
-      $color_pl = imagecolorallocate($im, 255, 255, 255);
-      $color_tm = imagecolorallocate($im, 80, 80, 80);
-      $stat_on = imagecolorallocate($im, 139, 227, 135);
-      $stat_ps = imagecolorallocate($im, 248, 188, 133);
-      $stat_pn = imagecolorallocate($im, 66, 66, 66);
-      $stat_of = imagecolorallocate($im, 241, 171, 171);
-      $border = imagecolorallocatealpha($im, 0, 0, 0, 20);
-      $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
+			$color_nm = imagecolorallocate($im, 255, 255, 255);
+			$color_ip = imagecolorallocate($im, 255, 255, 255);
+			$color_mp = imagecolorallocate($im, 255, 255, 255);
+			$color_pl = imagecolorallocate($im, 255, 255, 255);
+			$color_tm = imagecolorallocate($im, 80, 80, 80);
+			$stat_on = imagecolorallocate($im, 139, 227, 135);
+			$stat_ps = imagecolorallocate($im, 248, 188, 133);
+			$stat_pn = imagecolorallocate($im, 66, 66, 66);
+			$stat_of = imagecolorallocate($im, 241, 171, 171);
+			$border = imagecolorallocatealpha($im, 0, 0, 0, 20);
       // MAIN SECTION
-      $link = $server->connection_link();
+      $link = $server->get_address();
       if (strlen($link) > 22 && $server->get_type() != 'discord') {
         $link = gethostbyname(explode(":", $link)[0]) . ":" . explode(":", $link)[1];
       }
       $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
 
       switch ($server->get_status()) {
-        case 'pen': { $stat = $stat_pn; break; }
-        case 'nrs': { $stat = $stat_of; break; }
-        case 'onp': { $stat = $stat_ps; break; }
-        case 'onl': { $stat = $stat_on; break; }
+        case Server::ONLINE: { $stat = $stat_on; break; }
+        case Server::OFFLINE: { $stat = $stat_of; break; }
+        case Server::PENDING: { $stat = $stat_pn; break; }
+        case Server::PASSWORDED: { $stat = $stat_ps; break; }
       }
       
       imagettftext($im, 8, 90, 12, $h, $color_nm, $font, /* name  */ $server->get_name(false));
       if (version_compare(phpversion(), '8.0.0', '<')) {
-        imagefilledpolygon($im, array(0,0, 16,0, 0,16), 3, $stat);
+        imagefilledpolygon($im, [0,0, 16,0, 0,16], 3, $stat);
       } else {
-        imagefilledpolygon($im, array(0,0, 16,0, 0,16), $stat);
+        imagefilledpolygon($im, [0,0, 16,0, 0,16], $stat);
       }
       $game_id = @makeImage($server->game_icon(), 16, 16);                              // create game icon
       imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                           // place game icon
 
-      $loc_id = @makeImage($server->location_icon(), 12, 12);                          // create location icon
-      imagecopy($im, $loc_id, $w-30, $h-14, 0, 0, 12, 12);                           // place location icon
+      /*$loc_id = @makeImage("lgsl_files\other\locations.gif", 224, 198);    //$server->getLocation()                      // create location icon
+			$result = imagecreatetruecolor(16, 11);
+			$posX = 0; $posY = 33;
+			imagecopyresampled($result, $loc_id, 0, 0, $posX, $posY, 16, 11, 16, 11);
+      imagecopy($im, $result, $w-36, $h-13, 0, 0, 16, 11); */                          // place location icon
 
       //imagestringup($im, 2, 2, $h - 16 - 8, ucfirst($server['s']['game']), $color_nm);
       imagefilledrectangle($im, 17, 0, 20, $h, $border);
@@ -213,16 +218,15 @@
       $color_mp = imagecolorallocate($im, 0, 0, 0);
       $color_pl = imagecolorallocate($im, 255, 94, 0);
       $color_tm = imagecolorallocate($im, 66, 66, 66);
-      $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
       // MAIN SECTION
-      $link = $server->connection_link();
+      $link = $server->get_address();
       if (strlen($link) > 22 && $server->get_type() != 'discord') $link = gethostbyname(explode(":", $link)[0]) . ":" . explode(":", $link)[1];
       $map = $server->get_map();
       if (strlen($map) > 15) $map = substr($map, 0, 13) . '..';
       $max = "/{$server->get_players_count('max')}";
       if ($server->get_players_count('max') > 999) $max = '';
 
-      $time = date(str_replace(array(':S', ':s', '/Y', '/y'), '', $lgsl_config['text']['tzn']));
+      $time = date(str_replace([':S', ':s', '/Y', '/y'], '', $lgsl_config['text']['tzn']));
 
       $on_id = @makeImage($server->icon_status(), 16, 16);                          // create status icon
       $game_id = @makeImage($server->game_icon(), 16, 16);                          // create game icon

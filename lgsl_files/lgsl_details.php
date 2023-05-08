@@ -17,8 +17,8 @@
 //------------------------------------------------------------------------------------------------------------+
 // THIS CONTROLS HOW THE PLAYER FIELDS ARE DISPLAYED
 
-  $fields_show  = array("name", "score", "kills", "deaths", "team", "ping", "bot", "time"); // ORDERED FIRST
-  $fields_hide  = array("teamindex", "pid", "pbguid"); // REMOVED
+  $fields_show  = ["name", "score", "kills", "deaths", "team", "ping", "bot", "time"]; // ORDERED FIRST
+  $fields_hide  = ["teamindex", "pid", "pbguid"]; // REMOVED
   $fields_other = TRUE; // FALSE TO ONLY SHOW FIELDS IN $fields_show
 
 //------------------------------------------------------------------------------------------------------------+
@@ -87,9 +87,9 @@
           </div>
         </div>
         <div class='details_info_column zone{$server->get_zone()}' style='background-image: url({$server->get_map_image()});'>
-          <span class='details_location_image' style='background-image: url({$server->location_icon()});' title='{$server->location_text()}'></span>
-          <span class='details_password_image zone{$server->get_zone()}' style='background-image: url({$server->map_password_image()});' title='{$lgsl_config['text']['map']}: {$server->get_map()}'></span>
-          <span class='details_game_image' style='background-image: url({$server->game_icon()});' title='{$server->text_type_game()}'></span>
+          <i class='details_password_image zone{$server->get_zone()}' style='background-image: url({$server->map_password_image()});' title='{$lgsl_config['text']['map']}: {$server->get_map()}'></i>
+					<i class='details_location_image flag f{$server->getLocation()}' title='{$server->location_text()}'></i>
+          <i class='details_game_image' style='background-image: url({$server->game_icon()});' title='{$server->text_type_game()}'></i>
         </div>
       </div>";
 

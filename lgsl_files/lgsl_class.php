@@ -92,7 +92,7 @@
         $total['playersmax'] += $server->get_players_count('max');
 
         $total['servers']++;
-        if (in_array($server->get_status(), array('onp', 'onl'))) {
+        if (in_array($server->get_status(), array(self::ONLINE, self::PASSWORDED))) {
           $total['servers_online']++;
         } else {
           $total['servers_offline']++;
@@ -225,7 +225,9 @@
 
     function get_server_by_ip($ip, $c_port) {
       global $lgsl_config;
-      return $this->load_server("SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE ip = '{$ip}' and c_port = {$c_port};");
+			if ($c_port > 1) $c_port = "and c_port = {$c_port}";
+			else $c_port = "";
+      return $this->load_server("SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE ip = '{$ip}' {$c_port};");
     }
     
     static function get_servers_group($options = array()) {
@@ -265,11 +267,10 @@
         $server->from_array($db->lgsl_unserialize_server_data($s));
         $server->validate();
         
-        if (strpos($request, "c") === FALSE && !lgsl_timer("check")) {
-          $server->lgsl_live_query($request);
-          $db->lgsl_save_cache($server);
-        }
-        array_push($output, $server);
+        if (strpos($request, "c") === FALSE && lgsl_timer("check")) { $request .= "c"; }
+				$server->lgsl_cached_query($request);
+				$db->lgsl_save_cache($server);
+        $output[] = $server;
       }
       return $output;
     }
@@ -286,7 +287,7 @@
       global $lgsl_config;
       $packed_cache = $this->escape_string(base64_encode(serialize($server->to_array())));
       $packed_times = $this->escape_string(implode("_", $server->get_timestamps()));
-      $status = $server->get_status() == "onl";
+      $status = $server->get_status() === Server::ONLINE;
       $mysqli_query  = "
         UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`
         SET `status`='{$status}',
@@ -320,7 +321,7 @@
         $cache = unserialize(base64_decode($data['cache']));
         $server['b'] = array_merge($server['b'], $cache['b']);
         $server['p'] = $cache['p'];
-        $server['h'] = $cache['h'];
+        if (isset($cache['h'])) $server['h'] = $cache['h'];
         $server['s']['cache_time'] = explode("_", $data['cache_time']);
       }
       return $server;
@@ -332,6 +333,10 @@
   }
 //------------------------------------------------------------------------------------------------------------+
   class Server {
+		public const ONLINE = "onl";
+		public const OFFLINE = "nrs";
+		public const PASSWORDED = "pwd";
+		public const PENDING = "pen";
     private $_base;
     private $_extra;
     private $_other;
@@ -372,16 +377,24 @@
       $db = LGSL::db();
       if ($this->_base['id']) {
         $result = $db->get_server_by_id($this->_base['id']);
-      } elseif ($this->_base['ip'] and $this->_base['c_port']) {
+      } elseif ($this->_base['ip']) {
         $result = $db->get_server_by_ip($this->_base['ip'], $this->_base['c_port']);
       }
       if ($result) {
+				global $lgsl_config;
         $this->from_array($result);
         $this->validate();
-        if (strpos($lgsl_need, "c") === FALSE) {
-          $this->lgsl_live_query($lgsl_need);
-          $db->lgsl_save_cache($this);
-        }
+				$needed = "";
+				if (strpos($lgsl_need, "c") === FALSE) // CACHE ONLY REQUEST
+				{
+					if (strpos($lgsl_need, "s") !== FALSE && time() > ($this->get_timestamp('s', true)+$lgsl_config['cache_time'])) { $needed .= "s"; }
+					if (strpos($lgsl_need, "e") !== FALSE && time() > ($this->get_timestamp('e', true)+$lgsl_config['cache_time'])) { $needed .= "e"; }
+					if (strpos($lgsl_need, "p") !== FALSE && time() > ($this->get_timestamp('p', true)+$lgsl_config['cache_time'])) { $needed .= "p"; }
+					if ($needed) {
+						$this->lgsl_live_query($lgsl_need);
+						$db->lgsl_save_cache($this);
+					}
+				}
       }
     }
     public function lgsl_live_query($lgsl_need = 'sep') {
@@ -390,7 +403,7 @@
       $protocol->query();
 
       global $lgsl_config;
-      if ($lgsl_config['history'] and $this->get_status() != 'pen') {
+      if ($lgsl_config['history'] and $this->get_status() != self::PENDING) {
         $last = end($this->_history);
         if (!$last or time() - $last['t'] >= 60 * 15) { // RECORD IF 15 MINS IS PASSED
           $history_limit = $lgsl_config['history_hours'] * 60 * 60;
@@ -403,7 +416,7 @@
           }
           $this->_history = array_values($this->_history);
           array_push($this->_history, array(
-            "s" => $this->get_status() != 'nrs',
+            "s" => $this->get_status() != self::OFFLINE,
             "t" => time(),
             "p" => (int) $this->get_players_count('active')
           ));
@@ -418,12 +431,12 @@
     }
     
     public function from_array($data) {
-        $this->_base = isset($data['b']) ? array_merge($this->_base, $data['b']) : $this->_base;
-        $this->_extra = isset($data['e']) ? $data['e'] : array();
-        $this->_other = isset($data['o']) ? $data['o'] : array();
-        $this->_server = isset($data['s']) ? array_merge($this->_server, $data['s']) : $this->_server;
-        $this->_players = isset($data['p']) ? $data['p'] : array();
-        $this->_history = isset($data['h']) ? $data['h'] : array();
+			$this->_base = isset($data['b']) ? array_merge($this->_base, $data['b']) : $this->_base;
+			$this->_extra = isset($data['e']) ? $data['e'] : [];
+			$this->_other = isset($data['o']) ? $data['o'] : [];
+			$this->_server = isset($data['s']) ? array_merge($this->_server, $data['s']) : $this->_server;
+			$this->_players = isset($data['p']) ? $data['p'] : [];
+			$this->_history = isset($data['h']) ? $data['h'] : [];
     }    
     public function to_array() {
       $server = array();
@@ -463,7 +476,7 @@
     }
     public function get_address() {
       if ($this->_base['type'] === 'discord') {
-        return $this->_base['ip'];
+        return "https://discord.gg/{$this->get_ip()}";
       }
       return "{$this->_base['ip']}:{$this->_base['c_port']}";
     }
@@ -500,21 +513,24 @@
       }
       return $this->_server['name'];
     }
+    public function set_name($name) {
+      $this->_server['name'] = $name;
+    }
     public function get_players_count($out = null) {
-      if ($this->get_pending() or $this->get_status() == 'nrs') {
+      if ($this->get_pending() or $this->get_status() === self::OFFLINE) {
         return "--";
       }
       if ($out === 'active') {
-        return (int) isset($this->_server['players']) ? $this->_server['players'] : 0;
+        return (int) (isset($this->_server['players']) ? $this->_server['players'] : 0);
       }
       if ($out === 'max') {
-        return (int) isset($this->_server['playersmax']) ? $this->_server['playersmax'] : 0;
+        return (int) (isset($this->_server['playersmax']) ? $this->_server['playersmax'] : 0);
       }
       if ($out === 'bots') {
-        return (int) isset($this->_extra['bots']) ? $this->_extra['bots'] : 0;
+        return (int) (isset($this->_extra['bots']) ? $this->_extra['bots'] : 0);
       }
       if ($out === 'percent') {
-        return (int) $this->_server['players'] == 0 || $this->_server['playersmax'] == 0 ? 0 : floor($this->_server['players']/$this->_server['playersmax']*100);
+        return (int) ($this->_server['players'] == 0 || $this->_server['playersmax'] == 0 ? 0 : floor($this->_server['players']/$this->_server['playersmax']*100));
       }
       if (isset($this->_server['players']) and isset($this->_server['playersmax'])) {
         if ($this->_server['playersmax'] > 999) {
@@ -532,133 +548,48 @@
     public function get_pending() {
       return $this->_base['pending'];
     }
+		public function getPlayerNames() {
+			if ($this->get_players_count('active') > 0) {
+				return array_reduce($this->get_players(), function($a, $c) {
+					array_push($a, $c['name']);
+					return $a;
+				}, []);
+			}
+			else return [];
+		}
 
     public function get_software_link() {
       $lgsl_software_link = array(
-        "aarmy"         => "qtracker://{IP}:{S_PORT}?game=ArmyOperations&action=show",
-        "aarmy3"        => "qtracker://{IP}:{S_PORT}?game=AmericasArmy3&action=show",
-        "arcasimracing" => "http://en.wikipedia.org/wiki/ARCA_Sim_Racing",
-        "arma"          => "qtracker://{IP}:{S_PORT}?game=ArmedAssault&action=show",
-        "arma2"         => "http://en.wikipedia.org/wiki/ARMA_2",
         "arma3"         => "steam://connect/{IP}:{C_PORT}",
-        "avp2"          => "qtracker://{IP}:{S_PORT}?game=AliensversusPredator2&action=show",
-        "avp2010"       => "http://en.wikipedia.org/wiki/Aliens_vs._Predator_%28video_game%29",
-        "bfbc2"         => "http://en.wikipedia.org/wiki/Battlefield_bad_company_2",
-        "bfvietnam"     => "qtracker://{IP}:{S_PORT}?game=BattlefieldVietnam&action=show",
-        "bf1942"        => "qtracker://{IP}:{S_PORT}?game=Battlefield1942&action=show",
-        "bf2"           => "qtracker://{IP}:{S_PORT}?game=Battlefield2&action=show",
-        "bf3"           => "https://en.wikipedia.org/wiki/Battlefield_3",
-        "bf4"           => "https://en.wikipedia.org/wiki/Battlefield_4",
-        "bf2142"        => "qtracker://{IP}:{S_PORT}?game=Battlefield2142&action=show",
-        "callofduty"    => "qtracker://{IP}:{S_PORT}?game=CallOfDuty&action=show",
-        "callofdutybo3" => "qtracker://{IP}:{S_PORT}?game=CallOfDutyBlackOps3&action=show",
         "callofdutyiw"  => "javascript:prompt('Put it into console:', 'connect {IP}:{C_PORT}')",
-        "callofdutyuo"  => "qtracker://{IP}:{S_PORT}?game=CallOfDutyUnitedOffensive&action=show",
-        "callofdutywaw" => "qtracker://{IP}:{S_PORT}?game=CallOfDutyWorldAtWar&action=show",
-        "callofduty2"   => "qtracker://{IP}:{S_PORT}?game=CallOfDuty2&action=show",
         "callofduty4"   => "cod4://{IP}:{S_PORT}",
-        "cncrenegade"   => "qtracker://{IP}:{S_PORT}?game=CommandConquerRenegade&action=show",
         "conanexiles"   => "steam://connect/{IP}:{C_PORT}",
-        "crysis"        => "qtracker://{IP}:{S_PORT}?game=Crysis&action=show",
-        "crysiswars"    => "qtracker://{IP}:{S_PORT}?game=CrysisWars&action=show",
         "cs2d"          => "steam://connect/{IP}:{C_PORT}",
-        "cube"          => "http://cubeengine.com",
         "discord"       => "https://discord.gg/{IP}",
-        "doomskulltag"  => "http://skulltag.com",
-        "doomzdaemon"   => "http://www.zdaemon.org",
-        "doom3"         => "qtracker://{IP}:{S_PORT}?game=Doom3&action=show",
-        "dh2005"        => "http://en.wikipedia.org/wiki/Deer_Hunter_(computer_game)",
         "factorio"      => "steam://connect/{IP}",
-        "farcry"        => "qtracker://{IP}:{S_PORT}?game=FarCry&action=show",
         "farmsim"       => "steam://connect/{IP}:{C_PORT}",
-        "fear"          => "qtracker://{IP}:{S_PORT}?game=FEAR&action=show",
         "fivem"         => "fivem://connect/{IP}:{C_PORT}",
-        "flashpoint"    => "qtracker://{IP}:{S_PORT}?game=OperationFlashpoint&action=show",
-        "freelancer"    => "http://en.wikipedia.org/wiki/Freelancer_(computer_game)",
-        "frontlines"    => "http://en.wikipedia.org/wiki/Frontlines:_Fuel_of_War",
-        "f1c9902"       => "http://en.wikipedia.org/wiki/EA_Sports_F1_Series",
-        "gamespy1"      => "http://www.greycube.com",
-        "gamespy2"      => "http://www.greycube.com",
-        "gamespy3"      => "http://www.greycube.com",
-        "ghostrecon"    => "http://en.wikipedia.org/wiki/Tom_Clancy's_Ghost_Recon",
-        "graw"          => "qtracker://{IP}:{S_PORT}?game=GhostRecon&action=show",
-        "graw2"         => "http://en.wikipedia.org/wiki/Tom_Clancy's_Ghost_Recon_Advanced_Warfighter_2",
-        "gtr2"          => "http://en.wikipedia.org/wiki/GTR2",
-        "had2"          => "http://en.wikipedia.org/wiki/Hidden_&_Dangerous_2",
         "halflife"      => "steam://connect/{IP}:{C_PORT}",
         "halflifewon"   => "steam://connect/{IP}:{C_PORT}",
-        "halo"          => "qtracker://{IP}:{S_PORT}?game=Halo&action=show",
-        "il2"           => "http://en.wikipedia.org/wiki/IL-2_Sturmovik_(game)",
-        "jediknight2"   => "qtracker://{IP}:{S_PORT}?game=JediKnight2&action=show",
-        "jediknightja"  => "qtracker://{IP}:{S_PORT}?game=JediKnightJediAcademy&action=show",
         "jc2mp"         => "steam://connect/{IP}:{C_PORT}",
         "killingfloor"  => "steam://connect/{IP}:{C_PORT}",
-        "kingpin"       => "qtracker://{IP}:{S_PORT}?game=Kingpin&action=show",
-        "m2mp"          => "https://m2mp.de/",
         "minecraft"     => "minecraft://{IP}:{C_PORT}/",
-        "mohaa"         => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssault&action=show",
-        "mohaab"        => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssaultBreakthrough&action=show",
-        "mohaas"        => "qtracker://{IP}:{S_PORT}?game=MedalofHonorAlliedAssaultSpearhead&action=show",
-        "mohpa"         => "qtracker://{IP}:{S_PORT}?game=MedalofHonorPacificAssault&action=show",
         "mta"           => "mtasa://{IP}:{C_PORT}",
-        "nascar2004"    => "http://en.wikipedia.org/wiki/NASCAR_Thunder_2004",
-        "neverwinter"   => "qtracker://{IP}:{S_PORT}?game=NeverwinterNights&action=show",
-        "neverwinter2"  => "qtracker://{IP}:{S_PORT}?game=NeverwinterNights&action=show",
-        "nexuiz"        => "qtracker://{IP}:{S_PORT}?game=Nexuiz&action=show",
         "openttd"       => "steam://connect/{IP}:{C_PORT}",
-        "painkiller"    => "qtracker://{IP}:{S_PORT}?game=Painkiller&action=show",
-        "plainsight"    => "http://www.plainsightgame.com",
-        "prey"          => "qtracker://{IP}:{S_PORT}?game=Prey&action=show",
-        "quakeworld"    => "qtracker://{IP}:{S_PORT}?game=QuakeWorld&action=show",
-        "quakewars"     => "qtracker://{IP}:{S_PORT}?game=EnemyTerritoryQuakeWars&action=show",
-        "quake2"        => "qtracker://{IP}:{S_PORT}?game=Quake2&action=show",
-        "quake3"        => "qtracker://{IP}:{S_PORT}?game=Quake3&action=show",
-        "quake4"        => "qtracker://{IP}:{S_PORT}?game=Quake4&action=show",
         "ragemp"        => "rage://v/connect?ip={IP}:{C_PORT}",
-        "ravenshield"   => "http://en.wikipedia.org/wiki/Tom_Clancy's_Rainbow_Six_3",
         "redorchestra"  => "steam://connect/{IP}:{C_PORT}",
         "rfactor"       => "rfactor://{IP}:{C_PORT}",
         "samp"          => "samp://{IP}:{C_PORT}",
-        "savage"        => "http://en.wikipedia.org/wiki/Savage:_The_Battle_for_Newerth",
-        "savage2"       => "http://en.wikipedia.org/wiki/Savage_2:_A_Tortured_Soul",
-        "serioussam"    => "qtracker://{IP}:{S_PORT}?game=SeriousSam&action=show",
-        "serioussam2"   => "qtracker://{IP}:{S_PORT}?game=Serious_Sam2&action=show",
         "scum"          => "steam://connect/{IP}:{C_PORT}",
         "sf"            => "steam://connect/{IP}:{C_PORT}",
-        "shatteredh"    => "http://en.wikipedia.org/wiki/Shattered_Horizon",
-        "sof2"          => "qtracker://{IP}:{S_PORT}?game=SoldierOfFortune2&action=show",
         "soldat"        => "soldat://{IP}:{C_PORT}",
         "source"        => "steam://connect/{IP}:{C_PORT}",
-        "stalker"       => "qtracker://{IP}:{S_PORT}?game=STALKER_ShadowChernobyl&action=show",
-        "stalkercop"    => "qtracker://{IP}:{S_PORT}?game=STALKER_CallOfPripyat&action=show",
-        "stalkercs"     => "qtracker://{IP}:{S_PORT}?game=STALKER_ClearSky&action=show",
-        "startrekef"    => "http://en.wikipedia.org/wiki/Star_Trek:_Voyager:_Elite_Force",
-        "starwarsbf"    => "qtracker://{IP}:{S_PORT}?game=StarWarsBattlefront&action=show",
-        "starwarsbf2"   => "qtracker://{IP}:{S_PORT}?game=StarWarsBattlefront2&action=show",
-        "starwarsrc"    => "qtracker://{IP}:{S_PORT}?game=StarWarsRepublicCommando&action=show",
-        "swat4"         => "qtracker://{IP}:{S_PORT}?game=SWAT4&action=show",
         "test"          => "https://github.com/tltneon/lgsl",
         "teeworlds"     => "steam://connect/{IP}:{C_PORT}",
         "terraria"      => "steam://connect/{IP}:{C_PORT}",
-        "tribes"        => "qtracker://{IP}:{S_PORT}?game=Tribes&action=show",
-        "tribes2"       => "qtracker://{IP}:{S_PORT}?game=Tribes2&action=show",
-        "tribesv"       => "qtracker://{IP}:{S_PORT}?game=TribesVengeance&action=show",
-        "ts"            => "http://www.teamspeak.com",
         "ts3"           => "ts3server://{IP}?port={C_PORT}",
         "teaspeak"      => "ts3server://{IP}?port={C_PORT}",
-        "urbanterror"   => "qtracker://{IP}:{S_PORT}?game=UrbanTerror&action=show",
-        "ut"            => "qtracker://{IP}:{S_PORT}?game=UnrealTournament&action=show",
-        "ut2003"        => "qtracker://{IP}:{S_PORT}?game=UnrealTournament2003&action=show",
-        "ut2004"        => "qtracker://{IP}:{S_PORT}?game=UnrealTournament2004&action=show",
-        "ut3"           => "qtracker://{IP}:{S_PORT}?game=UnrealTournament3&action=show",
-        "vcmp"          => "https://vc-mp.org",
-        "vietcong"      => "qtracker://{IP}:{S_PORT}?game=Vietcong&action=show",
-        "vietcong2"     => "qtracker://{IP}:{S_PORT}?game=Vietcong2&action=show",
         "warsow"        => "warsow://{IP}:{C_PORT}",
-        "warsowold"     => "qtracker://{IP}:{S_PORT}?game=Warsow&action=show",
-        "wolfet"        => "qtracker://{IP}:{S_PORT}?game=WolfensteinEnemyTerritory&action=show",
-        "wolfrtcw"      => "qtracker://{IP}:{S_PORT}?game=ReturntoCastleWolfenstein&action=show",
-        "wolf2009"      => "http://en.wikipedia.org/wiki/Wolfenstein_(2009_video_game)",
         "wow"           => "javascript:prompt('Put it into your realm list:', 'set realmlist {IP}')");
     
         // SOFTWARE PORT IS THE QUERY PORT UNLESS SET
@@ -667,20 +598,19 @@
         } else {
           $s_port = $this->get_s_port();
         }
-    
-        // TRY USING THE STANDARD LAUNCH LINK FOR ALTERNATE PROTOCOLS IF ONE IS NOT SET
-        if (!isset($lgsl_software_link[$this->get_type()])) {
-          $type = str_replace("_", "", $this->get_type());
-        } else {
-          $type = $this->get_type();
-        }
+				
+				if (empty($lgsl_software_link[$this->get_type()])) {
+					$link = "javascript:prompt('IP:', '{IP}:{C_PORT}')";
+				} else {
+					$link = $lgsl_software_link[$this->get_type()];
+				}
     
         // INSERT DATA INTO STATIC LINK - CONVERT SPECIAL CHARACTERS - RETURN
-        return htmlentities(str_replace(array("{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}"), array($this->get_ip(), $this->get_c_port(), $this->get_q_port(), $s_port), $lgsl_software_link[$type]), ENT_QUOTES);
+        return htmlentities(str_replace(array("{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}"), array($this->get_ip(), $this->get_c_port(), $this->get_q_port(), $s_port), $link), ENT_QUOTES);
     }
     public function map_password_image() {
       global $lgsl_url_path;
-      if ($this->get_status() === "onp") return "{$lgsl_url_path}other/map_overlay_password.gif";
+      if ($this->get_status() === self::PASSWORDED) return "{$lgsl_url_path}other/map_overlay_password.gif";
       return "{$lgsl_url_path}other/overlay.gif";
     }
     public function get_map_image($check_exists = true, $id = -1) {
@@ -693,32 +623,32 @@
       if ($check_exists !== true) { return "{$lgsl_url_path}maps/{$type}/{$game}/{$map}.jpg"; }
   
       if ($this->_base['status']) {
-        $path_list = array(
+        $path_list = [
         "maps/{$type}/{$game}/{$map}.jpg",
         "maps/{$type}/{$game}/{$map}.gif",
         "maps/{$type}/{$game}/{$map}.png",
         "maps/{$type}/{$map}.jpg",
         "maps/{$type}/{$map}.gif",
         "maps/{$type}/{$map}.png",
-        "other/map_no_image.jpg");
+        "other/map_no_image.jpg"];
         if ($id > -1) {
-          $path_list_id = array(
+          $path_list_id = [
             "other/map_no_image_{$id}.jpg",
             "other/map_no_image_{$id}.gif",
-            "other/map_no_image_{$id}.png");
+            "other/map_no_image_{$id}.png"];
           $path_list = array_merge($path_list, $path_list_id);
         }
       } else {
-        $path_list = array(
+        $path_list = [
         "maps/{$type}/map_no_response.jpg",
         "maps/{$type}/map_no_response.gif",
         "maps/{$type}/map_no_response.png",
-        "other/map_no_response.jpg");
+        "other/map_no_response.jpg"];
         if ($id > -1) {
-          $path_list_id = array(
+          $path_list_id = [
             "other/map_no_response_{$id}.jpg",
             "other/map_no_response_{$id}.gif",
-            "other/map_no_response_{$id}.png",);
+            "other/map_no_response_{$id}.png"];
           $path_list = array_merge($path_list, $path_list_id);
         }
       }
@@ -746,7 +676,7 @@
       "icons/{$type}/{$type}.png");
 
       foreach ($path_list as $path) {
-        if (file_exists($lgsl_file_path.$path)) { return $lgsl_url_path.$path; }
+        if (file_exists("{$lgsl_file_path}{$path}")) { return "{$lgsl_url_path}{$path}"; }
       }
 
       return "{$lgsl_url_path}other/icon_unknown.gif";
@@ -754,14 +684,11 @@
     public function icon_status() {
       global $lgsl_url_path;
       switch ($this->get_status()) {
-        case 'pen': return "{$lgsl_url_path}other/icon_unknown.gif";
-        case 'nrs': return "{$lgsl_url_path}other/icon_no_response.gif";
-        case 'pwd': return "{$lgsl_url_path}other/icon_online_password.gif";
+        case self::PENDING: return "{$lgsl_url_path}other/icon_unknown.gif";
+        case self::OFFLINE: return "{$lgsl_url_path}other/icon_no_response.gif";
+        case self::PASSWORDED: return "{$lgsl_url_path}other/icon_online_password.gif";
         default: return "{$lgsl_url_path}other/icon_online.gif";
       }
-    }
-    public function connection_link() {
-      return ($this->get_type() == "discord" ? "https://discord.gg/{$this->get_ip()}" : "{$this->get_ip()}:{$this->get_c_port()}" );
     }
     public function location_text() {
       global $lgsl_config;
@@ -779,6 +706,10 @@
       }
   
       return "{$lgsl_url_path}locations/XX.png";
+    }
+    public function getLocation() {
+      if (isset($this->_other['location'])) return $this->_other['location'];
+			return "XX";
     }
     private function _cache_time_index($c) {
       switch ($c) {
@@ -799,14 +730,16 @@
     }
     public function get_timestamp($type = 's', $raw = false) {
       global $lgsl_config;
+			$time = 0;
       if (isset($this->_server['cache_time'])) {
-        $time = (int) isset($this->_server['cache_time']) ? $this->_server['cache_time'][$this->_cache_time_index($type)] : 0;
-        if ($time === 0) {
-          return 'not queried';
+				if (isset($this->_server['cache_time'][$this->_cache_time_index($type)])) {
+					$time = (int) $this->_server['cache_time'][$this->_cache_time_index($type)];
+				}
+        if ($time > 0) {
+					return $raw ? $time : Date($lgsl_config['text']['tzn'], $time);
         }
-        return $raw ? $time : Date($lgsl_config['text']['tzn'], $time);
       }
-      return 'not queried';
+      return $raw ? $time : 'not queried';
     }
     public function get_timestamps() {
       return isset($this->_server['cache_time']) ? $this->_server['cache_time'] : array();
@@ -822,18 +755,18 @@
     }
     public function get_status() {
       if ($this->_base['pending']) {
-        return 'pen';
+        return self::PENDING;
       }
       if ($this->_server['password']) {
-        return 'onp';
+        return self::PASSWORDED;
       }
       if ($this->_base['status']) {
-        return 'onl';
+        return self::ONLINE;
       }
-      return 'nrs';
+      return self::OFFLINE;
     }
   }
-  function lgsl_query_cached($type, $ip, $c_port, $q_port, $s_port, $request, $id = NULL)
+  function lgsl_query_cached($type, $ip, $c_port, $q_port, $s_port, $request, $id = NULL) 
   {
     global $lgsl_config;
 
@@ -1067,10 +1000,8 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  function lgsl_timer($action)
-  {
-    global $lgsl_config;
-    global $lgsl_timer;
+  function lgsl_timer($action) {
+    global $lgsl_config, $lgsl_timer;
 
     if (!$lgsl_timer)
     {
@@ -1105,12 +1036,9 @@
     $microtime  = $microtime[1] + $microtime[0];
     $time_taken = $microtime - $lgsl_timer;
 
-    if ($action == "check")
-    {
-      return ($time_taken > $time_limit) ? TRUE : FALSE;
-    }
-    else
-    {
+    if ($action == "check") {
+      return $time_taken > $time_limit;
+    } else {
       return round($time_taken, 2);
     }
   }

@@ -17,6 +17,10 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
   class Protocol {
+		public const UDP = "udp";
+		public const TCP = "tcp";
+		public const HTTP = "http";
+		
     private $_server;
     private $_lgsl_need;
     private $_lgsl_fp;
@@ -37,20 +41,21 @@
     }
     static public function lgsl_connection_type($type) {
       $protocol = array(
-        "bfbc2"         => "tcp",
-        "bf3"           => "tcp",
-        "discord"       => "http",
-        "farmsim"       => "http",
-        "fivem"         => "http",
-        "ragemp"        => "http",
-        "scum"          => "http",
-        "terraria"      => "http",
-        "ts"            => "tcp",
-        "ts3"           => "tcp",
-        "teaspeak"      => "tcp",
-        "wow"           => "tcp"
+        "bfbc2"         => self::TCP,
+        "bf3"           => self::TCP,
+        "discord"       => self::HTTP,
+        "farmsim"       => self::HTTP,
+        "eco"           => self::HTTP,
+        "fivem"         => self::HTTP,
+        "ragemp"        => self::HTTP,
+        "scum"          => self::HTTP,
+        "terraria"      => self::HTTP,
+        "ts"            => self::TCP,
+        "ts3"           => self::TCP,
+        "teaspeak"      => self::TCP,
+        "wow"           => self::TCP
       );
-      return isset($protocol[$type]) ? $protocol[$type] : "udp";
+      return isset($protocol[$type]) ? $protocol[$type] : self::UDP;
     }
     static public function lgsl_protocol_list() {
       return array(
@@ -88,6 +93,7 @@
         "doomzdaemon"   => "28",
         "doom3"         => "10",
         "dh2005"        => "09",
+				"eco"           => "40",
         "factorio"      => "42",
         "had2"          => "03",
         "halflife"      => "05",
@@ -225,6 +231,7 @@
         "doomzdaemon"   => "Doom - ZDaemon",
         "doom3"         => "Doom 3",
         "dh2005"        => "Deer Hunter 2005",
+				"eco"           => "ECO",
         "factorio"      => "Factorio",
         "farcry"        => "Far Cry",
         "farmsim"       => "Farming Simulator",
@@ -351,6 +358,7 @@
         case "had2"          : $c_to_q = 3;     $c_def = 11001;   $q_def = 11004;   $c_to_s = 0;   break;
         case "kingpin"       : $c_to_q = -10;   $c_def = 31510;   $q_def = 31500;   $c_to_s = 0;   break;
         case "killingfloor"  : $c_to_q = 1;     $c_def = 7708;    $q_def = 7709;    $c_to_s = 0;   break;
+        case "minecraft"     : $c_to_q = 0;     $c_def = 25565;   $q_def = 25565;   $c_to_s = 0;   break;
         case "mohaa"         : $c_to_q = 97;    $c_def = 12203;   $q_def = 12300;   $c_to_s = 0;   break;
         case "mohaab"        : $c_to_q = 97;    $c_def = 12203;   $q_def = 12300;   $c_to_s = 0;   break;
         case "mohaas"        : $c_to_q = 97;    $c_def = 12203;   $q_def = 12300;   $c_to_s = 0;   break;
@@ -403,45 +411,23 @@
       return isset($list[$type]) ? $list[$type] : "err";
     }
     public function query() {
-      global $lgsl_config;
       $this->_server->set_timestamp(implode('', $this->_lgsl_need), time());
-      $prot = $this->lgsl_connection_type($this->_server->get_type());
-      if ($prot === "http") {
-        if (!function_exists('curl_init') || !function_exists('curl_setopt') || !function_exists('curl_exec')) return FALSE;
-        $this->_lgsl_fp = curl_init('');
-        curl_setopt($this->_lgsl_fp, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($this->_lgsl_fp, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($this->_lgsl_fp, CURLOPT_CONNECTTIMEOUT, $lgsl_config['timeout']);
-        curl_setopt($this->_lgsl_fp, CURLOPT_TIMEOUT, 3);
-        curl_setopt($this->_lgsl_fp, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-      } else {
-        $this->_lgsl_fp = @fsockopen("{$prot}://{$this->_server->get_ip()}", $this->_server->get_q_port(), $errno, $errstr, 1);
-        if (!$this->_lgsl_fp) {
-          $this->_server->set_extra_value('_error', $errstr);
-          $this->_server->set_status(false);
-          return false;
-        }
-        stream_set_timeout($this->_lgsl_fp, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
-        stream_set_blocking($this->_lgsl_fp, true);
-      }
-      $status = call_user_func(array($this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"));
+      $protocol = $this->lgsl_connection_type($this->_server->get_type());
+			$this->_lgsl_fp = new Stream($protocol);
+			$this->_lgsl_fp->open($this->_server);
+      $status = call_user_func(array($this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"), $this->_server->get_type());
       $this->_server->set_status($status);
-      if ($prot == 'http') {
-        curl_close($this->_lgsl_fp);
-      } else {
-        @fclose($this->_lgsl_fp);
-      }
+			$this->_lgsl_fp->close();
     }
     private function _fp_write($string) {
-      fwrite($this->_lgsl_fp, $string);
+			$this->_lgsl_fp->write($string);
     }
     private function _fp_read($length) {
-      return fread($this->_lgsl_fp, $length);
+      return $this->_lgsl_fp->read($length);
     }
     
-    public function lgsl_query_err() {
-      $this->_server->set_name("LGSL PROBLEM: FUNCTION DOES NOT EXIST");
-      return false;
+    public function lgsl_query_err($type = null) {
+      return $this->_server->set_name("LGSL PROBLEM: FUNCTION DOES NOT EXIST FOR TYPE {$type}");
     }
     public function lgsl_query_01() {
       //---------------------------------------------------------+
@@ -3342,9 +3328,8 @@
       return FALSE;
     }
     public function lgsl_query_35() {
-      curl_setopt($this->_lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/dynamic.json");
-      $buffer = curl_exec($this->_lgsl_fp);
-      $buffer = json_decode($buffer, true);
+			$this->_lgsl_fp->write("http://{$server['b']['ip']}:{$server['b']['q_port']}/dynamic.json");
+			$buffer = $this->_lgsl_fp->readJson();
 
       if (!$buffer) return FALSE;
 
@@ -3363,9 +3348,8 @@
       if ($this->_lgsl_need['p']) {
         $this->_lgsl_need['p'] = FALSE;
 
-        curl_setopt($this->_lgsl_fp, CURLOPT_URL, "http://{$server['b']['ip']}:{$server['b']['q_port']}/players.json");
-        $buffer = curl_exec($this->_lgsl_fp);
-        $buffer = json_decode($buffer, true);
+				$this->_lgsl_fp->write("http://{$server['b']['ip']}:{$server['b']['q_port']}/players.json");
+				$buffer = $this->_lgsl_fp->readJson();
 
         foreach($buffer as $key => $value) {
           $server['p'][$key]['name'] = $value['name'];
@@ -3378,9 +3362,8 @@
       return TRUE;
     }
     public function lgsl_query_36() {
-      curl_setopt($this->_lgsl_fp, CURLOPT_URL, "https://discord.com/api/v9/invites/{$this->_server->get_ip()}?with_counts=true");
-      $buffer = curl_exec($this->_lgsl_fp);
-      $buffer = json_decode($buffer, true);
+			$this->_lgsl_fp->write("https://discord.com/api/v9/invites/{$this->_server->get_ip()}?with_counts=true");
+			$buffer = $this->_lgsl_fp->readJson();
   
       if (isset($buffer['message'])) {
         $server['e']['_error_fetching_info'] = $buffer['message'];
@@ -3407,9 +3390,8 @@
       if ($this->_lgsl_need['p']) {
         $this->_lgsl_need['p'] = FALSE;
   
-        curl_setopt($this->_lgsl_fp, CURLOPT_URL, "https://discordapp.com/api/guilds/{$server['e']['id']}/widget.json");
-        $buffer = curl_exec($this->_lgsl_fp);
-        $buffer = json_decode($buffer, true);
+				$this->_lgsl_fp->write("https://discordapp.com/api/guilds/{$server['e']['id']}/widget.json");
+				$buffer = $this->_lgsl_fp->readJson();
   
         if (isset($buffer['code']) and $buffer['code'] == 0) {
           $server['e']['_error_fetching_users'] = $buffer['message'];
@@ -3433,9 +3415,8 @@
       return TRUE;
     }
     public function lgsl_query_37() {
-      curl_setopt($this->_lgsl_fp, CURLOPT_URL, "https://api.hellbz.de/scum/api.php?address={$this->_server->get_ip()}&port={$this->_server->get_c_port()}");
-      $buffer = curl_exec($this->_lgsl_fp);
-      $buffer = json_decode($buffer, true);
+			$this->_lgsl_fp->write("https://api.hellbz.de/scum/api.php?address={$this->_server->get_ip()}&port={$this->_server->get_c_port()}");
+			$buffer = $this->_lgsl_fp->readJson();
 
       if (!$buffer['success']) return FALSE;
 
@@ -3452,10 +3433,9 @@
       $this->_lgsl_need['p'] = FALSE;
       return TRUE;
     }
-    public function lgsl_query_38() {      
-      curl_setopt($this->_lgsl_fp, CURLOPT_URL, "http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/v2/server/status?players=true");
-      $buffer = curl_exec($this->_lgsl_fp);
-      $buffer = json_decode($buffer, true);
+    public function lgsl_query_38() {
+			$this->_lgsl_fp->write("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/v2/server/status?players=true");
+			$buffer = $this->_lgsl_fp->readJson();
   
       if ($buffer['status'] != '200') {
         $server['e']['_error']    = $buffer['error'];
@@ -3496,20 +3476,65 @@
       return TRUE;
     }
     public function lgsl_query_40() {
-      curl_setopt($this->_lgsl_fp, CURLOPT_URL, "http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/index.html"); // CAN QUERY ONLY SERVER NAME AND ONLINE STATUS, MEH
-      $buffer = curl_exec($this->_lgsl_fp);
-  
-      if (!$buffer) return FALSE;
-      
-      preg_match('/<h2>Login to [\w\d\s\/\\&@"\'-]+<\/h2>/', $buffer, $name);
-      $server = $this->_server->to_array();
-      $server['s']['name']        = substr($name[0], 12, strlen($name[0])-17);
-      $server['s']['map']         = "Farm";
-      $this->_server->from_array($server);
-      $this->_lgsl_need['s'] = FALSE;
-      $this->_lgsl_need['e'] = FALSE;
-      $this->_lgsl_need['p'] = FALSE;
-      return strpos($buffer, 'status-indicator online') !== FALSE;
+			$server = $this->_server->to_array();
+			$urls = array(
+				'farmsim' => "http://{$server['b']['ip']}:{$server['b']['q_port']}/index.html",
+				'eco' => "http://{$server['b']['ip']}:{$server['b']['q_port']}/info"
+			);
+			$this->_lgsl_fp->write($urls[$server['b']['type']]);
+			$buffer = $this->_lgsl_fp->read();
+			if (!$buffer) return FALSE;
+			switch ($server['b']['type']) {
+				// Farming Simulator // CAN QUERY ONLY SERVER NAME AND ONLINE STATUS, MEH
+				case 'farmsim': {
+					preg_match('/<h2>Login to [\w\d\s\/\\&@"\'-]+<\/h2>/', $buffer, $name);
+
+					$server['s']['name']        = substr($name[0], 12, strlen($name[0])-17);
+					$server['s']['map']         = "Farm";
+					$this->_server->from_array($server);
+
+					return strpos($buffer, 'status-indicator online') !== FALSE;
+				}
+				// ECO
+				case 'eco': {
+					$buffer = json_decode($buffer, true);
+
+					$server['s']['name']        = strip_tags($buffer['Description']);
+					$server['s']['map']         = "World";
+					$server['s']['players']     = $buffer['OnlinePlayers'];
+					$server['s']['playersmax']  = $buffer['TotalPlayers'];
+					$server['s']['password']    = (int) $buffer['HasPassword'];
+					
+					if ($server['s']['players']) {
+						foreach ($buffer['OnlinePlayersNames'] as $key => $value) {
+							$server['p'][$key]['name'] = $value;
+						}
+					}
+					
+					function t($t, $s = 0) {
+						$d = (int) ($t / 86400) + $s;
+						$h = (int) ($t / 86400) % 3600;
+						$m = (int) ($t / 3600) % 60;
+						return "{$d} days {$h} hrs {$m} mins";
+					}
+					$server['e']['Laws']    = $buffer['Laws'];
+					$server['e']['Plants']    = $buffer['Plants'];
+					$server['e']['Animals']    = $buffer['Animals'];
+					$server['e']['Version']    = $buffer['Version'];
+					$server['e']['Discord']    = $buffer['DiscordAddress'];
+					$server['e']['JoinUrl']    = $buffer['JoinUrl'];
+					$server['e']['WorldSize']    = $buffer['WorldSize'];
+					$server['e']['EconomyDesc']    = $buffer['EconomyDesc'];
+					$server['e']['description']    = $buffer['DetailedDescription'];
+					$server['e']['PeakActivePlayers']    = $buffer['PeakActivePlayers'];
+					$server['e']['TimeSinceStart']    = t($buffer['TimeSinceStart'], 1);
+					$server['e']['HasMeteor']    = $buffer['HasMeteor'];
+					if ($buffer['HasMeteor']) $server['e']['TimeLeft'] = t($buffer['TimeLeft']);
+					$this->_server->from_array($server);
+					return TRUE;
+				}
+				default: return FALSE;
+			}
     }
     public function lgsl_query_41() {
       $server = $this->_server->to_array();
@@ -3708,6 +3733,71 @@
     }
   }
 
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+	class Query {
+		
+	}
+//------------------------------------------------------------------------------------------------------------+
+//------------------------------------------------------------------------------------------------------------+
+	class Stream {
+		private $_protocol;
+		private $_stream;
+		public function __construct($protocol) {
+			$this->_protocol = $protocol;
+		}
+		private function _isHttp() {
+			return $this->_protocol === Protocol::HTTP;
+		}
+		public function open(&$server) {
+      global $lgsl_config;
+			if ($this->_isHttp()) {
+        if (!function_exists('curl_init') || !function_exists('curl_setopt') || !function_exists('curl_exec')) return FALSE;
+        $this->_stream = curl_init('');
+        curl_setopt($this->_stream, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($this->_stream, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($this->_stream, CURLOPT_CONNECTTIMEOUT, $lgsl_config['timeout']);
+        curl_setopt($this->_stream, CURLOPT_TIMEOUT, 3);
+        curl_setopt($this->_stream, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+      } else {
+        $this->_stream = @fsockopen("{$this->_protocol}://{$server->get_ip()}", $server->get_q_port(), $errno, $errstr, 1);
+        if (!$this->_stream) {
+          $server->set_extra_value('_error', $errstr);
+          $server->set_status(false);
+          return false;
+        }
+        stream_set_timeout($this->_stream, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
+        stream_set_blocking($this->_stream, true);
+      }
+		}
+		public function read($length = 4096) {
+      if ($this->_isHttp()) {
+        return curl_exec($this->_stream);
+      } else {
+        return fread($this->_stream, $length);
+      }
+		}
+		public function readJson($length = 4096) {
+      return json_decode($this->read($length), true);
+		}
+		public function write($data) {
+      if ($this->_isHttp()) {
+				curl_setopt($this->_stream, CURLOPT_URL, $data);
+      } else {
+        fwrite($this->_stream, $data);
+      }
+		}
+		public function &get_stream() {
+			return $_stream;
+		}
+		public function close() {
+      if ($this->_isHttp()) {
+        curl_close($this->_stream);
+      } else {
+        @fclose($this->_stream);
+      }
+		}
+	}
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 

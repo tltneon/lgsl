@@ -1,0 +1,38 @@
+.inlined {
+	display: inline-block;
+	width: 300px;
+	vertical-align: top;
+}
+.tt{
+	margin: auto;
+	width: 610px;
+}
+.tt > .inlined:nth-child(2) {
+	text-align: end;
+}
+.inlined > div > div:first-child {
+	height: 46px;
+	overflow-y: auto;
+}
+::-webkit-scrollbar-thumb {
+	background-color: gray;
+}
+
+::-webkit-scrollbar {
+	width: 6px;
+	background: #3e3e3e;
+}
+.spacer {
+	height: 2em;
+}
+@media(max-width: 414px){
+	.inlined {
+		display: inline-block;
+		width: 100%;
+		vertical-align: top;
+	}
+	.tt{
+		width: auto;
+		padding: 7px;
+	}
+}

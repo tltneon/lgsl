@@ -105,8 +105,8 @@
 
       if ($lgsl_config['locations']) {
         $output .= "
-        <a href='".LGSL::location_link($server->location_text())."' target='_blank' class='contry_link'>
-          <img alt='{$server->location_text()}' src='{$server->location_icon()}' title='{$server->location_text()}' class='contry_icon' />
+        <a href='".LGSL::location_link($server->location_text())."' title='{$server->location_text()}'  target='_blank' class='contry_link'>
+          <i class='contry_icon flag f{$server->getLocation()}'></i>
         </a>";
       }
 

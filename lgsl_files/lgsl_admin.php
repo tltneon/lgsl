@@ -21,15 +21,15 @@
 
   $id        = 0;
   $last_type = "source";
-  $zone_list = array(0,1,2,3,4,5,6,7,8,9);
+  $zone_list = [0,1,2,3,4,5,6,7,8,9];
 
 //------------------------------------------------------------------------------------------------------------+
 
   if (!function_exists("fsockopen") && !$lgsl_config['feed']['method']) {
     if ((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec"))) {
-      $output = "<div class='center'><br /><br /><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><br /><br /></div>".lgsl_help_info(); return;
+      $output = "<div class='center'><i class='spacer'></i><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><i class='spacer'></i></div>".lgsl_help_info(); return;
     } else {
-      $output = "<div class='center'><br /><br /><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><br /><br /></div>".lgsl_help_info(); return;
+      $output = "<div class='center'><i class='spacer'></i><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><i class='spacer'></i></div>".lgsl_help_info(); return;
     }
   }
 
@@ -37,11 +37,7 @@
 
   if ($_POST) { $_POST = lgsl_stripslashes_deep($_POST); }
 
-  if (function_exists("mysqli_set_charset")) {
-    @$db->set_charset("utf8");
-  } else {
-    @$db->query("SET NAMES 'utf8'");
-  }
+  @$db->set_charset("utf8");
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -118,13 +114,7 @@
 
   if (!empty($_POST['lgsl_check_updates']))
   {
-    $context = stream_context_create(
-      array(
-        "http" => array(
-          "header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
-        )
-      )
-    );
+    $context = stream_context_create(["http" => ["header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"]]);
     $lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/branches/master", false, $context);
     $buffer1 = json_decode($lgsl_fp, true);
 
@@ -158,43 +148,6 @@
           </div>
         </div>
       </div>
-      <style>
-        .inlined {
-          display: inline-block;
-          width: 300px;
-          vertical-align: top;
-        }
-        .tt{
-          margin: auto;
-          width: 610px;
-        }
-        .tt > .inlined:nth-child(2) {
-          text-align: end;
-        }
-        .inlined > div > div:first-child {
-          height: 46px;
-          overflow-y: auto;
-        }
-        ::-webkit-scrollbar-thumb {
-          background-color: gray;
-        }
-
-        ::-webkit-scrollbar {
-          width: 6px;
-          background: #3e3e3e;
-        }
-        @media(max-width: 414px){
-          .inlined {
-            display: block;
-            width: 100%;
-            vertical-align: top;
-          }
-          .tt{
-            width: auto;
-            padding: 7px;
-          }
-        }
-      </style>
     ';
 
     $output .= "
@@ -226,7 +179,7 @@
         echo "Allowed only .jpg and .gif extensions.\n";
       }
     }
-    $server_list = lgsl_query_group( array( "request" => "s" ) );
+    $server_list = lgsl_query_group(["request" => "s"]);
 
     $output .= "
     <div style='padding: 5px;'>
@@ -283,7 +236,7 @@
         <textarea name='form_list' cols='90' rows='30' wrap='off' spellcheck='false' style='width:95%; height:500px; font-size:1.2em; font-family:courier new, monospace'>\r\n";
 
 //---------------------------------------------------------+
-        $mysqli_result = $db->escape_string("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
+        $mysqli_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC;");
 
         foreach ($mysqli_result as $mysqli_row) {
           $output .=
@@ -450,11 +403,11 @@
     global $lgsl_config;
     return "
     <div style='text-align:center; line-height:1em; font-size:1em;'>
-      <br /><br />
+      <i class='spacer'></i>
       <a href='https://github.com/tltneon/lgsl/wiki'>[ LGSL ONLINE WIKI ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB ]</a>
-      <br /><br />
+      <i class='spacer'></i>
       {$lgsl_config['text']['faq']}
-      <br /><br />
+      <i class='spacer'></i>
       <table cellspacing='10' cellpadding='0' style='border:1px solid; margin:auto; text-align:left'>
         <tr>
           <td> <a href='http://php.net/fsockopen'>FSOCKOPEN</a> </td>
@@ -487,8 +440,7 @@
           <td> ( {$lgsl_config['text']['zli']} ) </td>
         </tr>
       </table>
-      <br /><br />
-      <br /><br />
+      <i class='spacer'></i><i class='spacer'></i>
     </div>";
   }
 

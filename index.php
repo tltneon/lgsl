@@ -72,6 +72,7 @@
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta http-equiv='content-style-type' content='text/css' />
     <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style']; ?>' type='text/css' />
+		<?php echo ($lgsl_config['locations'] ? "<link rel='stylesheet' href='lgsl_files/other/_lgsl_locations.css' type='text/css' />" : ""); ?>
     <?php echo ($lgsl_config['autoreload'] ? "<META HTTP-EQUIV='REFRESH' CONTENT=" . ($lgsl_config['cache_time'] + 1) . " />" : ""); ?>
   </head>
 
