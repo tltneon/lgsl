@@ -415,7 +415,7 @@
       $protocol = $this->lgsl_connection_type($this->_server->get_type());
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
-				$status = call_user_func(array($this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"), $this->_server->get_type());
+				$status = call_user_func([$this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"], $this->_server->get_type());
 			}
       $this->_server->set_status($status);
 			$this->_lgsl_fp->close();
@@ -3768,7 +3768,7 @@
         curl_setopt($this->_stream, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($this->_stream, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($this->_stream, CURLOPT_CONNECTTIMEOUT, $lgsl_config['timeout']);
-        curl_setopt($this->_stream, CURLOPT_TIMEOUT, 3);
+        curl_setopt($this->_stream, CURLOPT_TIMEOUT, 1);
         curl_setopt($this->_stream, CURLOPT_HTTPHEADER, ['Accept: application/json']);
       } else {
         $this->_stream = @fsockopen("{$this->_protocol}://{$server->get_ip()}", $server->get_q_port(), $errno, $errstr, 1);

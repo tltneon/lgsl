@@ -165,11 +165,11 @@
       $game_id = @makeImage($server->game_icon(), 16, 16);                              // create game icon
       imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                           // place game icon
 
-      /*$loc_id = @makeImage("lgsl_files\other\locations.gif", 224, 198);    //$server->getLocation()                      // create location icon
+      $loc_id = @makeImage("lgsl_files\other\locations.gif", 224, 198);              // create location icon
 			$result = imagecreatetruecolor(16, 11);
-			$posX = 0; $posY = 33;
-			imagecopyresampled($result, $loc_id, 0, 0, $posX, $posY, 16, 11, 16, 11);
-      imagecopy($im, $result, $w-36, $h-13, 0, 0, 16, 11); */                          // place location icon
+			$pos = LGSL::locationCoords($server->getLocation());
+			imagecopyresampled($result, $loc_id, 0, 0, $pos[0], $pos[1], 16, 11, 16, 11);
+      imagecopy($im, $result, $w-36, $h-13, 0, 0, 16, 11);                           // place location icon
 
       //imagestringup($im, 2, 2, $h - 16 - 8, ucfirst($server['s']['game']), $color_nm);
       imagefilledrectangle($im, 17, 0, 20, $h, $border);

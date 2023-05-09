@@ -92,7 +92,7 @@
         $total['playersmax'] += $server->get_players_count('max');
 
         $total['servers']++;
-        if (in_array($server->get_status(), array(self::ONLINE, self::PASSWORDED))) {
+        if (in_array($server->get_status(), [self::ONLINE, self::PASSWORDED])) {
           $total['servers_online']++;
         } else {
           $total['servers_offline']++;
@@ -106,6 +106,63 @@
 		}
 		static public function removeChars($s) {
 			return preg_replace('/[\x00-\x01]/', '', $s);
+		}
+		static public function timer($action) {
+			global $lgsl_config, $lgsl_timer;
+
+			if (!$lgsl_timer) {
+				$microtime  = microtime();
+				$microtime  = explode(' ', $microtime);
+				$microtime  = $microtime[1] + $microtime[0];
+				$lgsl_timer = $microtime - 0.01;
+			}
+
+			$time_limit = intval($lgsl_config['live_time']);
+			$time_php   = ini_get("max_execution_time");
+
+			if ($time_limit > $time_php) {
+				@set_time_limit($time_limit + 5);
+
+				$time_php = ini_get("max_execution_time");
+
+				if ($time_limit > $time_php) {
+					$time_limit = $time_php - 5;
+				}
+			}
+
+			if ($action == "limit") {
+				return $time_limit;
+			}
+
+			$microtime  = microtime();
+			$microtime  = explode(' ', $microtime);
+			$microtime  = $microtime[1] + $microtime[0];
+			$time_taken = $microtime - $lgsl_timer;
+
+			if ($action == "check") {
+				return $time_taken > $time_limit;
+			} else {
+				return round($time_taken, 2);
+			}
+		}
+		static public function locationCoords($code) {
+			$a = ["AD"=>[0,0],"AE"=>[16,0],"AF"=>[32,0],"AG"=>[48,0],"AI"=>[64,0],"AL"=>[80,0],"AM"=>[96,0],"AN"=>[112,0],"AO"=>[128,0],"AR"=>[144,0],"AS"=>[160,0],"AT"=>[176,0],"AU"=>[192,0],"AW"=>[0,11],"AX"=>[16,11],"AZ"=>[32,11],
+						"BA"=>[48,11],"BB"=>[64,11],"BD"=>[80,11],"BE"=>[96,11],"BF"=>[112,11],"BG"=>[128,11],"BH"=>[144,11],"BI"=>[160,11],"BJ"=>[176,11],"BM"=>[192,11],"BN"=>[0,22],"BO"=>[16,22],"BR"=>[32,22],"BS"=>[48,22],"BT"=>[64,22],"BV"=>[80,22],
+						"BW"=>[96,22],"BY"=>[112,22],"BZ"=>[128,22],"CA"=>[144,22],"CC"=>[160,22],"CD"=>[176,22],"CF"=>[192,22],"CG"=>[0,33],"CH"=>[16,33],"CI"=>[32,33],"CK"=>[48,33],"CL"=>[64,33],"CM"=>[80,33],"CN"=>[96,33],"CO"=>[112,33],"CR"=>[128,33],
+						"CS"=>[144,33],"CU"=>[160,33],"CV"=>[176,33],"CX"=>[192,33],"CY"=>[0,44],"CZ"=>[16,44],"DE"=>[32,44],"DJ"=>[48,44],"DK"=>[64,44],"DM"=>[80,44],"DO"=>[96,44],"DZ"=>[112,44],"EC"=>[128,44],"EE"=>[144,44],"EG"=>[160,44],"EH"=>[176,44],
+						"ER"=>[192,44],"ES"=>[0,55],"ET"=>[16,55],"EU"=>[32,55],"FI"=>[48,55],"FJ"=>[64,55],"FK"=>[80,55],"FM"=>[96,55],"FO"=>[112,55],"FR"=>[128,55],"GA"=>[144,55],"GB"=>[160,55],"GD"=>[176,55],"GE"=>[192,55],"GF"=>[0,66],"GH"=>[16,66],
+						"GI"=>[32,66],"GL"=>[48,66],"GM"=>[64,66],"GN"=>[80,66],"GP"=>[96,66],"GQ"=>[112,66],"GR"=>[128,66],"GS"=>[144,66],"GT"=>[160,66],"GU"=>[176,66],"GW"=>[192,66],"GY"=>[0,77],"HK"=>[16,77],"HM"=>[32,77],"HN"=>[48,77],"HR"=>[64,77],
+						"HT"=>[80,77],"HU"=>[96,77],"ID"=>[112,77],"IE"=>[128,77],"IL"=>[144,77],"IN"=>[160,77],"IO"=>[176,77],"IQ"=>[192,77],"IR"=>[0,88],"IS"=>[16,88],"IT"=>[32,88],"JM"=>[48,88],"JO"=>[64,88],"JP"=>[80,88],"KE"=>[96,88],"KG"=>[112,88],
+						"KH"=>[128,88],"KI"=>[144,88],"KM"=>[160,88],"KN"=>[176,88],"KP"=>[192,88],"KR"=>[0,99],"KW"=>[16,99],"KY"=>[32,99],"KZ"=>[48,99],"LA"=>[64,99],"LB"=>[80,99],"LC"=>[96,99],"LI"=>[112,99],"LK"=>[128,99],"LR"=>[144,99],"LS"=>[160,99],
+						"LT"=>[176,99],"LU"=>[192,99],"LV"=>[0,110],"LY"=>[16,110],"MA"=>[32,110],"MC"=>[48,110],"MD"=>[64,110],"ME"=>[80,110],"MG"=>[96,110],"MH"=>[112,110],"MK"=>[128,110],"ML"=>[144,110],"MM"=>[160,110],"MN"=>[176,110],"MO"=>[192,110],
+						"MP"=>[0,121],"MQ"=>[16,121],"MR"=>[32,121],"MS"=>[48,121],"MT"=>[64,121],"MU"=>[96,121],"MV"=>[112,121],"MW"=>[128,121],"MX"=>[144,121],"MY"=>[160,121],"MZ"=>[176,121],"NA"=>[192,121],"NC"=>[0,132],"NE"=>[16,132],"NF"=>[32,132],
+						"NG"=>[48,132],"NI"=>[64,132],"NL"=>[80,132],"NO"=>[96,132],"NP"=>[112,132],"NR"=>[128,132],"NU"=>[144,132],"NZ"=>[160,132],"OFF"=>[176,132],"OM"=>[192,132],"PA"=>[0,143],"PE"=>[16,143],"PF"=>[32,143],"PG"=>[48,143],"PH"=>[64,143],
+						"PK"=>[80,143],"PL"=>[96,143],"PM"=>[112,143],"PN"=>[128,143],"PR"=>[144,143],"PS"=>[160,143],"PT"=>[176,143],"PW"=>[192,143],"PY"=>[0,154],"QA"=>[16,154],"RE"=>[32,154],"RO"=>[48,154],"RS"=>[64,154],"RU"=>[80,154],"RW"=>[96,154],
+						"SA"=>[112,154],"SB"=>[128,154],"SC"=>[144,154],"SD"=>[160,154],"SE"=>[176,154],"SG"=>[192,154],"SH"=>[0,165],"SI"=>[16,165],"SJ"=>[32,165],"SK"=>[48,165],"SL"=>[64,165],"SM"=>[80,165],"SN"=>[96,165],"SO"=>[112,165],"SR"=>[128,165],
+						"ST"=>[144,165],"SV"=>[160,165],"SY"=>[176,165],"SZ"=>[192,165],"TC"=>[0,176],"TD"=>[16,176],"TF"=>[32,176],"TG"=>[48,176],"TH"=>[64,176],"TJ"=>[80,176],"TK"=>[96,176],"TL"=>[112,176],"TM"=>[128,176],"TN"=>[144,176],"TO"=>[160,176],
+						"TR"=>[176,176],"TT"=>[192,176],"TV"=>[0,187],"TW"=>[16,187],"TZ"=>[32,187],"UA"=>[48,187],"UG"=>[64,187],"UK"=>[80,187],"UM"=>[96,187],"US"=>[112,187],"UY"=>[128,187],"UZ"=>[144,187],"VA"=>[160,187],"VC"=>[176,187],"VE"=>[192,187],
+						"VG"=>[208,0],"VI"=>[208,11],"VN"=>[208,22],"VU"=>[208,33],"WF"=>[208,44],"WS"=>[208,55],"XX"=>[208,66],"YE"=>[208,77],"YT"=>[208,88],"ZA"=>[208,99],"ZM"=>[208,110],"ZW"=>[208,121]];
+			return $a[$code];
 		}
   }
 //------------------------------------------------------------------------------------------------------------+
@@ -251,11 +308,11 @@
       $page         = empty($options['page'])         ? ""                               : "LIMIT {$limit} OFFSET " . strval($limit*((int)$options['page'] - 1));
       $status       = empty($options['status'])       ? ""                               : 1;
       $order        = empty($options['order'])        ? ""                               : $options['order'];
-      $sort         = empty($options['sort'])         ? ""                               : (in_array($options['sort'], array('ip', 'name', 'map', 'players')) ? $options['sort'] : "");
+      $sort         = empty($options['sort'])         ? ""                               : (in_array($options['sort'], ['ip', 'name', 'map', 'players']) ? $options['sort'] : "");
       $server_limit = empty($options['limit'])        ? ""                               : $lgsl_config['pagination_lim'];
       $server_limit = empty($random)                  ? $server_limit                    : $random;
 
-                           $mysqli_where   = array("`disabled`=0");
+                           $mysqli_where   = ["`disabled`=0"];
       if ($zone != 0)    { $mysqli_where[] = "FIND_IN_SET('{$zone}',`zone`)"; }
       if ($type != "")   { $mysqli_where[] = "`type`='{$type}'"; }
       if ($game != "")   { $mysqli_where[] = "`game`='{$game}'"; }
@@ -267,15 +324,23 @@
       $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $mysqli_where)." {$sort} {$server_limit} {$page}";
       $mysqli_result = $db->query($mysqli_query);
 
-      $output = array();
+      $output = [];
       foreach ($mysqli_result as $s) {
         $server = new Server();
         $server->from_array($db->lgsl_unserialize_server_data($s));
         $server->validate();
-        
-        if (strpos($request, "c") === FALSE && lgsl_timer("check")) { $request .= "c"; }
-				$server->lgsl_cached_query($request);
-				$db->lgsl_save_cache($server);
+
+				if (!LGSL::requestHas($request, "c") && !LGSL::timer("check")) { // CACHE ONLY REQUEST
+					$needed = "";
+					$time = time();
+					if (LGSL::requestHas($request, "s") && $time > ($server->get_timestamp('s', true) + $lgsl_config['cache_time'])) { $needed .= "s"; }
+					if (LGSL::requestHas($request, "e") && $time > ($server->get_timestamp('e', true) + $lgsl_config['cache_time'])) { $needed .= "e"; }
+					if (LGSL::requestHas($request, "p") && $time > ($server->get_timestamp('p', true) + $lgsl_config['cache_time'])) { $needed .= "p"; }
+					if ($needed) {
+						$server->lgsl_live_query($request);
+						$db->lgsl_save_cache($server);
+					}
+				}
         $output[] = $server;
       }
       return $output;
@@ -311,12 +376,12 @@
     }
     
     function lgsl_unserialize_server_data($data) {
-      $server = array();
-      foreach (array('name', 'game', 'mode', 'map', 'players', 'playersmax') as $i) {
+      $server = [];
+      foreach (['name', 'game', 'mode', 'map', 'players', 'playersmax'] as $i) {
         $server['s'][$i] = $data[$i];
         unset($data[$i]);
       }
-      foreach (array('zone', 'comment') as $i) {
+      foreach (['zone', 'comment'] as $i) {
         $server['o'][$i] = $data[$i];
         unset($data[$i]);
       }
@@ -328,6 +393,7 @@
         $server['b'] = array_merge($server['b'], $cache['b']);
         $server['p'] = $cache['p'];
         if (isset($cache['h'])) $server['h'] = $cache['h'];
+        if (isset($cache['o']['location'])) $server['o']['location'] = $cache['o']['location'];
         $server['s']['cache_time'] = explode("_", $data['cache_time']);
       }
       return $server;
@@ -392,9 +458,9 @@
         $this->validate();
 				if (!LGSL::requestHas($request, "c")) { // CACHE ONLY REQUEST
 					$needed = "";
-					if (LGSL::requestHas($request, "s") && time() > ($this->get_timestamp('s', true)+$lgsl_config['cache_time'])) { $needed .= "s"; }
-					if (LGSL::requestHas($request, "e") && time() > ($this->get_timestamp('e', true)+$lgsl_config['cache_time'])) { $needed .= "e"; }
-					if (LGSL::requestHas($request, "p") && time() > ($this->get_timestamp('p', true)+$lgsl_config['cache_time'])) { $needed .= "p"; }
+					if (LGSL::requestHas($request, "s") && time() > ($this->get_timestamp('s', true) + $lgsl_config['cache_time'])) { $needed .= "s"; }
+					if (LGSL::requestHas($request, "e") && time() > ($this->get_timestamp('e', true) + $lgsl_config['cache_time'])) { $needed .= "e"; }
+					if (LGSL::requestHas($request, "p") && time() > ($this->get_timestamp('p', true) + $lgsl_config['cache_time'])) { $needed .= "p"; }
 					if ($needed) {
 						$this->lgsl_live_query($request);
 						$db->lgsl_save_cache($this);
@@ -420,11 +486,11 @@
             }
           }
           $this->_history = array_values($this->_history);
-          array_push($this->_history, array(
+          array_push($this->_history, [
             "s" => $this->get_status() != self::OFFLINE,
             "t" => time(),
             "p" => $this->get_players_count('active')
-          ));
+          ]);
         }
       }
 
@@ -773,7 +839,36 @@
 			return $s === self::PASSWORDED or $s === self::ONLINE;
 		}
 		public function queryLocation() {
+			global $lgsl_config;
+      if ($lgsl_config['locations'] !== 1 && $lgsl_config['locations'] !== true) { return $lgsl_config['locations']; }
+      $ip = gethostbyname($this->get_ip());  
+      if (long2ip(ip2long($ip)) === "255.255.255.255") { return "XX"; }
+  
+      $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode";
+  
+      if (function_exists('curl_init') && function_exists('curl_setopt') && function_exists('curl_exec')) {
+        $lgsl_curl = curl_init();
+  
+        curl_setopt($lgsl_curl, CURLOPT_HEADER, 0);
+        curl_setopt($lgsl_curl, CURLOPT_TIMEOUT, 2);
+        curl_setopt($lgsl_curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($lgsl_curl, CURLOPT_CONNECTTIMEOUT, 2);
+        curl_setopt($lgsl_curl, CURLOPT_URL, $url);
+  
+        $answer = curl_exec($lgsl_curl);
+        $answer = json_decode($answer, true);
+        $location = (isset($answer["countryCode"]) ? $answer["countryCode"] : "XX");
+  
+        if (curl_error($lgsl_curl)) { $location = "XX"; }
+  
+        curl_close($lgsl_curl);
+      } else {
+        $location = @file_get_contents($url);
+      }
+  
+      if (strlen($location) != 2) { $location = "XX"; }
 			
+      return $location;
 		}
   }
   function lgsl_query_cached($type, $ip, $c_port, $q_port, $s_port, $request, $id = NULL) 
@@ -1013,8 +1108,7 @@
   function lgsl_timer($action) {
     global $lgsl_config, $lgsl_timer;
 
-    if (!$lgsl_timer)
-    {
+    if (!$lgsl_timer) {
       $microtime  = microtime();
       $microtime  = explode(' ', $microtime);
       $microtime  = $microtime[1] + $microtime[0];
@@ -1024,20 +1118,17 @@
     $time_limit = intval($lgsl_config['live_time']);
     $time_php   = ini_get("max_execution_time");
 
-    if ($time_limit > $time_php)
-    {
+    if ($time_limit > $time_php) {
       @set_time_limit($time_limit + 5);
 
       $time_php = ini_get("max_execution_time");
 
-      if ($time_limit > $time_php)
-      {
+      if ($time_limit > $time_php) {
         $time_limit = $time_php - 5;
       }
     }
 
-    if ($action == "limit")
-    {
+    if ($action == "limit") {
       return $time_limit;
     }
 
