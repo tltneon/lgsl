@@ -72,7 +72,7 @@
 
           <tr>
             <td> {$lgsl_config['text']['adr']} </td>
-            <td> <input type='text' name='form_ip' value='".lgsl_string_html($ip)."' size='15' maxlength='128' /> </td>
+            <td> <input type='text' name='form_ip' value='".lgsl_string_html($ip)."' onpaste='javascript:setTimeout(function(){const v=event.srcElement.value.split(\":\")[1];document.querySelector(\"input[name=form_ip]\").value=event.srcElement.value.trim();document.querySelector(\"input[name=form_c_port]\").value=v;document.querySelector(\"input[name=form_q_port]\").value=v;});' size='15' maxlength='128' /> </td>
           </tr>
 
           <tr>
@@ -125,12 +125,9 @@
           $output .= "
             <div class='annotation'>";
 
-              if ($mysql_query['disabled'])
-              {
+              if ($mysql_query['disabled']) {
                 $output .= $lgsl_config['text']['aaa'];
-              }
-              else
-              {
+              } else {
                 $output .= $lgsl_config['text']['aan'];
               }
 
@@ -140,10 +137,10 @@
 
         //-----------------------------------------------------------------------------------------------------------+
 
-          $server = lgsl_query_live($type, $ip, $c_port, $q_port, $s_port, "s");
-          $server = lgsl_server_html($server);
+          $server = new Server(array("type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port));
+					$server->lgsl_live_query("s");
 
-          if ($server['b']['status']) {
+          if ($server->get_status() != Server::OFFLINE) {
           //-----------------------------------------------------------------------------------------------------------+
 
             if (!empty($_POST['lgsl_submit_add'])) {
@@ -168,7 +165,6 @@
               <br />
               </div>";
             } else {
-              $status = $lgsl_config['text'][lgsl_text_status($server['b']['status'], $server['s']['password'])];
 
             //-----------------------------------------------------------------------------------------------------------+
 
@@ -181,12 +177,12 @@
                 </div>
 
                 <table class='details_table' style='text-align: center; margin: auto; max-width: 500px;'>
-                  <tr> <td> <b> {$lgsl_config['text']['adr']} </b> </td> <td> {$ip}:{$c_port}                                          </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['sts']} </b> </td> <td> {$status}                                   </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['nam']} </b> </td> <td> {$server['s']['name']}                                   </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td> {$server['s']['game']}                                   </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td> {$server['s']['map']}                                    </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['plr']} </b> </td> <td> {$server['s']['players']} / {$server['s']['playersmax']} </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['adr']} </b> </td> <td> {$server->get_ip()}:{$server->get_c_port()}                                          </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['sts']} </b> </td> <td> {$lgsl_config['text'][$server->get_status()]}                                   </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['nam']} </b> </td> <td> {$server->get_name()}                                   </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td> {$server->get_game()}                                   </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td> {$server->get_map()}                                    </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['plr']} </b> </td> <td> {$server->get_players_count('active')} / {$server->get_players_count('max')} </td> </tr>
                 </table>
 
                 <div>

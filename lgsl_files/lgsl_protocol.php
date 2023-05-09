@@ -414,8 +414,9 @@
       $this->_server->set_timestamp(implode('', $this->_lgsl_need), time());
       $protocol = $this->lgsl_connection_type($this->_server->get_type());
 			$this->_lgsl_fp = new Stream($protocol);
-			$this->_lgsl_fp->open($this->_server);
-      $status = call_user_func(array($this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"), $this->_server->get_type());
+			if ($status = $this->_lgsl_fp->open($this->_server)) {
+				$status = call_user_func(array($this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"), $this->_server->get_type());
+			}
       $this->_server->set_status($status);
 			$this->_lgsl_fp->close();
     }
@@ -646,7 +647,7 @@
       if (isset($server['e']['mapname'])) {
         $server['s']['map'] = $server['e']['mapname'];
   
-        if (!empty($server['e']['hostname']))    { $server['s']['name'] = $server['e']['hostname']; }
+        if (!empty($server['e']['hostname']))    { $server['s']['name'] = LGSL::removeChars($server['e']['hostname']); }
         if (!empty($server['e']['sv_hostname'])) { $server['s']['name'] = $server['e']['sv_hostname']; }
   
         if (isset($server['e']['password']))   { $server['s']['password']   = $server['e']['password']; }
@@ -656,6 +657,8 @@
         if (!empty($server['e']['gamename']))                                   { $server['s']['game'] = $server['e']['gamename']; }
         if (!empty($server['e']['gameid']) && empty($server['e']['gamename']))  { $server['s']['game'] = $server['e']['gameid']; }
         if (!empty($server['e']['gameid']) && $server['b']['type'] == "bf1942") { $server['s']['game'] = $server['e']['gameid']; }
+				
+				if (!empty($server['e']['gametype'])) { $server['s']['mode'] = $server['e']['gametype']; }
       }
   
       //---------------------------------------------------------+
@@ -787,15 +790,16 @@
       //---------------------------------------------------------+
       //  REFERENCE: http://developer.valvesoftware.com/wiki/Server_Queries
 
+			$xf = "\xFF\xFF\xFF\xFF";
       if ($server['b']['type'] == "halflifewon") {
-        if     ($this->_lgsl_need['s']) { $this->_fp_write("\xFF\xFF\xFF\xFFdetails\x00"); }
-        elseif ($this->_lgsl_need['e']) { $this->_fp_write("\xFF\xFF\xFF\xFFrules\x00");   }
-        elseif ($this->_lgsl_need['p']) { $this->_fp_write("\xFF\xFF\xFF\xFFplayers\x00"); }
+        if     ($this->_lgsl_need['s']) { $this->_fp_write("{$xf}details\x00"); }
+        elseif ($this->_lgsl_need['e']) { $this->_fp_write("{$xf}rules\x00");   }
+        elseif ($this->_lgsl_need['p']) { $this->_fp_write("{$xf}players\x00"); }
       } else {
         $challenge_code = isset($this->_lgsl_need['challenge']) ? $this->_lgsl_need['challenge'] : "\x00\x00\x00\x00";
-        if     ($this->_lgsl_need['s']) { $this->_fp_write("\xFF\xFF\xFF\xFF\x54Source Engine Query\x00" . (isset($this->_lgsl_need['challenge']) ? $challenge_code : "")); }
-        elseif ($this->_lgsl_need['e']) { $this->_fp_write("\xFF\xFF\xFF\xFF\x56{$challenge_code}");                                                                 }
-        elseif ($this->_lgsl_need['p']) { $this->_fp_write("\xFF\xFF\xFF\xFF\x55{$challenge_code}");                                                                 }
+        if     ($this->_lgsl_need['s']) { $this->_fp_write("{$xf}\x54Source Engine Query\x00" . (isset($this->_lgsl_need['challenge']) ? $challenge_code : "")); }
+        elseif ($this->_lgsl_need['e']) { $this->_fp_write("{$xf}\x56{$challenge_code}");                                                                 }
+        elseif ($this->_lgsl_need['p']) { $this->_fp_write("{$xf}\x55{$challenge_code}");                                                                 }
       }
 
       //---------------------------------------------------------+
@@ -823,11 +827,11 @@
         elseif ($this->_lgsl_need['p']) { if ($packet[4] == "m" || $packet[4] == "I") { continue; } }
         //---------------------------------------------------------------------------------------------------------------------------------+
 
-        if     (substr($packet, 0,  5) == "\xFF\xFF\xFF\xFF\x41") { $this->_lgsl_need['challenge'] = substr($packet, 5, 4); return call_user_func(array($this, "lgsl_query_05")); } // REPEAT WITH GIVEN CHALLENGE CODE
-        elseif (substr($packet, 0,  4) == "\xFF\xFF\xFF\xFF")     { $packet_total = 1;                     $packet_type = 1;       } // SINGLE PACKET - HL1 OR HL2
-        elseif (substr($packet, 9,  4) == "\xFF\xFF\xFF\xFF")     { $packet_total = ord($packet[8]) & 0xF; $packet_type = 2;       } // MULTI PACKET  - HL1 ( TOTAL IS LOWER NIBBLE OF BYTE )
-        elseif (substr($packet, 12, 4) == "\xFF\xFF\xFF\xFF")     { $packet_total = ord($packet[8]);       $packet_type = 3;       } // MULTI PACKET  - HL2
-        elseif (substr($packet, 18, 2) == "BZ")                   { $packet_total = ord($packet[8]);       $packet_type = 4;       } // BZIP PACKET   - HL2
+        if     (substr($packet, 0,  5) == "{$xf}\x41") { $this->_lgsl_need['challenge'] = substr($packet, 5, 4); return call_user_func(array($this, "lgsl_query_05")); } // REPEAT WITH GIVEN CHALLENGE CODE
+        elseif (substr($packet, 0,  4) == "{$xf}")     { $packet_total = 1;                     $packet_type = 1;       } // SINGLE PACKET - HL1 OR HL2
+        elseif (substr($packet, 9,  4) == "{$xf}")     { $packet_total = ord($packet[8]) & 0xF; $packet_type = 2;       } // MULTI PACKET  - HL1 ( TOTAL IS LOWER NIBBLE OF BYTE )
+        elseif (substr($packet, 12, 4) == "{$xf}")     { $packet_total = ord($packet[8]);       $packet_type = 3;       } // MULTI PACKET  - HL2
+        elseif (substr($packet, 18, 2) == "BZ")        { $packet_total = ord($packet[8]);       $packet_type = 4;       } // BZIP PACKET   - HL2
 
         $packet_count ++;
         $packet_temp[] = $packet;
@@ -870,7 +874,7 @@
 
       $header = $this->lgsl_cut_byte($buffer, 4);
 
-      if ($header != "\xFF\xFF\xFF\xFF") { return FALSE; } // SOMETHING WENT WRONG
+      if ($header != $xf) { return FALSE; } // SOMETHING WENT WRONG
 
       //---------------------------------------------------------+
 
@@ -899,7 +903,7 @@
         }
         $server['e']['tags']        = $this->lgsl_cut_string($buffer);
 
-        if ($server['s']['game'] == 'rust') {
+        if ($server['s']['game'] === 'rust') {
           preg_match('/cp\d{1,3}/', $server['e']['tags'], $e);
           $server['s']['players'] = substr($e[0], 2);
           preg_match('/mp\d{1,3}/', $server['e']['tags'], $e);
@@ -908,10 +912,10 @@
       }
       elseif ($response_type == "m") { // HALF-LIFE 1 INFO
         $server_ip                  = $this->lgsl_cut_string($buffer);
-        $server['s']['name']        = $this->lgsl_cut_string($buffer);
+        $server['s']['name']        = LGSL::removeChars($this->lgsl_cut_string($buffer));
         $server['s']['map']         = $this->lgsl_cut_string($buffer);
         $server['s']['game']        = $this->lgsl_cut_string($buffer);
-        $server['e']['description'] = $this->lgsl_cut_string($buffer);
+        $server['e']['description'] = LGSL::removeChars($this->lgsl_cut_string($buffer));
         $server['s']['players']     = ord($this->lgsl_cut_byte($buffer, 1));
         $server['s']['playersmax']  = ord($this->lgsl_cut_byte($buffer, 1));
         $server['e']['netcode']     = ord($this->lgsl_cut_byte($buffer, 1));
@@ -3271,7 +3275,7 @@
           $part = $this->_fp_read(4096);
           if ($part && substr($part, 0, 5) != 'error') { $buffer .= $part; } else { break; }
         }
-        $lvl = array();
+        $lvl = [];
         $server['e']['channels'] = "<style>.gray{color:gray;}</style><div style='text-align: left !important;'>";
         while ($items = $this->lgsl_cut_string($buffer, 0, '|')) {
           $cid = str_pad($this->lgsl_cut_string($items, 4, ' '), 5, '0', STR_PAD_LEFT);
@@ -3280,7 +3284,7 @@
           $name = $this->lgsl_cut_string($items, 0, ' ');
           $chars = "";
           if ((int) $pid == 0) {
-            $lvl = array($cid);
+            $lvl = [$cid];
           } else {
             $i = count($lvl)-1;
             while ($i > -1) {
@@ -3293,7 +3297,7 @@
               $i--;
             }
             if ($i == -1)
-              $lvl = array($cid);
+              $lvl = [$cid];
           }
           $server['e']['channels'] .= "<span class='gray'>{$chars}</span> " . preg_replace("/(\[\*?[clr]spacer\d{0,10}\])/", "", $this->lgsl_unescape($name)) . "\n";
         }
@@ -3377,10 +3381,17 @@
       $server['s']['players'] = $buffer['approximate_presence_count'];
       $server['s']['playersmax'] = $buffer['approximate_member_count'];
       $server['e']['id'] = $buffer['guild']['id'];
+      $server['e']['expires_at'] = $buffer['expires_at'] ? $buffer['expires_at'] : '--';
+      $server['e']['members'] = $buffer['approximate_member_count'];
+      $server['e']['premium_subscriptions'] = $buffer['guild']['premium_subscription_count'];
       if($buffer['guild']['description'])
         $server['e']['description'] = $buffer['guild']['description'];
       if($buffer['guild']['welcome_screen'] && $buffer['guild']['welcome_screen']['description'])
         $server['e']['description'] = $buffer['guild']['welcome_screen']['description'];
+      if($buffer['guild']['welcome_screen'] && $buffer['guild']['welcome_screen']['welcome_channels'])
+        $server['e']['welcome_channels'] = array_reduce($buffer['guild']['welcome_screen']['welcome_channels'], function($a, $c) {
+					return "{$a}\n{$c['emoji_name']} {$c['description']}";
+				}, "");
       $server['e']['features'] = implode(', ', $buffer['guild']['features']);
       $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
       if (isset($buffer['inviter'])) {
@@ -3399,7 +3410,7 @@
   
         if (isset($buffer['channels'])) {
           foreach ($buffer['channels'] as $key => $value) {
-            $server['e']['channel'.$key] = $value['name'];
+            $server['e']["channel{$key}"] = $value['name'];
           }
         }
   
@@ -3752,13 +3763,13 @@
 		public function open(&$server) {
       global $lgsl_config;
 			if ($this->_isHttp()) {
-        if (!function_exists('curl_init') || !function_exists('curl_setopt') || !function_exists('curl_exec')) return FALSE;
+        if (!function_exists('curl_init') || !function_exists('curl_setopt') || !function_exists('curl_exec')) return false;
         $this->_stream = curl_init('');
         curl_setopt($this->_stream, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($this->_stream, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($this->_stream, CURLOPT_CONNECTTIMEOUT, $lgsl_config['timeout']);
         curl_setopt($this->_stream, CURLOPT_TIMEOUT, 3);
-        curl_setopt($this->_stream, CURLOPT_HTTPHEADER, array('Accept: application/json'));
+        curl_setopt($this->_stream, CURLOPT_HTTPHEADER, ['Accept: application/json']);
       } else {
         $this->_stream = @fsockopen("{$this->_protocol}://{$server->get_ip()}", $server->get_q_port(), $errno, $errstr, 1);
         if (!$this->_stream) {
@@ -3769,6 +3780,7 @@
         stream_set_timeout($this->_stream, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
         stream_set_blocking($this->_stream, true);
       }
+			return true;
 		}
 		public function read($length = 4096) {
       if ($this->_isHttp()) {
@@ -3787,10 +3799,11 @@
         fwrite($this->_stream, $data);
       }
 		}
-		public function &get_stream() {
-			return $_stream;
+		public function &getStream() {
+			return $this->_stream;
 		}
 		public function close() {
+			if (!$this->_stream) return;
       if ($this->_isHttp()) {
         curl_close($this->_stream);
       } else {
@@ -3810,7 +3823,7 @@
       exit("LGSL PROBLEM: INVALID IP OR HOSTNAME");
     }
 
-    $lgsl_protocol_list = lgsl_protocol_list();
+    $lgsl_protocol_list = Protocol::lgsl_protocol_list();
 
     if (!isset($lgsl_protocol_list[$type]))
     {

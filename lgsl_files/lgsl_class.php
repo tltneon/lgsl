@@ -101,6 +101,12 @@
 
       return $total;
     }
+		static public function requestHas($request, $type) {
+			return stripos($request, $type) !== false;
+		}
+		static public function removeChars($s) {
+			return preg_replace('/[\x00-\x01]/', '', $s);
+		}
   }
 //------------------------------------------------------------------------------------------------------------+
   class Database {
@@ -373,7 +379,7 @@
       $this->_history = [];
     }
     
-    public function lgsl_cached_query($lgsl_need = 'sep') {
+    public function lgsl_cached_query($request = 'sep') {
       $db = LGSL::db();
       if ($this->_base['id']) {
         $result = $db->get_server_by_id($this->_base['id']);
@@ -384,26 +390,25 @@
 				global $lgsl_config;
         $this->from_array($result);
         $this->validate();
-				$needed = "";
-				if (strpos($lgsl_need, "c") === FALSE) // CACHE ONLY REQUEST
-				{
-					if (strpos($lgsl_need, "s") !== FALSE && time() > ($this->get_timestamp('s', true)+$lgsl_config['cache_time'])) { $needed .= "s"; }
-					if (strpos($lgsl_need, "e") !== FALSE && time() > ($this->get_timestamp('e', true)+$lgsl_config['cache_time'])) { $needed .= "e"; }
-					if (strpos($lgsl_need, "p") !== FALSE && time() > ($this->get_timestamp('p', true)+$lgsl_config['cache_time'])) { $needed .= "p"; }
+				if (!LGSL::requestHas($request, "c")) { // CACHE ONLY REQUEST
+					$needed = "";
+					if (LGSL::requestHas($request, "s") && time() > ($this->get_timestamp('s', true)+$lgsl_config['cache_time'])) { $needed .= "s"; }
+					if (LGSL::requestHas($request, "e") && time() > ($this->get_timestamp('e', true)+$lgsl_config['cache_time'])) { $needed .= "e"; }
+					if (LGSL::requestHas($request, "p") && time() > ($this->get_timestamp('p', true)+$lgsl_config['cache_time'])) { $needed .= "p"; }
 					if ($needed) {
-						$this->lgsl_live_query($lgsl_need);
+						$this->lgsl_live_query($request);
 						$db->lgsl_save_cache($this);
 					}
 				}
       }
     }
-    public function lgsl_live_query($lgsl_need = 'sep') {
+    public function lgsl_live_query($request = 'seph') {
       $this->set_queried();
-      $protocol = new Protocol($this, $lgsl_need);
+      $protocol = new Protocol($this, $request);
       $protocol->query();
 
       global $lgsl_config;
-      if ($lgsl_config['history'] and $this->get_status() != self::PENDING) {
+      if ($lgsl_config['history'] and LGSL::requestHas($request, "h") and $this->get_status() != self::PENDING) {
         $last = end($this->_history);
         if (!$last or time() - $last['t'] >= 60 * 15) { // RECORD IF 15 MINS IS PASSED
           $history_limit = $lgsl_config['history_hours'] * 60 * 60;
@@ -418,13 +423,13 @@
           array_push($this->_history, array(
             "s" => $this->get_status() != self::OFFLINE,
             "t" => time(),
-            "p" => (int) $this->get_players_count('active')
+            "p" => $this->get_players_count('active')
           ));
         }
       }
 
       if ($lgsl_config['locations'] && empty($this->_other['location'])) {
-        $this->_other['location'] = $lgsl_config['locations'] ? LGSL::query_location($this->get_ip()) : "";
+        $this->_other['location'] = $lgsl_config['locations'] ? $this->queryLocation() : "";
       }
 
       $this->validate();
@@ -492,7 +497,8 @@
     public function get_mode() {
       return $this->_server['mode'] ? $this->_server['mode'] : 'none';
     }
-    public function get_map() {
+    public function get_map($formatted = false) {
+			if ($formatted) return $this->_server['map'] ? preg_replace("/[^a-z0-9_]/", "_", strtolower($this->_server['map'])) : "--";
       return $this->_server['map'] ? $this->_server['map'] : "--";
     }
     public function get_players() {
@@ -506,10 +512,7 @@
     }
     public function get_name($html = true) {
       if ($this->get_pending()) {
-        return "waiting to be queried";
-      }
-      if ($html) {
-        return lgsl_string_html($this->_server['name']);
+				return "--";
       }
       return $this->_server['name'];
     }
@@ -551,7 +554,7 @@
 		public function getPlayerNames() {
 			if ($this->get_players_count('active') > 0) {
 				return array_reduce($this->get_players(), function($a, $c) {
-					array_push($a, $c['name']);
+					$a[] = $c['name'];
 					return $a;
 				}, []);
 			}
@@ -606,7 +609,7 @@
 				}
     
         // INSERT DATA INTO STATIC LINK - CONVERT SPECIAL CHARACTERS - RETURN
-        return htmlentities(str_replace(array("{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}"), array($this->get_ip(), $this->get_c_port(), $this->get_q_port(), $s_port), $link), ENT_QUOTES);
+        return htmlentities(str_replace(["{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}"], [$this->get_ip(), $this->get_c_port(), $this->get_q_port(), $s_port], $link), ENT_QUOTES);
     }
     public function map_password_image() {
       global $lgsl_url_path;
@@ -765,6 +768,13 @@
       }
       return self::OFFLINE;
     }
+		public function isOnline() {
+			$s = $this->get_status();
+			return $s === self::PASSWORDED or $s === self::ONLINE;
+		}
+		public function queryLocation() {
+			
+		}
   }
   function lgsl_query_cached($type, $ip, $c_port, $q_port, $s_port, $request, $id = NULL) 
   {

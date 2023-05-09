@@ -27,9 +27,9 @@
 
   if (!function_exists("fsockopen") && !$lgsl_config['feed']['method']) {
     if ((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec"))) {
-      $output = "<div class='center'><i class='spacer'></i><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><i class='spacer'></i></div>".lgsl_help_info(); return;
+      $output = "<div class='center'><i class='space'></i><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><i class='space'></i></div>".lgsl_help_info(); return;
     } else {
-      $output = "<div class='center'><i class='spacer'></i><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><i class='spacer'></i></div>".lgsl_help_info(); return;
+      $output = "<div class='center'><i class='space'></i><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><i class='space'></i></div>".lgsl_help_info(); return;
     }
   }
 
@@ -47,7 +47,7 @@
       $servers = array();
       $mysqli_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`");
       foreach ($mysqli_result as $mysqli_row) {
-        $servers["{$mysqli_row['type']}:{$mysqli_row['ip']}:{$mysqli_row['q_port']}"] = array($mysqli_row['status'], $mysqli_row['cache'], $mysqli_row['cache_time']);
+        $servers["{$mysqli_row['type']}:{$mysqli_row['ip']}:{$mysqli_row['q_port']}"] = [$mysqli_row['status'], $mysqli_row['cache'], $mysqli_row['cache_time']];
       }
     }
 
@@ -84,7 +84,7 @@
       $comment    = $db->escape_string(           trim($_POST['form_comment'][$form_key]));
 
       // CACHE INDEXED BY TYPE:IP:Q_PORT SO IF THEY CHANGE THE CACHE IS IGNORED
-      list($status, $cache, $cache_time) = isset($servers["{$type}:{$ip}:{$q_port}"]) ? $servers["{$type}:{$ip}:{$q_port}"] : array("0", "", "");
+      list($status, $cache, $cache_time) = isset($servers["{$type}:{$ip}:{$q_port}"]) ? $servers["{$type}:{$ip}:{$q_port}"] : ["0", "", ""];
 
       $status     = $db->escape_string($status);
       $cache      = $db->escape_string($cache);
@@ -112,49 +112,49 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  if (!empty($_POST['lgsl_check_updates']))
-  {
+  if (!empty($_POST['lgsl_check_updates'])) {
     $context = stream_context_create(["http" => ["header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"]]);
     $lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/branches/master", false, $context);
     $buffer1 = json_decode($lgsl_fp, true);
+		$date1 = date($lgsl_config['text']['tzn'], strtotime($buffer1["commit"]["commit"]["author"]["date"]));
 
     $lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/releases/latest", false, $context);
     $buffer2 = json_decode($lgsl_fp, true);
+		$date2 = date($lgsl_config['text']['tzn'], strtotime($buffer2["published_at"]));
+		
+		
 
-    $output .= '
-      <div class="tt">
-        <div class="inlined">
+    $output .= "
+      <div class='tt'>
+        <div class='inlined'>
           <div>
             <h4>Latest commit (beta)</h4>
           </div>
           <div>
-            <div>'.$buffer1["commit"]["commit"]["message"].'</div>
-            <tt>'.date("Y-m-d H:i:s", strtotime($buffer1["commit"]["commit"]["author"]["date"])).'</tt>
+            <div>{$buffer1["commit"]["commit"]["message"]}</div>
+            <tt>{$date1}</tt>
             <div>
-              <a href="https://github.com/tltneon/lgsl/archive/master.zip">Download</a> or <a href="'.$buffer1["commit"]["html_url"].'">Changes</a>
+              <a href='https://github.com/tltneon/lgsl/archive/master.zip'>Download</a> / <a href='{$buffer1["commit"]["html_url"]}'>Changes</a>
             </div>
           </div>
         </div>
-        <div class="inlined">
+        <div class='inlined'>
           <div>
             <h4>Latest release (stable)</h4>
           </div>
           <div>
-            <div>'.$buffer2["name"].'</div>
-            <tt>'.date("Y-m-d H:i:s", strtotime($buffer2["published_at"])).'</tt>
+            <div>{$buffer2["name"]}</div>
+            <tt>{$date2}</tt>
             <div>
-              <a href="'.$buffer2["assets"][0]["browser_download_url"].'">Download</a> or <a href="'.$buffer2["html_url"].'">Changelog</a>
+              <a href='{$buffer2["assets"][0]["browser_download_url"]}'>Download</a> / <a href='{$buffer2["html_url"]}'>Changes</a>
             </div>
           </div>
         </div>
       </div>
-    ';
-
-    $output .= "
-    <form method='post' action='' style='padding-top: 40px; text-align: center;'>
-      <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-      <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
-    </form>";
+			<form method='post' action='' style='padding-top: 40px; text-align: center;'>
+				<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+				<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
+			</form>";
 
     return;
   }
@@ -167,10 +167,10 @@
       if ($ext === "jpg" || $ext === "gif") {
         $uploadfolder = preg_replace("/[^a-z0-9_\/]/", "_", strtolower("lgsl_files/maps/{$_POST['lgsl_map_upload_path']}/"));
         $uploadfile = preg_replace("/[^a-z0-9_]/", "_", strtolower($_POST['lgsl_map_upload_file'])) . ".{$ext}";
-        if (!file_exists($uploadfolder . $uploadfile)) {
+        if (!file_exists("{$uploadfolder}{$uploadfile}")) {
           mkdir($uploadfolder, 0666, true);
         }
-        if (move_uploaded_file($_FILES['map']['tmp_name'], $uploadfolder . $uploadfile)) {
+        if (move_uploaded_file($_FILES['map']['tmp_name'], "{$uploadfolder}{$uploadfile}")) {
           echo "Image {$uploadfile} uploaded successfully.\n";
         } else {
           echo "File not uploaded. Something wrong.\n";
@@ -179,45 +179,48 @@
         echo "Allowed only .jpg and .gif extensions.\n";
       }
     }
-    $server_list = lgsl_query_group(["request" => "s"]);
+    $server_list = Database::get_servers_group(["request" => "sc"]);
 
     $output .= "
-    <div style='padding: 5px;'>
-      Haven't got images? <a href='https://github.com/tltneon/lgsl/wiki#how-can-i-add-map-images' target='_blank'>How to: add map icons</a>
-    </div>
+		<div class='center'>
+			<p style='padding: 5px;'>
+				Haven't got images? <a href='https://github.com/tltneon/lgsl/wiki#how-can-i-add-map-images' target='_blank'>How to: add map images</a>
+			</p>
     ";
 
     foreach ($server_list as $server) {
-      if (!$server['b']['status']) { continue; }
+      if (!$server->isOnline()) { continue; }
 
-      $image_map = lgsl_image_map($server['b']['status'], $server['b']['type'], $server['s']['game'], $server['s']['map'], FALSE);
+      $image_map = $server->get_map_image();
 
       $output .= "
-      <div style='padding-bottom: 5px;'>
+      <p style='padding-bottom: 5px;'>
         <div style='display: inline-block;'>
-          <img src='{$image_map}' width='32' height='32' />
+          <img src='{$image_map}' width='64' height='60' />
         </div>
-        <div style='display: inline-block;vertical-align: super;'>
-          <div>{$lgsl_config['text']['map']}: {$server['s']['map']}</div>
-          <div>Link: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
+        <div style='display: inline-block;vertical-align: super;text-align: left;'>
+          <div>{$lgsl_config['text']['map']}: {$server->get_map()}</div>
+          <div>Expected: /maps/{$server->get_type()}/{$server->get_game()}/{$server->get_map(true)}.jpg</div>
+          <div>Current: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
           <form action='admin.php' method='post' enctype='multipart/form-data'>
             Select image to upload:
             <input type='file' name='map' id='map' />
-            <input type='hidden' name='lgsl_map_upload_path' value='{$server['b']['type']}/{$server['s']['game']}' />
-            <input type='hidden' name='lgsl_map_upload_file' value='{$server['s']['map']}' />
+            <input type='hidden' name='lgsl_map_upload_path' value='{$server->get_type()}/{$server->get_game()}' />
+            <input type='hidden' name='lgsl_map_upload_file' value='{$server->get_map()}' />
             <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
             <input type='hidden' name='lgsl_map_image_paths' value='true' />
             <input type='submit' name='lgsl_map_image_upload' value='Upload Image' />
           </form>
         </div>
-      </div>";
+      </p>";
     }
 
     $output .= "
-    <form method='post' action='' style='padding: 15px;'>
-      <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-      <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
-    </form>";
+			<form method='post' action='' style='padding: 15px;'>
+				<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+				<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
+			</form>
+		</div>";
 
     return;
   }
@@ -229,11 +232,10 @@
     <form method='post' action=''>
       <div class='center'>
         <b>TYPE : IP : C PORT : Q PORT : S PORT : ZONES : DISABLED : COMMENT</b>
-        <br />
-        <br />
+        <i class='space2x'></i>
       </div>
       <div class='center'>
-        <textarea name='form_list' cols='90' rows='30' wrap='off' spellcheck='false' style='width:95%; height:500px; font-size:1.2em; font-family:courier new, monospace'>\r\n";
+        <textarea name='form_list' cols='90' rows='30' wrap='off' spellcheck='false'>\r\n";
 
 //---------------------------------------------------------+
         $mysqli_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC;");
@@ -275,18 +277,18 @@
 
   $output .= "
   <form method='post' action=''>
-    <div style='text-align:center; overflow:auto'>
-      <table cellspacing='5' cellpadding='0' style='margin:auto'>
+    <div class='admin-server-table'>
+      <table cellspacing='5' cellpadding='0'>
         <tr>
-          <td style='text-align:center; white-space:nowrap'>[ ID ]                           </td>
-          <td style='text-align:center; white-space:nowrap'>[ Game Type | Query Protocol ]   </td>
-          <td style='text-align:center; white-space:nowrap'>[ IP ]                           </td>
-          <td style='text-align:center; white-space:nowrap'>[ {$lgsl_config['text']['cpt']} ]</td>
-          <td style='text-align:center; white-space:nowrap'>[ {$lgsl_config['text']['qpt']} ]</td>
-          <td style='text-align:center; white-space:nowrap'>[ Software Port ]                </td>
-          <td style='text-align:center; white-space:nowrap'>[ Zones ]                        </td>
-          <td style='text-align:center; white-space:nowrap'>[ {$lgsl_config['text']['dsb']} ]</td>
-          <td style='text-align:center; white-space:nowrap'>[ Comment ]                      </td>
+          <td>[ ID ]                           </td>
+          <td>[ Game Type | Query Protocol ]   </td>
+          <td>[ IP ]                           </td>
+          <td>[ {$lgsl_config['text']['cpt']} ]</td>
+          <td>[ {$lgsl_config['text']['qpt']} ]</td>
+          <td>[ Software Port ]                </td>
+          <td>[ Zones ]                        </td>
+          <td>[ {$lgsl_config['text']['dsb']} ]</td>
+          <td>[ Comment ]                      </td>
         </tr>";
 
 //---------------------------------------------------------+
@@ -295,19 +297,19 @@
 
       foreach ($mysqli_result as $mysqli_row) {
         $id = $mysqli_row['id']; // ID USED AS [] ONLY RETURNS TICKED CHECKBOXES
-        $disabled = ($mysqli_row['type'] == 'discord' ? 'disabled' : '');
+        $disabled = ($mysqli_row['type'] === 'discord' ? 'readonly onclick="return false;" style="background: #777;"' : '');
 
         $output .= "
         <tr>
           <td>
-            <a href='".LGSL::link($id)."' style='text-decoration:none' target='_blank'>{$id}</a>
+            <a href='{LGSL::link($id)}' style='text-decoration:none' target='_blank'>{$id}</a>
           </td>
           <td>
             <select name='form_type[{$id}]'>";
 //---------------------------------------------------------+
             foreach ($lgsl_type_list as $type => $description) {
               $output .= "
-              <option ".($type == $mysqli_row['type'] ? "selected='selected'" : "")." value='{$type}'>{$description}</option>";
+              <option ".($type === $mysqli_row['type'] ? "selected='selected'" : "")." value='{$type}'>{$description}</option>";
             }
 
             if (!isset($lgsl_type_list[$mysqli_row['type']])) {
@@ -318,7 +320,7 @@
             $output .= "
             </select>
           </td>
-          <td class='center'><input type='text' name='form_ip[{$id}]'       value='".lgsl_string_html($mysqli_row['ip'])."' size='15' maxlength='255' /></td>
+          <td class='center'><input type='text'   name='form_ip[{$id}]'     value='".lgsl_string_html($mysqli_row['ip'])."'   size='15' maxlength='255' /></td>
           <td class='center'><input type='number' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536' {$disabled} /></td>
           <td class='center'><input type='number' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536' {$disabled} /></td>
           <td class='center'><input type='number' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536' {$disabled} /></td>
@@ -363,9 +365,9 @@
             </select>
           </td>
           <td class='center'><input type='text'   name='form_ip[{$id}]'     value=''  size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value=''  min='0' max='65536'   /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value=''  min='0' max='65536'   /></td>
-          <td class='center'><input type='number' name='form_s_port[{$id}]' value='0' min='0' max='65536'   /></td>
+          <td class='center'><input type='number' name='form_c_port[{$id}]' value=''  min='0'   max='65536'   /></td>
+          <td class='center'><input type='number' name='form_q_port[{$id}]' value=''  min='0'   max='65536'   /></td>
+          <td class='center'><input type='number' name='form_s_port[{$id}]' value='0' min='0'   max='65536'   /></td>
           <td>
             <select name='form_zone[{$id}]'>";
 //---------------------------------------------------------+
@@ -385,11 +387,11 @@
       <input type='hidden' name='lgsl_management' value='0' />
       <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
         <tr>
-          <td><input type='submit' name='lgsl_save_1'          value='".$lgsl_config['text']['skc']."' /> </td>
-          <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' /> </td>
-          <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' /> </td>
-          <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['avm']."' /> </td>
-          <td><input type='submit' name='lgsl_check_updates'   value='".$lgsl_config['text']['upd']."' /> </td>
+          <td><input type='submit' name='lgsl_save_1'          value='{$lgsl_config['text']['skc']}' /> </td>
+          <td><input type='submit' name='lgsl_save_2'          value='{$lgsl_config['text']['srh']}' /> </td>
+          <td><input type='submit' name='lgsl_map_image_paths' value='{$lgsl_config['text']['mip']}' /> </td>
+          <td><input type='submit' name='lgsl_switch'          value='{$lgsl_config['text']['avm']}' /> </td>
+          <td><input type='submit' name='lgsl_check_updates'   value='{$lgsl_config['text']['upd']}' /> </td>
         </tr>
       </table>
     </div>
@@ -402,13 +404,13 @@
   function lgsl_help_info() {
     global $lgsl_config;
     return "
-    <div style='text-align:center; line-height:1em; font-size:1em;'>
-      <i class='spacer'></i>
+    <div class='admin-help-info'>
+      <i class='space'></i>
       <a href='https://github.com/tltneon/lgsl/wiki'>[ LGSL ONLINE WIKI ]</a> <a href='https://github.com/tltneon/lgsl'>[ LGSL GITHUB ]</a>
-      <i class='spacer'></i>
+      <i class='space'></i>
       {$lgsl_config['text']['faq']}
-      <i class='spacer'></i>
-      <table cellspacing='10' cellpadding='0' style='border:1px solid; margin:auto; text-align:left'>
+      <i class='space'></i>
+      <table cellspacing='10' cellpadding='0'>
         <tr>
           <td> <a href='http://php.net/fsockopen'>FSOCKOPEN</a> </td>
           <td> {$lgsl_config['text']['enb']}: ".(function_exists("fsockopen") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
@@ -440,7 +442,7 @@
           <td> ( {$lgsl_config['text']['zli']} ) </td>
         </tr>
       </table>
-      <i class='spacer'></i><i class='spacer'></i>
+      <i class='space2x'></i>
     </div>";
   }
 
