@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ Â© RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -74,7 +74,7 @@
 
           <tr>
             <td> {$lgsl_config['text']['adr']} </td>
-            <td> <input type='text' name='form_ip' value='".lgsl_string_html($ip)."' size='15' maxlength='128' /> </td>
+            <td> <input type='text' name='form_ip' value='".lgsl_string_html($ip)."' onpaste='javascript:setTimeout(function(){const v=event.srcElement.value.split(\":\")[1];document.querySelector(\"input[name=form_ip]\").value=event.srcElement.value.trim();document.querySelector(\"input[name=form_c_port]\").value=v;document.querySelector(\"input[name=form_q_port]\").value=v;});' size='15' maxlength='128' /> </td>
           </tr>
 
           <tr>
