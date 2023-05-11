@@ -182,7 +182,6 @@ div.servername_nolink {display: none;}
   div.servername_nolink {
     display: none;
   }
-  }
   div.servername_link a {color: #d5f2ff;}
   div.servername_link {display: block;}
   #server_list_table td {
@@ -198,4 +197,4 @@ div.servername_nolink {display: none;}
   .details_info_column {margin: auto; order: 2; margin-top: 6px;}
   .details_info_column:nth-child(2) {order: 1;}
   #details_playerlist {overflow: auto;}
-}
+  }

@@ -126,10 +126,10 @@
             <td style='padding:0; text-align:center'>
               <div style='left:0; right:0; top:0; bottom:0; width:{$zone_width}; padding:0; position:relative'>
                 <a href='".lgsl_link($server['o']['id'])."'>
-                  <img alt='' src='{$misc['image_map']}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
-                  <img alt='' src='{$misc['image_map_password']}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
-                  <img alt='' src='{$misc['icon_game']}'          title='{$misc['text_type_game']}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
-                  <img alt='' src='{$misc['icon_location']}'      title='{$misc['text_location']}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
+                  <img alt='' src='{$misc['image_map']}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;'>
+                  <img alt='' src='{$misc['image_map_password']}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;'>
+                  <img alt='' src='{$misc['icon_game']}'          title='{$misc['text_type_game']}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;'>
+                  <img alt='' src='{$misc['icon_location']}'      title='{$misc['text_location']}'      style='position:absolute; z-index:2; top:2px; right:2px;'>
                 </a>
               </div>
             </td>
@@ -167,7 +167,7 @@
               else {
                 $inner_width = ($server['s']['playersmax'] > 0 ? $server['s']['players']/$server['s']['playersmax']*100 : 0);
                 $output .="
-                <br />
+                <br>
                 <div style='margin-top: 5px; border: 1px solid #555; background-color: #222; height: 4px;'>
                   <div style='width: ". $inner_width ."%; background-color: #ff8400; height: 4px;'></div>
                 </div>";

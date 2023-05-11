@@ -67,13 +67,13 @@
 <html>
   <head>
     <title><?php echo $title; ?></title>
-    <link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-    <meta http-equiv='content-style-type' content='text/css' />
-    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style']; ?>' type='text/css' />
-    <?php echo ($lgsl_config['autoreload'] ? "<META HTTP-EQUIV='REFRESH' CONTENT=" . ($lgsl_config['cache_time'] + 1) . " />" : ""); ?>
+    <link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta http-equiv='content-style-type' content='text/css'>
+    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style']; ?>' type='text/css'>
+    <?php echo ($lgsl_config['autoreload'] ? "<META HTTP-EQUIV='REFRESH' CONTENT=" . ($lgsl_config['cache_time'] + 1) . ">" : ""); ?>
   </head>
 
   <body>

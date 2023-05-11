@@ -59,7 +59,7 @@
 		if (function_exists("fsockopen")) {
 			$fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
 			if (!$fp) {
-				echo "ERROR: $errno - $errstr<br />\n";
+				echo "ERROR: $errno - $errstr<br>\n";
 				echo "<l k='coutd'></l>\n";
 			} else {
 				fwrite($fp, "\n");
@@ -90,18 +90,16 @@
 	}
 
 ?>
-
-
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>LGSL Installation Page</title>
-		<link rel='stylesheet' type='text/css' href='lgsl_files/styles/darken_style.css' />
+		<link rel='stylesheet' type='text/css' href='lgsl_files/styles/darken_style.css'>
 		<link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
 		<link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-		<meta http-equiv='content-style-type' content='text/css' />
+		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+		<meta http-equiv='content-style-type' content='text/css'>
 		<style>
 			body {
 				padding: 2px 4px;
@@ -156,25 +154,25 @@
 	<form method="post" action="?">
 		<p>
 			MySQL Server*:
-			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" '.$installed.' />
+			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" '.$installed.'>
 		</p>
 		<p>
 			MySQL Login*:
-			<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" '.$installed.' />
+			<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" '.$installed.'>
 		</p>
 		<p>
 			MySQL Password:
-			<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" '.$installed.' />
+			<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" '.$installed.'>
 		</p>
 		<p>
 			MySQL Database*:
-			<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" '.$installed.' />
+			<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" '.$installed.'>
 		</p>
 		<p>
 			MySQL Table*:
-			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" '.$installed.' />
+			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" '.$installed.'>
 		</p>
-		<input type="hidden" name="_createtables" value="1" />
+		<input type="hidden" name="_createtables" value="1">
 		<button type="submit" '.$installed.'>
 			<l k="creat"></l>
 		</button>
@@ -182,24 +180,24 @@
 
 	'.($installed == "disabled" ? '<div><l k="cretd"></l></div>' : '').'
 
-	<br />
+	<br>
 
 	<h4><l k="step2"></l></h4>
 
 	<p>
 		LGSL Admin Login*:
-		<input type="text" onChange="vars.lgsl_user = event.target.value" />
+		<input type="text" onChange="vars.lgsl_user = event.target.value">
 	</p>
 	<p>
 		LGSL Admin Password*:
-		<input type="text" onChange="vars.lgsl_password = event.target.value" />
+		<input type="text" onChange="vars.lgsl_password = event.target.value">
 	</p>
 
-	<hr />
+	<hr>
 
 	<p>
 		<l k="selst"></l>:
-		<select type="text" name="style" onChange="changeValue(event, {styleChanged: true})" />
+		<select type="text" name="style" onChange="changeValue(event, {styleChanged: true})">
 			<option value="darken_style.css">Darken</option>
 			<option value="ogp_style.css">OGP</option>
 			<option value="material_style.css">Material Design</option>
@@ -214,7 +212,7 @@
 	</p>
 	<p>
 		<l k="sella"></l>:
-		<select type="text" name="language" onChange="changeValue(event, {translationInput: true})" />
+		<select type="text" name="language" onChange="changeValue(event, {translationInput: true})">
 			<option value="english">English</option>
 			<option value="russian">Русский</option>
 			<option value="french">Français</option>
@@ -234,17 +232,17 @@
 
 	<p>
 		<l k="selsc"></l> <a href="https://github.com/tltneon/lgsl/wiki/scripts" target="_blank" class="hinfolink">?</a>:
-		<br /><input type="checkbox" id="parallax.js" name="scripts" onChange="changeCheckbox(event)" /> parallax (for Parallax Style)
-		<br /><input type="checkbox" id="preview.js" name="scripts" onChange="changeCheckbox(event)" /> map preview (on server list)
-		<br /><input type="checkbox" id="refresh.js" name="scripts" onChange="changeCheckbox(event)" /> refresh (manually refresh server status)
-		<br /><input type="checkbox" id="flag-icon.js" name="scripts" onChange="changeCheckbox(event)" /> flag-icon (replacing with svg)
+		<br><input type="checkbox" id="parallax.js" name="scripts" onChange="changeCheckbox(event)"> parallax (for Parallax Style)
+		<br><input type="checkbox" id="preview.js" name="scripts" onChange="changeCheckbox(event)"> map preview (on server list)
+		<br><input type="checkbox" id="refresh.js" name="scripts" onChange="changeCheckbox(event)"> refresh (manually refresh server status)
+		<br><input type="checkbox" id="flag-icon.js" name="scripts" onChange="changeCheckbox(event)"> flag-icon (replacing with svg)
 	</p>
 
-	<hr />
+	<hr>
 
 	<p>
 		<l k="sorts"></l>:
-		<select type="text" name="sort_servers_by" onChange="changeValue(event)" />
+		<select type="text" name="sort_servers_by" onChange="changeValue(event)">
 			<option value="id">ID</option>
 			<option value="type">Type</option>
 			<option value="zone">Zone</option>
@@ -254,7 +252,7 @@
 	</p>
 	<p>
 		<l k="sortp"></l>:
-		<select type="text" name="sort_players_by" onChange="changeValue(event)" />
+		<select type="text" name="sort_players_by" onChange="changeValue(event)">
 			<option value="name">Name</option>
 			<option value="score">Score</option>
 			<option value="time">Time</option>
@@ -262,36 +260,36 @@
 	</p>
 	<p>
 		<l k="enaim"></l> <a href="https://github.com/tltneon/lgsl/wiki/LGSL-with-Image-Mod" target="_blank" class="hinfolink">?</a>:
-		<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)" />
+		<input type="checkbox" name="image_mod" onChange="changeCheckbox(event)">
 	</p>
 	<p>
 		Enable Preloader <a href="https://github.com/tltneon/lgsl/wiki/features#preloader" target="_blank" class="hinfolink">?</a>:
-		<input type="checkbox" name="preloader" onChange="changeCheckbox(event)" />
+		<input type="checkbox" name="preloader" onChange="changeCheckbox(event)">
 	</p>
 	<p>
 		Enable Pagination <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
-		<input type="checkbox" name="page_mod" onChange="changeCheckbox(event)" />
-		<input type="number" min="5" max="35" value="15" onChange="vars.page_lim = event.target.value" />
+		<input type="checkbox" name="page_mod" onChange="changeCheckbox(event)">
+		<input type="number" min="5" max="35" value="15" onChange="vars.page_lim = event.target.value">
 	</p>
 	<p>
 		Automatically reload page:
-		<input type="checkbox" name="autoreload" onChange="changeCheckbox(event)" />
+		<input type="checkbox" name="autoreload" onChange="changeCheckbox(event)">
 	</p>
 	<p>
 		Time before a server needs updating:
-		<input type="number" min="0" max="3600" value="60" onChange="vars.cache_time = event.target.value" />
+		<input type="number" min="0" max="3600" value="60" onChange="vars.cache_time = event.target.value">
 	</p>
 	<p>
 		Enable server tracking (history) <a href="https://github.com/tltneon/lgsl/wiki/features#pagination" target="_blank" class="hinfolink">?</a>:
-		<input type="checkbox" name="history" onChange="changeCheckbox(event)" />
+		<input type="checkbox" name="history" onChange="changeCheckbox(event)">
 	</p>
 	<p>
 		<l k="hideo"></l>:
-		<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)" />
+		<input type="checkbox" name="hide_offline" onChange="changeCheckbox(event)">
 	</p>
 	<p>
 		<l k="pubad"></l>:
-		<select type="text" name="public_add" onChange="changeValue(event)" />
+		<select type="text" name="public_add" onChange="changeValue(event)">
 			<option value="0" style="color: red;">Disabled</option>
 			<option value="1" style="color: orange;">Enabled (require approval)</option>
 			<option value="2" style="color: green;">Enabled (shows instantly)</option>
@@ -299,11 +297,11 @@
 	</p>
 	<p>
 		<l k="showt"></l>:
-		<input type="checkbox" name="totals" onChange="changeCheckbox(event)" />
+		<input type="checkbox" name="totals" onChange="changeCheckbox(event)">
 	</p>
 	<p>
 		<l k="showl"></l>:
-		<select type="text" name="locations" onChange="changeValue(event)" />
+		<select type="text" name="locations" onChange="changeValue(event)">
 			<option value="0" style="color: red;">Disabled</option>
 			<option value="1" style="color: green;">Enabled</option>
 			<option disabled style="background: gray;"></option>
@@ -317,7 +315,7 @@
 	</button>
 
 	<p style="color: red; font-size: 12pt;"><l k="remem"></l></p>
-	<hr />
+	<hr>
 	<p style="font-size: 9pt;"><l k="after"></l></p>
 	';
 
@@ -327,8 +325,6 @@
 ?>
 			</div>
 		</div>
-	</body>
-</html>
 
 <script>
 document.addEventListener("DOMContentLoaded", reloadLocale);
@@ -882,3 +878,6 @@ document.addEventListener("reloadLocale", reloadLocale);
 		return t[locale][key];
 	}
 </script>
+
+	</body>
+</html>

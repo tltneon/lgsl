@@ -74,7 +74,7 @@
   $lgsl_config['text']['dsb'] = "닫은";
   $lgsl_config['text']['aum'] = "구성에서 관리자 사용자 이름 또는 암호가 누락되었습니다.";
   $lgsl_config['text']['apc'] = "기본 암호를 변경하십시오";
-  $lgsl_config['text']['faq'] = "- 서버를 제거하려면 IP를 삭제 한 다음 저장을 클릭하십시오.<br /><br />- LGSL에서 쿼리 포트를 비워 두어 자동으로 채우십시오.<br /><br />- 소프트웨어 포트는 몇 가지 게임에만 필요하므로 0으로 설정하는 것은 정상입니다.<br /><br />-스타일 및 기타 옵션을 설정하려면 lgsl_config.php 파일을 편집하십시오.<br /><br />- LGSL을 최신 상태로 유지하십시오.";
+  $lgsl_config['text']['faq'] = "- 서버를 제거하려면 IP를 삭제 한 다음 저장을 클릭하십시오.<br><br>- LGSL에서 쿼리 포트를 비워 두어 자동으로 채우십시오.<br><br>- 소프트웨어 포트는 몇 가지 게임에만 필요하므로 0으로 설정하는 것은 정상입니다.<br><br>-스타일 및 기타 옵션을 설정하려면 lgsl_config.php 파일을 편집하십시오.<br><br>- LGSL을 최신 상태로 유지하십시오.";
   $lgsl_config['text']['fso'] = "서버 직접 쿼리에 필요";
   $lgsl_config['text']['crl'] = "fsockopen이 비활성화 된 경우 공급에 사용됩니다.";
   $lgsl_config['text']['mbs'] = "UTF-8은 서버 및 플레이어 이름을 올바르게 표시하는 데 사용됩니다.";

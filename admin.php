@@ -32,10 +32,10 @@
 <html>
   <head>
     <title>Live Game Server List Admin</title>
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
-    <meta http-equiv='content-style-type' content='text/css' />
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta http-equiv='content-style-type' content='text/css'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style'];?>' type='text/css' />
+    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style'];?>' type='text/css'>
   </head>
   <body>
     <div id='admin_page'>
@@ -56,11 +56,11 @@
     <div id='admin_login_page'>
     <form method='post' action=''>
       <table style='margin:auto; text-align:center'>
-        <tr><td> ".$lgsl_config['text']['umn'].": </td><td> <input type='text'     name='lgsl_user' value='' /> </td></tr>
-        <tr><td> ".$lgsl_config['text']['pwd'].": </td><td> <input type='password' name='lgsl_pass' value='' /> </td></tr>
+        <tr><td> ".$lgsl_config['text']['umn'].": </td><td> <input type='text'     name='lgsl_user' value=''> </td></tr>
+        <tr><td> ".$lgsl_config['text']['pwd'].": </td><td> <input type='password' name='lgsl_pass' value=''> </td></tr>
         <tr>
           <td colspan='2'>
-            <input type='submit' name='lgsl_admin_login' value='".$lgsl_config['text']['lgn']."' />
+            <input type='submit' name='lgsl_admin_login' value='".$lgsl_config['text']['lgn']."'>
           </td>
         </tr>
       </div>

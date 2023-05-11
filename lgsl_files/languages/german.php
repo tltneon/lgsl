@@ -74,7 +74,7 @@
   $lgsl_config['text']['dsb'] = "Deaktviert";
   $lgsl_config['text']['aum'] = "ADMIN BENUTZERNAME ODER PASSWORT FEHLT IN CONFIG";
   $lgsl_config['text']['apc'] = "ADMIN PASSWORT MUSS GEÄNDERT WERDEN";
-  $lgsl_config['text']['faq'] = "- Um einen Server zu entfernen, entferne die IP und klicke auf Speichern.<br /><br />- Unausgefüllt lassen, um Query Port automatisch einzutragen.<br /><br />- Der Software Port wird nur von wenigen Spielen benötigt. Oft ist 0 der richtige Wert.<br /><br />- Bearbeite die lgsl_config.php um das Design und andere Optionen auszuwählen.<br /><br />- Update LGSL regelmäßig.";
+  $lgsl_config['text']['faq'] = "- Um einen Server zu entfernen, entferne die IP und klicke auf Speichern.<br><br>- Unausgefüllt lassen, um Query Port automatisch einzutragen.<br><br>- Der Software Port wird nur von wenigen Spielen benötigt. Oft ist 0 der richtige Wert.<br><br>- Bearbeite die lgsl_config.php um das Design und andere Optionen auszuwählen.<br><br>- Update LGSL regelmäßig.";
   $lgsl_config['text']['fso'] = "Erforderlich für die direkte Abfrage von Servern";
   $lgsl_config['text']['crl'] = "Wird für den Feed benutzt, wenn fsockopen deaktiviert ist.";
   $lgsl_config['text']['mbs'] = "Wird verwendet, um UTF-8-Server- und Spielernamen korrekt anzuzeigen";

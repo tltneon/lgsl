@@ -880,7 +880,7 @@ function lgsl_lang($code) { // FOR PREVENTING WARNINGS
   {
     if (!$location) { return "#"; }
 
-    return "https://www.google.com/maps/search/{$location}/";
+    return "https://www.google.com/maps/search/{$location}+country/";
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -1078,23 +1078,23 @@ function lgsl_lang($code) { // FOR PREVENTING WARNINGS
             <summary style='margin-bottom: 12px;'>
               Open debug infos
             </summary>
-            <hr /><pre>".print_r($_SERVER, TRUE)."</pre>
-            <hr />#d0# ".__FILE__."
-            <hr />#d1# ".@realpath(__FILE__)."
-            <hr />#d2# ".dirname(__FILE__)."
-            <hr />#d3# {$lgsl_file_path}
-            <hr />#d4# {$_SERVER['DOCUMENT_ROOT']}
-            <hr />#d5# ".@realpath($_SERVER['DOCUMENT_ROOT'])."
-            <hr />#d6# {$lgsl_url_path}
-            <hr />#c0# {$lgsl_config['url_path']}
-            <hr />#c1# {$lgsl_config['no_realpath']}
-            <hr />#c2# {$lgsl_config['feed']['method']}
-            <hr />#c3# {$lgsl_config['feed']['url']}
-            <hr />#c4# {$lgsl_config['cache_time']}
-            <hr />#c5# {$lgsl_config['live_time']}
-            <hr />#c6# {$lgsl_config['timeout']}
-            <hr />#c7# {$lgsl_config['cms']}
-            <hr />
+            <hr><pre>".print_r($_SERVER, TRUE)."</pre>
+            <hr>#d0# ".__FILE__."
+            <hr>#d1# ".@realpath(__FILE__)."
+            <hr>#d2# ".dirname(__FILE__)."
+            <hr>#d3# {$lgsl_file_path}
+            <hr>#d4# {$_SERVER['DOCUMENT_ROOT']}
+            <hr>#d5# ".@realpath($_SERVER['DOCUMENT_ROOT'])."
+            <hr>#d6# {$lgsl_url_path}
+            <hr>#c0# {$lgsl_config['url_path']}
+            <hr>#c1# {$lgsl_config['no_realpath']}
+            <hr>#c2# {$lgsl_config['feed']['method']}
+            <hr>#c3# {$lgsl_config['feed']['url']}
+            <hr>#c4# {$lgsl_config['cache_time']}
+            <hr>#c5# {$lgsl_config['live_time']}
+            <hr>#c6# {$lgsl_config['timeout']}
+            <hr>#c7# {$lgsl_config['cms']}
+            <hr>
           </details>
           <select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"lgsl_files/styles/\" + this.value + \".css\"'>
             <option value='breeze_style'>breeze_style</option>
