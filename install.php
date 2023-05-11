@@ -325,8 +325,6 @@
 ?>
 			</div>
 		</div>
-	</body>
-</html>
 
 <script>
 document.addEventListener("DOMContentLoaded", reloadLocale);
@@ -880,3 +878,6 @@ document.addEventListener("reloadLocale", reloadLocale);
 		return t[locale][key];
 	}
 </script>
+
+	</body>
+</html>

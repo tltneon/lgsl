@@ -198,4 +198,3 @@ div.servername_nolink {display: none;}
   .details_info_column {margin: auto; order: 2; margin-top: 6px;}
   .details_info_column:nth-child(2) {order: 1;}
   #details_playerlist {overflow: auto;}
-}

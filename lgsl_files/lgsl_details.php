@@ -210,10 +210,7 @@
       foreach ($server['e'] as $field => $value) {
         $value = preg_replace('/((https*:\/\/|https*:\/\/www\.|www\.)[\w\d\.\-\/=$?​]*)/i', "<a href='$1' target='_blank'>$1</a>", html_entity_decode($value));
         $output .= "
-        <tr>
-          <td> {$field} </td>
-          <td> {$value} </td>
-        </tr>";
+        <tr><td> {$field} </td><td> {$value} </td></tr>";
       }
 
       $output .= "

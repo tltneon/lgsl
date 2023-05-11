@@ -880,7 +880,7 @@ function lgsl_lang($code) { // FOR PREVENTING WARNINGS
   {
     if (!$location) { return "#"; }
 
-    return "https://www.google.com/maps/search/{$location}/";
+    return "https://www.google.com/maps/search/{$location}+country/";
   }
 
 //------------------------------------------------------------------------------------------------------------+
