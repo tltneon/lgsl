@@ -78,7 +78,7 @@
   $lgsl_config['text']['dsb'] = "禁用";
   $lgsl_config['text']['aum'] = "后台配置中缺少管理员用户名或密码";
   $lgsl_config['text']['apc'] = "后台管理员密码不能使用默认密码";
-  $lgsl_config['text']['faq'] = "- IP地址留空可删除服务器，然后点击保存.<br /><br />- 查询端口留空，则LGSL会尝试自动填写<br /><br />- 软件端口只有部分游戏需要，因此一般设置0为正常的。<br /><br />- 修改lgsl_config.php可以设置样式和更多选项。<br /><br />- 让您的 LGSL 保持最新状态。";
+  $lgsl_config['text']['faq'] = "- IP地址留空可删除服务器，然后点击保存.<br><br>- 查询端口留空，则LGSL会尝试自动填写<br><br>- 软件端口只有部分游戏需要，因此一般设置0为正常的。<br><br>- 修改lgsl_config.php可以设置样式和更多选项。<br><br>- 让您的 LGSL 保持最新状态。";
   $lgsl_config['text']['fso'] = "查询服务器数据时需要";
   $lgsl_config['text']['crl'] = "当fsockopen被禁用作为备用方式";
   $lgsl_config['text']['mbs'] = "用于正确显示UTF-8编码的服务器和玩家名称";

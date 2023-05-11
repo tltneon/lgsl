@@ -74,7 +74,7 @@
   $lgsl_config['text']['dsb'] = "Discapacitado";
   $lgsl_config['text']['aum'] = "ADMIN USERNAME OR PASSWORD MISSING FROM CONFIG";
   $lgsl_config['text']['apc'] = "ADMIN PASSWORD MUST BE CHANGED FROM THE DEFAULT";
-  $lgsl_config['text']['faq'] = "- To remove a server, delete the IP, then click Save.<br /><br />- Leave the query port blank to have LGSL try to fill it in for you.<br /><br />- Software port is only needed for a few games so it being set 0 is normal.<br /><br />- Edit the lgsl_config.php to set the style and other options.<br /><br />- Keep your LGSL up to date.";
+  $lgsl_config['text']['faq'] = "- To remove a server, delete the IP, then click Save.<br><br>- Leave the query port blank to have LGSL try to fill it in for you.<br><br>- Software port is only needed for a few games so it being set 0 is normal.<br><br>- Edit the lgsl_config.php to set the style and other options.<br><br>- Keep your LGSL up to date.";
   $lgsl_config['text']['fso'] = "Required for direct querying of servers";
   $lgsl_config['text']['crl'] = "Used for the feed when fsockopen is disabled";
   $lgsl_config['text']['mbs'] = "Used to show UTF-8 server and player names correctly";

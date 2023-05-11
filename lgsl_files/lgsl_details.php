@@ -98,7 +98,7 @@
   if (extension_loaded('gd')) {
     $g = "ip={$server['b']['ip']}&port={$server['b']['c_port']}";
     if ($lgsl_config['history']) {
-      $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart' /></div>";
+      $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server["s"]["name"]}' style='border-radius: 6px;' id='chart'></div>";
     }
 
     if ($lgsl_config['image_mod']) {
@@ -110,12 +110,12 @@
         </summary>
         <div>
           <div style='overflow-x: auto;'><img src='userbar.php?{$g}' alt='{$server["s"]["name"]}'/></div>
-          <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}[/img][/url]</textarea><br /><br />
+          <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}[/img][/url]</textarea><br><br>
 
           <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t=2' alt='{$server["s"]["name"]}'/></div>
-          <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=2[/img][/url]</textarea><br /><br />
+          <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=2[/img][/url]</textarea><br><br>
 
-          <img src='userbar.php?{$g}&t=3' alt='{$server["s"]["name"]}'/><br />
+          <img src='userbar.php?{$g}&t=3' alt='{$server["s"]["name"]}'/><br>
           <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=3[/img][/url]</textarea>
         </div>
       </details>

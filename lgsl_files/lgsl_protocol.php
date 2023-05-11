@@ -4616,7 +4616,7 @@ function lgsl_unescape($text) {
 
     echo("
       <style>.char-element {display: inline-block;max-width: 24px;border: 1px solid black;text-align: center;} .char-cell {width: 24px;height: 18px;display: inline-block;}</style>
-      <span style='color:red;'>". count($symbols) ."</span> symbols <span style='color:yellow;'>>></span>{$raw}<br />
+      <span style='color:red;'>". count($symbols) ."</span> symbols <span style='color:yellow;'>>></span>{$raw}<br>
       <details style='width: 260px;'>{$raw2}</details>
     ");
   }

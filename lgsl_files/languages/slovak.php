@@ -75,7 +75,7 @@
   $lgsl_config['text']['dsb'] = "Vypnuté";
   $lgsl_config['text']['aum'] = "Admin meno/heslo chýba v configu";
   $lgsl_config['text']['apc'] = "Heslo pre admina nesmie byť rovnaké ako záklandé";
-  $lgsl_config['text']['faq'] = "- Ak chcete odstrániť server, odstráňte IP a potom kliknite na Uložiť.<br /><br />- Nechajte querey port prázdny, aby sa ho LGSL pokúsila vyplniť za vás.<br /><br />- Software port je potrebný len pre niekoľko hier, takže nastavenie na 0 je normálne.<br /><br />- Upravte lgsl_config.php na nastavenie štýlu a ďalších možností.<br /><br />- Nechajte si svoje LGSL aktuálny.";
+  $lgsl_config['text']['faq'] = "- Ak chcete odstrániť server, odstráňte IP a potom kliknite na Uložiť.<br><br>- Nechajte querey port prázdny, aby sa ho LGSL pokúsila vyplniť za vás.<br><br>- Software port je potrebný len pre niekoľko hier, takže nastavenie na 0 je normálne.<br><br>- Upravte lgsl_config.php na nastavenie štýlu a ďalších možností.<br><br>- Nechajte si svoje LGSL aktuálny.";
   $lgsl_config['text']['fso'] = "Vyžaduje sa na priame dopytovanie serverov";
   $lgsl_config['text']['crl'] = "Používa sa pre feed, keď je fsockopen vypnutý";
   $lgsl_config['text']['mbs'] = "Used to show UTF-8 server and player names correctly";

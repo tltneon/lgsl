@@ -98,7 +98,7 @@
     [ <a href='"       .lgsl_string_html($_SERVER['HTTP_REFERER'])."'>".lgsl_string_html($_SERVER['HTTP_REFERER'])."</a> ]
     ".($version ? " [ {$version} ] " : "")."
     ".($xml     ? " [ XML ]        " : "")."
-    <br />";
+    <br>";
 
     fwrite($file_handle, $file_string);
 
