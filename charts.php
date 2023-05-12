@@ -30,6 +30,7 @@
 
   header("Content-Type: image/png");
   require "lgsl_files/lgsl_class.php";
+  $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
   $server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", "cs", (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", "cs");
   if (!$server) {
     $white = imagecolorallocate($im, 255, 255, 255);
@@ -88,7 +89,7 @@
       }
     }
   } else {
-    imagestring($im, 2, 150, 65, $lgsl_config['text']['npi'], $black);
+    imagettftext($im, 6, 0, 150, 65, $black, $font, $lgsl_config['text']['npi']);
   }
   imageline($im, $x0 - 15, $maxY, $x0, $maxY, $black);
   imagestring($im, 1, 3, $maxY - 3, 0, $black);
@@ -109,7 +110,6 @@
   $game_id = makeImage($misc['icon_game'], 16, 16);                         // create game icon
   imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);                             // place game icon
 
-  $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
   imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim ($server['s']['name']));
   imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $misc['connect_filtered']));
   imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
