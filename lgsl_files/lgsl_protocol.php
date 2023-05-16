@@ -3989,7 +3989,8 @@
     $server['e']['id'] = $buffer['guild']['id'];
     if($buffer['guild']['description'])
       $server['e']['description'] = $buffer['guild']['description'];
-    if($buffer['guild']['welcome_screen'] && $buffer['guild']['welcome_screen']['description'])
+   // PHP 8.2.1: Undefined array key "welcome_screen"
+    if(isset($buffer['guild']['welcome_screen']) && $buffer['guild']['welcome_screen']['description'])
       $server['e']['description'] = $buffer['guild']['welcome_screen']['description'];
     $server['e']['features'] = implode(', ', $buffer['guild']['features']);
     $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
