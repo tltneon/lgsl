@@ -84,6 +84,7 @@
         "callofduty4"   => "02",
         "cncrenegade"   => "03",
         "conanexiles"   => "05",
+        "cryofall"      => "44",
         "crysis"        => "06",
         "crysiswars"    => "06",
         "cs2d"          => "29",
@@ -223,6 +224,7 @@
         "callofduty4"   => "Call Of Duty 4 / CoD4X",
         "cncrenegade"   => "Command and Conquer: Renegade",
         "conanexiles"   => "Conan Exiles",
+        "cryofall"      => "Cryofall",
         "crysis"        => "Crysis",
         "crysiswars"    => "Crysis Wars",
         "cs2d"          => "Counter-Strike 2D",
@@ -3649,6 +3651,62 @@
 			lgsl_cut_byte($buffer, 8); // challenge
 			$server['s']['players'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
 			$server['s']['playersmax'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
+      $this->_server->from_array($server);
+			return TRUE;
+		}
+
+		public function lgsl_query_44() { // Cryofall (by tltneon)
+      $server = $this->_server->to_array();
+			$this->_fp_write("\x05\x0b\x00\x00\x00\x86\x76\x41\x31\xa0\x87\xdb\x08\x10\x02\x00\x55\xf0\x86\xff\xde\x58\x00\x00\x00\x00\x00\x00\x00\x00\x08\x00\x00\x00\x43\x72\x79\x6f\x46\x61\x6c\x6c");
+			$buffer = $this->_fp_read(4096);
+			if (!$buffer) {
+				return false;
+			}
+			lgsl_print_raw_buffer($buffer);
+			$this->_fp_write("\x0c\x0a\x00\x01\x00\x00\x02\x00\x05\x60\x02\xe8\x03\x07\x00\x00\x06\x5f\x02\x20\x4e\x01");
+			lgsl_print_raw_buffer($this->_fp_read(4096));
+
+			$this->_fp_write("\x01\x00\x00\x02\x00\x05\x60\x02\xe8\x03");
+			$buffer = $this->_fp_read(4096);
+			lgsl_print_raw_buffer($buffer);
+			if (strlen($buffer) < 12) {
+				$this->_fp_write("\x00\x06\x61\x02\x20\x4e\x02");
+				$buffer = $this->_fp_read(4096);
+				lgsl_print_raw_buffer($buffer);
+			}
+			$server['s']['map'] = "Cryofall";
+			if (strlen($buffer) < 12) {
+				$server['s']['name'] = "Cryofall server";
+				$server['s']['players'] = 0;
+				$server['s']['playersmax'] = 0;
+				$server['e']['_error'] = "Server working but not sends data";
+			} else {
+				lgsl_cut_byte($buffer, 11);
+				$server['s']['name'] = lgsl_cut_byte($buffer, lgsl_unpack(lgsl_cut_byte($buffer, 2), "S"));
+				lgsl_cut_byte($buffer, 2);
+				$server['e']['version'] = $this->lgsl_cut_byte($buffer, lgsl_unpack(lgsl_cut_byte($buffer, 2), "S"));
+				$server['s']['players'] = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S");
+				$server['s']['playersmax'] = lgsl_unpack(lgsl_cut_byte($buffer, 2), "S"); lgsl_cut_byte($buffer, 3);
+				$server['e']['description'] = $this->lgsl_parse_color($this->lgsl_cut_byte($buffer, lgsl_unpack(lgsl_cut_byte($buffer, 2), "S")), 'factorio');
+				$this->lgsl_cut_byte($buffer, lgsl_unpack(lgsl_cut_byte($buffer, 2), "S") - 8);
+				$server['e']['GUID'] = '';
+				for ($i = 0; $i < 16; $i++) {
+					$server['e']['GUID'] = bin2hex($this->lgsl_cut_byte($buffer, 1)) . $server['e']['GUID'];
+				}
+				$server['e']['GUID'] = strtoupper($server['e']['GUID']);
+				$this->lgsl_cut_byte($buffer, 8);
+				$mods = ord($this->lgsl_cut_byte($buffer, 1));
+				for ($i = 0; $i < $mods; $i++) {
+					$server['e']["mod{$i}"] = "{$this->lgsl_cut_byte($buffer, lgsl_unpack(lgsl_cut_byte($buffer, 2), 'S'))} v{$this->lgsl_cut_byte($buffer, lgsl_unpack(lgsl_cut_byte($buffer, 2), 'S'))} - {$this->lgsl_cut_byte($buffer, lgsl_unpack(lgsl_cut_byte($buffer, 2), 'S'))}";
+					$this->lgsl_cut_byte($buffer, 2);
+				}
+				$mods = ord($this->lgsl_cut_byte($buffer, 1));
+				for ($i = 0; $i < $mods; $i++) {
+					$server['e']["option{$i}"] = $this->lgsl_cut_byte($buffer, lgsl_unpack(lgsl_cut_byte($buffer, 2), "S"));
+				}
+				$server['e']["community_server"] = ord($this->lgsl_cut_byte($buffer, 1));
+				$server['e']["no_client_mods"] = ord($this->lgsl_cut_byte($buffer, 1));
+			}
       $this->_server->from_array($server);
 			return TRUE;
 		}
