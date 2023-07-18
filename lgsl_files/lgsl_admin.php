@@ -52,7 +52,7 @@
     }
 
     // EMPTY SQL TABLE
-    $mysqli_result = $db->query("TRUNCATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`");
+    $mysqli_result = $db->query("TRUNCATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ");
 
     // CONVERT ADVANCED TO NORMAL DATA FORMAT
     if (!empty($_POST['lgsl_management'])) {
@@ -302,7 +302,7 @@
         $output .= "
         <tr>
           <td>
-            <a href='{LGSL::link($id)}' style='text-decoration:none' target='_blank'>{$id}</a>
+            <a href='".LGSL::link($id)."' style='text-decoration:none' target='_blank'>{$id}</a>
           </td>
           <td>
             <select name='form_type[{$id}]'>";
