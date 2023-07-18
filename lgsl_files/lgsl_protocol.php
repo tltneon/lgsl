@@ -503,8 +503,12 @@
       foreach ($item as $item_key => $data_key) {
         if (!($item_key % 2)) { continue; } // SKIP EVEN KEYS
 
-        $data_key               = strtolower($data_key);
-        $server['e'][$data_key] = $item[$item_key+1];
+        $s = 1;
+        if ($item[0]) $s = 0; // IW4 HAS NO EXTRA "\"
+        for ($i = $s; $i < count($item); $i += 2) { // SKIP EVEN KEYS
+          $data_key               = strtolower($this->lgsl_parse_color($item[$i], "1"));
+          $server['e'][$data_key] = $this->lgsl_parse_color($item[$i+1], "1");
+        }
       }
 
       //---------------------------------------------------------+
@@ -3384,14 +3388,16 @@
       $server['e']['expires_at'] = $buffer['expires_at'] ? $buffer['expires_at'] : '--';
       $server['e']['members'] = $buffer['approximate_member_count'];
       $server['e']['premium_subscriptions'] = $buffer['guild']['premium_subscription_count'];
-      if($buffer['guild']['description'])
+      if($buffer['guild']['description']) {
         $server['e']['description'] = $buffer['guild']['description'];
-      if($buffer['guild']['welcome_screen'] && $buffer['guild']['welcome_screen']['description'])
-        $server['e']['description'] = $buffer['guild']['welcome_screen']['description'];
-      if($buffer['guild']['welcome_screen'] && $buffer['guild']['welcome_screen']['welcome_channels'])
+      }
+      if (isset($buffer['guild']['welcome_screen'])) {
+        if ($buffer['guild']['welcome_screen']['description']) $server['e']['description'] = $buffer['guild']['welcome_screen']['description'];
+        if ($buffer['guild']['welcome_screen']['welcome_channels'])
         $server['e']['welcome_channels'] = array_reduce($buffer['guild']['welcome_screen']['welcome_channels'], function($a, $c) {
-					return "{$a}\n{$c['emoji_name']} {$c['description']}";
-				}, "");
+          return "{$a}\n{$c['emoji_name']} {$c['description']}";
+        }, "");
+      }
       $server['e']['features'] = implode(', ', $buffer['guild']['features']);
       $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
       if (isset($buffer['inviter'])) {
