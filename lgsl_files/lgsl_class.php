@@ -644,6 +644,7 @@
         "killingfloor"  => "steam://connect/{IP}:{C_PORT}",
         "minecraft"     => "minecraft://{IP}:{C_PORT}/",
         "mta"           => "mtasa://{IP}:{C_PORT}",
+        "mumble"        => "mumble://{IP}/",
         "openttd"       => "steam://connect/{IP}:{C_PORT}",
         "ragemp"        => "rage://v/connect?ip={IP}:{C_PORT}",
         "redorchestra"  => "steam://connect/{IP}:{C_PORT}",

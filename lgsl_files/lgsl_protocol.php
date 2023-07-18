@@ -131,6 +131,7 @@
         "mohaas_"       => "02",
         "mohpa_"        => "02",
         "mta"           => "08",
+				"mumble"        => "43",
         "nascar2004"    => "09",
         "neverwinter"   => "09",
         "neverwinter2"  => "09",
@@ -265,6 +266,7 @@
         "mohaas"        => "Medal of Honor: Allied Assault Spearhead",
         "mohpa"         => "Medal of Honor: Pacific Assault",
         "mta"           => "Multi Theft Auto",
+				"mumble"        => "Mumble",
         "nascar2004"    => "Nascar Thunder 2004",
         "neverwinter"   => "NeverWinter Nights",
         "neverwinter2"  => "NeverWinter Nights 2",
@@ -3635,6 +3637,21 @@
       $this->_lgsl_need['p'] = FALSE;
       return TRUE;
     }
+		public function lgsl_query_43() { // Mumble
+			$this->_fp_write("\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08");
+			$buffer = $this->_fp_read(4096);
+			if (!$buffer) return FALSE;
+			$server = $this->_server->to_array();
+			$server['s']['name']        = "Mumble Server";
+			$server['s']['map']         = "Mumble";
+			lgsl_cut_byte($buffer, 1); // 0
+			$server['e']['version'] = ord(lgsl_cut_byte($buffer, 1)) .".". ord(lgsl_cut_byte($buffer, 1)) .".". ord(lgsl_cut_byte($buffer, 1));
+			lgsl_cut_byte($buffer, 8); // challenge
+			$server['s']['players'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
+			$server['s']['playersmax'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
+      $this->_server->from_array($server);
+			return TRUE;
+		}
 
     //---------------------------------------------------------+
 
