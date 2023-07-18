@@ -3662,17 +3662,14 @@
 			if (!$buffer) {
 				return false;
 			}
-			lgsl_print_raw_buffer($buffer);
 			$this->_fp_write("\x0c\x0a\x00\x01\x00\x00\x02\x00\x05\x60\x02\xe8\x03\x07\x00\x00\x06\x5f\x02\x20\x4e\x01");
-			lgsl_print_raw_buffer($this->_fp_read(4096));
+			$this->_fp_read(4096);
 
 			$this->_fp_write("\x01\x00\x00\x02\x00\x05\x60\x02\xe8\x03");
 			$buffer = $this->_fp_read(4096);
-			lgsl_print_raw_buffer($buffer);
 			if (strlen($buffer) < 12) {
 				$this->_fp_write("\x00\x06\x61\x02\x20\x4e\x02");
 				$buffer = $this->_fp_read(4096);
-				lgsl_print_raw_buffer($buffer);
 			}
 			$server['s']['map'] = "Cryofall";
 			if (strlen($buffer) < 12) {
