@@ -445,7 +445,7 @@
       $this->_history = [];
     }
     
-    public function lgsl_cached_query($request = 'sep') {
+    public function lgsl_cached_query($request = 'seph') {
       $db = LGSL::db();
       if ($this->_base['id']) {
         $result = $db->get_server_by_id($this->_base['id']);
