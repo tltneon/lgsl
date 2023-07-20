@@ -111,14 +111,17 @@
 
   // DRAW GRAPH
 
-  imagesetthickness($im, 2);
-  for ($i = 1; $i < count($x); $i++) {
-    if ($s[$i-1]) {
-      imageline($im, (int) ($x0 + $x[$i-1] * $scaleX), (int) ($maxY - $y[$i-1] * $scaleY), (int) ($x0 + $x[$i] * $scaleX), (int) ($maxY - $y[$i] * $scaleY), $green);
-    } else {
-      imagefilledellipse($im, (int) ($x0 + $x[$i] * $scaleX), (int) ($maxY - $y[$i] * $scaleY), 6, 6, $red);
-    }
-  }
+  imagesetthickness($im, 3);
+	if (count($x) == 1) {
+		imagefilledellipse($im, (int) ($x0 + $x[0] * $scaleX), (int) ($maxY - $y[0] * $scaleY), 6, 6, $red);
+	} else {
+		for ($i = 1; $i < count($x); $i++) {
+			if ($s[$i] == 0) {
+				imagefilledellipse($im, (int) ($x0 + $x[$i] * $scaleX), (int) ($maxY - $y[$i] * $scaleY), 6, 6, $red);
+			}
+			imageline($im, (int) ($x0 + $x[$i-1] * $scaleX), (int) ($maxY - $y[$i-1] * $scaleY), (int) ($x0 + $x[$i] * $scaleX), (int) ($maxY - $y[$i] * $scaleY), $green);
+		}
+	}
 
   $game_id = makeImage($server->game_icon(), 16, 16);                          // create game icon
   imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);                             // place game icon
