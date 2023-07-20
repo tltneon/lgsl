@@ -3832,6 +3832,7 @@
 	class Stream {
 		private $_protocol;
 		private $_stream;
+		private $_server;
 		public function __construct($protocol) {
 			$this->_protocol = $protocol;
 		}
@@ -3848,6 +3849,7 @@
         curl_setopt($this->_stream, CURLOPT_CONNECTTIMEOUT, $lgsl_config['timeout']);
         curl_setopt($this->_stream, CURLOPT_TIMEOUT, 1);
         curl_setopt($this->_stream, CURLOPT_HTTPHEADER, ['Accept: application/json']);
+				$this->_server = $server;
       } else {
         $this->_stream = @fsockopen("{$this->_protocol}://{$server->get_ip()}", $server->get_q_port(), $errno, $errstr, 1);
         if (!$this->_stream) {
@@ -3862,13 +3864,31 @@
 		}
 		public function read($length = 4096) {
       if ($this->_isHttp()) {
-        return curl_exec($this->_stream);
+				$result = curl_exec($this->_stream);
+				if (curl_errno($this->_stream)) {
+					$this->_server->set_extra_value('_error', 'Couldn\'t send request: ' . curl_error($this->_stream));
+          $this->_server->set_status(false);
+          return false;
+				} else {
+					$resultStatus = curl_getinfo($this->_stream, CURLINFO_HTTP_CODE);
+					if ($resultStatus != 200) {
+						$this->_server->set_extra_value('_error', "Request failed: HTTP status code: {$resultStatus}");
+						$this->_server->set_status(false);
+						return false;
+					}
+				}
+        return $result;
       } else {
         return fread($this->_stream, $length);
       }
 		}
 		public function readJson($length = 4096) {
-      return json_decode($this->read($length), true);
+			$result = $this->read($length);
+			try {
+				return json_decode($result, true);
+      } catch (Exception $e) {
+				return $result;
+			}
 		}
 		public function write($data) {
       if ($this->_isHttp()) {
