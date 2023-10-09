@@ -15,29 +15,23 @@
   global $output, $server, $title;
 
 //------------------------------------------------------------------------------------------------------------+
-// THIS CONTROLS HOW THE PLAYER FIELDS ARE DISPLAYED
-
-  $fields_show  = ["name", "score", "kills", "deaths", "team", "ping", "bot", "time"]; // ORDERED FIRST
-  $fields_hide  = ["teamindex", "pid", "pbguid"]; // REMOVED
-  $fields_other = TRUE; // FALSE TO ONLY SHOW FIELDS IN $fields_show
-
-//------------------------------------------------------------------------------------------------------------+
 // GET THE SERVER DETAILS AND PREPARE IT FOR DISPLAY
 
   global $lgsl_server_id;
   if ($lgsl_config['preloader']) {
-    $lgsl_server_id = isset($_GET["s"]) ? (int) $_GET["s"] : null;
+    $lgsl_server_id = $_GET["s"] ?? null;
   }
-  $lgsl_server_ip = isset($_GET["ip"]) ? $_GET["ip"] : "";
-  $lgsl_server_port = isset($_GET["port"]) ? (int) $_GET["port"] : "";
+  $lgsl_server_ip = $_GET["ip"] ?? "";
+  $lgsl_server_port = $_GET["port"] ?? "";
 
   //$server = lgsl_query_cached("", $lgsl_server_ip, $lgsl_server_port, "", "", "sep", $lgsl_server_id);
-  $server = new Server(array("ip" => $lgsl_server_ip, "c_port" => $lgsl_server_port, "id" => $lgsl_server_id));
+  $server = new Server(["ip" => $lgsl_server_ip, "c_port" => $lgsl_server_port, "id" => $lgsl_server_id]);
   $server->lgsl_cached_query();
+  var_dump($server->get_history());
 
   if ($server->isvalid()) {
     $title .= " | {$server->get_name()}";
-    $fields = lgsl_sort_fields($server->to_array(), $fields_show, $fields_hide, $fields_other);
+    $fields = $server->sort_player_fields();
     //$server = lgsl_sort_players($server->get_players());
     //$server = lgsl_sort_extras($server->get_extras());
     //$server = lgsl_server_html($server);
@@ -89,7 +83,7 @@
         <div class='details_info_column zone{$server->get_zone()}' style='background-image: url({$server->get_map_image()});'>
           <i class='details_password_image zone{$server->get_zone()}' style='background-image: url({$server->map_password_image()});' title='{$lgsl_config['text']['map']}: {$server->get_map()}'></i>
 					<i class='details_location_image flag f{$server->getLocation()}' title='{$server->location_text()}'></i>
-          <i class='details_game_image' style='background-image: url({$server->game_icon()});' title='{$server->text_type_game()}'></i>
+          <i class='details_game_image' style='background-image: url({$server->add_url_path($server->game_icon())});' title='{$server->text_type_game()}'></i>
         </div>
       </div>";
 
@@ -107,7 +101,7 @@
 
     if ($lgsl_config['image_mod']) {
       if (extension_loaded('gd')) {
-        $p = str_replace('lgsl_files/', '', lgsl_url_path()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
+        $p = str_replace('src/', '', lgsl_url_path()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
         $output .= "
         <details>
           <summary style='margin-bottom: 12px;'>
@@ -122,6 +116,9 @@
 
             <img src='userbar.php?{$g}&t=3' alt='{$server->get_name()}'/><br />
             <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=3[/img][/url]</textarea>
+            
+            <iframe src='src/lgsl_zone.php?{$g}' alt='{$server->get_name()}' style='border: 0; display: block; background: white;width: 200px;height: 275px;margin: auto;'></iframe><br />
+            <textarea onClick='this.select();'><iframe src='{$p}src/lgsl_zone.php?{$g}'></iframe></textarea>
           </div>
         </details>
         <div class='spacer'></div>
@@ -152,7 +149,7 @@
     $output .= "
     <div id='details_playerlist'>";
 
-    if ($server->get_players_count('active') == 0) {
+    if ($server->get_players_count('active') == 0 || count($server->get_players()) == 0) {
       $output .= "<div class='noinfo'>{$lgsl_config['text']['npi']}</div>";
     } else {
       $players = $server->get_players();

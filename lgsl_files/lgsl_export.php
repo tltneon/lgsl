@@ -26,50 +26,50 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $output       = "";
-  $mysql_filter = "";
-  $mysql_where  = array();
+  $output    = "";
+  $db_filter = "";
+  $db_where  = [];
 
-  if ($json)        { $jsarray = array(); }
-  if ($nodisabled)  { $mysql_where[] = "`disabled`=0"; } // ONLY LIST ENABLED
-  if ($online)      { $mysql_where[] = "`status`=1"; }   // ONLY LIST ONLINE
-  if ($mysql_where) { $mysql_filter  = "WHERE ".implode(" AND ", $mysql_where); }
+  if ($json)        { $jsarray = []; }
+  if ($nodisabled)  { $db_where[] = "`disabled`=0"; } // ONLY LIST ENABLED
+  if ($online)      { $db_where[] = "`status`=1"; }   // ONLY LIST ONLINE
+  if ($db_where) { $db_filter  = "WHERE ".implode(" AND ", $db_where); }
 
-  if     ($sort == "ip")   { $mysql_filter .= " ORDER BY CONCAT(`ip`, `c_port`) ASC"; }
-  elseif ($sort == "type") { $mysql_filter .= " ORDER BY `type` ASC"; }
-  else                     { $mysql_filter .= " ORDER BY `id` ASC"; }
+  if     ($sort === "ip")   { $db_filter .= " ORDER BY CONCAT(`ip`, `c_port`) ASC"; }
+  elseif ($sort === "type") { $db_filter .= " ORDER BY `type` ASC"; }
+  else                      { $db_filter .= " ORDER BY `id` ASC"; }
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $mysql_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` {$mysql_filter}");
+  $db_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` {$db_filter}");
 
-  foreach ($mysql_result as $mysql_row) {
-    if ($randomzones) { $mysql_row['zone'] = rand(1, $randomzones); } // FILL ZONES WITH RANDOM NUMBERS ( 1 TO $randomzones )
+  foreach ($db_result as $db_row) {
+    $db_row['zone'] = (int) $db_row['zone'];
+    if ($randomzones) { $db_row['zone'] = rand(1, $randomzones); } // FILL ZONES WITH RANDOM NUMBERS ( 1 TO $randomzones )
 
     if ($xml) {
       $output .= "
       <server>
-        <type>{$mysql_row['type']}</type>
-        <ip>{$mysql_row['ip']}</ip>
-        <c_port>{$mysql_row['c_port']}</c_port>
-        <q_port>{$mysql_row['q_port']}</q_port>
-        <s_port>{$mysql_row['s_port']}</s_port>
-        <zone>{$mysql_row['zone']}</zone>
-        <disabled>{$mysql_row['disabled']}</disabled>
+        <type>{$db_row['type']}</type>
+        <ip>{$db_row['ip']}</ip>
+        <c_port>{$db_row['c_port']}</c_port>
+        <q_port>{$db_row['q_port']}</q_port>
+        <s_port>{$db_row['s_port']}</s_port>
+        <zone>{$db_row['zone']}</zone>
+        <disabled>{$db_row['disabled']}</disabled>
       </server>";
     } elseif ($json) {
-      array_push($jsarray, 
-        array(
-          'type'     => $mysql_row['type'],
-          'ip'       => $mysql_row['ip'],
-          'c_port'   => $mysql_row['c_port'],
-          'q_port'   => $mysql_row['q_port'],
-          's_port'   => $mysql_row['s_port'],
-          'zone'     => $mysql_row['zone'],
-          'disabled' => $mysql_row['disabled'])
-        );
+      array_push($jsarray, [
+          'type'     => $db_row['type'],
+          'ip'       => $db_row['ip'],
+          'c_port'   => $db_row['c_port'],
+          'q_port'   => $db_row['q_port'],
+          's_port'   => $db_row['s_port'],
+          'zone'     => $db_row['zone'],
+          'disabled' => $db_row['disabled']
+      ]);
     } else {
-      $output .= "{$mysql_row['type']} : {$mysql_row['ip']} : {$mysql_row['c_port']} : {$mysql_row['q_port']} : {$mysql_row['s_port']} : {$mysql_row['zone']} : {$mysql_row['disabled']} \r\n";
+      $output .= "{$db_row['type']} : {$db_row['ip']} : {$db_row['c_port']} : {$db_row['q_port']} : {$db_row['s_port']} : {$db_row['zone']} : {$db_row['disabled']} \r\n";
     }
   }
 

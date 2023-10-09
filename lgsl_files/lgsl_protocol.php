@@ -412,7 +412,7 @@
   
     public function lgsl_protocol_function($type) {
       $list = $this->lgsl_protocol_list();
-      return isset($list[$type]) ? $list[$type] : "err";
+      return $list[$type] ?? "err";
     }
     public function query() {
       $this->_server->set_timestamp(implode('', $this->_lgsl_need), time());
@@ -420,7 +420,9 @@
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
 				$status = call_user_func([$this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"], $this->_server->get_type());
-			}
+			} else {
+        $this->_server->set_extra_value('_error', 'Can\'t establish the connection to server.');
+      }
       $this->_server->set_status($status);
 			$this->_lgsl_fp->close();
     }
@@ -477,7 +479,7 @@
   
       //---------------------------------------------------------+
   
-      if (rand(0, 10) == 5) { $server['p'] = array(); } // RANDOM NO PLAYERS
+      if (rand(0, 10) == 5) { $server['p'] = []; } // RANDOM NO PLAYERS
       if (rand(0, 10) == 5) { return FALSE; }           // RANDOM GOING OFFLINE
   
       //---------------------------------------------------------+
@@ -814,7 +816,7 @@
       //  THE STANDARD HEADER POSITION REVEALS THE TYPE BUT IT MAY NOT ARRIVE FIRST
       //  ONCE WE KNOW THE TYPE WE CAN FIND THE TOTAL NUMBER OF PACKETS EXPECTED
 
-      $packet_temp  = array();
+      $packet_temp  = [];
       $packet_type  = 0;
       $packet_count = 0;
       $packet_total = 4;
@@ -852,7 +854,7 @@
       //  WITH THE TYPE WE CAN NOW SORT AND JOIN THE PACKETS IN THE CORRECT ORDER
       //  REMOVING ANY EXTRA HEADERS IN THE PROCESS
 
-      $buffer = array();
+      $buffer = [];
 
       foreach ($packet_temp as $packet) {
         if     ($packet_type == 1) { $packet_order = 0; }
@@ -985,7 +987,7 @@
       //---------------------------------------------------------+
 
       // IF ONLY [s] WAS REQUESTED THEN REMOVE INCOMPLETE [e]
-      if ($this->_lgsl_need['s'] && !$this->_lgsl_need['e']) { $server['e'] = array(); }
+      if ($this->_lgsl_need['s'] && !$this->_lgsl_need['e']) { $server['e'] = []; }
 
       if     ($this->_lgsl_need['s']) { $this->_lgsl_need['s'] = FALSE; }
       elseif ($this->_lgsl_need['e']) { $this->_lgsl_need['e'] = FALSE; }
@@ -1022,7 +1024,7 @@
       //---------------------------------------------------------+
       //  GET RAW PACKET DATA
 
-      $buffer = array();
+      $buffer = [];
       $packet_count = 0;
       $packet_total = 4;
 
@@ -2405,7 +2407,7 @@
       //---------------------------------------------------------+
   
       for ($i=0; $i<$server['s']['players']; $i++) {
-        $player_bits   = array();
+        $player_bits   = [];
         $player_bits[] = ord(lgsl_cut_byte($buffer, 1)) * 4; // %p = PING
         $player_bits[] = ord(lgsl_cut_byte($buffer, 1));     // %l = PACKET LOSS
         $player_bits[] = ord(lgsl_cut_byte($buffer, 1));     // %t = TEAM
@@ -2641,7 +2643,7 @@
       lgsl_gs_crypt($server['b']['type'], $packet, TRUE);
       $this->_fp_write("\x4A\x35\xFF\xFF\x02\x00\x02\x00\x01\x00{$packet}");
   
-      $buffer = array();
+      $buffer = [];
       $packet_count = 0;
       $packet_total = 4;
   
@@ -2679,7 +2681,7 @@
   
       //---------------------------------------------------------+
   
-      $raw = array();
+      $raw = [];
   
       do {
         $raw_name = lgsl_cut_pascal($buffer, 2);
@@ -2999,7 +3001,12 @@
         $this->_fp_write("\x01\x00\x03\x10\x21\xFB\x01\x75\x00");
   
         $buffer = $this->_fp_read(4096);
-  
+        
+        if (!$buffer) { 
+          $this->_fp_write("\x01\x00\x03\x10\x21\xFB\x01\x75\x00");
+          $buffer = $this->_fp_read(4096);
+         }
+
         if (!$buffer) { return FALSE; }
   
         $buffer = substr($buffer, 4); // REMOVE HEADER
@@ -3012,32 +3019,31 @@
         $server['e']['gamemode']   = ord(lgsl_cut_byte($buffer, 1));
         $server['e']['bots']       = ord(lgsl_cut_byte($buffer, 1));
   
-        $server['s']['password']        = ($server['e']['bit_flags'] & 1) ? "1" : "0";
-        $server['e']['registered_only'] = ($server['e']['bit_flags'] & 2) ? "1" : "0";
-        $server['e']['fog_of_war']      = ($server['e']['bit_flags'] & 4) ? "1" : "0";
-        $server['e']['friendlyfire']    = ($server['e']['bit_flags'] & 8) ? "1" : "0";
+        $server['s']['password']        = (int)($server['e']['bit_flags'] & 1);
+        $server['e']['registered_only'] = (int)($server['e']['bit_flags'] & 2);
+        $server['e']['fog_of_war']      = (int)($server['e']['bit_flags'] & 4);
+        $server['e']['friendlyfire']    = (int)($server['e']['bit_flags'] & 8);
       }
   
       if ($this->_lgsl_need['p']) {
         $this->_lgsl_need['p'] = FALSE;
   
         $this->_fp_write("\x01\x00\xFB\x05");
-  
         $buffer = $this->_fp_read(4096);
   
-        if (!$buffer) { return FALSE; }
-  
-        $buffer = substr($buffer, 4); // REMOVE HEADER
-  
-        $player_total = ord(lgsl_cut_byte($buffer, 1));
-  
-        for ($i=0; $i<$player_total; $i++) {
-          $server['p'][$i]['pid']    = ord(lgsl_cut_byte($buffer, 1));
-          $server['p'][$i]['name']   = lgsl_cut_pascal($buffer);
-          $server['p'][$i]['team']   = ord(lgsl_cut_byte($buffer, 1));
-          $server['p'][$i]['score']  = lgsl_unpack(lgsl_cut_byte($buffer, 4), "l");
-          $server['p'][$i]['deaths'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "l");
-        }
+        if ($buffer) {
+					$buffer = substr($buffer, 4); // REMOVE HEADER
+		
+					$player_total = ord(lgsl_cut_byte($buffer, 1));
+		
+					for ($i=0; $i<$player_total; $i++) {
+						$server['p'][$i]['pid']    = ord(lgsl_cut_byte($buffer, 1));
+						$server['p'][$i]['name']   = lgsl_cut_pascal($buffer);
+						$server['p'][$i]['team']   = ord(lgsl_cut_byte($buffer, 1));
+						$server['p'][$i]['score']  = lgsl_unpack(lgsl_cut_byte($buffer, 4), "l");
+						$server['p'][$i]['deaths'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "l");
+					}
+				}
       }
   
       //---------------------------------------------------------+
@@ -3115,7 +3121,7 @@
         $this->_lgsl_need['p'] = FALSE;
   
         $field_total = lgsl_cut_pascal($buffer, 4, 0, 1);
-        $field_list  = array();
+        $field_list  = [];
   
         for ($i=0; $i<$field_total; $i++) {
           $field_list[] = strtolower(lgsl_cut_pascal($buffer, 4, 0, 1));
@@ -4047,10 +4053,10 @@
 //---------------------------------------------------------+
 //  CHECK WHAT IS NEEDED
 
-    $lgsl_need      = array();
-    $lgsl_need['s'] = strpos($request, "s") !== FALSE ? TRUE : FALSE;
-    $lgsl_need['e'] = strpos($request, "e") !== FALSE ? TRUE : FALSE;
-    $lgsl_need['p'] = strpos($request, "p") !== FALSE ? TRUE : FALSE;
+    $lgsl_need      = [];
+    $lgsl_need['s'] = strpos($request, "s") !== FALSE;
+    $lgsl_need['e'] = strpos($request, "e") !== FALSE;
+    $lgsl_need['p'] = strpos($request, "p") !== FALSE;
 
     // ChANGE [e] TO [s][e] AS BASIC QUERIES OFTEN RETURN EXTRA INFO
     if ($lgsl_need['e'] && !$lgsl_need['s']) { $lgsl_need['s'] = TRUE; }
@@ -4230,8 +4236,8 @@ function lgsl_unescape($text) {
       case 1: // CONNECTION PROBLEM - FEED MAYBE TEMPORARY OFFLINE
         $server['s']['name'] = "---";
         $server['s']['map']  = "---";
-        $server['e'] = array("feed" => "Failed To Connect");
-        $server['p'] = array();
+        $server['e'] = ["feed" => "Failed To Connect"];
+        $server['p'] = [];
       break;
 
       case 2: // NO FEED DATA - MAYBE WRONG FEED URL
@@ -4305,7 +4311,7 @@ function lgsl_unescape($text) {
   
 //---------------------------------------------------------+
 
-  function lgsl_print_raw_buffer(&$buffer){
+  function lgsl_print_raw_buffer(&$buffer) {
       $raw = '';
       $raw2 = '';
     $symbols = $buffer ? unpack('C*', $buffer) : Array();
@@ -4480,7 +4486,7 @@ function lgsl_unescape($text) {
 //-------- WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P ----------+
 
   function lgsl_version() {
-    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 7.0.0"; // little dirty trick
+    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 7.0.0";
   }
 
 //------------------------------------------------------------------------------------------------------------+

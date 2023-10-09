@@ -30,11 +30,11 @@
   // MAIN SECTION
 
   header("Content-Type: image/png");
-  require "lgsl_files/lgsl_class.php";
-  $s = isset($_GET['s']) ? (int) $_GET['s'] : null;
-  $ip = isset($_GET['ip']) ? $_GET['ip'] : null;
-  $port = isset($_GET['port']) ? (int) $_GET['port'] : null;
-  $server = new Server(array("ip" => $ip, "c_port" => $port, "id" => $s));
+  require "src/lgsl_class.php";
+  $s = (int) ($_GET['s'] ?? null);
+  $ip = $_GET['ip'] ?? null;
+  $port = (int) ($_GET['port'] ?? null);
+  $server = new Server(["ip" => $ip, "c_port" => $port, "id" => $s]);
   $server->lgsl_cached_query("cs");
   if (!$server) {
     $white = imagecolorallocate($im, 255, 255, 255);
@@ -51,9 +51,7 @@
   $xStep = 30;
   $yStep = (int) ($max > 32 ? 9 : 100 / $max) + 1;
 
-  $s = array();
-  $x = array();
-  $y = array();
+  $s = $x = $y = [];
   $history = $server->get_history();
   $avg = 0; $avgc = 0;
   foreach ($history as $key) {
@@ -97,7 +95,7 @@
     $ySteps = ($maxY-$y0) / $yStep - 1;
     for ($i = 1; $i < $ySteps + 1; $i++) {
       imageline($im, $x0 + 1, (int) $maxY - $yStep * $i, $maxX, (int) $maxY - $yStep * $i, $gray);
-      if ($max > 32 or $i % (int) (1 + $max / 10) == 0) {
+      if ($max > 32 || $i % (int) (1 + $max / 10) == 0) {
         imagestring($im, 1, 3, ($maxY - $yStep * $i) - 3, round($i * $yStep / $scaleY, 0), $black);
       }
     }
@@ -113,7 +111,7 @@
 
   imagesetthickness($im, 3);
 	if (count($x) == 1) {
-		imagefilledellipse($im, (int) ($x0 + $x[0] * $scaleX), (int) ($maxY - $y[0] * $scaleY), 6, 6, $red);
+		imagefilledellipse($im, (int) ($x0 + $x[0] * $scaleX), (int) ($maxY - $y[0] * $scaleY), 6, 6, $green);
 	} else {
 		for ($i = 1; $i < count($x); $i++) {
 			if ($s[$i] == 0) {
@@ -123,10 +121,10 @@
 		}
 	}
 
-  $game_id = makeImage($server->game_icon(), 16, 16);                          // create game icon
+  $game_id = makeImage($server->game_icon('src/'), 16, 16);                          // create game icon
   imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);                             // place game icon
 
-  $font = dirname(__FILE__) . '/lgsl_files/other/cousine.ttf';
+  $font = dirname(__FILE__) . '/src/other/cousine.ttf';
 	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim($server->get_name(false)));
 	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $server->get_address()));
 	imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));

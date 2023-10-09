@@ -1,6 +1,6 @@
 <?php
 //------------------------------------------------------------------------------------------------------------+
-  require "lgsl_files/lgsl_config.php";
+  require "src/lgsl_config.php";
 
   if (empty($lgsl_config['admin']['user']) || empty($lgsl_config['admin']['pass'])) {
     exit($lgsl_config['text']['aum']);
@@ -27,8 +27,8 @@
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta http-equiv='content-style-type' content='text/css' />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='lgsl_files/other/_lgsl_admin.css' type='text/css' />
-    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style'];?>' type='text/css' />
+    <link rel='stylesheet' href='src/other/_lgsl_admin.css' type='text/css' />
+    <link rel='stylesheet' href='src/styles/<?php echo $lgsl_config['style'];?>' type='text/css' />
   </head>
   <body>
     <div id='admin_page'>
@@ -39,7 +39,7 @@
   if (defined("LGSL_ADMIN")) {
     global $output;
     $output = "";
-    require "lgsl_files/lgsl_admin.php";
+    require "src/lgsl_admin.php";
     echo $output;
   } else {
     echo "

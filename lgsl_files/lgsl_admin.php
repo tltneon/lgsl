@@ -11,7 +11,7 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  if (!defined("LGSL_ADMIN")) { exit("DIRECT ACCESS ADMIN FILE NOT ALLOWED"); }
+  if (!defined("LGSL_ADMIN")) { header('HTTP/1.0 404 Not Found'); exit(); }
 
   require "lgsl_class.php";
 
@@ -44,15 +44,16 @@
   if (!empty($_POST['lgsl_save_1']) || !empty($_POST['lgsl_save_2'])) {
     if (!empty($_POST['lgsl_save_1'])) {
       // LOAD SERVER CACHE INTO MEMORY
-      $servers = array();
+      $servers = [];
       $mysqli_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`");
+			
       foreach ($mysqli_result as $mysqli_row) {
         $servers["{$mysqli_row['type']}:{$mysqli_row['ip']}:{$mysqli_row['q_port']}"] = [$mysqli_row['status'], $mysqli_row['cache'], $mysqli_row['cache_time']];
       }
     }
 
-    // EMPTY SQL TABLE
-    $mysqli_result = $db->query("TRUNCATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ");
+    // EMPTY SQL TABLE		
+    $mysqli_result = $db->clear();
 
     // CONVERT ADVANCED TO NORMAL DATA FORMAT
     if (!empty($_POST['lgsl_management'])) {
@@ -72,7 +73,7 @@
 
     foreach ($_POST['form_type'] as $form_key => $not_used) {
       // COMMENTS LEFT IN THEIR NATIVE ENCODING WITH JUST HTML SPECIAL CHARACTERS CONVERTED
-      $_POST['form_comment'][$form_key] = lgsl_htmlspecialchars($_POST['form_comment'][$form_key]);
+      $_POST['form_comment'][$form_key] = htmlspecialchars($_POST['form_comment'][$form_key], ENT_QUOTES);
 
       $type       = $db->escape_string(strtolower(trim($_POST['form_type']   [$form_key])));
       $ip         = $db->escape_string(           trim($_POST['form_ip']     [$form_key]));
@@ -101,12 +102,12 @@
 
       // DISCARD SERVERS WITH AN EMPTY IP AND AUTO DISABLE SERVERS WITH SOMETHING WRONG
       if     (!$ip)                               { continue; }
-      elseif ($c_port < 1 || $c_port > 99999)     { $disabled = 1; $c_port = 0; }
-      elseif ($q_port < 1 || $q_port > 99999)     { $disabled = 1; $q_port = 0; }
+      elseif ($c_port < 1 || $c_port > 65535)     { $disabled = 1; $c_port = 0; }
+      elseif ($q_port < 1 || $q_port > 65535)     { $disabled = 1; $q_port = 0; }
       elseif (!isset($lgsl_protocol_list[$type])) { $disabled = 1; }
 
       $mysqli_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`zone`,`disabled`,`comment`,`status`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','{$zone}','{$disabled}','{$comment}','{$status}','{$cache}','{$cache_time}')";
-      $db->query($mysqli_query);
+			$db->execute($mysqli_query);
     }
   }
 
@@ -115,6 +116,18 @@
   if (!empty($_POST['lgsl_check_updates'])) {
     $context = stream_context_create(["http" => ["header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"]]);
     $lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/branches/master", false, $context);
+    if (!$lgsl_fp) {
+      $output .= "
+      <div class='tt'>
+        CAN'T LOAD DATA FROM GITHUB.COM -> NO INTERNET CONNECTION?
+      </div>
+      <form method='post' action='' style='padding-top: 40px; text-align: center;'>
+				<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+				<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
+			</form>
+      ";
+      return;
+    }
     $buffer1 = json_decode($lgsl_fp, true);
 		$date1 = date($lgsl_config['text']['tzn'], strtotime($buffer1["commit"]["commit"]["author"]["date"]));
 
@@ -238,17 +251,17 @@
         <textarea name='form_list' cols='90' rows='30' wrap='off' spellcheck='false'>\r\n";
 
 //---------------------------------------------------------+
-        $mysqli_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC;");
+        $mysqli_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
 
         foreach ($mysqli_result as $mysqli_row) {
           $output .=
-          lgsl_string_html(str_pad($mysqli_row['type'],     15, " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['ip'],       30, " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['c_port'],   6,  " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['q_port'],   6,  " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['s_port'],   7,  " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['zone'],     7,  " ")).":".
-          lgsl_string_html(str_pad($mysqli_row['disabled'], 2,  " ")).":".
+          str_pad($mysqli_row['type'],     15, " ").":".
+          str_pad($mysqli_row['ip'],       30, " ").":".
+          str_pad($mysqli_row['c_port'],   6,  " ").":".
+          str_pad($mysqli_row['q_port'],   6,  " ").":".
+          str_pad($mysqli_row['s_port'],   7,  " ").":".
+          str_pad($mysqli_row['zone'],     7,  " ").":".
+          str_pad($mysqli_row['disabled'], 2,  " ").":".
                                    $mysqli_row['comment']            ."\r\n";
         }
 //---------------------------------------------------------+
@@ -259,10 +272,11 @@
         <input type='hidden' name='lgsl_management' value='1' />
         <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
           <tr>
-            <td><input type='submit' name='lgsl_save_1'          value='".$lgsl_config['text']['skc']."' /> </td>
-            <td><input type='submit' name='lgsl_save_2'          value='".$lgsl_config['text']['srh']."' /> </td>
-            <td><input type='submit' name='lgsl_map_image_paths' value='".$lgsl_config['text']['mip']."' /> </td>
-            <td><input type='submit' name='lgsl_switch'          value='".$lgsl_config['text']['nrm']."' /> </td>
+            <td><input type='submit' name='lgsl_save_1'          value='{$lgsl_config['text']['skc']}' /> </td>
+            <td><input type='submit' name='lgsl_save_2'          value='{$lgsl_config['text']['srh']}' /> </td>
+            <td><input type='submit' name='lgsl_map_image_paths' value='{$lgsl_config['text']['mip']}' /> </td>
+            <td><input type='submit' name='lgsl_switch'          value='{$lgsl_config['text']['nrm']}' /> </td>
+            <td><input type='submit' name='lgsl_check_updates'   value='{$lgsl_config['text']['upd']}' /> </td>
           </tr>
         </table>
       </div>
@@ -293,7 +307,7 @@
 
 //---------------------------------------------------------+
 
-      $mysqli_result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` ORDER BY `id` ASC");
+      $mysqli_result = $db->get_all();
 
       foreach ($mysqli_result as $mysqli_row) {
         $id = $mysqli_row['id']; // ID USED AS [] ONLY RETURNS TICKED CHECKBOXES
@@ -314,16 +328,16 @@
 
             if (!isset($lgsl_type_list[$mysqli_row['type']])) {
               $output .= "
-              <option selected='selected' value='".lgsl_string_html($mysqli_row['type'])."'>".lgsl_string_html($mysqli_row['type'])."</option>";
+						<option selected='selected' value='{$mysqli_row['type']}'>{$mysqli_row['type']}</option>";
             }
 //---------------------------------------------------------+
             $output .= "
             </select>
           </td>
-          <td class='center'><input type='text'   name='form_ip[{$id}]'     value='".lgsl_string_html($mysqli_row['ip'])."'   size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value='".lgsl_string_html($mysqli_row['c_port'])."' min='0' max='65536' {$disabled} /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value='".lgsl_string_html($mysqli_row['q_port'])."' min='0' max='65536' {$disabled} /></td>
-          <td class='center'><input type='number' name='form_s_port[{$id}]' value='".lgsl_string_html($mysqli_row['s_port'])."' min='0' max='65536' {$disabled} /></td>
+          <td class='center'><input type='text'   name='form_ip[{$id}]'     value='{$mysqli_row['ip']}'   size='15' maxlength='255' /></td>
+          <td class='center'><input type='number' name='form_c_port[{$id}]' value='{$mysqli_row['c_port']}' min='0' max='65536' {$disabled} /></td>
+          <td class='center'><input type='number' name='form_q_port[{$id}]' value='{$mysqli_row['q_port']}' min='0' max='65536' {$disabled} /></td>
+          <td class='center'><input type='number' name='form_s_port[{$id}]' value='{$mysqli_row['s_port']}' min='0' max='65536' {$disabled} /></td>
           <td>
             <select name='form_zone[$id]'>";
 //---------------------------------------------------------+
@@ -334,7 +348,7 @@
 
             if (!isset($zone_list[$mysqli_row['zone']])) {
               $output .= "
-              <option selected='selected' value='".lgsl_string_html($mysqli_row['zone'])."'>".lgsl_string_html($mysqli_row['zone'])."</option>";
+              <option selected='selected' value='{$mysqli_row['zone']}'>{$mysqli_row['zone']}</option>";
             }
 //---------------------------------------------------------+
 //---------------------------------------------------------+
@@ -451,18 +465,6 @@
   function lgsl_stripslashes_deep($value) {
     $value = is_array($value) ? array_map('tltneon\LGSL\lgsl_stripslashes_deep', $value) : stripslashes($value);
     return $value;
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-
-  function lgsl_htmlspecialchars($string) {
-    // PHP4 COMPATIBLE WAY OF CONVERTING SPECIAL CHARACTERS WITHOUT DOUBLE ENCODING EXISTING ENTITIES
-    $string = str_replace("\x05\x06", "", $string);
-    $string = preg_replace("/&([a-z\d]{2,7}|#\d{2,5});/i", "\x05\x06$1", $string);
-    $string = htmlspecialchars($string, ENT_QUOTES);
-    $string = str_replace("\x05\x06", "&", $string);
-
-    return $string;
   }
 
 //------------------------------------------------------------------------------------------------------------+

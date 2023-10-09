@@ -3,7 +3,9 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ PREPARE CONFIG - DO NOT CHANGE OR MOVE THIS ]
 
-  global $lgsl_config; $lgsl_config = array();
+  global $lgsl_config; $lgsl_config = [];
+	
+	$lgsl_config['installed'] = false;
 
 //------------------------------------------------------------------------------------------------------------+
 //[ FEED: 0=OFF 1=CURL OR FSOCKOPEN 2=FSOCKOPEN ONLY / LEAVE THE URL ALONE UNLESS YOU KNOW WHAT YOUR DOING ]
@@ -112,11 +114,13 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ DATABASE SETTINGS: FOR STAND-ALONE OR TO OVERRIDE CMS DEFAULTS ]
 
+  $lgsl_config['db']['type']   = "mysql";
   $lgsl_config['db']['server'] = "localhost";
   $lgsl_config['db']['user']   = "root";
   $lgsl_config['db']['pass']   = "";
   $lgsl_config['db']['db']     = "lgsl";
   $lgsl_config['db']['table']  = "lgsl";
+  $lgsl_config['db']['prefix'] = "";
 
 //------------------------------------------------------------------------------------------------------------+
 //[ HOSTING FIXES ]
@@ -135,6 +139,7 @@
   $lgsl_config['cache_time']    = 60;        // seconds=time before a server needs updating
   $lgsl_config['autoreload']    = false;     // true=reloads page when cache_time is passed
   $lgsl_config['history']       = false;     // true=enable server tracking (history of past 24 hours)
+	$lgsl_config['history_hours'] = 24;
   $lgsl_config['live_time']     = 3;         // seconds=time allowed for updating servers per page load
   $lgsl_config['timeout']       = 0;         // 1=gives more time for servers to respond but adds loading delay
   $lgsl_config['retry_offline'] = 0;         // 1=repeats query when there is no response but adds loading delay

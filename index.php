@@ -3,13 +3,14 @@
   $time = microtime(true);
   header("Content-Type:text/html; charset=utf-8");
 
-  require ("lgsl_files/lgsl_config.php");
+  require ("src/lgsl_config.php");
+	if (empty($lgsl_config['installed'])) header("Location: install.php");
   global $output, $title;
 
   function load_page($file) {
     global $lgsl_config;
     if ($lgsl_config['preloader']) {
-      $loader = @file_get_contents('lgsl_files/other/loader.html');
+      $loader = @file_get_contents('src/other/loader.html');
       $post = http_build_query($_POST);
       $get = http_build_query($_GET);
       return "
@@ -21,23 +22,24 @@
             return false;
           }
           httpRequest.onreadystatechange = alertContents;
-          httpRequest.open('POST', 'lgsl_files/lgsl_{$file}.php?{$get}', true);
+          httpRequest.open('POST', 'src/lgsl_{$file}.php?{$get}', true);
           httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
           httpRequest.send('{$post}')
 
           function alertContents() {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
+			  
+              document.getElementById('container').innerHTML = httpRequest.responseText;
               if (httpRequest.status === 200) {
-                document.getElementById('container').innerHTML = httpRequest.responseText;
                 if (document.querySelector('[id^=servername]')) {
-                  document.title = document.title + ' | ' + document.querySelector('[id^=servername]').innerText;
+                  document.title += ' | ' + document.querySelector('[id^=servername]').innerText;
                 }
                 window.document.dispatchEvent(new Event('DOMContentLoaded', {
                   bubbles: true,
                   cancelable: true
                 }));
               } else {
-                alert('There was a problem with the request.');
+                alert('There was a problem with the request. HTTP Code: ' + httpRequest.status);
               }
             }
           }
@@ -46,16 +48,16 @@
       {$loader}";
     } else {
       global $lgsl_server_id;
-      $lgsl_server_id = isset($_GET['s']) ? $_GET['s'] : "";
-      require("lgsl_files/lgsl_{$file}.php");
+      $lgsl_server_id = $_GET['s'] ?? "";
+      require("src/lgsl_{$file}.php");
       return $output;
     }
   }
 
   $title = $lgsl_config['text']['ttl'];
-  $s = isset($_GET['s']) ? $_GET['s'] : null;
-  $ip = isset($_GET['ip']) ? $_GET['ip'] : null;
-  $port = isset($_GET['port']) ? $_GET['port'] : null;
+  $s = $_GET['s'] ?? null;
+  $ip = $_GET['ip'] ?? null;
+  $port = $_GET['port'] ?? null;
   if     (is_numeric($s)) { $output = load_page("details"); }    
   elseif (isset($ip) && isset($port)) { $output = load_page("details");                                              }
   elseif ($s === "add")   { $output = load_page("add");     $title .= " | {$lgsl_config["text"]["aas"]}"; }
@@ -66,13 +68,13 @@
 <html>
   <head>
     <title><?php echo $title; ?></title>
-    <link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="src/other/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="src/other/favicon.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
     <meta http-equiv='content-style-type' content='text/css' />
-    <link rel='stylesheet' href='lgsl_files/styles/<?php echo $lgsl_config['style']; ?>' type='text/css' />
-		<?php echo ($lgsl_config['locations'] ? "<link rel='stylesheet' href='lgsl_files/other/_lgsl_locations.css' type='text/css' />" : ""); ?>
+    <link rel='stylesheet' href='src/styles/<?php echo $lgsl_config['style']; ?>' type='text/css' />
+		<?php echo ($lgsl_config['locations'] ? "<link rel='stylesheet' href='src/other/_lgsl_locations.css' type='text/css' />" : ""); ?>
     <?php echo ($lgsl_config['autoreload'] ? "<META HTTP-EQUIV='REFRESH' CONTENT=" . ($lgsl_config['cache_time'] + 1) . " />" : ""); ?>
   </head>
 
@@ -96,7 +98,7 @@
     <?php
       if (isset($lgsl_config['scripts'])) {
         foreach ($lgsl_config['scripts'] as $script) {
-          echo "<script src='lgsl_files/scripts/{$script}'></script>";
+          echo "<script src='src/scripts/{$script}'></script>";
         }
       }
     ?>

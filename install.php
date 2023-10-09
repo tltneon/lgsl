@@ -1,13 +1,19 @@
 <?php
+	namespace tltneon\LGSL;
 	//------------------------------------------------------------------------------------------------------------+
 		header("Content-Type:text/html; charset=utf-8");
 	//------------------------------------------------------------------------------------------------------------+
+	
+	require('src/lgsl_class.php');
+	
 
-	$mysql_server = empty($_POST["server"]) ? "localhost" : $_POST["server"];
-	$mysql_user = empty($_POST["login"]) ? "" : $_POST["login"];
-	$mysql_password = empty($_POST["password"]) ? "" : $_POST["password"];
-	$mysql_database = empty($_POST["database"]) ? "lgsl" : $_POST["database"];
-	$mysql_table = empty($_POST["table"]) ? "lgsl" : $_POST["table"];
+	$db_type = empty($_POST["type"]) ? "mysql" : $_POST["type"];
+	$db_server = empty($_POST["server"]) ? "localhost" : $_POST["server"];
+	$db_user = empty($_POST["login"]) ? "" : $_POST["login"];
+	$db_password = empty($_POST["password"]) ? "" : $_POST["password"];
+	$db_database = empty($_POST["database"]) ? "lgsl" : $_POST["database"];
+	$db_table = empty($_POST["table"]) ? "lgsl" : $_POST["table"];
+	$db_prefix = empty($_POST["prefix"]) ? "" : $_POST["prefix"];
 	$step = 1;
 	$query_success = false;
 
@@ -16,28 +22,75 @@
 			echo('<l k="filli"></l>');
 		} else {
 			try {
-        		mysqli_report(MYSQLI_REPORT_ERROR);
-				$lgsl_database = mysqli_connect($mysql_server, $mysql_user, $mysql_password);
+				if ($db_type === "mysql") {
+					mysqli_report(MYSQLI_REPORT_ERROR);
+					global $lgsl_config; $lgsl_config['db'] = [
+						'server' => $_POST["server"],
+						'user'   => $_POST["login"],
+						'pass'   => $_POST["password"],
+						'db'     => '',
+						'prefix' => "{$_POST["server"]}_"
+					];
+					$db = new Database();
+					$db->connect('mysql');
+					$db->execute("CREATE DATABASE IF NOT EXISTS {$_POST['database']}");
+					$lgsl_config['db']['db'] = $_POST["database"];
 
-				if (!$lgsl_database) {
-					printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
-				} else {
-					$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
-					if (isset($_POST["_updatetables"])) {
-						$query = "
-						ALTER TABLE `{$_POST["table"]}`
-						ADD    `name`           VARCHAR (255) NOT NULL DEFAULT '' AFTER `id`,
-						ADD    `game`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `type`,
-						ADD    `mode`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `game`,
-						ADD    `map`            VARCHAR (255) NOT NULL DEFAULT '' AFTER `s_port`,
-						ADD    `players`        SMALLINT (5)  NOT NULL DEFAULT '0' AFTER `map`,
-						ADD    `playersmax`     SMALLINT (5)  NOT NULL DEFAULT '0' AFTER `players`,
-						CHANGE `cache` `cache`  MEDIUMTEXT    NOT NULL;";
+					if (!$db) {
+						printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
 					} else {
-						$query = "
-						CREATE TABLE `{$_POST["table"]}` (
+						$db->select_db();
+						if (isset($_POST["_updatetables"])) {
+							$query = "
+							ALTER TABLE `{$_POST["table"]}`
+							ADD    `name`           VARCHAR (255) NOT NULL DEFAULT '' AFTER `id`,
+							ADD    `game`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `type`,
+							ADD    `mode`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `game`,
+							ADD    `map`            VARCHAR (255) NOT NULL DEFAULT '' AFTER `s_port`,
+							ADD    `players`        SMALLINT (5)  NOT NULL DEFAULT '0' AFTER `map`,
+							ADD    `playersmax`     SMALLINT (5)  NOT NULL DEFAULT '0' AFTER `players`,
+							CHANGE `cache` `cache`  MEDIUMTEXT    NOT NULL;";
+						} else {
+							$query = "
+							CREATE TABLE `{$_POST["table"]}` (
 
-							`id`         INT     (11)  NOT NULL auto_increment,
+								`id`         INT     (11)  NOT NULL auto_increment,
+								`name`       VARCHAR (255) NOT NULL DEFAULT '',
+								`type`       VARCHAR (50)  NOT NULL DEFAULT '',
+								`game`       VARCHAR (50)  NOT NULL DEFAULT '',
+								`mode`       VARCHAR (50)  NOT NULL DEFAULT '',
+								`ip`         VARCHAR (255) NOT NULL DEFAULT '',
+								`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+								`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+								`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+								`map`        VARCHAR (255) NOT NULL DEFAULT '',
+								`players`    SMALLINT (5)  NOT NULL DEFAULT '0',
+								`playersmax` SMALLINT (5)  NOT NULL DEFAULT '0',
+								`zone`       VARCHAR (255) NOT NULL DEFAULT '',
+								`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
+								`comment`    VARCHAR (255) NOT NULL DEFAULT '',
+								`status`     TINYINT (1)   NOT NULL DEFAULT '0',
+								`cache`      MEDIUMTEXT    NOT NULL,
+								`cache_time` TEXT          NOT NULL,
+
+								PRIMARY KEY (`id`)
+
+							) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+						}
+						if ($db->execute($query) == TRUE) {
+							printf('');
+							$step = 2;
+							$query_success = true;
+						} else {
+							printf('<l k="table"></l>');
+						}
+					}
+				} else {
+					$db = new Database();
+					$db->connect('sqlite');
+					$db->execute("PRAGMA encoding='utf-8';");
+					$query = "
+						CREATE TABLE `{$_POST["table"]}` (
 							`name`       VARCHAR (255) NOT NULL DEFAULT '',
 							`type`       VARCHAR (50)  NOT NULL DEFAULT '',
 							`game`       VARCHAR (50)  NOT NULL DEFAULT '',
@@ -54,28 +107,100 @@
 							`comment`    VARCHAR (255) NOT NULL DEFAULT '',
 							`status`     TINYINT (1)   NOT NULL DEFAULT '0',
 							`cache`      MEDIUMTEXT    NOT NULL,
-							`cache_time` TEXT          NOT NULL,
+							`cache_time` TEXT          NOT NULL
 
-							PRIMARY KEY (`id`)
-
-						) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;";
-					}
-					if (mysqli_query($lgsl_database, $query) === TRUE) {
-							printf('');
-							$step = 2;
-							$query_success = true;
-						} else {
-							printf('<l k="table"></l>');
-						}
-					mysqli_close($lgsl_database);
+						);";
+						$db->execute($query);
+					$step = 2;
+					$query_success = true;
 				}
 			} catch (Error $e) {
+				var_dump($e);
 				printf('<l k="mysld"></l>');
 			}
 		}
 	}
 	if (isset($_POST['_skipstep1'])) {
 		$step = 2;
+	}
+	if (isset($_POST['_finishInstallation'])) {
+		$conf = json_decode($_POST['_config'], true);
+		try {
+			//$lgsl_database = mysqli_connect($db_server, $db_user, $db_password);
+		} catch (Error $e) {
+			//echo 'err';
+		}
+		if (empty($lgsl_database)) {
+			
+			file_put_contents('install.php', 666);
+			//chmod('install.php', 666);
+			chmod('src/lgsl_config.php', 666);
+			function type($var) {
+				if (gettype($var) == "Array") return $var;
+				if ($var === true) return 'true';
+				if ($var === false) return 'false';
+				return "$var";
+			}
+			foreach ($conf as $key => $value) {
+				$conf[$key] = type($conf[$key]);
+			}
+			$config = 
+"<?php
+	global \$lgsl_config; \$lgsl_config = [];
+	/* */
+	\$lgsl_config['installed'] = true;
+	\$lgsl_config['feed']['method'] = 0;
+	\$lgsl_config['feed']['url'] = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\";
+	\$lgsl_config['style'] = '{$conf['style']}'; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, materials_style.css
+	\$lgsl_config['scripts'] = {$conf['scripts']};
+	\$lgsl_config['locations'] = {$conf['locations']};
+	\$lgsl_config['list']['totals'] = {$conf['totals']};
+	\$lgsl_config['sort']['servers'] = \"{$conf['sort_servers_by']}\";	// OPTIONS: id  type  zone  players  status
+	\$lgsl_config['sort']['players'] = \"{$conf['sort_players_by']}\";	// OPTIONS: name  score
+	\$lgsl_config['zone']['width'] = \"160\"; // images will be cropped unless also resized to match
+	\$lgsl_config['zone']['line_size'] = \"19\";  // player box height is this number multiplied by player names
+	\$lgsl_config['zone']['height'] = \"100\"; // player box height limit
+	\$lgsl_config['grid']     = [1,1,1,1,1,1,1,1,1,1];
+	\$lgsl_config['players']  = [1,1,1,1,1,1,1,1,1,1];
+	\$lgsl_config['random']   = [0,0,0,0,0,0,0,0,0,0];
+	\$lgsl_config['hide_offline'] = [{$conf['hide_offline']},0,0,0,0,0,0,0,0,0];
+	\$lgsl_config['title'] = ['Live Game Server List', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server'];
+	\$lgsl_config['admin']['user'] = \"{$conf['lgsl_user']}\";
+	\$lgsl_config['admin']['pass'] = \"{$conf['lgsl_password']}\";
+	\$lgsl_config['db']['type']    = \"{$conf['db_type']}\";
+	\$lgsl_config['db']['server']  = \"{$conf['db_server']}\";
+	\$lgsl_config['db']['user']    = \"{$conf['db_user']}\";
+	\$lgsl_config['db']['pass']    = \"{$conf['db_password']}\";
+	\$lgsl_config['db']['db']      = \"{$conf['db_database']}\";
+	\$lgsl_config['db']['table']   = \"{$conf['db_table']}\";
+	\$lgsl_config['db']['prefix']  = \"{$conf['db_prefix']}\";
+	\$lgsl_config['image_mod']     = {$conf['image_mod']};
+	\$lgsl_config['preloader']     = {$conf['preloader']};   // true=using ajax to faster loading page
+	\$lgsl_config['pagination_mod']= {$conf['page_mod']};   // true = using pagination
+	\$lgsl_config['pagination_lim']= {$conf['page_lim']};   // limit per page
+	\$lgsl_config['direct_index']  = 0;                     // 1=link to index.php instead of the folder
+	\$lgsl_config['no_realpath']   = 0;                     // 1=do not use the realpath function
+	\$lgsl_config['url_path']      = '';                  // full url to /src/ for when auto detection fails
+	\$lgsl_config['management']    = 0;                     // 1=show advanced management in the admin by default
+	\$lgsl_config['host_to_ip']    = 0;                     // 1=show the servers ip instead of its hostname
+	\$lgsl_config['public_add']    = {$conf['public_add']}; // 1=servers require approval OR 2=servers shown instantly
+	\$lgsl_config['public_feed']   = 0;                     // 1=feed requests can add new servers to your list
+	\$lgsl_config['cache_time']    = {$conf['cache_time']}; // seconds=time before a server needs updating
+	\$lgsl_config['autoreload']    = {$conf['autoreload']}; // 1=reloads page when cache_time is passed
+	\$lgsl_config['history']       = {$conf['history']};    // 1=record server history
+	\$lgsl_config['live_time']     = 3;                     // seconds=time allowed for updating servers per page load
+	\$lgsl_config['timeout']       = 0;                     // 1=gives more time for servers to respond but adds loading delay
+	\$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay
+	\$lgsl_config['cms']           = 'sa';                // sets which CMS specific code to use
+	include('languages/{$conf['language']}.php');        // sets LGSL language
+?>";
+			file_put_contents('src/lgsl_config.php', $config);
+			unlink('install.php');
+			exit('done');
+		} else {
+			$step = 2;
+			printf('<l k="table"></l>');
+		} 
 	}
 
 ?>
@@ -85,9 +210,9 @@
 <html>
 	<head>
 		<title>LGSL Installation Page</title>
-		<link rel='stylesheet' type='text/css' href='lgsl_files/styles/darken_style.css' />
-		<link rel="icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
-		<link rel="shortcut icon" href="lgsl_files/other/favicon.ico" type="image/x-icon">
+		<link rel='stylesheet' type='text/css' href='src/styles/darken_style.css' />
+		<link rel="icon" href="src/other/favicon.ico" type="image/x-icon">
+		<link rel="shortcut icon" href="src/other/favicon.ico" type="image/x-icon">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
 		<meta http-equiv='content-style-type' content='text/css' />
@@ -95,8 +220,12 @@
 			body {
 				padding: 2px 4px;
 			}
-			input[type="text"], input[type="password"] {
+			input[type="text"], input[type="password"], select {
 				float: right;
+			}
+			select {
+				width: 170px;
+				height: 21.5px;
 			}
 			div#container{
 				width: inherit !important;
@@ -109,6 +238,9 @@
 				float: right;
 				margin: 0;
 				text-decoration: underline;
+			}
+			h4 {
+				text-align: center;
 			}
 			button{
 				margin: auto;
@@ -128,6 +260,17 @@
 				width: 6px;
 				height: 7px;
 				display: inline-block;
+			}
+			.badge {
+				border-radius: 4px;
+				display: inline;
+				padding: 1px 4px;
+			}
+			.bg-red {
+				background: red;
+			}
+			.bg-green {
+				background: green;
 			}
 		</style>
 	</head>
@@ -151,67 +294,60 @@
 		});
 
 	$output = '
+	<h4>LGSL Installation page</h4>
 	<h6><a href="./"><l k="back"></l></a></h6>
 	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank"><l k="owiki"></l></a></h5>
 	<div>';
 
 		if ($step == 1) {
 			$output .= '<h4><l k="check"></l></h4>';
-			if (function_exists("fsockopen")) {
-				$fp = fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3);
-				if (!$fp) {
-					$output .= "ERROR: $errno - $errstr<br />";
-					$output .= "<l k='coutd'></l>";
-				} else {
-					fwrite($fp, "\n");
-					$output .= "<l k='consu'></l>";
-					fclose($fp);
-				} 
-			} else {
-				$output .= "<p>FSOCKOPEN: FAILED</p>";
+			
+			function check($name, $bool, $hint = '') {
+				if ($bool) return "<p class='badge bg-green'>$name</p>";
+				return "<p class='badge bg-red' title='$hint'>$name</p>";
 			}
 			
-			if (function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) {
-				$output .= "<p>CURL: SUCCESS</p>";
-			} else {
-				$output .= "<p>CURL: FAILED</p>";
-			}
-			
-			if (function_exists("bzdecompress")) {
-				$output .= "<p>BZ2: SUCCESS</p>";
-			} else {
-				$output .= "<p>BZ2: FAILED</p>";
-			}
-	
-			if (extension_loaded('gd')) {
-				$output .= "<p>GD: SUCCESS</p>";
-			} else {
-				$output .= "<p>GD: FAILED</p>";
-			}
+			$output .= check('MySQL', function_exists("mysqli_connect"), 'used for mysql db');
+			$output .= check('PHP 7+', version_compare(PHP_VERSION, "7.0.0") >= 0, 'errors may occurs if PHP < 7.0');
+			$output .= check('FSOCKOPEN', function_exists("fsockopen") && fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3), 'mainly used for querying');
+			$output .= check('CURL', function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec"), 'optional: for some games');
+			$output .= check('BZ2', function_exists("bzdecompress"), 'optional: for some games');
+			$output .= check('GD', function_exists("gd"), 'optional: for charts & userbars');
 		}
 
 	$output .= "	
-		<br /><h4><l k='step1'></l></h4>
+		<br>" . ($step == 1 ? "<h4><l k='step1'></l></h4>" : "") . "
 		<form method='post' action='?'>
 			<p>
-				MySQL Server*:
-				<input type='text' name='server' onChange='vars.mysql_server = event.target.value' value='{$mysql_server}' />
+				DB Type*:
+				<select name='db_type' onChange='changeValue(event, {dbChanged: true})'>
+					<option ". ($db_type == 'mysql' ? 'selected' : '') .">mysql</option>
+					<option ". ($db_type == 'sqlite' ? 'selected' : '') .">sqlite</option>
+				</select>
+			</p>
+			<p id='db_server'>
+				DB Server*:
+				<input type='text' name='server' onChange='vars.db_server = event.target.value' value='{$db_server}' />
 			</p>
 			<p>
-				MySQL Login*:
-				<input type='text' name='login' onChange='vars.mysql_user = event.target.value' value='{$mysql_user}' />
+				DB Login*:
+				<input type='text' name='login' onChange='vars.db_user = event.target.value' value='{$db_user}' />
 			</p>
 			<p>
-				MySQL Password:
-				<input type='password' name='password' onChange='vars.mysql_password = event.target.value' value='{$mysql_password}' />
+				DB Password:
+				<input type='password' name='password' onChange='vars.db_password = event.target.value' value='{$db_password}' />
+			</p>
+			<p id='db_database'>
+				DB Database*:
+				<input type='text' name='database' onChange='vars.db_database = event.target.value' value='{$db_database}' />
 			</p>
 			<p>
-				MySQL Database*:
-				<input type='text' name='database' onChange='vars.mysql_database = event.target.value' value='{$mysql_database}' />
+				DB Table*:
+				<input type='text' name='table' onChange='vars.db_table = event.target.value' value='{$db_table}' />
 			</p>
 			<p>
-				MySQL Table*:
-				<input type='text' name='table' onChange='vars.mysql_table = event.target.value' value='{$mysql_table}' />
+				Table Prefix:
+				<input type='text' name='prefix' onChange='vars.db_prefix = event.target.value' value='{$db_prefix}' />
 			</p>
 			<div style='display: ". ($step == 1 ? 'block' : 'none') ."'>
 				<button type='submit' name='_createtables'>
@@ -361,10 +497,6 @@
 			<button onClick='generateConfig()'>
 				<l k='gener'></l>
 			</button>
-
-			<p style='color: red; font-size: 12pt;'><l k='remem'></l></p>
-			<hr />
-			<p style='font-size: 9pt;'><l k='after'></l></p>
 		</div>
 	";
 
@@ -389,11 +521,13 @@ document.addEventListener("reloadLocale", reloadLocale);
 	}
 	var locale = "english";
 	let vars = {
-		mysql_server: "<?php echo $mysql_server; ?>",
-		mysql_user: "<?php echo $mysql_user; ?>",
-		mysql_password: "<?php echo $mysql_password; ?>",
-		mysql_database: "<?php echo $mysql_database; ?>",
-		mysql_table: "<?php echo $mysql_table; ?>",
+		db_type: "<?php echo $db_type; ?>",
+		db_server: "<?php echo $db_server; ?>",
+		db_user: "<?php echo $db_user; ?>",
+		db_password: "<?php echo $db_password; ?>",
+		db_database: "<?php echo $db_database; ?>",
+		db_table: "<?php echo $db_table; ?>",
+		db_prefix: "<?php echo $db_prefix; ?>",
 		lgsl_user: "",
 		lgsl_password: "",
 		//
@@ -416,6 +550,8 @@ document.addEventListener("reloadLocale", reloadLocale);
 	}
 	function changeValue(event, options = {}) {
 		if (options.styleChanged) {
+			vars["scripts"]["parallax.js"] = false;
+			document.querySelector("input[id='parallax.js']").checked = false;
 			if (event.target.value == "showcase") {
 				event.target.value = "darken_style.css";
 				window.open("https://github.com/tltneon/lgsl/wiki/Styles");
@@ -424,7 +560,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				vars["scripts"]["parallax.js"] = true;
 				document.querySelector("input[id='parallax.js']").checked = true;
 			}
-			document.getElementsByTagName("link")[0].href = `lgsl_files/styles/${event.target.value}`;
+			document.getElementsByTagName("link")[0].href = `src/styles/${event.target.value}`;
 		}
 		if (options.translationInput) {
 			if (event.target.value == "help") {
@@ -433,6 +569,14 @@ document.addEventListener("reloadLocale", reloadLocale);
 			}
 			locale = event.target.value;
 			document.dispatchEvent(new Event("reloadLocale"));
+		}
+		if (options.dbChanged) {
+			console.log(event.target.value);
+			if (event.target.value == 'sqlite') {
+				document.querySelector("p[id='db_server']").style.display = 'none';
+			} else {
+				document.querySelector("p[id='db_server']").style.display = 'inherit';
+			}
 		}
 		vars[event.target.name] = event.target.value;
 	}
@@ -448,99 +592,40 @@ document.addEventListener("reloadLocale", reloadLocale);
 		el.insertAdjacentHTML('beforeend', l(key));
 	}
 	function generateConfig() {
-		if (vars.mysql_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
+		if (vars.db_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
 		let textarea = document.body.getElementsByTagName("textarea")[0] ? document.body.getElementsByTagName("textarea")[0] : document.createElement("textarea");
-		let slist = '';
+		let slist = "";
 		for (s in vars['scripts']) {
 			if (vars['scripts'][s])
-				slist += '"' + s + '",';
+				slist += `"${s}",`;
 		}
-		document.body.getElementsByTagName("div")[0].appendChild(textarea);
-		textarea.innerHTML = "&lt;?php \n" +
-		"global $lgsl_config; $lgsl_config = array(); \n" +
-		"$lgsl_config['feed']['method'] = 0; \n" +
-		"$lgsl_config['feed']['url'] = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"; \n" +
-		"$lgsl_config['style'] = \""+ vars.style +"\"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, materials_style.css \n" +
-		"$lgsl_config['scripts'] = ["+ slist +"]; \n" +
-		"$lgsl_config['locations'] = "+ vars.locations +"; \n" +
-		"$lgsl_config['list']['totals'] = "+ vars.totals +"; \n" +
-		"$lgsl_config['sort']['servers'] = \""+ vars.sort_servers_by +"\";	// OPTIONS: id  type  zone  players  status \n" +
-		"$lgsl_config['sort']['players'] = \""+ vars.sort_players_by +"\";	// OPTIONS: name  score \n" +
-		"$lgsl_config['zone']['width'] = \"160\"; // images will be cropped unless also resized to match \n" +
-		"$lgsl_config['zone']['line_size'] = \"19\";  // player box height is this number multiplied by player names \n" +
-		"$lgsl_config['zone']['height'] = \"100\"; // player box height limit \n" +
-		"$lgsl_config['grid'][1] = 1; \n" +
-		"$lgsl_config['grid'][2] = 1; \n" +
-		"$lgsl_config['grid'][3] = 1; \n" +
-		"$lgsl_config['grid'][4] = 1; \n" +
-		"$lgsl_config['grid'][5] = 1; \n" +
-		"$lgsl_config['grid'][6] = 1; \n" +
-		"$lgsl_config['grid'][7] = 1; \n" +
-		"$lgsl_config['grid'][8] = 1; \n" +
-		"$lgsl_config['players'][1] = 1; \n" +
-		"$lgsl_config['players'][2] = 1; \n" +
-		"$lgsl_config['players'][3] = 1; \n" +
-		"$lgsl_config['players'][4] = 1; \n" +
-		"$lgsl_config['players'][5] = 1; \n" +
-		"$lgsl_config['players'][6] = 1; \n" +
-		"$lgsl_config['players'][7] = 1; \n" +
-		"$lgsl_config['players'][8] = 1; \n" +
-		"$lgsl_config['random'][0] = 0; \n" +
-		"$lgsl_config['random'][1] = 0; \n" +
-		"$lgsl_config['random'][2] = 0; \n" +
-		"$lgsl_config['random'][3] = 0; \n" +
-		"$lgsl_config['random'][4] = 0; \n" +
-		"$lgsl_config['random'][5] = 0; \n" +
-		"$lgsl_config['random'][6] = 0; \n" +
-		"$lgsl_config['random'][7] = 0; \n" +
-		"$lgsl_config['random'][8] = 0; \n" +
-		"$lgsl_config['hide_offline'][0] = "+ vars.hide_offline +"; \n" +
-		"$lgsl_config['hide_offline'][1] = 0; \n" +
-		"$lgsl_config['hide_offline'][2] = 0; \n" +
-		"$lgsl_config['hide_offline'][3] = 0; \n" +
-		"$lgsl_config['hide_offline'][4] = 0; \n" +
-		"$lgsl_config['hide_offline'][5] = 0; \n" +
-		"$lgsl_config['hide_offline'][6] = 0; \n" +
-		"$lgsl_config['hide_offline'][7] = 0; \n" +
-		"$lgsl_config['hide_offline'][8] = 0; \n" +
-		"$lgsl_config['title'][0] = \"Live Game Server List\"; \n" +
-		"$lgsl_config['title'][1] = \"Game Server\"; \n" +
-		"$lgsl_config['title'][2] = \"Game Server\"; \n" +
-		"$lgsl_config['title'][3] = \"Game Server\"; \n" +
-		"$lgsl_config['title'][4] = \"Game Server\"; \n" +
-		"$lgsl_config['title'][5] = \"Game Server\"; \n" +
-		"$lgsl_config['title'][6] = \"Game Server\"; \n" +
-		"$lgsl_config['title'][7] = \"Game Server\"; \n" +
-		"$lgsl_config['title'][8] = \"Game Server\"; \n" +
-		"$lgsl_config['admin']['user'] = \""+ vars.lgsl_user +"\"; \n" +
-		"$lgsl_config['admin']['pass'] = \""+ vars.lgsl_password +"\"; \n" +
-		"$lgsl_config['db']['server']  = \""+ vars.mysql_server +"\"; \n" +
-		"$lgsl_config['db']['user']    = \""+ vars.mysql_user +"\"; \n" +
-		"$lgsl_config['db']['pass']    = \""+ vars.mysql_password +"\"; \n" +
-		"$lgsl_config['db']['db']      = \""+ vars.mysql_database +"\"; \n" +
-		"$lgsl_config['db']['table']   = \""+ vars.mysql_table +"\"; \n" +
-		"$lgsl_config['image_mod']     = "+ vars.image_mod +"; \n" +
-		"$lgsl_config['preloader']     = "+ vars.preloader +";   // true=using ajax to faster loading page\n" +
-		"$lgsl_config['pagination_mod']= "+ vars.page_mod +";   // true = using pagination\n" +
-		"$lgsl_config['pagination_lim']= "+ vars.page_lim +";   // limit per page\n" +
-		"$lgsl_config['direct_index']  = 0;                     // 1=link to index.php instead of the folder \n" +
-		"$lgsl_config['no_realpath']   = 0;                     // 1=do not use the realpath function \n" +
-		"$lgsl_config['url_path']      = \"\";                  // full url to /lgsl_files/ for when auto detection fails \n" +
-		"$lgsl_config['management']    = 0;                     // 1=show advanced management in the admin by default \n" +
-		"$lgsl_config['host_to_ip']    = 0;                     // 1=show the servers ip instead of its hostname \n" +
-		"$lgsl_config['public_add']    = "+ vars.public_add +"; // 1=servers require approval OR 2=servers shown instantly \n" +
-		"$lgsl_config['public_feed']   = 0;                     // 1=feed requests can add new servers to your list \n" +
-		"$lgsl_config['cache_time']    = "+ vars.cache_time +"; // seconds=time before a server needs updating \n" +
-		"$lgsl_config['autoreload']    = "+ vars.autoreload +"; // 1=reloads page when cache_time is passed \n" +
-		"$lgsl_config['history']       = "+ vars.history +";    // 1=reloads page when cache_time is passed \n" +
-		"$lgsl_config['live_time']     = 3;                     // seconds=time allowed for updating servers per page load \n" +
-		"$lgsl_config['timeout']       = 0;                     // 1=gives more time for servers to respond but adds loading delay \n" +
-		"$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay \n" +
-		"$lgsl_config['cms']           = \"sa\";                // sets which CMS specific code to use \n" +
-		"include(\"languages/"+ vars.language +".php\");        // sets LGSL language";
-		textarea.style.width = "100%";
-		textarea.style.height = "90vh";
-		window.scrollTo(0, document.body.scrollHeight);
+		httpRequest = new XMLHttpRequest();
+		if (!httpRequest) {
+			alert('Cannot create an XMLHTTP instance');
+			return false;
+		}
+		httpRequest.open('POST', 'install.php');
+		httpRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		vars['scripts'] = `[${slist}]`;
+		console.log(vars);
+		httpRequest.onreadystatechange = alertContents;
+		httpRequest.send(`_config=${JSON.stringify(vars)}&_finishInstallation=true`);
+		function alertContents() {
+            if (httpRequest.readyState === XMLHttpRequest.DONE) {
+              if (httpRequest.status === 200) {
+				if (httpRequest.responseText === 'done') {
+              		document.getElementById('container').innerHTML = 'LGSL successfully installed! lgsl_config.php rewrited & install.php was deleted.<br>Redirecting to main page.. <a href=".">Link</a>';
+					setTimeout(() => {
+						window.location = '.';
+					}, 1000);
+				} else {
+					alert('There was a problem with the request. Message: ' + httpRequest.responseText);
+				}
+              } else {
+                alert('There was a problem with the request. HTTP Code: ' + httpRequest.status);
+              }
+            }
+          }
 	}
 
 	function l(key) {
@@ -551,7 +636,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
 				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
 				"remem": "Remember to remove the install.php after install LGSL!",
-				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
+				"after": "After you make config, replace it into src/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
 				"selsc": "Select scripts",
@@ -574,181 +659,25 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
+        "check": "Check requirements",
 			},
 			"russian": {
-				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
-				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
-				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
-				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
-				"remem": "Remember to remove the install.php after install LGSL!",
-				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
-				"selst": "Select style",
-				"sella": "Select language",
-				"selsc": "Select scripts",
-				"sorts": "Sort servers by",
-				"sortp": "Sort players by",
-				"enaim": "Enable Image mod",
-				"hideo": "Hide offline servers",
-				"pubad": "Public add servers",
-				"showt": "Show totals",
-				"showl": "Show locations",
-				"step1": "Step 1: Install LGSL Tables",
-				"step2": "Step 2: Configurating LGSL",
 				"back": "< Назад",
-				"owiki": "Online Wiki: How to",
-				"gener": "Generate config",
-				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 1 or 2).",
-				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
-				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
-				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
 			},
 			"french": {
-				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
-				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
-				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
-				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
-				"remem": "Remember to remove the install.php after install LGSL!",
-				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
-				"selst": "Select style",
-				"sella": "Select language",
-				"selsc": "Select scripts",
-				"sorts": "Sort servers by",
-				"sortp": "Sort players by",
-				"enaim": "Enable Image mod",
-				"hideo": "Hide offline servers",
-				"pubad": "Public add servers",
-				"showt": "Show totals",
-				"showl": "Show locations",
-				"step1": "Step 1: Install LGSL Tables",
-				"step2": "Step 2: Configurating LGSL",
 				"back": "< Arrière",
-				"owiki": "Online Wiki: How to",
-				"gener": "Generate config",
-				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 1 or 2).",
-				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
-				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
-				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
 			},
 			"german": {
-				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
-				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
-				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
-				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
-				"remem": "Remember to remove the install.php after install LGSL!",
-				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
-				"selst": "Select style",
-				"sella": "Select language",
-				"selsc": "Select scripts",
-				"sorts": "Sort servers by",
-				"sortp": "Sort players by",
-				"enaim": "Enable Image mod",
-				"hideo": "Hide offline servers",
-				"pubad": "Public add servers",
-				"showt": "Show totals",
-				"showl": "Show locations",
-				"step1": "Step 1: Install LGSL Tables",
-				"step2": "Step 2: Configurating LGSL",
 				"back": "< Zurück",
-				"owiki": "Online Wiki: How to",
-				"gener": "Generate config",
-				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 1 or 2).",
-				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
-				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
-				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
 			},
 			"spanish": {
-				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
-				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
-				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
-				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
-				"remem": "Remember to remove the install.php after install LGSL!",
-				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
-				"selst": "Select style",
-				"sella": "Select language",
-				"selsc": "Select scripts",
-				"sorts": "Sort servers by",
-				"sortp": "Sort players by",
-				"enaim": "Enable Image mod",
-				"hideo": "Hide offline servers",
-				"pubad": "Public add servers",
-				"showt": "Show totals",
-				"showl": "Show locations",
-				"step1": "Step 1: Install LGSL Tables",
-				"step2": "Step 2: Configurating LGSL",
 				"back": "< Espalda",
-				"owiki": "Online Wiki: How to",
-				"gener": "Generate config",
-				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 1 or 2).",
-				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
-				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
-				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
 			},
 			"czech": {
-				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
-				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
-				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
-				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
-				"remem": "Remember to remove the install.php after install LGSL!",
-				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
-				"selst": "Select style",
-				"sella": "Select language",
-				"selsc": "Select scripts",
-				"sorts": "Sort servers by",
-				"sortp": "Sort players by",
-				"enaim": "Enable Image mod",
-				"hideo": "Hide offline servers",
-				"pubad": "Public add servers",
-				"showt": "Show totals",
-				"showl": "Show locations",
-				"step1": "Step 1: Install LGSL Tables",
-				"step2": "Step 2: Configurating LGSL",
 				"back": "< Zadní",
-				"owiki": "Online Wiki: How to",
-				"gener": "Generate config",
-				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 1 or 2).",
-				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
-				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
-				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
 			},
 			"bulgarian": {
-				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
-				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
-				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
-				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
-				"remem": "Remember to remove the install.php after install LGSL!",
-				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
-				"selst": "Select style",
-				"sella": "Select language",
-				"selsc": "Select scripts",
-				"sorts": "Sort servers by",
-				"sortp": "Sort players by",
-				"enaim": "Enable Image mod",
-				"hideo": "Hide offline servers",
-				"pubad": "Public add servers",
-				"showt": "Show totals",
-				"showl": "Show locations",
-				"step1": "Step 1: Install LGSL Tables",
-				"step2": "Step 2: Configurating LGSL",
 				"back": "< Обратно",
-				"owiki": "Online Wiki: How to",
-				"gener": "Generate config",
-				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 1 or 2).",
-				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
-				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
-				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
 			},
 			"slovak": {
 				"tablc": "LGSL tabuľka bola vytvorená <span style='color: green;'>úspešne</span>.",
@@ -756,7 +685,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"consu": "Spojenie bolo <span style='color: green;'>úspešne</span> nadviazané, LGSL môže brať údaje z herných serverov.",
 				"coutd": "LGSL <span style='color: red;'>nemôže získať údaje z herného servera</span>, iba teamspeak server (UDP upflow je zakázané na vašom hostingu).",
 				"remem": "Nezabudni vymazať súbor install.php po nainštalovaní LGSL!",
-				"after": "Potom čo vytvoríš konfiguraciu, vymeň subor za lgsl_files/lgsl_config.php",
+				"after": "Potom čo vytvoríš konfiguraciu, vymeň subor za src/lgsl_config.php",
 				"selst": "Zvoliť štýl",
 				"sella": "Zvoliť jazyk",
 				"selsc": "Select scripts",
@@ -776,37 +705,9 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"filla": "Musíš vyplniť povinné* údaje (krok 1 or 2).",
 				"mysld": "Pripojenie <span style='color: red;'>Zlyhalo</span>: PHP rozšírenie mysqli nie je aktívne.",
 				"table": "LGSL <span style='color: red;'>tabulka nebola vytvorená</span>: nesprávny názov databázy alebo tabuľka už existuje.",
-				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
 			},
 			"arabic": {
-				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
-				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
-				"consu": "Connection <span style='color: green;'>successfully</span> established, LGSL can take data from game servers.",
-				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
-				"remem": "Remember to remove the install.php after install LGSL!",
-				"after": "After you make config, replace it into lgsl_files/lgsl_config.php",
-				"selst": "Select style",
-				"sella": "Select language",
-				"selsc": "Select scripts",
-				"sorts": "Sort servers by",
-				"sortp": "Sort players by",
-				"enaim": "Enable Image mod",
-				"hideo": "Hide offline servers",
-				"pubad": "Public add servers",
-				"showt": "Show totals",
-				"showl": "Show locations",
-				"step1": "Step 1: Install LGSL Tables",
-				"step2": "Step 2: Configurating LGSL",
 				"back": "< Back",
-				"owiki": "Online Wiki: How to",
-				"gener": "Generate config",
-				"creat": "Create table",
-				"filla": "You need to fill required* inputs (step 1 or 2).",
-				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
-				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
-				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
-                "check": "Check requirements",
 			},
 			"turkish": {
 				"tablc": "LGSL tablosu oluşturuldu <span style='color: green;'>Başarıyla Tamamlandı!</span>.",
@@ -814,7 +715,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"consu": "Bağlantı <span style='color: green;'>Başarıyla</span> kuruldu, LGSL oyun sunucularından veri alabilir.",
 				"coutd": "LGSL <span style='color: red;'>Barındırma işleminizde UDP yukarı akışı engellendiğinden</span> oyun sunucularının çoğundan veri alınamadı.",
 				"remem": "LGSL'yi kurduktan sonra install.php'yi kaldırmayı unutmayın!",
-				"after": "Yapılandırmayı yaptıktan sonra, onu lgsl_files/lgsl_config.php olarak değiştirin",
+				"after": "Yapılandırmayı yaptıktan sonra, onu src/lgsl_config.php olarak değiştirin",
 				"selst": "Stil seçin",
 				"sella": "Dilinizi Seçin",
 				"selsc": "Script'leri Seçin",
@@ -835,7 +736,6 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Bağlantı <span style='color: red;'>failed</span>: Hatalı <span style='color: red;'>Bağlantı Başarısız</span>: mysqli uzantısı etkin değil.",
 				"table": "LGSL <span style='color: red;'>tablo oluşturulmadı</span>: yanlış veritabanı adı veya tablo zaten var.",
 				"cretd": "Tablo <span style='color: green;'>Başarıyla Oluşturuldu!</span> Oluşturuldu! 2'inci adıma geçin",
-                "check": "Check requirements",
 			},
 			"romanian": {
 				"tablc": "Tabelul LGSL a fost creat cu <span style='color: green;'>success</span>.",
@@ -843,7 +743,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"consu": "Conexiunea a fost stabilită cu <span style='color: green;'>succes</span>, LGSL poate prelua date de la serverele de jocuri.",
 				"coutd": "LGSL <span style='color: red;'>nu a putut prelua date de la majoritatea serverelor de jocuri</span> deoarece traficul UDP este blocat pe găzduirea dvs.",
 				"remem": "Nu uitați să eliminați install.php după instalarea LGSL!",
-				"after": "După ce finalizați configurația, înlocuiți-o în lgsl_files/lgsl_config.php",
+				"after": "După ce finalizați configurația, înlocuiți-o în src/lgsl_config.php",
 				"selst": "Selectați stilul",
 				"sella": "Selectați limba",
 				"selsc": "Selectați scripturi",
@@ -864,7 +764,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "Conectarea a <span style='color: red;'>eșuat</span>: extensia mysqli nu este activă.",
 				"table": "<span style='color: red;'>Tabelul LGSL nu a fost creat</span>: nume greșit al bazei de date sau tabelul există deja.",
 				"cretd": "Tabel creat cu <span style='color: green;'>succes</span> created! Continuați cu Pasul 2.",
-                "check": "Verificați cerințele",
+				"check": "Verificați cerințele",
 			},
 			"korean": {
 				"tablc": "LGSL 테이블이<span style='color: green;'>완료되었습니다!</span>를 만들었습니다.",
@@ -872,7 +772,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"consu": "연결 <span style='color: green;'>성공적으로 설정</span>, LGSL 게임 서버에서 데이터를 받을 수 있습니다.",
 				"coutd": "LGSL <span style='color: red;'>UDP 업스트림이 호스팅에서 차단되었기 때문입니다</span>. 대부분의 게임 서버에서 데이터를 검색하지 못했습니다.",
 				"remem": "LGSL을 설치한 후 install.php를 제거하는 것을 잊지 마십시오!",
-				"after": "설정 후 lgsl_files/lgsl_config.php로 변경",
+				"after": "설정 후 src/lgsl_config.php로 변경",
 				"selst": "테마 선택",
 				"sella": "당신의 언어를 고르시 오",
 				"selsc": "플러그인 선택",
@@ -893,38 +793,36 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "링크 <span style='color: red;'>실패</span>: 잘못된 <span style='color: red;'>연결 실패</span>: mysqli 확장이 활성화되어 있지 않습니다.",
 				"table": "LGSL <span style='color: red;'>테이블이 생성되지 않음</span>: 잘못된 데이터베이스 이름 또는 테이블이 이미 존재합니다.",
 				"cretd": "<span style='color: green;'>성공적으로 생성되었습니다!</span> 테이블이 생성되었습니다! 2단계로 이동",
-                "check": "Check requirements",
 			},
-            "chinese_simplified": {
-                "tablc": "LGSL 数据表创建 <span style='color: green;'>成功</span>.",
-                "filli": "您必须确保必填项 (<span style='color:red'>步骤1</span>) 正确.",
-                "consu": "连接 <span style='color: green;'>成功</span> 确认, LGSL 可以从游戏服务器获取数据。",
-                "coutd": "LGSL <span style='color: red;'>无法从大多数游戏服务器获取数据</span> ，因为UDP upflow在您的当前服务器主机上被阻止。",
-                "remem": "请务必在LGSL安装成功删除install.php",
-                "after": "接下来, 请将它替换到 lgsl_files/lgsl_config.php",
-                "selst": "选择风格",
-                "sella": "选择语言",
-                "selsc": "选择脚本",
-                "sorts": "服务器排序方式",
-                "sortp": "玩家排序方式",
-                "enaim": "开启图片mod",
-                "hideo": "隐藏离线服务器",
-                "pubad": "开放服务器添加",
-                "showt": "显示总数",
-                "showl": "显示位置",
-                "step1": "步骤1: 安装LGSL数据表",
-                "step2": "步骤2: 配置LGSL",
-                "back": "< 返回",
-                "owiki": "在线文档: 访问",
-                "gener": "生成配置文件",
-                "creat": "创建数据表",
-                "filla": "您必须完成必填项* (步骤1或步骤2).",
-                "mysld": "连接 <span style='color: red;'>失败</span>: mysqli扩展未激活。",
-                "table": "LGSL <span style='color: red;'>数据表未创建</span>: 数据库名称有误或数据表已被创建。",
-                "cretd": "数据表 <span style='color: green;'>成功</span> 创建! 请进入第2步。",
-                "check": "Check requirements",
-            }
+			"chinese_simplified": {
+				"tablc": "LGSL 数据表创建 <span style='color: green;'>成功</span>.",
+				"filli": "您必须确保必填项 (<span style='color:red'>步骤1</span>) 正确.",
+				"consu": "连接 <span style='color: green;'>成功</span> 确认, LGSL 可以从游戏服务器获取数据。",
+				"coutd": "LGSL <span style='color: red;'>无法从大多数游戏服务器获取数据</span> ，因为UDP upflow在您的当前服务器主机上被阻止。",
+				"remem": "请务必在LGSL安装成功删除install.php",
+				"after": "接下来, 请将它替换到 src/lgsl_config.php",
+				"selst": "选择风格",
+				"sella": "选择语言",
+				"selsc": "选择脚本",
+				"sorts": "服务器排序方式",
+				"sortp": "玩家排序方式",
+				"enaim": "开启图片mod",
+				"hideo": "隐藏离线服务器",
+				"pubad": "开放服务器添加",
+				"showt": "显示总数",
+				"showl": "显示位置",
+				"step1": "步骤1: 安装LGSL数据表",
+				"step2": "步骤2: 配置LGSL",
+				"back": "< 返回",
+				"owiki": "在线文档: 访问",
+				"gener": "生成配置文件",
+				"creat": "创建数据表",
+				"filla": "您必须完成必填项* (步骤1或步骤2).",
+				"mysld": "连接 <span style='color: red;'>失败</span>: mysqli扩展未激活。",
+				"table": "LGSL <span style='color: red;'>数据表未创建</span>: 数据库名称有误或数据表已被创建。",
+				"cretd": "数据表 <span style='color: green;'>成功</span> 创建! 请进入第2步。",
+			}
 		};
-		return t[locale][key];
+		return t[locale][key] ?? t['english'][key];
 	}
 </script>

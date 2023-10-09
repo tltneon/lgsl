@@ -38,10 +38,10 @@
   if ($type || $game || $mode) {
     $output .= "<div id='back_to_servers_list'><a href='./'>CLEAR FILTERS</a></div>";
   }
-  $ipsort = lgsl_build_link_params($uri, array("sort" => "ip", "order" => $order));
-  $mapsort = lgsl_build_link_params($uri, array("sort" => "map", "order" => $order));
-  $namesort = lgsl_build_link_params($uri, array("sort" => "name", "order" => $order));
-  $playersort = lgsl_build_link_params($uri, array("sort" => "players", "order" => $order));
+  $ipsort = LGSL::build_link($uri, array("sort" => "ip", "order" => $order));
+  $mapsort = LGSL::build_link($uri, array("sort" => "map", "order" => $order));
+  $namesort = LGSL::build_link($uri, array("sort" => "name", "order" => $order));
+  $playersort = LGSL::build_link($uri, array("sort" => "players", "order" => $order));
 
   $output .= "
   <table id='server_list_table'>
@@ -59,7 +59,7 @@
     //$server  = lgsl_server_html($server);
     $percent = $server->get_players_count('percent');
     $lastupd = $server->get_timestamp();
-    $gamelink= lgsl_build_link_params($uri, array("game" => $server->get_game()));
+    $gamelink= LGSL::build_link($uri, array("game" => $server->get_game()));
 
     $output .= "
     <tr class='server_{$server->get_status()}'>
@@ -67,7 +67,7 @@
       <td class='status_cell'>
         <span title='{$lgsl_config['text'][$server->get_status()]} | {$lgsl_config['text']['lst']}: {$lastupd}' class='status_icon_{$server->get_status()}'></span>
         <a href='{$gamelink}'>
-          <img alt='{$server->get_name()}' src='{$server->game_icon()}' title='{$server->text_type_game()}' class='game_icon' />
+          <img alt='{$server->get_name()}' src='{$server->add_url_path($server->game_icon())}' title='{$server->text_type_game()}' class='game_icon' />
         </a>
       </td>
 
@@ -123,13 +123,13 @@
   if ($lgsl_config['pagination_mod'] && ((int)(count($server_list) / $lgsl_config['pagination_lim']) > 0 || $page > 1)) {
     $output .= "
       <div id='pages'>
-        " . ($page > 1 ? "<a href='" . lgsl_build_link_params($uri, array("page" => $page - 1)) . "'> < </a>" : "") . "
+        " . ($page > 1 ? "<a href='" . LGSL::build_link($uri, array("page" => $page - 1)) . "'> < </a>" : "") . "
         <span>{$lgsl_config['text']['pag']} {$page}</span>
         " . (count($server_list) < $lgsl_config['pagination_lim'] ?
             "" :
             (isset($_GET['page']) ?
-                "<a href='" . lgsl_build_link_params($uri, array("page" => $page + 1)) . "'> > </a>" :
-                "<a href='" . lgsl_build_link_params($uri, array("page" => 2)) ."'>></a>")) . "
+                "<a href='" . LGSL::build_link($uri, array("page" => $page + 1)) . "'> > </a>" :
+                "<a href='" . LGSL::build_link($uri, array("page" => 2)) ."'>></a>")) . "
       </div>
       ";
   }

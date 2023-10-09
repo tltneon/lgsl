@@ -72,19 +72,19 @@
 
           <tr>
             <td> {$lgsl_config['text']['adr']} </td>
-            <td> <input type='text' name='form_ip' value='".lgsl_string_html($ip)."' onpaste='javascript:setTimeout(function(){const v=event.srcElement.value.split(\":\")[1];document.querySelector(\"input[name=form_ip]\").value=event.srcElement.value.trim();document.querySelector(\"input[name=form_c_port]\").value=v;document.querySelector(\"input[name=form_q_port]\").value=v;});' size='15' maxlength='128' /> </td>
+            <td> <input type='text' name='form_ip' value='$ip' onpaste='javascript:setTimeout(function(){const v=event.srcElement.value.split(\":\")[1];document.querySelector(\"input[name=form_ip]\").value=event.srcElement.value.trim();document.querySelector(\"input[name=form_c_port]\").value=v;document.querySelector(\"input[name=form_q_port]\").value=v;});' size='15' maxlength='128' /> </td>
           </tr>
 
           <tr>
             <td> {$lgsl_config['text']['cpt']} </td>
-            <td> <input type='number' name='form_c_port' value='".lgsl_string_html($c_port)."' min='1024' max='65535' /> </td>
+            <td> <input type='number' name='form_c_port' value='$c_port' min='1024' max='65535' /> </td>
           </tr>
 
           <tr>
             <td> {$lgsl_config['text']['qpt']}
               <a href='https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports' target='_blank' id='new_q' style='position: absolute;background: #fff;  text-align: center;border-radius: 10px;width: 14px;height: 14px;border: 2px solid;margin-top: 7px;' title='How to choose protocol or query port?'>?</a>
             </td>
-            <td> <input type='number' name='form_q_port' value='".lgsl_string_html($q_port)."' min='1024' max='65535' /> </td>
+            <td> <input type='number' name='form_q_port' value='$q_port' min='1024' max='65535' /> </td>
           </tr>
 
           <tr>
@@ -137,7 +137,7 @@
 
         //-----------------------------------------------------------------------------------------------------------+
 
-          $server = new Server(array("type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port));
+          $server = new Server(["type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port]);
 					$server->lgsl_live_query("s");
 
           if ($server->get_status() != Server::OFFLINE) {
@@ -147,7 +147,7 @@
               $disabled = ($lgsl_config['public_add'] == "2") ? "0" : "1";
 
               $mysql_query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`disabled`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','{$disabled}','','')";
-              $mysql_result = $db->query($mysql_query);
+              $mysql_result = $db->execute($mysql_query);
 
               $output .= "
               <div class='annotation'>";
@@ -190,10 +190,10 @@
                 </div>
 
                 <div class='annotation'>
-                  <input type='hidden' name='form_type'       value='".lgsl_string_html($type)."'   />
-                  <input type='hidden' name='form_ip'         value='".lgsl_string_html($ip)."'     />
-                  <input type='hidden' name='form_c_port'     value='".lgsl_string_html($c_port)."' />
-                  <input type='hidden' name='form_q_port'     value='".lgsl_string_html($q_port)."' />
+                  <input type='hidden' name='form_type'       value='$type'   />
+                  <input type='hidden' name='form_ip'         value='$ip'     />
+                  <input type='hidden' name='form_c_port'     value='$c_port' />
+                  <input type='hidden' name='form_q_port'     value='$q_port' />
                   <input type='submit' name='lgsl_submit_add' value='{$lgsl_config['text']['aas']}' />
                 </div>
 

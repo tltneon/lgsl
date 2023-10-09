@@ -6,8 +6,8 @@
 	"license": "GPL-3.0-only",
 	"keywords":
 	[
-    "gameserver",
-    "query",
+		"gameserver",
+		"query",
 		"discord",
 		"fivem",
 		"minecraft",
@@ -44,7 +44,7 @@
   ],
 	"require":
 	{
-		"php": ">=5.4",
+		"php": ">=7.1",
 		"ext-mysqli": "*",
 		"ext-bz2": "*",
 		"ext-curl": "*"
@@ -58,7 +58,7 @@
 	{
 		"psr-4":
 		{
-			"lgsl\\": "lgsl/lgsl_files/lgsl_class.php"
+			"tltneon\\lgsl": "lgsl/lgsl_files/lgsl_class.php"
 		}
 	}
 }
