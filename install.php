@@ -7,7 +7,7 @@
 	require('src/lgsl_class.php');
 	
 
-	$db_type = empty($_POST["type"]) ? "mysql" : $_POST["type"];
+	$db_type = empty($_POST["db_type"]) ? "mysql" : $_POST["db_type"];
 	$db_server = empty($_POST["server"]) ? "localhost" : $_POST["server"];
 	$db_user = empty($_POST["login"]) ? "" : $_POST["login"];
 	$db_password = empty($_POST["password"]) ? "" : $_POST["password"];
@@ -18,31 +18,29 @@
 	$query_success = false;
 
 	if (isset($_POST["_createtables"]) || isset($_POST["_updatetables"])) {
-		if (empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])) {
+		if (($db_type === "mysql" && (empty($_POST["server"]) | empty($_POST["login"]))) || empty($_POST["database"]) || empty($_POST["table"])) {
 			echo('<l k="filli"></l>');
 		} else {
 			try {
+				global $lgsl_config; $lgsl_config['db'] = [
+					'server' => $_POST["server"],
+					'user'   => $_POST["login"],
+					'pass'   => $_POST["password"],
+					'db'     => '',
+					'prefix' => "{$_POST["prefix"]}"
+				];
 				if ($db_type === "mysql") {
 					mysqli_report(MYSQLI_REPORT_ERROR);
-					global $lgsl_config; $lgsl_config['db'] = [
-						'server' => $_POST["server"],
-						'user'   => $_POST["login"],
-						'pass'   => $_POST["password"],
-						'db'     => '',
-						'prefix' => "{$_POST["server"]}_"
-					];
 					$db = new Database();
-					$db->connect('mysql');
-					$db->execute("CREATE DATABASE IF NOT EXISTS {$_POST['database']}");
-					$lgsl_config['db']['db'] = $_POST["database"];
-
-					if (!$db) {
-						printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
+					if (!$db || !$db->connect('mysql')) {
+						printf("<span style='color: red;'>Wrong</span> mysql server, username or password (%s)\n", $db->get_error());
 					} else {
+						$db->execute("CREATE DATABASE IF NOT EXISTS {$_POST['database']}");
+						$lgsl_config['db']['db'] = $_POST["database"];
 						$db->select_db();
 						if (isset($_POST["_updatetables"])) {
 							$query = "
-							ALTER TABLE `{$_POST["table"]}`
+							ALTER TABLE `{$_POST['prefix']}{$_POST["table"]}`
 							ADD    `name`           VARCHAR (255) NOT NULL DEFAULT '' AFTER `id`,
 							ADD    `game`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `type`,
 							ADD    `mode`           VARCHAR (50)  NOT NULL DEFAULT '' AFTER `game`,
@@ -52,8 +50,7 @@
 							CHANGE `cache` `cache`  MEDIUMTEXT    NOT NULL;";
 						} else {
 							$query = "
-							CREATE TABLE `{$_POST["table"]}` (
-
+							CREATE TABLE `{$_POST['prefix']}{$_POST["table"]}` (
 								`id`         INT     (11)  NOT NULL auto_increment,
 								`name`       VARCHAR (255) NOT NULL DEFAULT '',
 								`type`       VARCHAR (50)  NOT NULL DEFAULT '',
@@ -86,11 +83,13 @@
 						}
 					}
 				} else {
+					$lgsl_config['db']['db'] = $_POST["database"];
 					$db = new Database();
 					$db->connect('sqlite');
+					chmod("src/{$_POST["database"]}.db", 700);
 					$db->execute("PRAGMA encoding='utf-8';");
 					$query = "
-						CREATE TABLE `{$_POST["table"]}` (
+						CREATE TABLE `{$_POST['prefix']}{$_POST["table"]}` (
 							`name`       VARCHAR (255) NOT NULL DEFAULT '',
 							`type`       VARCHAR (50)  NOT NULL DEFAULT '',
 							`game`       VARCHAR (50)  NOT NULL DEFAULT '',
@@ -108,9 +107,8 @@
 							`status`     TINYINT (1)   NOT NULL DEFAULT '0',
 							`cache`      MEDIUMTEXT    NOT NULL,
 							`cache_time` TEXT          NOT NULL
-
 						);";
-						$db->execute($query);
+					$db->execute($query);
 					$step = 2;
 					$query_success = true;
 				}
@@ -125,13 +123,7 @@
 	}
 	if (isset($_POST['_finishInstallation'])) {
 		$conf = json_decode($_POST['_config'], true);
-		try {
-			//$lgsl_database = mysqli_connect($db_server, $db_user, $db_password);
-		} catch (Error $e) {
-			//echo 'err';
-		}
 		if (empty($lgsl_database)) {
-			
 			file_put_contents('install.php', 666);
 			//chmod('install.php', 666);
 			chmod('src/lgsl_config.php', 666);
@@ -192,6 +184,7 @@
 	\$lgsl_config['timeout']       = 0;                     // 1=gives more time for servers to respond but adds loading delay
 	\$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay
 	\$lgsl_config['cms']           = 'sa';                // sets which CMS specific code to use
+	\$lgsl_config['disabled_types']= false;
 	include('languages/{$conf['language']}.php');        // sets LGSL language
 ?>";
 			file_put_contents('src/lgsl_config.php', $config);
@@ -308,7 +301,7 @@
 			}
 			
 			$output .= check('MySQL', function_exists("mysqli_connect"), 'used for mysql db');
-			$output .= check('PHP 7+', version_compare(PHP_VERSION, "7.0.0") >= 0, 'errors may occurs if PHP < 7.0');
+			$output .= check('PHP 7.1', version_compare(PHP_VERSION, "7.1.0") >= 0, 'errors may occurs if PHP < 7.1');
 			$output .= check('FSOCKOPEN', function_exists("fsockopen") && fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3), 'mainly used for querying');
 			$output .= check('CURL', function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec"), 'optional: for some games');
 			$output .= check('BZ2', function_exists("bzdecompress"), 'optional: for some games');
@@ -325,15 +318,15 @@
 					<option ". ($db_type == 'sqlite' ? 'selected' : '') .">sqlite</option>
 				</select>
 			</p>
-			<p id='db_server'>
+			<p id='db_server' ". ($db_type == 'sqlite' ? "style='display: none;'" : '') .">
 				DB Server*:
 				<input type='text' name='server' onChange='vars.db_server = event.target.value' value='{$db_server}' />
 			</p>
-			<p>
+			<p id='db_login' ". ($db_type == 'sqlite' ? "style='display: none;'" : '') .">
 				DB Login*:
 				<input type='text' name='login' onChange='vars.db_user = event.target.value' value='{$db_user}' />
 			</p>
-			<p>
+			<p id='db_password' ". ($db_type == 'sqlite' ? "style='display: none;'" : '') .">
 				DB Password:
 				<input type='password' name='password' onChange='vars.db_password = event.target.value' value='{$db_password}' />
 			</p>
@@ -574,8 +567,12 @@ document.addEventListener("reloadLocale", reloadLocale);
 			console.log(event.target.value);
 			if (event.target.value == 'sqlite') {
 				document.querySelector("p[id='db_server']").style.display = 'none';
+				document.querySelector("p[id='db_login']").style.display = 'none';
+				document.querySelector("p[id='db_password']").style.display = 'none';
 			} else {
 				document.querySelector("p[id='db_server']").style.display = 'inherit';
+				document.querySelector("p[id='db_login']").style.display = 'inherit';
+				document.querySelector("p[id='db_password']").style.display = 'inherit';
 			}
 		}
 		vars[event.target.name] = event.target.value;
@@ -592,7 +589,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		el.insertAdjacentHTML('beforeend', l(key));
 	}
 	function generateConfig() {
-		if (vars.db_user == "" || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
+		if ((vars.db_type == "mysql" && vars.db_user == "") || vars.lgsl_user == "" || vars.lgsl_password == "") return alert(l("filla"));
 		let textarea = document.body.getElementsByTagName("textarea")[0] ? document.body.getElementsByTagName("textarea")[0] : document.createElement("textarea");
 		let slist = "";
 		for (s in vars['scripts']) {

@@ -216,9 +216,8 @@
 				$this->_connection = new SqliteWrapper();					
 			}
 			$this->_connection->connect();
-      if ($this->_connection->get_error()) {
-        printf("Connect failed: %s\n", $this->_connection->get_error());
-        exit();
+      if ($this->get_error()) {
+        return null;
       }
       if ($lgsl_config['db']['db'] != '') {
 				$this->_db = $lgsl_config['db']['db'];
@@ -300,8 +299,8 @@
       $result = $this->_connection->execute($string) || $this->_connection->get_error();
       return $result;
     }
-    function err() {
-      die("DB Error: {$this->_connection->err()}");
+    function get_error() {
+      return $this->_connection->get_error();
     }
     function escape_string($string) {
       return $this->_connection->escape_string($string);
@@ -471,7 +470,8 @@
 			return $this->_connection->query($string);
 		}
 		public function get_error() {
-			return $this->_connection->connect_errno;
+			if ($this->_connection->connect_errno === 0) return null;
+			return "{$this->_connection->connect_error} ({$this->_connection->connect_errno})";
 		}
 		public function get_all() {
 			global $lgsl_config;
