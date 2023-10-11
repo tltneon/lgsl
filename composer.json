@@ -52,13 +52,14 @@
 	"suggest":
 	{
 		"ext-gd": "*",
-		"ext-mbstring": "*"
+		"ext-mbstring": "*",
+		"ext-sqlite3": "*"
 	},
 	"autoload":
 	{
 		"psr-4":
 		{
-			"tltneon\\lgsl": "lgsl/lgsl_files/lgsl_class.php"
+			"tltneon\\lgsl\\": "lgsl/src/lgsl_class.php"
 		}
 	}
 }
