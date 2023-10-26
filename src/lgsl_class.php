@@ -427,6 +427,7 @@
       if (strlen($data['cache']) > 0) {
         $cache = unserialize(base64_decode($data['cache']));
         $server['b'] = array_merge($server['b'], $cache['b']);
+        $server['e'] = $cache['e'];
         $server['p'] = $cache['p'];
         if (isset($cache['h'])) $server['h'] = $cache['h'];
         if (isset($cache['o']['location'])) $server['o']['location'] = $cache['o']['location'];
@@ -605,16 +606,17 @@
         $result = $db->get_server_by_ip($this->_base['ip'], $this->_base['c_port']);
       }
       if ($result) {
-				global $lgsl_config;
         $this->from_array($result);
         $this->validate();
 				if (!LGSL::requestHas($request, "c")) { // CACHE ONLY REQUEST
+					global $lgsl_config;
 					$needed = "";
 					if (LGSL::requestHas($request, "s") && time() > ($this->get_timestamp('s', true) + $lgsl_config['cache_time'])) { $needed .= "s"; }
 					if (LGSL::requestHas($request, "e") && time() > ($this->get_timestamp('e', true) + $lgsl_config['cache_time'])) { $needed .= "e"; }
 					if (LGSL::requestHas($request, "p") && time() > ($this->get_timestamp('p', true) + $lgsl_config['cache_time'])) { $needed .= "p"; }
+					if (LGSL::requestHas($request, "h")) { $needed .= "h"; }
 					if ($needed) {
-						$this->lgsl_live_query($request);
+						$this->lgsl_live_query($needed);
 						$db->lgsl_save_cache($this);
 					}
 				}
@@ -946,11 +948,10 @@
     }
     private function _cache_time_index($c) {
       switch ($c) {
-        case 'e': $t = 1; break;
-        case 'p': $t = 2; break;
-        default: $t = 0; break;
+        case 'e': return 1;
+        case 'p': return 2;
+        default: return 0;
       }
-      return $t;
     }
     public function set_timestamp($types, $time) {
       if (!isset($this->_server) || !isset($this->_server['cache_time'])) {
@@ -962,20 +963,23 @@
       }
     }
     public function get_timestamp($type = 's', $raw = false) {
-      global $lgsl_config;
 			$time = 0;
       if (isset($this->_server['cache_time'])) {
 				if (isset($this->_server['cache_time'][$this->_cache_time_index($type)])) {
 					$time = (int) $this->_server['cache_time'][$this->_cache_time_index($type)];
 				}
         if ($time > 0) {
+					global $lgsl_config;
 					return $raw ? $time : Date($lgsl_config['text']['tzn'], $time);
         }
       }
       return $raw ? $time : 'not queried';
     }
+    public function set_timestamps($cache_time) {
+      $this->_server['cache_time'] = $cache_time;
+    }
     public function get_timestamps() {
-      return isset($this->_server['cache_time']) ? $this->_server['cache_time'] : array();
+      return isset($this->_server['cache_time']) ? $this->_server['cache_time'] : [];
     }
     public function get_zone() {
       return isset($this->_other['zone']) ? $this->_other['zone'] : "";

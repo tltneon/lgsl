@@ -22,6 +22,7 @@
 		public const HTTP = "http";
 		
     private $_server;
+    private $_server_timestamp;
     private $_lgsl_need;
     private $_lgsl_fp;
     
@@ -414,8 +415,12 @@
       $list = $this->lgsl_protocol_list();
       return $list[$type] ?? "err";
     }
+		public function set_requested($type = 's') {
+			$this->_lgsl_need[$type] = false;
+      $this->_server->set_timestamp($type, time());
+			$this->_server_timestamp = $this->_server->get_timestamps();
+		}
     public function query() {
-      $this->_server->set_timestamp(implode('', $this->_lgsl_need), time());
       $protocol = $this->lgsl_connection_type($this->_server->get_type());
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
@@ -424,6 +429,7 @@
         $this->_server->set_extra_value('_error', 'Can\'t establish the connection to server.');
       }
       $this->_server->set_status($status);
+			$this->_server->set_timestamps($this->_server_timestamp);
 			$this->_lgsl_fp->close();
     }
     private function _fp_write($string) {
@@ -800,7 +806,7 @@
       //---------------------------------------------------------+
       //  REFERENCE: http://developer.valvesoftware.com/wiki/Server_Queries
 
-			$xf = "\xFF\xFF\xFF\xFF";
+      $xf = "\xFF\xFF\xFF\xFF";
       if ($server['b']['type'] == "halflifewon") {
         if     ($this->_lgsl_need['s']) { $this->_fp_write("{$xf}details\x00"); }
         elseif ($this->_lgsl_need['e']) { $this->_fp_write("{$xf}rules\x00");   }
@@ -989,9 +995,9 @@
       // IF ONLY [s] WAS REQUESTED THEN REMOVE INCOMPLETE [e]
       if ($this->_lgsl_need['s'] && !$this->_lgsl_need['e']) { $server['e'] = []; }
 
-      if     ($this->_lgsl_need['s']) { $this->_lgsl_need['s'] = FALSE; }
-      elseif ($this->_lgsl_need['e']) { $this->_lgsl_need['e'] = FALSE; }
-      elseif ($this->_lgsl_need['p']) { $this->_lgsl_need['p'] = FALSE; }
+      if     ($this->_lgsl_need['s']) { $this->set_requested('s'); }
+      elseif ($this->_lgsl_need['e']) { $this->set_requested('e'); }
+      elseif ($this->_lgsl_need['p']) { $this->set_requested('p'); }
 
       //---------------------------------------------------------+
       $this->_server->from_array($server);
