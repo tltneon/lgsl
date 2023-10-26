@@ -53,7 +53,7 @@ textarea {background-color: rgba(26, 28, 34, 0.2); border: 1px solid rgba(26, 28
   width: 250px;
   height: 188px;
 }
-.details_password_image, .details_game_image, .details_location_image {
+.details_password_image, .details_game_image {
   display: block;
   z-index: 5;
   background-size: cover;
@@ -65,6 +65,7 @@ textarea {background-color: rgba(26, 28, 34, 0.2); border: 1px solid rgba(26, 28
   right: 4px;
   float: right;
   top: 4px;
+  z-index: 5;
 }
 .details_game_image {
   width: 32px;

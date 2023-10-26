@@ -110,7 +110,7 @@ a:hover {
   width: 250px;
   height: 188px;
 }
-.details_password_image, .details_game_image, .details_location_image {
+.details_password_image, .details_game_image {
   display: block;
   z-index: 5;
   background-size: cover;
@@ -132,6 +132,7 @@ a:hover {
   right: 4px;
   float: right;
   top: 4px;
+  z-index: 5;
 }
 .details_game_image {
   width: 32px;

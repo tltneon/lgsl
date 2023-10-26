@@ -46,6 +46,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
   $output .= "
+	<link rel='stylesheet' href='other/_lgsl_locations.css' type='text/css' />
   <style>
     html {
       background-color: $background;
@@ -99,9 +100,6 @@
     <tr>";
 
     foreach ($server_list as $server) {
-      /*$server = lgsl_sort_players($server);
-      $misc   = lgsl_server_misc($server);
-      $server = lgsl_server_html($server);*/
 
 //------------------------------------------------------------------------------------------------------------+
       if ($zone_count != 0 && !($zone_count % $zone_grid)) {
@@ -144,7 +142,7 @@
                   <img alt='' src='{$server->get_map_image()}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
                   <img alt='' src='{$server->map_password_image()}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
                   <img alt='' src='{$server->add_url_path($server->game_icon())}'          title='{$server->get_game()}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
-                  <img alt='' src='{$server->add_url_path($server->location_icon())}'      title='{$server->location_icon()}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
+                  <img alt='' class='details_location_image flag f{$server->getLocation()}' title='{$server->location_text()}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
                 </a>
               </div>
             </td>

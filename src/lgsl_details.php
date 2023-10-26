@@ -27,7 +27,6 @@
   //$server = lgsl_query_cached("", $lgsl_server_ip, $lgsl_server_port, "", "", "sep", $lgsl_server_id);
   $server = new Server(["ip" => $lgsl_server_ip, "c_port" => $lgsl_server_port, "id" => $lgsl_server_id]);
   $server->lgsl_cached_query();
-  var_dump($server->get_history());
 
   if ($server->isvalid()) {
     $title .= " | {$server->get_name()}";

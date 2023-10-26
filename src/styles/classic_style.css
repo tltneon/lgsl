@@ -53,7 +53,7 @@ a:active { color:#7500c0; }
   width: 160px;
   height: 120px;
 }
-.details_password_image, .details_game_image, .details_location_image {
+.details_password_image, .details_game_image {
   display: block;
   z-index: 5;
   background-size: cover;
@@ -71,6 +71,7 @@ a:active { color:#7500c0; }
   right: 4px;
   float: right;
   top: 4px;
+  z-index: 5;
 }
 .details_game_image {
   width: 16px;
