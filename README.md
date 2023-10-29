@@ -2,8 +2,9 @@
 ![PHP](https://img.shields.io/badge/PHP-7.1+-brightgreen?style=for-the-badge&logo=php)
 ![MySQL](https://img.shields.io/badge/MySQL-5.5+-brightgreen?style=for-the-badge&logo=mysql)
 ![MariaDB](https://img.shields.io/badge/MariaDB-5.5+-brightgreen?style=for-the-badge&logo=mariadb)
+![SQLite](https://img.shields.io/badge/SQLite-3-brightgreen?style=for-the-badge&logo=sql)
 
-[![GitHub followers](https://img.shields.io/github/followers/tltneon?style=for-the-badge)](https://github.com/tltneon?tab=followers)
+[![GitHub contributors](https://img.shields.io/github/contributors/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/graphs/contributors)
 [![GitHub stars](https://img.shields.io/github/stars/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
@@ -19,6 +20,40 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can 
 ![lgsl Server List on laptop](https://i.imgur.com/oU2x9Y5.png)
 ### Server List on mobile device
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
+
+## Install standalone
+1. Download
+2. Unzip
+3. Open main page and proceed the installation
+4. Done! Now you can add server.
+## Add as Composer library
+Install library
+```bash
+composer require tltneon/lgsl
+```
+Use that code to query game servers
+```php
+use tltneon\LGSL;
+
+$server = new LGSL\Server([
+    "ip" => "127.0.0.1",
+    "c_port" => "27015", // for players
+    "q_port" => "27015", // for querying
+    "type" => "source"
+]);
+$server->lgsl_live_query("sep");
+```
+Get server data 
+```php
+$server->get_name();
+$server->get_ip();
+$server->get_c_port();
+$server->get_game();
+$server->get_map();
+$server->get_players_count();
+$server->get_software_link();
+$server->to_array(); // full data
+```
 
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
 #### v7.0.0
