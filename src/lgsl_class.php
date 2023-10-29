@@ -403,7 +403,7 @@
             `players`='{$server->get_players_count('active')}',
             `playersmax`='{$server->get_players_count('max')}',
             `game`='{$server->get_game()}',
-            `mode`='{$server->get_mode()}',
+            `mode`='{$this->escape_string($server->get_mode())}',
             `name`='{$this->escape_string($server->get_name())}',
             `map`='{$server->get_map()}'
         WHERE `id` = '{$server->get_id()}'
@@ -531,7 +531,7 @@
 			return new SqliteResultWrapper($this->_connection->query($string));
 		}
 		public function execute($string) {
-			$string = str_replace("`id`", "`rowid`", $string);
+			$string = str_replace("WHERE `id`", "WHERE `rowid`", $string);
 			$this->_connection->exec($string);
 		}
 		public function get_all() {

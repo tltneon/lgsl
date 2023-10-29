@@ -116,6 +116,7 @@
         "ghostrecon"    => "19",
         "graw"          => "06",
         "graw2"         => "09",
+        "gtac"          => "45",
         "gtr2"          => "15",
         "jediknight2"   => "02",
         "jediknightja"  => "02",
@@ -251,6 +252,7 @@
         "ghostrecon"    => "Ghost Recon",
         "graw"          => "Ghost Recon: Advanced Warfighter",
         "graw2"         => "Ghost Recon: Advanced Warfighter 2",
+        "gtac"          => "GTA / Mafia Connected",
         "gtr2"          => "GTR 2",
         "had2"          => "Hidden and Dangerous 2",
         "halflife"      => "Half-life Steam Protocol (CS 1.6, etc)",
@@ -806,7 +808,7 @@
       //---------------------------------------------------------+
       //  REFERENCE: http://developer.valvesoftware.com/wiki/Server_Queries
 
-      $xf = "\xFF\xFF\xFF\xFF";
+			$xf = "\xFF\xFF\xFF\xFF";
       if ($server['b']['type'] == "halflifewon") {
         if     ($this->_lgsl_need['s']) { $this->_fp_write("{$xf}details\x00"); }
         elseif ($this->_lgsl_need['e']) { $this->_fp_write("{$xf}rules\x00");   }
@@ -3719,6 +3721,38 @@
       $this->_server->from_array($server);
 			return TRUE;
 		}
+
+		public function lgsl_query_45() { // GTA / Mafia Connected
+      $server = $this->_server->to_array();
+
+      $this->_fp_write("\xFF\xFFUGP\x00\x01\x00");
+      $buffer = $this->_fp_read(4096);
+      if (!$buffer) return false;
+      //$this->lgsl_cut_byte($buffer, 2);
+      //$this->lgsl_cut_byte($buffer, 3) == "UGP";
+      $this->_fp_write("\xFF\xFFUGP\x00\x01\x01" . chr(0x01 | 0x08) . chr(0x04 | 0x08 | 0x20 | 0x40) . chr(0x01 | 0x02 | 0x04));
+      $buffer = $this->_fp_read(4096);
+      $this->lgsl_cut_byte($buffer, 8);
+      switch (ord($this->lgsl_cut_byte($buffer, 1))) {
+        case 1: $server['s']["game"] = 'iii'; break;
+        case 2: $server['s']["game"] = 'vc'; break;
+        case 3: $server['s']["game"] = 'sa'; break;
+        case 5: $server['s']["game"] = 'iv'; break;
+        case 6: $server['s']["game"] = 'iv_eflc'; break;
+        case 10: $server['s']["game"] = 'mafia'; break;
+      }
+      $this->lgsl_cut_byte($buffer, 2);
+      $server['s']["name"] = $this->lgsl_cut_byte($buffer, ord($this->lgsl_cut_byte($buffer, 1)));
+      $server['s']["mode"] = $this->lgsl_cut_byte($buffer, ord($this->lgsl_cut_byte($buffer, 1)));
+      $server['s']["map"] = 'default';
+      $server['s']['players'] = ord($this->lgsl_cut_byte($buffer, 1));
+      $server['s']['playersmax'] = ord($this->lgsl_cut_byte($buffer, 1));
+      for ($i = ord($this->lgsl_cut_byte($buffer, 1)); $i > 0; $i--) {
+        $server['e'][$this->lgsl_cut_byte($buffer, ord($this->lgsl_cut_byte($buffer, 1)))] = $this->lgsl_cut_byte($buffer, ord($this->lgsl_cut_byte($buffer, 1)));
+      }
+      $this->_server->from_array($server);
+			return TRUE;
+    }
 
     //---------------------------------------------------------+
 
