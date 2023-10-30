@@ -3265,7 +3265,7 @@
       $server['s']['playersmax']   = intval($items[$ver ? 'maxclients' : 'maxusers']);
       $server['s']['password']     = intval($items[$ver ? 'flag_password' : 'password']);
       $server['e']['platform']     = $items['platform'];
-      $server['e']['motd']         = $ver ? $this->lgsl_unescape($items['welcomemessage']) : $items['welcomemessage'];
+      $server['e']['motd']         = $this->lgsl_parse_color($ver ? $this->lgsl_unescape($items['welcomemessage']) : $items['welcomemessage'], 'bbcode');
       $server['e']['uptime']       = $this->lgsl_time($items['uptime']);
       $server['e']['banner']       = $this->lgsl_unescape($items['hostbanner_url']);
       $server['e']['channelscount']= $items[$ver ? 'channelsonline' : 'currentchannels'];
@@ -3774,6 +3774,16 @@
     }
     public function lgsl_parse_color($string, $type) {
       switch($type) {
+        case "2": return preg_replace("/\^[\x20-\x7E]/", "", $string);
+        case "doomskulltag": return preg_replace("/\\x1c./", "", $string);
+        case "farcry": return preg_replace("/\\$\d/", "", $string);
+        case "fivem": return preg_replace("/\^\d/", "", $string);
+        case "painkiller": return preg_replace("/#./", "", $string);
+        case "swat4": return preg_replace("/\[c=......\]/Usi", "", $string);
+        case "minecraft": return preg_replace("/[�§]\w/S", "", $string);
+        case "factorio": return preg_replace("/\[[-a-z=0-9\#\/\.,\s?]*\]/S", "", $string);				
+				case "bbcode": return preg_replace('/\[[^\]]+\]/', '', $string);
+				
         case "1":
           $string = preg_replace("/\^x.../", "", $string);
           $string = preg_replace("/\^./",    "", $string);
@@ -3788,26 +3798,6 @@
             if ($char  < 32) { $char = 46; }
             $string[$i] = chr($char);
           }
-        break;
-
-        case "2":
-          $string = preg_replace("/\^[\x20-\x7E]/", "", $string);
-        break;
-
-        case "doomskulltag":
-          $string = preg_replace("/\\x1c./", "", $string);
-        break;
-
-        case "farcry":
-          $string = preg_replace("/\\$\d/", "", $string);
-        break;
-
-        case "fivem":
-          $string = preg_replace("/\^\d/", "", $string);
-        break;
-
-        case "painkiller":
-          $string = preg_replace("/#./", "", $string);
         break;
 
         case "quakeworld":
@@ -3825,18 +3815,6 @@
           $string = preg_replace("/\^[0-9]+/",  "", $string);
           $string = preg_replace("/lan .*\^/U", "", $string);
           $string = preg_replace("/con .*\^/U", "", $string);
-        break;
-
-        case "swat4":
-          $string = preg_replace("/\[c=......\]/Usi", "", $string);
-        break;
-
-        case "minecraft":
-          $string = preg_replace("/[�§]\w/S", "", $string);
-        break;
-
-        case "factorio":
-          $string = preg_replace("/\[[-a-z=0-9\#\/\.,\s?]*\]/S", "", $string);
         break;
       }
       return $string;
