@@ -124,6 +124,7 @@
         "killingfloor"  => "13",
         "kingpin"       => "03",
         "m2mp"          => "39",
+        "mafiac"        => "45",
         "minecraft"     => "06",
         "mohaa"         => "03",
         "mohaab"        => "03",
@@ -252,7 +253,7 @@
         "ghostrecon"    => "Ghost Recon",
         "graw"          => "Ghost Recon: Advanced Warfighter",
         "graw2"         => "Ghost Recon: Advanced Warfighter 2",
-        "gtac"          => "GTA / Mafia Connected",
+        "gtac"          => "GTA Connected",
         "gtr2"          => "GTR 2",
         "had2"          => "Hidden and Dangerous 2",
         "halflife"      => "Half-life Steam Protocol (CS 1.6, etc)",
@@ -265,6 +266,7 @@
         "killingfloor"  => "Killing Floor",
         "kingpin"       => "Kingpin: Life of Crime",
         "m2mp"          => "Mafia II Multiplayer",
+        "mafiac"        => "Mafia Connected",
         "minecraft"     => "Minecraft",
         "mohaa"         => "Medal of Honor: Allied Assault",
         "mohaab"        => "Medal of Honor: Allied Assault Breakthrough",
@@ -417,9 +419,12 @@
       $list = $this->lgsl_protocol_list();
       return $list[$type] ?? "err";
     }
-		public function set_requested($type = 's') {
-			$this->_lgsl_need[$type] = false;
-      $this->_server->set_timestamp($type, time());
+		public function set_requested($types = 'sep') {
+			$types = str_split($types);
+			foreach ($types as $type) {
+				$this->_lgsl_need[$type] = false;
+				$this->_server->set_timestamp($type, time());
+			}
 			$this->_server_timestamp = $this->_server->get_timestamps();
 		}
     public function query() {
@@ -429,9 +434,11 @@
 				$status = call_user_func([$this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"], $this->_server->get_type());
 			} else {
         $this->_server->set_extra_value('_error', 'Can\'t establish the connection to server.');
+				$this->set_requested();
       }
       $this->_server->set_status($status);
 			$this->_server->set_timestamps($this->_server_timestamp);
+			if ($this->_server->get_timestamp('s', true) == 0) $this->_server->set_timestamp('s', time());
 			$this->_lgsl_fp->close();
     }
     private function _fp_write($string) {
@@ -832,7 +839,7 @@
       do {
         if (!($packet = $this->_fp_read(4096))) {
           if ($this->_lgsl_need['s']) { return FALSE; }
-          elseif ($this->_lgsl_need['e']) { $this->_lgsl_need['e'] = FALSE; return TRUE; }
+          elseif ($this->_lgsl_need['e']) { $this->set_requested('e'); return TRUE; }
           else { return TRUE; }
         }
 
@@ -974,6 +981,7 @@
         while ($buffer) {
           $this->lgsl_cut_byte($buffer, 1);
           $server['p'][$player_key]['name']  = $this->lgsl_cut_string($buffer);
+					if (strlen($server['p'][$player_key]['name']) == 0) $server['p'][$player_key]['name']  = "*unknown*";
           $server['p'][$player_key]['score'] = $this->lgsl_unpack($this->lgsl_cut_byte($buffer, 4), "l");
           $server['p'][$player_key]['time']  = $this->lgsl_time($this->lgsl_unpack($this->lgsl_cut_byte($buffer, 4), "f"));
 
@@ -3344,10 +3352,8 @@
         $server['e']['peak']       = $value['peak'];
         $server['e']['gamemode']   = $value['gamemode'];
         $server['e']['lang']       = $value['lang'];
+        $this->set_requested();
         $this->_server->from_array($server);
-        $this->_lgsl_need['s'] = FALSE;
-        $this->_lgsl_need['e'] = FALSE;
-        $this->_lgsl_need['p'] = FALSE;
         return TRUE;
       }
   
@@ -3372,7 +3378,7 @@
       $server['e']['version'] = $buffer['iv'];
 
       if ($this->_lgsl_need['p']) {
-        $this->_lgsl_need['p'] = FALSE;
+        $this->set_requested('p');
 
 				$this->_lgsl_fp->write("http://{$server['b']['ip']}:{$server['b']['q_port']}/players.json");
 				$buffer = $this->_lgsl_fp->readJson();
@@ -3382,9 +3388,8 @@
           $server['p'][$key]['ping'] = $value['ping'];
         }
       }
+      $this->set_requested('se');
       $this->_server->from_array($server);
-      $this->_lgsl_need['s'] = FALSE;
-      $this->_lgsl_need['e'] = FALSE;
       return TRUE;
     }
     public function lgsl_query_36() {
@@ -3396,8 +3401,7 @@
         return FALSE;
       }
       $server = $this->_server->to_array();
-      $this->_lgsl_need['s'] = FALSE;
-      $this->_lgsl_need['e'] = FALSE;
+      $this->set_requested('se');
       $server['s']['map'] = 'discord';
       $server['s']['name'] = $buffer['guild']['name'];
       $server['s']['players'] = $buffer['approximate_presence_count'];
@@ -3423,7 +3427,7 @@
       }
   
       if ($this->_lgsl_need['p']) {
-        $this->_lgsl_need['p'] = FALSE;
+        $this->set_requested('p');
   
 				$this->_lgsl_fp->write("https://discordapp.com/api/guilds/{$server['e']['id']}/widget.json");
 				$buffer = $this->_lgsl_fp->readJson();
@@ -3504,10 +3508,8 @@
       $server['s']['playersmax']  = lgsl_cut_pascal($buffer, 1, -1);
       $server['s']['password']    = 0;
       $server['e']['gamemode']    = lgsl_cut_pascal($buffer, 1, -1);
+      $this->set_requested();
       $this->_server->from_array($server);
-      $this->_lgsl_need['s'] = FALSE;
-      $this->_lgsl_need['e'] = FALSE;
-      $this->_lgsl_need['p'] = FALSE;
       return TRUE;
     }
     public function lgsl_query_40() {
@@ -3519,6 +3521,7 @@
 			$this->_lgsl_fp->write($urls[$server['b']['type']]);
 			$buffer = $this->_lgsl_fp->read();
 			if (!$buffer) return FALSE;
+			$this->set_requested();
 			switch ($server['b']['type']) {
 				// Farming Simulator // CAN QUERY ONLY SERVER NAME AND ONLINE STATUS, MEH
 				case 'farmsim': {
@@ -3594,10 +3597,8 @@
         $server['s']['map']         = "World";
         $server['e']['version']     = hexdec($version);
       }
+      $this->set_requested();
       $this->_server->from_array($server);
-      $this->_lgsl_need['s'] = FALSE;
-      $this->_lgsl_need['e'] = FALSE;
-      $this->_lgsl_need['p'] = FALSE;
       return true;
     }
     public function lgsl_query_42() {
@@ -3647,10 +3648,8 @@
       }
       $server['s']['players']     = count($server['p']);
       $server['s']['map']         = "World";
+      $this->set_requested();
       $this->_server->from_array($server);
-      $this->_lgsl_need['s'] = FALSE;
-      $this->_lgsl_need['e'] = FALSE;
-      $this->_lgsl_need['p'] = FALSE;
       return TRUE;
     }
 		public function lgsl_query_43() { // Mumble
@@ -3665,13 +3664,13 @@
 			lgsl_cut_byte($buffer, 8); // challenge
 			$server['s']['players'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
 			$server['s']['playersmax'] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "N");
+      $this->set_requested();
       $this->_server->from_array($server);
 			return TRUE;
 		}
 
 		public function lgsl_query_44() { // Cryofall (by tltneon)
-      $server = $this->_server->to_array();
-			$this->_fp_write("\x05\x0b\x00\x00\x00\x86\x76\x41\x31\xa0\x87\xdb\x08\x10\x02\x00\x55\xf0\x86\xff\xde\x58\x00\x00\x00\x00\x00\x00\x00\x00\x08\x00\x00\x00\x43\x72\x79\x6f\x46\x61\x6c\x6c");
+      $this->_fp_write("\x05\x0b\x00\x00\x00\x86\x76\x41\x31\xa0\x87\xdb\x08\x10\x02\x00\x55\xf0\x86\xff\xde\x58\x00\x00\x00\x00\x00\x00\x00\x00\x08\x00\x00\x00\x43\x72\x79\x6f\x46\x61\x6c\x6c");
 			$buffer = $this->_fp_read(4096);
 			if (!$buffer) {
 				return false;
@@ -3685,7 +3684,9 @@
 				$this->_fp_write("\x00\x06\x61\x02\x20\x4e\x02");
 				$buffer = $this->_fp_read(4096);
 			}
+      $server = $this->_server->to_array();
 			$server['s']['map'] = "Cryofall";
+			$server['e'] = [];
 			if (strlen($buffer) < 12) {
 				$server['s']['name'] = "Cryofall server";
 				$server['s']['players'] = 0;
@@ -3718,6 +3719,7 @@
 				$server['e']["community_server"] = ord($this->lgsl_cut_byte($buffer, 1));
 				$server['e']["no_client_mods"] = ord($this->lgsl_cut_byte($buffer, 1));
 			}
+      $this->set_requested();
       $this->_server->from_array($server);
 			return TRUE;
 		}
@@ -3750,6 +3752,7 @@
       for ($i = ord($this->lgsl_cut_byte($buffer, 1)); $i > 0; $i--) {
         $server['e'][$this->lgsl_cut_byte($buffer, ord($this->lgsl_cut_byte($buffer, 1)))] = $this->lgsl_cut_byte($buffer, ord($this->lgsl_cut_byte($buffer, 1)));
       }
+      $this->set_requested();
       $this->_server->from_array($server);
 			return TRUE;
     }

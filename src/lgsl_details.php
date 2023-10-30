@@ -24,7 +24,6 @@
   $lgsl_server_ip = $_GET["ip"] ?? "";
   $lgsl_server_port = $_GET["port"] ?? "";
 
-  //$server = lgsl_query_cached("", $lgsl_server_ip, $lgsl_server_port, "", "", "sep", $lgsl_server_id);
   $server = new Server(["ip" => $lgsl_server_ip, "c_port" => $lgsl_server_port, "id" => $lgsl_server_id]);
   $server->lgsl_cached_query();
 
@@ -98,25 +97,34 @@
       $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server->get_name()}' style='border-radius: 6px;' id='chart' /></div>";
     }
 
-    if ($lgsl_config['image_mod']) {
-      if (extension_loaded('gd')) {
-        $p = str_replace('src/', '', lgsl_url_path()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
-        $output .= "
+		$p = str_replace('src/', '', lgsl_url_path()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
+		$framespace = max(0, min(6, $server->get_players_count('active'))) * 8.8;
+		$output .= "
         <details>
           <summary style='margin-bottom: 12px;'>
             {$lgsl_config['text']['cts']}
           </summary>
-          <div>
-            <div style='overflow-x: auto;'><img src='userbar.php?{$g}' alt='{$server->get_name()}'/></div>
-            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}[/img][/url]</textarea><br /><br />
+          <div>";
+					
+					if ($lgsl_config['image_mod']) {
+						if (extension_loaded('gd')) {
+							$output .= "
+							<div style='overflow-x: auto;'><img src='userbar.php?{$g}' alt='{$server->get_name()}'/></div>
+							<textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}[/img][/url]</textarea><br /><br />
 
-            <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t=2' alt='{$server->get_name()}'/></div>
-            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=2[/img][/url]</textarea><br /><br />
+							<div style='overflow-x: auto;'><img src='userbar.php?{$g}&t=2' alt='{$server->get_name()}'/></div>
+							<textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=2[/img][/url]</textarea><br /><br />
 
-            <img src='userbar.php?{$g}&t=3' alt='{$server->get_name()}'/><br />
-            <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=3[/img][/url]</textarea>
-            
-            <iframe src='src/lgsl_zone.php?{$g}' alt='{$server->get_name()}' style='border: 0; display: block; background: white;width: 200px;height: 275px;margin: auto;'></iframe><br />
+							<img src='userbar.php?{$g}&t=3' alt='{$server->get_name()}'/><br />
+							<textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=3[/img][/url]</textarea>
+							";
+						} else {
+							$output .= "<div id='invalid_server_id'> Error while trying to display image userbar: GD library not loaded (see php.ini) </div>";
+						}
+					}
+					
+					$output .= "
+						<iframe src='src/lgsl_zone.php?{$g}' alt='{$server->get_name()}' style='border: 0; display: block; background: white;width: 200px;height: calc(275px + {$framespace}px);margin: auto;'></iframe><br />
             <textarea onClick='this.select();'><iframe src='{$p}src/lgsl_zone.php?{$g}'></iframe></textarea>
           </div>
         </details>
@@ -138,9 +146,6 @@
             100% {opacity: 1;}
           }
         </style>";
-      }
-      else {$output .= "<div id='invalid_server_id'> Error while trying to display userbar: GD library not loaded (see php.ini) </div>";}
-    }
 
   //------------------------------------------------------------------------------------------------------------+
   // SHOW THE PLAYERS

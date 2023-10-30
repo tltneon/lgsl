@@ -113,7 +113,7 @@
 
       $marquee = strlen($server->get_name()) > 25;
       $output .= "
-      <td style='padding-top:5px; padding-bottom:5px; vertical-align:top; text-align:center'>
+      <td style='vertical-align:top; text-align:center'>
 
         <table style='width:{$zone_width}; margin:auto; text-align:center' cellpadding='0' cellspacing='2'>
 
@@ -141,7 +141,7 @@
                 <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."'>
                   <img alt='' src='{$server->get_map_image()}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
                   <img alt='' src='{$server->map_password_image()}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
-                  <img alt='' src='{$server->add_url_path($server->game_icon())}'          title='{$server->get_game()}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
+                  <img alt='' src='{$server->add_url_path($server->game_icon())}'          title='{$server->text_type_game()}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
                   <img alt='' class='details_location_image flag f{$server->getLocation()}' title='{$server->location_text()}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
                 </a>
               </div>
