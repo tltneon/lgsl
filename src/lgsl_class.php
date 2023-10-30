@@ -317,7 +317,7 @@
       return null;
     }
     function get_server_by_id($id) {
-			return $this->load_server($this->_connection->get_server_by_id($id));
+			return $this->load_server($this->_connection->get_server_by_id_query_string($id));
     }
 
     function get_server_by_ip($ip, $c_port) {
@@ -450,7 +450,7 @@
 			$this->execute("TRUNCATE TABLE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
 		}
   }
-	class MysqlWrapper extends DBWrapper{
+	class MysqlWrapper extends DBWrapper {
 		public function connect() {
 			global $lgsl_config;
 			$this->_connection = new \mysqli($lgsl_config['db']['server'], $lgsl_config['db']['user'], $lgsl_config['db']['pass']);
@@ -482,9 +482,9 @@
 		public function escape_string($string) {
 			return $this->_connection->escape_string($string);
 		}
-		public function get_server_by_id($id) {
+		public function get_server_by_id_query_string($id) {
       global $lgsl_config;
-      return $this->query("SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE id = {$id};")->fetch_array();
+      return "SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE id = {$id};";
 		}
 	}
 	abstract class ResultWrapper {
@@ -540,9 +540,9 @@
 			$t = $this->query("SELECT rowid as id, * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
 			return $t->fetch_all();
 		}
-		public function get_server_by_id($id) {
+		public function get_server_by_id_query_string($id) {
       global $lgsl_config;
-      return $this->load_server("SELECT rowid as id, * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE rowid = {$id};");
+      return "SELECT rowid as id, * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE rowid = {$id};";
 		}
 	}
 	class SqliteResultWrapper extends ResultWrapper {
@@ -798,10 +798,12 @@
         "factorio"      => "steam://connect/{IP}",
         "farmsim"       => "steam://connect/{IP}:{C_PORT}",
         "fivem"         => "fivem://connect/{IP}:{C_PORT}",
+        "gtac"          => "gtac://connect/{IP}:{C_PORT}/gta:{GAME}",
         "halflife"      => "steam://connect/{IP}:{C_PORT}",
         "halflifewon"   => "steam://connect/{IP}:{C_PORT}",
         "jc2mp"         => "steam://connect/{IP}:{C_PORT}",
         "killingfloor"  => "steam://connect/{IP}:{C_PORT}",
+        "mafiac"        => "mafiac://connect/{IP}:{C_PORT}/mafia:{GAME}",
         "minecraft"     => "minecraft://{IP}:{C_PORT}/",
         "mta"           => "mtasa://{IP}:{C_PORT}",
         "mumble"        => "mumble://{IP}/",
@@ -836,7 +838,7 @@
 				}
     
         // INSERT DATA INTO STATIC LINK - CONVERT SPECIAL CHARACTERS - RETURN
-        return htmlentities(str_replace(["{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}"], [$this->get_ip(), $this->get_c_port(), $this->get_q_port(), $s_port], $link), ENT_QUOTES);
+        return htmlentities(str_replace(["{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}", "{GAME}"], [$this->get_ip(), $this->get_c_port(), $this->get_q_port(), $s_port, $this->get_game()], $link), ENT_QUOTES);
     }
 		public function add_url_path($path = '') {
       global $lgsl_url_path;
