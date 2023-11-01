@@ -428,6 +428,12 @@
 			$this->_server_timestamp = $this->_server->get_timestamps();
 		}
     public function query() {
+			if ($this->_server->get_type() === "test") {
+				$status = $this->lgsl_query_01();
+				$this->_server->set_status($status);
+				$this->set_requested();
+				return;
+			}
       $protocol = $this->lgsl_connection_type($this->_server->get_type());
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
