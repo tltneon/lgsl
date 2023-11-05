@@ -178,7 +178,7 @@
     if(!empty($_POST['lgsl_map_image_upload'])) {
       $ext = strtolower(pathinfo($_FILES['map']['name'], PATHINFO_EXTENSION));
       if ($ext === "jpg" || $ext === "gif") {
-        $uploadfolder = preg_replace("/[^a-z0-9_\/]/", "_", strtolower("lgsl_files/maps/{$_POST['lgsl_map_upload_path']}/"));
+        $uploadfolder = preg_replace("/[^a-z0-9_\/]/", "_", strtolower("src/maps/{$_POST['lgsl_map_upload_path']}/"));
         $uploadfile = preg_replace("/[^a-z0-9_]/", "_", strtolower($_POST['lgsl_map_upload_file'])) . ".{$ext}";
         if (!file_exists("{$uploadfolder}{$uploadfile}")) {
           mkdir($uploadfolder, 0666, true);
