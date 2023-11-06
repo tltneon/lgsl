@@ -20,7 +20,7 @@ function cl() {
   }
 }
 async function refreshData(type = 'source', ip, c_port, q_port) {
-  const response = await fetch(`lgsl_files/lgsl_feed.php?type=${type}&ip=${ip}&c_port=${c_port}&q_port=${q_port}&request=s&format=3`);
+  const response = await fetch(`src/lgsl_feed.php?type=${type}&ip=${ip}&c_port=${c_port}&q_port=${q_port}&request=s&format=3`);
   if (response.ok) {
     let status = await response.text();
     status = JSON.parse(atob(status.slice(4, -4)));
