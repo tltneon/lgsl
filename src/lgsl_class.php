@@ -1193,7 +1193,7 @@
             <hr />#c7# {$lgsl_config['cms']}
             <hr />
           </details>
-          <select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"lgsl_files/styles/\" + this.value + \".css\"'>
+          <select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"src/styles/\" + this.value + \".css\"'>
             <option value='breeze_style'>breeze_style</option>
             <option value='classic_style'>classic_style</option>
             <option value='cards_style'>cards_style</option>
