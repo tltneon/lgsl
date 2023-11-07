@@ -15,13 +15,13 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $type    = isset($_GET['type'])    ? lgsl_string_html($_GET['type'])    : "";
-  $ip      = isset($_GET['ip'])      ? lgsl_string_html($_GET['ip'])      : "";
+  $type    = isset($_GET['type'])    ? $_GET['type']    : "";
+  $ip      = isset($_GET['ip'])      ? $_GET['ip']      : "";
   $c_port  = isset($_GET['c_port'])  ? intval($_GET['c_port'])            : 0;
   $q_port  = isset($_GET['q_port'])  ? intval($_GET['q_port'])            : 0;
   $s_port  = isset($_GET['s_port'])  ? intval($_GET['s_port'])            : 0;
-  $request = isset($_GET['request']) ? lgsl_string_html($_GET['request']) : "";
-  $version = isset($_GET['version']) ? lgsl_string_html($_GET['version']) : "";
+  $request = isset($_GET['request']) ? $_GET['request'] : "";
+  $version = isset($_GET['version']) ? $_GET['version'] : "";
   $xml     = isset($_GET['xml'])     ? intval($_GET['xml'])               : 0;
   $format  = isset($_GET['format'])  ? intval($_GET['format'])            : 0;
 
@@ -32,7 +32,7 @@
     exit("LGSL FEED PROBLEM: INCOMPLETE REQUEST");
   }
 
-  if ($q_port > 99999 || $q_port < 1) {
+  if ($q_port > 65535 || $q_port < 1) {
     exit("LGSL FEED PROBLEM: INVALID QUERY PORT: '{$q_port}'");
   }
 
@@ -89,8 +89,8 @@
 
     $file_string  = "
     [ ".date("Y/m/d H:i:s")." ] {$type}:{$ip}:{$c_port}:{$q_port}:{$s_port}:{$request}
-    [ <a href='http://".lgsl_string_html($_SERVER['REMOTE_ADDR']) ."'>".lgsl_string_html($_SERVER['REMOTE_ADDR']) ."</a> ]
-    [ <a href='"       .lgsl_string_html($_SERVER['HTTP_REFERER'])."'>".lgsl_string_html($_SERVER['HTTP_REFERER'])."</a> ]
+    [ <a href='http://".$_SERVER['REMOTE_ADDR'] ."'>".$_SERVER['REMOTE_ADDR'] ."</a> ]
+    [ <a href='"       .$_SERVER['HTTP_REFERER']."'>".$_SERVER['HTTP_REFERER']."</a> ]
     ".($version ? " [ {$version} ] " : "")."
     ".($xml     ? " [ XML ]        " : "")."
     <br />";
@@ -122,23 +122,23 @@
   echo "<?xml version='1.0' encoding='UTF-8' ?>\r\n<server>\r\n";
 
   foreach ($server as $a => $b) {
-    echo "<".lgsl_string_html($a, TRUE).">";
+    echo "<".$a.">";
 
     foreach ($b as $c => $d) {
       if (is_array($d)) {
         echo "<player>\r\n";
 
         foreach ($d as $e => $f) {
-          echo "<".lgsl_string_html($e, TRUE).">".lgsl_string_html($f, TRUE)."</".lgsl_string_html($e, TRUE).">\r\n";
+          echo "<".$e, TRUE.">".$f."</".$e.">\r\n";
         }
 
         echo "</player>\r\n";
       } else {
-        echo "<".lgsl_string_html($c, TRUE).">".lgsl_string_html($d, TRUE)."</".lgsl_string_html($c, TRUE).">\r\n";
+        echo "<".$c.">".$d."</".$c.">\r\n";
       }
     }
 
-    echo "</".lgsl_string_html($a, TRUE).">\r\n";
+    echo "</".$a.">\r\n";
   }
 
   echo "</server>\r\n";
