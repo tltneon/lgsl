@@ -167,7 +167,7 @@
       $game_id = @makeImage($server->game_icon('src/'), 16, 16);                              // create game icon
       imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                           // place game icon
 
-      $loc_id = @makeImage("src\other\locations.gif", 224, 198);              // create location icon
+      $loc_id = @makeImage("src/other/locations.gif", 224, 198);              // create location icon
 			$result = imagecreatetruecolor(16, 11);
 			$pos = LGSL::locationCoords($server->getLocation());
 			imagecopyresampled($result, $loc_id, 0, 0, $pos[0], $pos[1], 16, 11, 16, 11);
