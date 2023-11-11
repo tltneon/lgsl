@@ -258,6 +258,28 @@
   $output .= "<div style='text-align:center; font-family:tahoma; font-size:9px; padding: 33px 0px 11px 0px;'><a href='https://github.com/tltneon/lgsl' style='text-decoration:none'>".lgsl_version()."</a></div>";
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+	$output .= "
+	<script type=\"application/ld+json\">
+	{
+		\"@context\": \"https://schema.org\",
+		\"@type\": \"GameServer\",
+		\"@id\": \"GameServer\",
+		\"potentialAction\": {
+			\"@context\": \"https://schema.org\",
+			\"@type\": \"Action\",
+			\"@id\": \"Action\",
+			\"name\": \"Connect to server\",
+			\"url\": \"{$server->get_software_link()}\"
+		},
+		\"description\": \"{$server->get_name()} | game: {$server->get_game()} | ip: {$server->get_ip()}:{$server->get_c_port()} | status: {$lgsl_config['text'][$server->get_status()]} | players: {$server->get_players_count()}\",
+		\"identifier\": \"{$lgsl_server_id}\",
+		\"name\": \"{$server->get_name()}\",
+		\"playersOnline\": \"{$server->get_players_count("active")}\",
+		\"url\": \"$_SERVER[HTTP_REFERER]\"
+	}
+	</script>
+	";
+
 if ($lgsl_config['preloader']) {
   echo $output;
 }

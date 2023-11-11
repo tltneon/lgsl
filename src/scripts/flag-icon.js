@@ -8,13 +8,14 @@ function reImage(country) {
 function loadIcons() {
   let details_location_image = document.querySelector(".details_location_image"); // details page
   if (details_location_image) {
-    let co = details_location_image.style.backgroundImage.slice(-8).slice(0, -6);
+    let co = details_location_image.classList[2].slice(1);
     details_location_image.style.backgroundImage = `url('${reImage(co)}')`;
   }
   
   document.querySelectorAll(".contry_icon").forEach(item => { // server list
-    let co = item.src.slice(-6).slice(0, -4);
-    item.src = reImage(co);
+		item.style.backgroundImage = `url('${reImage(item.classList[2].slice(1))}')`;
+		item.style.backgroundPosition = "inherit";
+    item.style.backgroundSize = "cover";
   });
 }
 

@@ -600,7 +600,7 @@
     
     public function lgsl_cached_query($request = 'seph') {
       $db = LGSL::db();
-      if ($this->_base['id']) {
+      if ($this->_base['id'] > 0) {
         $result = $db->get_server_by_id($this->_base['id']);
       } elseif ($this->_base['ip']) {
         $result = $db->get_server_by_ip($this->_base['ip'], $this->_base['c_port']);

@@ -18,8 +18,7 @@
         (function() {
           httpRequest = new XMLHttpRequest();
           if (!httpRequest) {
-            alert('Cannot create an XMLHTTP instance');
-            return false;
+            return alert('Cannot create an XMLHTTP instance');
           }
           httpRequest.onreadystatechange = alertContents;
           httpRequest.open('POST', 'src/lgsl_{$file}.php?{$get}', true);
@@ -28,18 +27,14 @@
 
           function alertContents() {
             if (httpRequest.readyState === XMLHttpRequest.DONE) {
-			  
               document.getElementById('container').innerHTML = httpRequest.responseText;
               if (httpRequest.status === 200) {
                 if (document.querySelector('[id^=servername]')) {
                   document.title += ' | ' + document.querySelector('[id^=servername]').innerText;
                 }
-                window.document.dispatchEvent(new Event('DOMContentLoaded', {
-                  bubbles: true,
-                  cancelable: true
-                }));
+                window.document.dispatchEvent(new Event('DOMContentLoaded', {bubbles: true, cancelable: true }));
               } else {
-                alert('There was a problem with the request. HTTP Code: ' + httpRequest.status);
+                alert('There was a problem with the request.\\nHTTP Code: ' + httpRequest.status + '\\nSee php_error.log for details.');
               }
             }
           }
@@ -47,8 +42,7 @@
       </script>
       {$loader}";
     } else {
-      global $lgsl_server_id;
-      $lgsl_server_id = $_GET['s'] ?? "";
+      $GLOBALS['lgsl_server_id'] = (int) $_GET['s'];
       require("src/lgsl_{$file}.php");
       return $output;
     }
@@ -58,10 +52,9 @@
   $s = $_GET['s'] ?? null;
   $ip = $_GET['ip'] ?? null;
   $port = $_GET['port'] ?? null;
-  if     (is_numeric($s)) { $output = load_page("details"); }    
-  elseif (isset($ip) && isset($port)) { $output = load_page("details");                                              }
-  elseif ($s === "add")   { $output = load_page("add");     $title .= " | {$lgsl_config["text"]["aas"]}"; }
-  else                    { $output = load_page("list");                                                  }
+  if ($s === "add")                     { $output = load_page("add");     $title .= " | {$lgsl_config["text"]["aas"]}";}
+  elseif ((int) $s > 0 || $ip && $port) { $output = load_page("details");                                              }
+  else                                  { $output = load_page("list");                                                 }
 //------------------------------------------------------------------------------------------------------------+
 ?>
 <!DOCTYPE html>
@@ -84,7 +77,7 @@
                                         echo "<li><a href='../../'>{$lgsl_config['text']['mpg']}</a></li>";   // MAIN PAGE
         if ($lgsl_config['public_add']) echo "<li><a href='?s=add'>{$lgsl_config['text']['aas']}</a></li>";   // ADD SERVER
         if (file_exists("install.php")) echo "<li><a href='./install.php'>INSTALLATION PAGE</a></li>";        // INSTALLATION PAGE  
-        if (isset($_GET['s']))          echo "<li><a href='./'>{$lgsl_config['text']['bak']}</a></li>";       // BACK TO SERVERS LIST
+        if ($s || $ip)                  echo "<li><a href='./'>{$lgsl_config['text']['bak']}</a></li>";       // BACK TO SERVERS LIST
       ?>
     </div>
     <a id="adminlink" href="admin.php"></a>
