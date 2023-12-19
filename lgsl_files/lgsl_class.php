@@ -432,7 +432,7 @@
     $misc['text_location']      = lgsl_text_location($server['o']['location']);
     $misc['name_filtered']      = lgsl_string_html($server['s']['name'], FALSE, 20); // LEGACY
     $misc['connect_filtered']   = ($server['b']['type'] == "discord" ? "https://discord.gg/" . $server['b']['ip'] : $server['b']['ip'] . ":" . $server['b']['c_port'] );
-    $misc['software_link']      = lgsl_software_link($server['b']['type'], $server['b']['ip'], $server['b']['c_port'], $server['b']['q_port'], $server['b']['s_port']);
+    $misc['software_link']      = lgsl_software_link($server['b']['type'], $server['b']['ip'], $server['b']['c_port'], $server['b']['q_port'], $server['b']['s_port'], $server['s']['game']);
     $misc['location_link']      = lgsl_location_link($server['o']['location']);
 
     return $misc;

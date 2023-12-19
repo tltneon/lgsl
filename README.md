@@ -1,15 +1,20 @@
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/tltneon/lgsl?color=green&style=for-the-badge)](https://github.com/tltneon/lgsl/releases)
-![PHP](https://img.shields.io/badge/PHP-5.4--8.2.0dev-brightgreen?style=for-the-badge&logo=php)
-![MySQL](https://img.shields.io/badge/MySQL-5.5--8.0.x-brightgreen?style=for-the-badge&logo=mysql)
-![MariaDB](https://img.shields.io/badge/MariaDB-5.5--10.8.x-brightgreen?style=for-the-badge&logo=mariadb)
+![PHP](https://img.shields.io/badge/PHP-5.4+-brightgreen?style=for-the-badge&logo=php)
+![MySQL](https://img.shields.io/badge/MySQL-5.5+-brightgreen?style=for-the-badge&logo=mysql)
+![MariaDB](https://img.shields.io/badge/MariaDB-5.5+-brightgreen?style=for-the-badge&logo=mariadb)
 
 [![GitHub followers](https://img.shields.io/github/followers/tltneon?style=for-the-badge)](https://github.com/tltneon?tab=followers)
 [![GitHub stars](https://img.shields.io/github/stars/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
-# LGSL v6.2.0 (Live Game Server List)
-Based-off LGSL v5.8 (stand-alone version) from www.greycube.com. This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4-8.x and MySQL 5.5-8.0.x or MariaDB 5.5-10.8.x. May be upgraded from LGSL 5.8 and older.
+# LGSL v6.2.1 (Live Game Server List)
+Based-off LGSL v5.8 (stand-alone version) from www.greycube.com.
+
+This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4+ and MySQL 5.5+ or MariaDB 5.5+.
+LGSL v6 is LTS version, if you want to try new features - see [LGSL7 branch](https://github.com/tltneon/lgsl/tree/lgsl7).
+
+May be easily upgraded from LGSL 5.8 and older.
 
 ## [Live DEMOs](https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports) | [Features list](https://github.com/tltneon/lgsl/wiki/features) | [Wiki](https://github.com/tltneon/lgsl/wiki)
 
@@ -21,6 +26,9 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can 
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
 
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
+#### v6.2.1
+- **Added Euro Truck Simulator 2, American Truck Simulator, Mumble, ECO, Cryofall, GTA / Mafia Connected, Sonic Robo Blast 2 support**
+- **Minor fixes**
 #### v6.2.0
 - **Added Preloader feature**
 	- *Loading animation by (https://codepen.io/Bilal1909)*
