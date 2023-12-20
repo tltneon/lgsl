@@ -10,7 +10,7 @@
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
 # LGSL v7.0.0 (Live Game Server List)
-Based-off LGSL v6.2.0. Rewrited LGSL using OOP.
+Modern branch of LGSL that brings new abilities. That branch is experimental, unstable and may be heavily changed in future.
 
 ## [Live DEMOs](https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports) | [Features list](https://github.com/tltneon/lgsl/wiki/features) | [Wiki](https://github.com/tltneon/lgsl/wiki) 
 
@@ -36,12 +36,12 @@ Use that code to query game servers
 use tltneon\LGSL;
 
 $server = new LGSL\Server([
-    "ip" => "127.0.0.1",
+    "ip" => "127.0.0.1", // server ip or hostname
     "c_port" => "27015", // for players
     "q_port" => "27015", // for querying
-    "type" => "source"
+    "type" => "source" // protocol name from lgsl_type_list()
 ]);
-$server->lgsl_live_query("sep");
+$server->lgsl_live_query("sep"); // s - server info, e - extra data, p - players info
 ```
 Get server data 
 ```php
