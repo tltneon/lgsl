@@ -82,7 +82,7 @@
 							printf('<l k="table"></l>');
 						}
 					}
-				} else {
+				} elseif ($db_type === "sqlite") {
 					$lgsl_config['db']['db'] = $_POST["database"];
 					$db = new Database();
 					$db->connect('sqlite');
@@ -111,6 +111,46 @@
 					$db->execute($query);
 					$step = 2;
 					$query_success = true;
+				} else {
+					$db = new Database();
+					if (!$db || !$db->connect('postgres')) {
+						printf("<span style='color: red;'>Wrong</span> postgres server, username or password (%s)\n", $db->get_error());
+					} else {
+						$query = $db->query("select exists(SELECT datname FROM pg_catalog.pg_database WHERE lower(datname) = lower('{$_POST['database']}'));", true);
+						if ($query['exists'] === "f") {
+							$db->execute("CREATE DATABASE {$_POST['database']};");
+						}
+						$lgsl_config['db']['db'] = $_POST["database"];
+						$db->select_db();
+						$query = "
+						CREATE TABLE IF NOT EXISTS `{$_POST['prefix']}{$_POST['table']}` (
+							`id`         SERIAL                 PRIMARY KEY,
+							`name`       VARCHAR (255) NOT NULL DEFAULT '',
+							`type`       VARCHAR (50)  NOT NULL DEFAULT '',
+							`game`       VARCHAR (50)  NOT NULL DEFAULT '',
+							`mode`       VARCHAR (50)  NOT NULL DEFAULT '',
+							`ip`         VARCHAR (255) NOT NULL DEFAULT '',
+							`c_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+							`q_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+							`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
+							`map`        VARCHAR (255) NOT NULL DEFAULT '',
+							`players`    SMALLINT      NOT NULL DEFAULT '0',
+							`playersmax` SMALLINT      NOT NULL DEFAULT '0',
+							`zone`       VARCHAR (255) NOT NULL DEFAULT '',
+							`disabled`   SMALLINT      NOT NULL DEFAULT '0',
+							`comment`    VARCHAR (255) NOT NULL DEFAULT '',
+							`status`     SMALLINT      NOT NULL DEFAULT '0',
+							`cache`      TEXT          NOT NULL,
+							`cache_time` TEXT          NOT NULL);";
+						
+						if ($db->execute($query) === TRUE) {
+							printf('');
+							$step = 2;
+							$query_success = true;
+						} else {
+							printf('<l k="table"></l>');
+						}
+					}
 				}
 			} catch (Error $e) {
 				var_dump($e);
@@ -317,6 +357,7 @@
 				<select name='db_type' onChange='changeValue(event, {dbChanged: true})'>
 					<option ". ($db_type == 'mysql' ? 'selected' : '') .">mysql</option>
 					<option ". ($db_type == 'sqlite' ? 'selected' : '') .">sqlite</option>
+					<option ". ($db_type == 'postgres' ? 'selected' : '') .">postgres</option>
 				</select>
 			</p>
 			<p id='db_server' ". ($db_type == 'sqlite' ? "style='display: none;'" : '') .">

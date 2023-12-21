@@ -1,8 +1,9 @@
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/tltneon/lgsl?color=green&style=for-the-badge)](https://github.com/tltneon/lgsl/releases)
+![GitHub tag (with filter)](https://img.shields.io/github/v/tag/tltneon/lgsl?filter=v7*&style=for-the-badge&color=green)
 ![PHP](https://img.shields.io/badge/PHP-7.1+-brightgreen?style=for-the-badge&logo=php)
 ![MySQL](https://img.shields.io/badge/MySQL-5.5+-brightgreen?style=for-the-badge&logo=mysql)
 ![MariaDB](https://img.shields.io/badge/MariaDB-5.5+-brightgreen?style=for-the-badge&logo=mariadb)
-![SQLite](https://img.shields.io/badge/SQLite-3-brightgreen?style=for-the-badge&logo=sql)
+![SQLite](https://img.shields.io/badge/SQLite-3-brightgreen?style=for-the-badge&logo=sqlite)
+![SQLite](https://img.shields.io/badge/PostgreSQL-3-brightgreen?style=for-the-badge&logo=postgresql)
 
 [![GitHub contributors](https://img.shields.io/github/contributors/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/graphs/contributors)
 [![GitHub stars](https://img.shields.io/github/stars/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/stargazers)
@@ -45,6 +46,7 @@ $server->lgsl_live_query("sep"); // s - server info, e - extra data, p - players
 ```
 Get server data 
 ```php
+$server->get_status();
 $server->get_name();
 $server->get_ip();
 $server->get_c_port();

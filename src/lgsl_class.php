@@ -212,8 +212,10 @@
       }
 			if ($type === 'mysql') {
 				$this->_connection = new MysqlWrapper();
+			} elseif ($type === 'sqlite') {
+				$this->_connection = new SqliteWrapper();
 			} else {
-				$this->_connection = new SqliteWrapper();					
+				$this->_connection = new PostgresWrapper();					
 			}
 			$this->_connection->connect();
       if ($this->get_error()) {
@@ -322,7 +324,7 @@
 
     function get_server_by_ip($ip, $c_port) {
       global $lgsl_config;
-			if ($c_port > 1) $c_port = "and c_port = {$c_port}";
+			if ($c_port > 1) $c_port = "AND c_port = '{$c_port}'";
 			else $c_port = "";
       return $this->load_server("SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE ip = '{$ip}' {$c_port};");
     }
@@ -467,7 +469,6 @@
       return new MysqlResultWrapper($result);
     }
 		public function execute($string) {
-			//echo $string;
 			return $this->_connection->query($string);
 		}
 		public function get_error() {
@@ -485,27 +486,6 @@
 		public function get_server_by_id_query_string($id) {
       global $lgsl_config;
       return "SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE id = {$id};";
-		}
-	}
-	abstract class ResultWrapper {
-		public $_result;
-		function __construct($r) {
-			$this->_result = $r;
-		}
-		public function fetch_all() {
-			return $this->_result;
-		}
-		public function fetch_array() {
-			return $this->_result;
-		}
-	}
-	class MysqlResultWrapper extends ResultWrapper {
-		public function fetch_all() {
-			if ($this->_result == false) return $ret;
-			return $this->_result->fetch_all(MYSQLI_ASSOC);
-		}
-		public function fetch_array() {
-			return $this->_result->fetch_array(MYSQLI_ASSOC);
 		}
 	}
 	class SqliteWrapper extends DBWrapper {
@@ -536,13 +516,72 @@
 		}
 		public function get_all() {
 			global $lgsl_config;
-			//return 
 			$t = $this->query("SELECT rowid as id, * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
 			return $t->fetch_all();
 		}
 		public function get_server_by_id_query_string($id) {
       global $lgsl_config;
       return "SELECT rowid as id, * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE rowid = {$id};";
+		}
+	}
+	class PostgresWrapper extends DBWrapper {
+		public function connect() {
+			global $lgsl_config;
+			$dbname = $lgsl_config['db']['db'] ? "dbname={$lgsl_config['db']['db']}" : "";
+			$password = $lgsl_config['db']['pass'] ? "password={$lgsl_config['db']['pass']}" : "";
+			$this->_connection = \pg_connect("host={$lgsl_config['db']['server']} port=5432 {$dbname} user={$lgsl_config['db']['user']} {$password}");
+		}
+		public function get_error() {
+			if (!$this->_connection) return "Not connected";
+			return pg_last_error($this->_connection);
+		}
+		public function query($string) {
+			return new PostgresResultWrapper(pg_query($this->_connection, str_replace('`', '"', $string)));
+		}
+		public function clear() {
+			parent::clear();
+			global $lgsl_config;
+			$this->execute("ALTER SEQUENCE {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}_id_seq RESTART WITH 1;");
+		}
+		public function escape_string($string) {
+			return pg_escape_string($this->_connection, $string);
+		}
+		public function execute($string) {
+			return $this->query($string);
+		}
+		public function select_db() {
+			$this->connect();
+		}
+		public function get_all() {
+			global $lgsl_config;
+			$t = $this->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
+			return $t->fetch_all();
+		}
+		public function get_server_by_id_query_string($id) {
+      global $lgsl_config;
+      return "SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE id = {$id};";
+		}
+	}
+
+	abstract class ResultWrapper {
+		protected $_result;
+		function __construct($r) {
+			$this->_result = $r;
+		}
+		public function fetch_all() {
+			return $this->_result;
+		}
+		public function fetch_array() {
+			return $this->_result;
+		}
+	}
+	class MysqlResultWrapper extends ResultWrapper {
+		public function fetch_all() {
+			if ($this->_result == false) return $ret;
+			return $this->_result->fetch_all(MYSQLI_ASSOC);
+		}
+		public function fetch_array() {
+			return $this->_result->fetch_array(MYSQLI_ASSOC);
 		}
 	}
 	class SqliteResultWrapper extends ResultWrapper {
@@ -557,6 +596,14 @@
 		public function fetch_array() {
 			if ($this->_result == false) return [];
 			return $this->_result->fetchArray(SQLITE3_ASSOC);
+		}
+	}
+	class PostgresResultWrapper extends ResultWrapper {
+		public function fetch_all() {
+			return pg_fetch_all($this->_result);
+		}
+		public function fetch_array() {
+			return pg_fetch_array($this->_result, null, PGSQL_ASSOC);
 		}
 	}
 //------------------------------------------------------------------------------------------------------------+
@@ -600,7 +647,7 @@
     
     public function lgsl_cached_query($request = 'seph') {
       $db = LGSL::db();
-      if ($this->_base['id'] > 0) {
+      if ($this->_base['id']) {
         $result = $db->get_server_by_id($this->_base['id']);
       } elseif ($this->_base['ip']) {
         $result = $db->get_server_by_ip($this->_base['ip'], $this->_base['c_port']);
