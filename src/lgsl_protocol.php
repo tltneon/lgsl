@@ -3,7 +3,7 @@
 
   /*----------------------------------------------------------------------------------------------------------\
   |                                                                                                            |
-  |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                       |
+  |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                         |
   |                                                                                                            |
   |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
   |                                                                                                            |
@@ -3343,11 +3343,10 @@
       return TRUE;
     }
     public function lgsl_query_34() {
-      curl_setopt($this->_lgsl_fp, CURLOPT_URL, 'https://cdn.rage.mp/master/');
-      $buffer = curl_exec($this->_lgsl_fp);
-      $buffer = json_decode($buffer, true);
-      $server = $this->_server->to_array();
-  
+			$this->_lgsl_fp->write("https://cdn.rage.mp/master/");
+			$buffer = $this->_lgsl_fp->readJson();
+			if (!$buffer) return FALSE;
+      $server = $this->_server->to_array();  
       if (isset($buffer["{$server['b']['ip']}:{$server['b']['c_port']}"])) {
         $value = $buffer["{$server['b']['ip']}:{$server['b']['c_port']}"];
         $server['s']['name']       = $value['name'];
@@ -3356,23 +3355,20 @@
         $server['s']['playersmax'] = $value['maxplayers'];
         $server['e']['url']        = $value['url'];
         $server['e']['peak']       = $value['peak'];
-        $server['e']['gamemode']   = $value['gamemode'];
+        $server['s']['mode']       = $value['gamemode'];
         $server['e']['lang']       = $value['lang'];
         $this->set_requested();
         $this->_server->from_array($server);
         return TRUE;
       }
-  
       return FALSE;
     }
     public function lgsl_query_35() {
-			$this->_lgsl_fp->write("http://{$server['b']['ip']}:{$server['b']['q_port']}/dynamic.json");
+			$this->_lgsl_fp->write("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/dynamic.json");
 			$buffer = $this->_lgsl_fp->readJson();
 
       if (!$buffer) return FALSE;
-
       $server = $this->_server->to_array();
-
       $server['s']['name'] = $this->lgsl_parse_color($buffer['hostname'], 'fivem');
       $server['s']['players'] = $buffer['clients'];
       $server['s']['playersmax'] = $buffer['sv_maxclients'];
@@ -3386,7 +3382,7 @@
       if ($this->_lgsl_need['p']) {
         $this->set_requested('p');
 
-				$this->_lgsl_fp->write("http://{$server['b']['ip']}:{$server['b']['q_port']}/players.json");
+				$this->_lgsl_fp->write("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/players.json");
 				$buffer = $this->_lgsl_fp->readJson();
 
         foreach($buffer as $key => $value) {
@@ -3401,7 +3397,7 @@
     public function lgsl_query_36() {
 			$this->_lgsl_fp->write("https://discord.com/api/v9/invites/{$this->_server->get_ip()}?with_counts=true");
 			$buffer = $this->_lgsl_fp->readJson();
-  
+      if (!$buffer) return false;
       if (isset($buffer['message'])) {
         $server['e']['_error_fetching_info'] = $buffer['message'];
         return FALSE;
@@ -3426,7 +3422,7 @@
           return "{$a}\n{$c['emoji_name']} {$c['description']}";
         }, "");
       }
-      $server['e']['features'] = implode(', ', $buffer['guild']['features']);
+      $server['e']['features'] = implode(', ', $buffer['guild']['features'] ?? []);
       $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
       if (isset($buffer['inviter'])) {
         $server['e']['inviter'] = "{$buffer['inviter']['username']}#{$buffer['inviter']['discriminator']}";
@@ -3481,10 +3477,13 @@
     public function lgsl_query_38() {
 			$this->_lgsl_fp->write("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/v2/server/status?players=true");
 			$buffer = $this->_lgsl_fp->readJson();
-  
+
+			if (!$buffer) return false;
       if ($buffer['status'] != '200') {
-        $server['e']['_error']    = $buffer['error'];
-        return FALSE;
+				$server = $this->_server->to_array();
+        $server['e']['_error2']    = $buffer['error'];
+				$this->_server->from_array($server);
+        return TRUE;
       }
       $server = $this->_server->to_array();
       $server['s']['name']        = $buffer['name'];
@@ -3906,8 +3905,6 @@
 					$resultStatus = curl_getinfo($this->_stream, CURLINFO_HTTP_CODE);
 					if ($resultStatus != 200) {
 						$this->_server->set_extra_value('_error', "Request failed: HTTP status code: {$resultStatus}");
-						$this->_server->set_status(false);
-						return false;
 					}
 				}
         return $result;
@@ -3976,12 +3973,12 @@
 //---------------------------------------------------------+
 //  ARRAYS ARE SETUP IN ADVANCE
 
-    $server = [
-    "b" => ["type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port, "status" => 1],
-    "s" => ["game" => "", "mode" => "", "name" => "", "map" => "", "players" => 0, "playersmax" => 0, "password" => ""],
-    "e" => [],
-    "p" => [],
-    "t" => []];
+  $server = [
+  "b" => ["type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port, "status" => 1],
+  "s" => ["game" => "", "mode" => "", "name" => "", "map" => "", "players" => 0, "playersmax" => 0, "password" => ""],
+  "e" => [],
+  "p" => [],
+  "t" => []];
 
 //---------------------------------------------------------+
 //  GET DATA
@@ -4119,7 +4116,7 @@
     }
 
     return $response;
-  }
+}
 
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+

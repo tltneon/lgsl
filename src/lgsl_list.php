@@ -111,7 +111,7 @@
       }
 
       $output .= "
-        <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
+        <a href='".LGSL::link($server->get_ip(), $server->get_c_port(false))."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
       </td>
 
     </tr>";

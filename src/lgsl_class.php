@@ -3,7 +3,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ RICHARD PERRY FROM GREYCUBE.COM ]                         |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -480,7 +480,7 @@
 			$t = $this->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
 			return $t->fetch_all(MYSQLI_ASSOC);
 		}
-		public function escape_string($string) {
+		public function escape_string($string = "") {
 			return $this->_connection->escape_string($string);
 		}
 		public function get_server_by_id_query_string($id) {
@@ -543,7 +543,7 @@
 			global $lgsl_config;
 			$this->execute("ALTER SEQUENCE {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}_id_seq RESTART WITH 1;");
 		}
-		public function escape_string($string) {
+		public function escape_string($string = "") {
 			return pg_escape_string($this->_connection, $string);
 		}
 		public function execute($string) {
