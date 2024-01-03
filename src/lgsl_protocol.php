@@ -137,6 +137,7 @@
         "mta"           => "08",
 				"mumble"        => "43",
         "nascar2004"    => "09",
+        "necesse"       => "46",
         "neverwinter"   => "09",
         "neverwinter2"  => "09",
         "nexuiz"        => "02",
@@ -275,6 +276,7 @@
         "mta"           => "Multi Theft Auto",
 				"mumble"        => "Mumble",
         "nascar2004"    => "Nascar Thunder 2004",
+        "necesse"       => "Necesse",
         "neverwinter"   => "NeverWinter Nights",
         "neverwinter2"  => "NeverWinter Nights 2",
         "nexuiz"        => "Nexuiz",
@@ -3761,6 +3763,38 @@
       $this->_server->from_array($server);
 			return TRUE;
     }
+		
+		public function lgsl_query_46() { // Necesse (by tltneon)
+      $server = $this->_server->to_array();
+      $this->_fp_write("\x00\x00\x01\x00\x00\x17\x7f\xd3\x96");
+      $buffer = $this->_fp_read(4096);
+      if (!$buffer) return false;
+			$server['s']["name"] = "Necesse server";
+			$server['s']["map"] = "World";
+      $this->lgsl_cut_byte($buffer, 15);
+      $server['s']['players'] = ord($this->lgsl_cut_byte($buffer, 1));
+      $server['s']['playersmax'] = ord($this->lgsl_cut_byte($buffer, 1));
+			$settings = ord($this->lgsl_cut_byte($buffer, 1));
+			$server['e']["allowOutsideCharacters"] = $settings & 64 ? 1 : 0;
+			$server['e']["forcedPvP"] = $settings & 32 ? 1 : 0;
+			$server['e']["disableMobSpawns"] = $settings & 16 ? 1 : 0;
+			$server['e']["playerHunger"] = $settings & 8 ? 1 : 0;
+			$server['e']["survivalMode"] = $settings & 4 ? 1 : 0;
+			$server['e']["allowCheats"] = $settings & 2 ? 1 : 0;
+      $this->lgsl_cut_byte($buffer, 7);
+			$server['e']["version"] = $this->lgsl_cut_byte($buffer, 11);
+			$difficulty = ["Casual", "Easy", "Normal", "Hard", "Brutal"];
+      $server['e']['difficulty'] = $difficulty[ord($this->lgsl_cut_byte($buffer, 1))];
+			$deathPenalty = ["No penalty", "Drop materials", "Drop main inventory", "Drop full inventory", "Hardcore"];
+      $server['e']['deathPenalty'] = $deathPenalty[ord($this->lgsl_cut_byte($buffer, 1))];
+			$raidFrequency = ["Often", "Occasionally", "Rarely", "Hard"];
+      $server['e']['raidFrequency'] = $raidFrequency[ord($this->lgsl_cut_byte($buffer, 1))];
+			$server['e']["daytime"] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "G");
+			$server['e']["nighttime"] = lgsl_unpack(lgsl_cut_byte($buffer, 4), "G");
+      $this->set_requested();
+      $this->_server->from_array($server);
+			return TRUE;
+		}
 
     //---------------------------------------------------------+
 
