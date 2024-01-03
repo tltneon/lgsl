@@ -54,6 +54,7 @@
         "ts"            => self::TCP,
         "ts3"           => self::TCP,
         "teaspeak"      => self::TCP,
+        "windward"      => self::TCP,
         "wow"           => self::TCP
       ];
       return isset($protocol[$type]) ? $protocol[$type] : self::UDP;
@@ -195,6 +196,7 @@
         "vcmp"          => "12",
         "vietcong"      => "03",
         "vietcong2"     => "09",
+        "windward"      => "41",
         "wolfet"        => "02",
         "wolfrtcw"      => "02",
         "wolf2009"      => "10",
@@ -330,6 +332,7 @@
         "vietcong2"     => "Vietcong 2",
         "warsow"        => "Warsow",
         "warsowold"     => "Warsow ( 0.4.2 and older )",
+        "windward"      => "Windward",
         "wolfet"        => "Wolfenstein: Enemy Territory",
         "wolfrtcw"      => "Wolfenstein: Return To Castle Wolfenstein",
         "wolf2009"      => "Wolfenstein ( 2009 By Raven )",
@@ -3603,7 +3606,15 @@
         $server['s']['name']        = "Satisfactory Dedicated Server";
         $server['s']['map']         = "World";
         $server['e']['version']     = hexdec($version);
-      }
+      } elseif ($server['b']['type'] == 'windward') {				
+				$this->_fp_write("\x0b\x00\x00\x00\x03\x0c\x00\x00\x00\x04LGSL\x00");
+        $buffer = $this->_fp_read(128);
+        if (!$buffer) {
+          return FALSE;
+        }
+        $server['s']['name']        = "Windward Server";
+        $server['s']['map']         = "World";
+			}
       $this->set_requested();
       $this->_server->from_array($server);
       return true;
