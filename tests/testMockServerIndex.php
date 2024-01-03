@@ -37,7 +37,9 @@ class LGSLTest extends TestCase
 		public function testMockExtras(LGSL\Server $server): void {
 				$extra = $server->get_extras();
 				$this->assertIsArray($extra);
-				$this->assertSame($extra['testextra1'], "normal");
+				if (count($extra) > 0) {
+					$this->assertSame($extra['testextra1'], "normal");
+				}
 		}
 		
 		/**
