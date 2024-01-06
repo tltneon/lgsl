@@ -56,6 +56,8 @@
   $lgsl_config['text']['pin'] = "Ping";
   $lgsl_config['text']['dea'] = "Deaths";
   $lgsl_config['text']['hea'] = "Health";
+  $lgsl_config['text']['kil'] = "Kills";
+  $lgsl_config['text']['squ'] = "Squad";
   $lgsl_config['text']['ski'] = "Skill";
   $lgsl_config['text']['spe'] = "Spectator";
   $lgsl_config['text']['pag'] = "Page";
