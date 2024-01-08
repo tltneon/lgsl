@@ -135,7 +135,7 @@
 							`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
 							`map`        VARCHAR (255) NOT NULL DEFAULT '',
 							`players`    SMALLINT      NOT NULL DEFAULT '0',
-							`playersmax` SMALLINT      NOT NULL DEFAULT '0',
+							`playersmax` INTEGER       NOT NULL DEFAULT '0',
 							`zone`       VARCHAR (255) NOT NULL DEFAULT '',
 							`disabled`   SMALLINT      NOT NULL DEFAULT '0',
 							`comment`    VARCHAR (255) NOT NULL DEFAULT '',
