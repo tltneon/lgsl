@@ -3,7 +3,7 @@
 ![MySQL](https://img.shields.io/badge/MySQL-5.5+-brightgreen?style=for-the-badge&logo=mysql)
 ![MariaDB](https://img.shields.io/badge/MariaDB-5.5+-brightgreen?style=for-the-badge&logo=mariadb)
 ![SQLite](https://img.shields.io/badge/SQLite-3-brightgreen?style=for-the-badge&logo=sqlite)
-![SQLite](https://img.shields.io/badge/PostgreSQL-3-brightgreen?style=for-the-badge&logo=postgresql)
+![Postgres](https://img.shields.io/badge/PostgreSQL-11+-brightgreen?style=for-the-badge&logo=postgresql)
 
 [![GitHub contributors](https://img.shields.io/github/contributors/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/graphs/contributors)
 [![GitHub stars](https://img.shields.io/github/stars/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/stargazers)
@@ -11,16 +11,16 @@
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
 # LGSL v7.0.0 (Live Game Server List)
-Modern branch of LGSL that brings new abilities. That branch is experimental, unstable and may be heavily changed in future.
+LGSL is a standalone module for website that can query status and data from [130+ game servers](https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports). Or you can use it as a library in your projects.
 
-## [Live DEMOs](https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL) | [How to install]( https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL) | [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports) | [Features list](https://github.com/tltneon/lgsl/wiki/features) | [Wiki](https://github.com/tltneon/lgsl/wiki) 
+***LGSL7 branch:*** Modern branch of LGSL that brings new abilities. That branch is experimental, **unstable** and may be **heavily** changed in future.
 
-Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can suggest any [ideas about new features](https://github.com/tltneon/lgsl/issues).
+Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can [suggest](https://github.com/tltneon/lgsl/issues) any ideas about new features such adding new game or code improvements.
 
-### Server List on laptop
-![lgsl Server List on laptop](https://i.imgur.com/oU2x9Y5.png)
-### Server List on mobile device
-![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
+## [Live DEMOs](https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL) |  [Supported games](https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports) | [Features list](https://github.com/tltneon/lgsl/wiki/features) | [Wiki](https://github.com/tltneon/lgsl/wiki) 
+
+
+
 
 ## Install standalone
 1. Download
@@ -30,7 +30,7 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can 
 ## Add as Composer library
 Install library
 ```bash
-composer require tltneon/lgsl
+composer require tltneon/lgsl 7.0.0
 ```
 Use that code to query game servers
 ```php
@@ -59,7 +59,11 @@ $server->to_array(); // full data
 
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
 #### v7.0.0
-- **Rewrited LGSL using OOP**
+- **PHP version bumped to 7.1+**
+- **Fitting to using with Composer**
+- **Rewriting LGSL with OOP**
+- **Added some tests**
+- **Added ability to use another DBs - PostgreSQL and SQLite**
 - **Added dynamic sorting by server name, players count, map and address**
 - **Added Details sort plugin: sorting by clicking on headings of column**
 - **Minor fixes**
