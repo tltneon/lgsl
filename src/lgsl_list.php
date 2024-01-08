@@ -14,10 +14,10 @@
   require "lgsl_class.php";
   global $output;
 
-  $type = (isset($_GET['type']) ? $_GET['type'] : '');
-  $game = (isset($_GET['game']) ? $_GET['game'] : '');
-  $mode = (isset($_GET['mode']) ? $_GET['mode'] : '');
-  $sort = (isset($_GET['sort']) ? $_GET['sort'] : '');
+  $type = $_GET['type'] ?? '';
+  $game = $_GET['game'] ?? '';
+  $mode = $_GET['mode'] ?? '';
+  $sort = $_GET['sort'] ?? '';
   $order= (isset($_GET['order']) ? $_GET['order'] == "ASC" ? "DESC" : 'ASC' : "ASC");
 
   $page = ($lgsl_config['pagination_mod'] && isset($_GET['page']) ? (int)$_GET['page'] : 1);
@@ -28,11 +28,11 @@
     $uri = $_SERVER['HTTP_REFERER'];
   }
 
-  //$server_list = lgsl_query_group(["type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order]);
   $server_list = Database::get_servers_group(["type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order]);
 
 //------------------------------------------------------------------------------------------------------------+
-  if (count($server_list) == 0 && $page < 2) {
+  $servers = count($server_list);
+  if ($servers == 0 && $page < 2) {
     $output .= "<div id='back_to_servers_list'><a href='./admin.php'>ADD YOUR FIRST SERVER</a></div>";
   }
   if ($type || $game || $mode) {
@@ -55,8 +55,6 @@
     </tr>";
 
   foreach ($server_list as $server) {
-    //$misc    = lgsl_server_misc($server);
-    //$server  = lgsl_server_html($server);
     $percent = $server->get_players_count('percent');
     $lastupd = $server->get_timestamp();
     $gamelink= LGSL::build_link($uri, ["game" => $server->get_game()]);
@@ -82,7 +80,7 @@
           {$server->get_name()}
         </div>
         <div class='servername_link'>
-          <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."'>
+        <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."'>
             {$server->get_name()}
           </a>
         </div>
@@ -120,16 +118,16 @@
   $output .= "
   </table>";
 
-  if ($lgsl_config['pagination_mod'] && ((int)(count($server_list) / $lgsl_config['pagination_lim']) > 0 || $page > 1)) {
+  if ($lgsl_config['pagination_mod'] && ((int)($servers / $lgsl_config['pagination_lim']) > 0 || $page > 1)) {
     $output .= "
       <div id='pages'>
-        " . ($page > 1 ? "<a href='" . LGSL::build_link($uri, ["page" => $page - 1]) . "'> < </a>" : "") . "
-        <span>{$lgsl_config['text']['pag']} {$page}</span>
-        " . (count($server_list) < $lgsl_config['pagination_lim'] ?
-            "" :
-            (isset($_GET['page']) ?
-                "<a href='" . LGSL::build_link($uri, ["page" => $page + 1]) . "'> > </a>" :
-                "<a href='" . LGSL::build_link($uri, ["page" => 2]) ."'>></a>")) . "
+      " . ($page > 1 ? "<a href='" . LGSL::build_link($uri, ["page" => $page - 1]) . "'> < </a>" : "") . "
+      <span>{$lgsl_config['text']['pag']} {$page}</span>
+      " . ($servers < $lgsl_config['pagination_lim'] ?
+          "" :
+          (isset($_GET['page']) ?
+              "<a href='" . LGSL::build_link($uri, ["page" => $page + 1]) . "'> > </a>" :
+              "<a href='" . LGSL::build_link($uri, ["page" => 2]) ."'>></a>")) . "
       </div>
       ";
   }

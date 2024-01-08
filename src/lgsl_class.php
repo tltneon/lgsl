@@ -92,7 +92,7 @@
         $total['playersmax'] += $server->get_players_count('max');
 
         $total['servers']++;
-        if (in_array($server->get_status(), [self::ONLINE, self::PASSWORDED])) {
+        if (in_array($server->get_status(), [Server::ONLINE, Server::PASSWORDED])) {
           $total['servers_online']++;
         } else {
           $total['servers_offline']++;
@@ -191,6 +191,9 @@
   }
 //------------------------------------------------------------------------------------------------------------+
   class Database {
+    public const ASSOC = 0;
+    public const NUM = 1;
+    public const BOTH = 2;
     private static $_instance = null;
     private $_connection;
     private $_db;
@@ -203,20 +206,19 @@
     }
 
     public function connect($type = null) {
-      global $lgsl_config, $lgsl_file_path;
+      global $lgsl_config;
 			if ($type == null) {
 				$type = $lgsl_config['db']['type'];
 			}
       if ($lgsl_config['cms'] !== 'sa') {
         $this->load_cms_config();
       }
-			if ($type === 'mysql') {
-				$this->_connection = new MysqlWrapper();
-			} elseif ($type === 'sqlite') {
-				$this->_connection = new SqliteWrapper();
-			} else {
-				$this->_connection = new PostgresWrapper();					
-			}
+      $types = [
+        'mysql' => 'tltneon\LGSL\MysqlWrapper',
+        'sqlite' => 'tltneon\LGSL\SqliteWrapper',
+        'postgres' => 'tltneon\LGSL\PostgresWrapper'
+      ];
+      $this->_connection = new $types[$type]();
 			$this->_connection->connect();
       if ($this->get_error()) {
         return null;
@@ -284,7 +286,7 @@
         break;
       }
     }
-    function query($string, $single_result = false, $mode = MYSQLI_ASSOC) {
+    function query($string, $single_result = false, $mode = Database::ASSOC) {
       $result = $this->_connection->query($string);
       if ($result === false) {
         printf("Connect failed: %s\n", $this->_connection->get_error());
@@ -442,11 +444,14 @@
     function __construct() {}
     function __wakeup(){}
   }
+
+
   abstract class DBWrapper {
 		protected $_connection;
     public $_id = 'id';
 		public function select_db() {}
 		public function set_charset($c) {}
+		public function execute($c) {}
 		public function clear() {
 			global $lgsl_config;
 			$this->execute("TRUNCATE TABLE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
@@ -568,42 +573,62 @@
 		function __construct($r) {
 			$this->_result = $r;
 		}
-		public function fetch_all() {
+		public function fetch_all($mode = Database::ASSOC) {
 			return $this->_result;
 		}
-		public function fetch_array() {
+		public function fetch_array($mode = Database::ASSOC) {
 			return $this->_result;
 		}
 	}
 	class MysqlResultWrapper extends ResultWrapper {
-		public function fetch_all() {
+    public const MODES = [
+      Database::ASSOC => MYSQLI_ASSOC,
+      Database::NUM => MYSQLI_NUM,
+      Database::BOTH => MYSQLI_BOTH
+    ];
+		public function fetch_all($mode = Database::ASSOC) {
+      $ret = [];
 			if ($this->_result == false) return $ret;
-			return $this->_result->fetch_all(MYSQLI_ASSOC);
+			return $this->_result->fetch_all($this::MODES[$mode]);
 		}
-		public function fetch_array() {
-			return $this->_result->fetch_array(MYSQLI_ASSOC);
+		public function fetch_array($mode = Database::ASSOC) {
+			return $this->_result->fetch_array($this::MODES[$mode]);
 		}
 	}
 	class SqliteResultWrapper extends ResultWrapper {
-		public function fetch_all() {
+    public const MODES = [
+      Database::ASSOC => SQLITE3_ASSOC,
+      Database::NUM => SQLITE3_NUM,
+      Database::BOTH => SQLITE3_BOTH
+    ];
+		public function fetch_all($mode = Database::ASSOC) {
 			$ret = [];
 			if ($this->_result == false) return $ret;
-			while ($r = $this->_result->fetchArray(SQLITE3_ASSOC)) {
+			while ($r = $this->_result->fetchArray($this::MODES[$mode])) {
 				array_push($ret, $r);
 			}
 			return $ret;
 		}
-		public function fetch_array() {
+		public function fetch_array($mode = Database::ASSOC) {
 			if ($this->_result == false) return [];
-			return $this->_result->fetchArray(SQLITE3_ASSOC);
+			return $this->_result->fetchArray($this::MODES[$mode]);
 		}
 	}
 	class PostgresResultWrapper extends ResultWrapper {
-		public function fetch_all() {
-			return pg_fetch_all($this->_result);
+    public const MODES = [
+      Database::ASSOC => PGSQL_ASSOC,
+      Database::NUM => PGSQL_NUM,
+      Database::BOTH => PGSQL_BOTH
+    ];
+		public function fetch_all($m = Database::ASSOC) {
+      $result = pg_fetch_all($this->_result);
+      if (!$result) return [];
+			return $result;
 		}
-		public function fetch_array() {
-			return pg_fetch_array($this->_result, null, PGSQL_ASSOC);
+		public function fetch_array($mode = Database::ASSOC) {
+      $result = pg_fetch_array($this->_result, null, $this::MODES[$mode]);
+      if (!$result) return [];
+			return $result;
 		}
 	}
 //------------------------------------------------------------------------------------------------------------+
@@ -896,7 +921,7 @@
 			return "$lgsl_file_path$path";
 		}
     public function map_password_image() {
-      if ($this->get_status() === self::PASSWORDED) return "{$lgsl_url_path}other/map_overlay_password.gif";
+      if ($this->get_status() === self::PASSWORDED) return "{$this->add_url_path()}other/map_overlay_password.gif";
       return "{$this->add_url_path()}other/overlay.gif";
     }
     public function get_map_image($check_exists = true, $id = -1) {
