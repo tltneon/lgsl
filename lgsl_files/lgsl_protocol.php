@@ -28,6 +28,7 @@
     "arma3"         => "ArmA 3 / DayZ",
     "avp2"          => "Aliens VS. Predator 2",
     "avp2010"       => "Aliens VS. Predator ( 2010 By Rebellion )",
+		"beammp"        => "BeamMP",
     "bfbc2"         => "Battlefield Bad Company 2",
     "bfvietnam"     => "Battlefield Vietnam",
     "bf1942"        => "Battlefield 1942",
@@ -92,6 +93,7 @@
     "mta"           => "Multi Theft Auto",
     "mumble"        => "Mumble",
     "nascar2004"    => "Nascar Thunder 2004",
+		"necesse"       => "Necesse",
     "neverwinter"   => "NeverWinter Nights",
     "neverwinter2"  => "NeverWinter Nights 2",
     "nexuiz"        => "Nexuiz",
@@ -175,6 +177,7 @@
     "arma3"         => "05",
     "avp2"          => "03",
     "avp2010"       => "31",
+    "beammp"        => "48",
     "bfbc2"         => "30",
     "bfvietnam"     => "09",
     "bf1942"        => "03",
@@ -243,6 +246,7 @@
     "mta"           => "08",
     "mumble"        => "43",
     "nascar2004"    => "09",
+		"necesse"       => "47",
     "neverwinter"   => "09",
     "neverwinter2"  => "09",
     "nexuiz"        => "02",
@@ -463,6 +467,7 @@
   function lgsl_gametype_scheme($type)
   {
     $lgsl_scheme_list = array(
+    "beammp"        => "http",
     "bfbc2"         => "tcp",
     "bf3"           => "tcp",
     "discord"       => "http",
@@ -4401,6 +4406,61 @@
 		return TRUE;
 	}
 
+	function lgsl_query_47(&$server, &$lgsl_need, &$lgsl_fp) { // Necesse (by tltneon)
+		fwrite($lgsl_fp, "\x00\x00\x01\x00\x00\x17\x7f\xd3\x96");
+		$buffer = fread($lgsl_fp, 4096);
+		if (!$buffer) return FALSE;
+		$server['s']["name"] = "Necesse server";
+		$server['s']["map"] = "World";
+		lgsl_cut_byte($buffer, 15);
+		$server['s']['players'] = ord(lgsl_cut_byte($buffer, 1));
+		$server['s']['playersmax'] = ord(lgsl_cut_byte($buffer, 1));
+		$settings = ord(lgsl_cut_byte($buffer, 1));
+		$server['e']["allowOutsideCharacters"] = $settings & 64 ? 1 : 0;
+		$server['e']["forcedPvP"] = $settings & 32 ? 1 : 0;
+		$server['e']["disableMobSpawns"] = $settings & 16 ? 1 : 0;
+		$server['e']["playerHunger"] = $settings & 8 ? 1 : 0;
+		$server['e']["survivalMode"] = $settings & 4 ? 1 : 0;
+		$server['e']["allowCheats"] = $settings & 2 ? 1 : 0;
+		lgsl_cut_byte($buffer, 5);
+		$server['e']["version"] = lgsl_cut_pascal($buffer, 1, 6);
+		$difficulty = ["Casual", "Easy", "Normal", "Hard", "Brutal"];
+		$server['e']['difficulty'] = $difficulty[ord(lgsl_cut_byte($buffer, 1))];
+		$deathPenalty = ["No penalty", "Drop materials", "Drop main inventory", "Drop full inventory", "Hardcore"];
+		$server['e']['deathPenalty'] = $deathPenalty[ord(lgsl_cut_byte($buffer, 1))];
+		$raidFrequency = ["Often", "Occasionally", "Rarely", "Hard"];
+		$server['e']['raidFrequency'] = $raidFrequency[ord(lgsl_cut_byte($buffer, 1))];
+		$server['e']["daytime"] = lgsl_unpack(lgsl_cut_byte($buffer, 2), 'G');
+		$server['e']["nighttime"] = lgsl_unpack(lgsl_cut_byte($buffer, 2), 'G');
+		return TRUE;
+  }
+
+  function lgsl_query_48(&$server, &$lgsl_need, &$lgsl_fp) { // BeamMP
+    curl_setopt($lgsl_fp, CURLOPT_URL, "https://backend.beammp.com/servers-info");
+    $buffer = curl_exec($lgsl_fp);
+    if (!$buffer) $buffer = curl_exec($lgsl_fp);
+    if (!$buffer) return FALSE;
+		$buffer = json_decode($buffer, true);
+		$find = array_filter($buffer, function($k) use ($server) {
+			return $k['ip'] == $server['b']['ip'] && ((int) $k['port']) == $server['b']['q_port'];
+		});
+		if (!$find) return FALSE;
+		$find = reset($find);
+
+		$server['s']['name'] = lgsl_parse_color($find['sname'], '2');
+		$server['s']['players'] = $find['players'];
+		$server['s']['playersmax'] = $find['maxplayers'];
+		$server['s']['password'] = $find['password'];
+		$server['s']['map'] = $find['map'];
+		$server['e']['description'] = $find['sdesc'];
+		$server['e']['version'] = $find['version'];
+		if ($server['s']['players'] > 0) {
+			$server['p'] = array_map(function ($k) {
+				return ['name' => $k];
+			}, explode(';', $find['playerslist']));
+		}
+		return TRUE;
+  }
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 
