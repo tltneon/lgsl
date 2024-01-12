@@ -662,7 +662,8 @@
         "name" => "--",
         "game" => "",
         "mode" => "none",
-        "password" => 0
+        "password" => 0,
+        "map" => "World"
       ];
       $this->_other = [
         "zone" => null,
@@ -727,6 +728,13 @@
       $this->validate();
     }
     
+    public function updateValues(&$data) {
+			$this->_base = array_merge($this->_base, $data['b'] ?? []);
+			$this->_extra = array_merge($this->_extra, $data['e'] ?? []);
+			$this->_other = array_merge($this->_other, $data['o'] ?? []);
+			$this->_server = array_merge($this->_server, $data['s'] ?? []);
+			$this->_players = $data['p'] ?? [];
+    }    
     public function from_array($data) {
 			$this->_base = isset($data['b']) ? array_merge($this->_base, $data['b']) : $this->_base;
 			$this->_extra = isset($data['e']) ? $data['e'] : [];
@@ -755,7 +763,8 @@
     public function get_id() {
       return $this->_base['id'];
     }
-    public function get_ip() {
+    public function get_ip($forceIp = false) {
+      if ($forceIp) return gethostbyname($this->_base['ip']);
       return $this->_base['ip'];
     }
     public function get_c_port($intOnly = true) {

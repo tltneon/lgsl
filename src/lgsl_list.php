@@ -80,7 +80,7 @@
           {$server->get_name()}
         </div>
         <div class='servername_link'>
-        <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."'>
+          <a href='{LGSL::link($server->get_ip(), $server->get_c_port())}'>
             {$server->get_name()}
           </a>
         </div>
