@@ -28,11 +28,11 @@
 //------------------------------------------------------------------------------------------------------------+
 // VALIDATE REQUEST
 
-  if (!$type || !$ip || !$c_port || !$q_port  || !$request) {
+  if (!$type || !$ip || (!Protocol::lgslProtocolWithoutPort($type) && (!$c_port || !$q_port)) || !$request) {
     exit("LGSL FEED PROBLEM: INCOMPLETE REQUEST");
   }
 
-  if ($q_port > 65535 || $q_port < 1) {
+  if ($q_port > 65535 || $q_port < 0) {
     exit("LGSL FEED PROBLEM: INVALID QUERY PORT: '{$q_port}'");
   }
 
@@ -75,7 +75,7 @@
 // ADD THE FEED PROVIDER
 
   $server->set_extra_value('_feed_', "http://{$_SERVER['HTTP_HOST']}");
-  $server->set_extra_value('_lgsl_', "v7.0.0");
+  $server->set_extra_value('_lgsl_', LGSL::VERSION);
 
 //------------------------------------------------------------------------------------------------------------+
 // FEED USAGE LOGGING - 'logs' FOLDER MUST BE MANUALLY CREATED AND SET AS WRITABLE

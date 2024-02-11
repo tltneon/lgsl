@@ -80,7 +80,7 @@
           {$server->get_name()}
         </div>
         <div class='servername_link'>
-          <a href='{LGSL::link($server->get_ip(), $server->get_c_port())}'>
+          <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."'>
             {$server->get_name()}
           </a>
         </div>
@@ -103,7 +103,7 @@
 
       if ($lgsl_config['locations']) {
         $output .= "
-        <a href='".LGSL::location_link($server->location_text())."' title='{$server->location_text()}'  target='_blank' class='contry_link'>
+        <a href='".LGSL::locationLink($server->location_text())."' title='{$server->location_text()}'  target='_blank' class='contry_link'>
           <i class='contry_icon flag f{$server->getLocation()}'></i>
         </a>";
       }

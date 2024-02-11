@@ -10,10 +10,12 @@ function loadIcons() {
   if (details_location_image) {
     let co = details_location_image.classList[2].slice(1);
     details_location_image.style.backgroundImage = `url('${reImage(co)}')`;
+		details_location_image.style.backgroundPosition = "inherit";
+    details_location_image.style.backgroundSize = "cover";
   }
   
   document.querySelectorAll(".contry_icon").forEach(item => { // server list
-		item.style.backgroundImage = `url('${reImage(item.classList[2].slice(1))}')`;
+		item.style.backgroundImage = 'url(' + reImage(item.classList[2].slice(1)) + ')';
 		item.style.backgroundPosition = "inherit";
     item.style.backgroundSize = "cover";
   });

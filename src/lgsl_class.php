@@ -45,19 +45,15 @@
       }
       return $link;
     }
-    static function location_link($location) {
+    static function locationLink($location) {
       if (!$location) { return "#"; }
       return "https://www.google.com/maps/search/{$location}/";
     }
-    static function query_location($ip) {
+    static function locationCode(string $ip): string {
       global $lgsl_config;
-  
       if ($lgsl_config['locations'] !== 1 && $lgsl_config['locations'] !== true) { return $lgsl_config['locations']; }
-  
       $ip = gethostbyname($ip);
-  
       if (long2ip(ip2long($ip)) == "255.255.255.255") { return "XX"; }
-  
       $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode";
   
       if (LGSL::isEnabled("curl")) {
@@ -71,7 +67,7 @@
   
         $answer = curl_exec($lgsl_curl);
         $answer = json_decode($answer, true);
-        $location = (isset($answer["countryCode"]) ? $answer["countryCode"] : "XX");
+        $location = $answer["countryCode"] ?? "XX";
   
         if (curl_error($lgsl_curl)) { $location = "XX"; }
   
@@ -746,14 +742,14 @@
 			$this->_history = isset($data['h']) ? $data['h'] : [];
     }    
     public function to_array() {
-      $server = [];
-      $server['b'] = $this->_base;
-      $server['e'] = $this->_extra;
-      $server['o'] = $this->_other;
-      $server['s'] = $this->_server;
-      $server['p'] = $this->_players;
-      $server['h'] = $this->_history;
-      return $server;
+      return [
+        'b' => $this->_base,
+        'e' => $this->_extra,
+        'o' => $this->_other,
+        's' => $this->_server,
+        'p' => $this->_players,
+        'h' => $this->_history
+      ];
     }
     public function isvalid() {
       return (isset($this->_base['ip']) || isset($this->_base['id'])) && isset($this->_base['q_port']) && isset($this->_base['type']);
@@ -782,8 +778,11 @@
       return $this->_base['s_port'];
     }
     public function get_address() {
-      if ($this->_base['type'] === 'discord') {
+      if ($this->_base['type'] === Protocol::DISCORD) {
         return "https://discord.gg/{$this->get_ip()}";
+      }
+      if (Protocol::lgslProtocolWithoutPort($this->_base['type'])) {
+        return $this->_base['ip'];
       }
       return "{$this->_base['ip']}:{$this->_base['c_port']}";
     }
@@ -1010,31 +1009,14 @@
     }
     public function location_text() {
       global $lgsl_config;
-      return isset($this->_other['location']) ? "{$lgsl_config['text']['loc']} {$this->_other['location']}" : "";
-    }
-    public function location_icon() {
-      global $lgsl_config, $lgsl_file_path, $lgsl_url_path;
-  
-      if (!isset($this->_other['location']) || !$lgsl_config["locations"]) { return "{$lgsl_url_path}locations/OFF.png"; }
-  
-      if ($this->_other['location']) {
-        $loc = "locations/".strtoupper(preg_replace("/[^a-zA-Z0-9_]/", "_", $this->_other['location'])).".png";
-  
-        if (file_exists($lgsl_file_path.$loc)) { return $lgsl_url_path.$loc; }
-      }
-  
-      return "{$lgsl_url_path}locations/XX.png";
+      return  "{$lgsl_config['text']['loc']} {$this->getLocation()}";
     }
     public function getLocation() {
-      if (isset($this->_other['location'])) return $this->_other['location'];
-			return "XX";
+      return $this->_other['location'] ?? "XX";
     }
-    private function _cache_time_index($c) {
-      switch ($c) {
-        case 'e': return 1;
-        case 'p': return 2;
-        default: return 0;
-      }
+    private function _cache_time_index(string $c = 's') {
+      $cache = ['s' => 0, 'e' => 1, 'p' => 2];
+      return $cache[$c];
     }
     public function set_timestamp($types, $time) {
       if (!isset($this->_server) || !isset($this->_server['cache_time'])) {
@@ -1096,36 +1078,7 @@
       unset($this->_extra['_error']);
     }
 		public function queryLocation() {
-			global $lgsl_config;
-      if ($lgsl_config['locations'] !== 1 && $lgsl_config['locations'] !== true) { return $lgsl_config['locations']; }
-      $ip = gethostbyname($this->get_ip());  
-      if (long2ip(ip2long($ip)) === "255.255.255.255") { return "XX"; }
-  
-      $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode";
-  
-      if (LGSL::isEnabled("curl")) {
-        $lgsl_curl = curl_init();
-  
-        curl_setopt($lgsl_curl, CURLOPT_HEADER, 0);
-        curl_setopt($lgsl_curl, CURLOPT_TIMEOUT, 2);
-        curl_setopt($lgsl_curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($lgsl_curl, CURLOPT_CONNECTTIMEOUT, 2);
-        curl_setopt($lgsl_curl, CURLOPT_URL, $url);
-  
-        $answer = curl_exec($lgsl_curl);
-        $answer = json_decode($answer, true);
-        $location = $answer["countryCode"] ?? "XX";
-  
-        if (curl_error($lgsl_curl)) { $location = "XX"; }
-  
-        curl_close($lgsl_curl);
-      } else {
-        $location = @file_get_contents($url);
-      }
-  
-      if (strlen($location) != 2) { $location = "XX"; }
-			
-      return $location;
+      return LGSL::locationCode($this->get_ip());
 		}
 		public function sort_player_fields() {
 			//------------------------------------------------------------------------------------------------------------+
