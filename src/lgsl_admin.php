@@ -164,10 +164,8 @@
           </div>
         </div>
       </div>
-			<form method='post' action='' style='padding-top: 40px; text-align: center;'>
-				<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-				<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
-			</form>";
+			" . lgsl_return_buttons() . "
+      ";
 
     return;
   }
@@ -229,15 +227,66 @@
     }
 
     $output .= "
-			<form method='post' action='' style='padding: 15px;'>
-				<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-				<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
-			</form>
+    " . lgsl_return_buttons() . "
 		</div>";
 
     return;
   }
 
+//------------------------------------------------------------------------------------------------------------+
+
+if (!empty($_POST['lgsl_server_protocol_detection'])) {
+  $time = microtime(true);
+  $_POST["q_port"] = isset($_POST["q_port"]) ? explode(",", str_replace(" ", "", $_POST["q_port"])) : [27015, 27016];
+  $_POST['ip'] = $_POST['ip'] ?? "127.0.0.1";
+  $_POST['protocols'] = $_POST['protocols'] ?? ["source"];
+  $log = "";
+  foreach ($_POST["q_port"] as $q) {
+    $log .= "Querying {$_POST['ip']}:{$q}<br>";
+    foreach ($_POST["protocols"] as $p) {
+      $server = new Server([
+          "ip" => $_POST["ip"], // server ip or hostname
+          "q_port" => $q, // for querying
+          "type" => $p // protocol name from lgsl_type_list()
+      ]);
+      $server->lgsl_live_query("s"); // s - server info, e - extra data, p - players info
+      $log .= "[type: {$server->get_type()}] " . ($server->get_status() === Server::OFFLINE ? $lgsl_config['text'][$server->get_status()] : "[game: {$server->get_game()}] [data: {$server->get_name()} | {$server->get_players_count()} | {$lgsl_config['text'][$server->get_status()]}]") ."<br>";
+    }
+    $log .= "<br>";
+  }
+  $log .= "Querying takes: ".round(microtime(true) - $time, 6)."s.";
+
+  $output .= "
+  <h5>Protocol Detection Section: be aware that selecting bunch of protocols or ports may take a lot of time to proceed.</h5>
+  <div id='protocols_list'>
+    <form method='post'>
+      Protocols:
+      <select multiple name='protocols[]' style='height:175px'>
+        ";
+          $prot = Protocol::lgsl_type_list();
+          foreach ($prot as $k => $v) {
+            $active = in_array($k, $_POST['protocols']) ? "selected='selected'" : '';
+            $output .= "<option value='{$k}' {$active}>{$v}</option>";
+          }
+      $output .=  "
+      </select>
+      <div>Server IP: <input type='input' name='ip' value='{$_POST['ip']}' /></div>
+      <div>Query ports: <input type='input' name='q_port' value='" . implode(',', $_POST['q_port']) . "'></div>
+      <div>Query limit: {$lgsl_config['live_time']}s.</div>
+      <input type='submit' name='lgsl_server_protocol_detection'>
+    </form>
+  </div>
+  <div id='protocols_log'>
+    {$log}
+  </div>
+  ";
+
+  $output .= "
+    " . lgsl_return_buttons() . "
+  </div>";
+
+  return;
+}
 //------------------------------------------------------------------------------------------------------------+
 
   if ((!empty($_POST['lgsl_management']) && empty($_POST['lgsl_switch'])) || (empty($_POST['lgsl_management']) && !empty($_POST['lgsl_switch'])) || (!isset($_POST['lgsl_management']) && $lgsl_config['management'])) {
@@ -270,15 +319,7 @@
       </div>
       <div class='center'>
         <input type='hidden' name='lgsl_management' value='1' />
-        <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
-          <tr>
-            <td><input type='submit' name='lgsl_save_1'          value='{$lgsl_config['text']['skc']}' /> </td>
-            <td><input type='submit' name='lgsl_save_2'          value='{$lgsl_config['text']['srh']}' /> </td>
-            <td><input type='submit' name='lgsl_map_image_paths' value='{$lgsl_config['text']['mip']}' /> </td>
-            <td><input type='submit' name='lgsl_switch'          value='{$lgsl_config['text']['nrm']}' /> </td>
-            <td><input type='submit' name='lgsl_check_updates'   value='{$lgsl_config['text']['upd']}' /> </td>
-          </tr>
-        </table>
+        " . lgsl_main_buttons() . "
       </div>
     </form>";
 
@@ -294,13 +335,13 @@
     <div class='admin-server-table'>
       <table cellspacing='5' cellpadding='0'>
         <tr>
-          <td>[ ID ]                           </td>
+          <td>[ # ]                            </td>
           <td>[ Game Type | Query Protocol ]   </td>
-          <td>[ IP ]                           </td>
+          <td>[ IP | ID ]                      </td>
           <td>[ {$lgsl_config['text']['cpt']} ]</td>
           <td>[ {$lgsl_config['text']['qpt']} ]</td>
-          <td>[ Software Port ]                </td>
-          <td>[ Zones ]                        </td>
+          <td>[ S Port ]                       </td>
+          <td>[ Zone ]                         </td>
           <td>[ {$lgsl_config['text']['dsb']} ]</td>
           <td>[ Comment ]                      </td>
         </tr>";
@@ -308,10 +349,15 @@
 //---------------------------------------------------------+
 
       $mysqli_result = $db->get_all();
+      $isDisabled = function($check) {
+        if ($check) return 'readonly onclick="return false;" style="background: #777; cursor: not-allowed;"';
+        return "";
+      };
 
       foreach ($mysqli_result as $mysqli_row) {
         $id = $mysqli_row['id']; // ID USED AS [] ONLY RETURNS TICKED CHECKBOXES
-        $disabled = ($mysqli_row['type'] === 'discord' ? 'readonly onclick="return false;" style="background: #777;"' : '');
+        $hasSPort = $isDisabled(!($mysqli_row['type'] === Protocol::UT2003 || $mysqli_row['type'] === Protocol::UT2004));
+        $isDiscord = $isDisabled($mysqli_row['type'] === Protocol::DISCORD);
 
         $output .= "
         <tr>
@@ -335,9 +381,9 @@
             </select>
           </td>
           <td class='center'><input type='text'   name='form_ip[{$id}]'     value='{$mysqli_row['ip']}'   size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value='{$mysqli_row['c_port']}' min='0' max='65536' {$disabled} /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value='{$mysqli_row['q_port']}' min='0' max='65536' {$disabled} /></td>
-          <td class='center'><input type='number' name='form_s_port[{$id}]' value='{$mysqli_row['s_port']}' min='0' max='65536' {$disabled} /></td>
+          <td class='center'><input type='number' name='form_c_port[{$id}]' value='{$mysqli_row['c_port']}' min='0' max='65536' {$isDiscord} /></td>
+          <td class='center'><input type='number' name='form_q_port[{$id}]' value='{$mysqli_row['q_port']}' min='0' max='65536' {$isDiscord} /></td>
+          <td class='center'><input type='number' name='form_s_port[{$id}]' value='{$mysqli_row['s_port']}' min='0' max='65536' {$hasSPort} /></td>
           <td>
             <select name='form_zone[$id]'>";
 //---------------------------------------------------------+
@@ -399,15 +445,7 @@
       </table>
 
       <input type='hidden' name='lgsl_management' value='0' />
-      <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
-        <tr>
-          <td><input type='submit' name='lgsl_save_1'          value='{$lgsl_config['text']['skc']}' /> </td>
-          <td><input type='submit' name='lgsl_save_2'          value='{$lgsl_config['text']['srh']}' /> </td>
-          <td><input type='submit' name='lgsl_map_image_paths' value='{$lgsl_config['text']['mip']}' /> </td>
-          <td><input type='submit' name='lgsl_switch'          value='{$lgsl_config['text']['avm']}' /> </td>
-          <td><input type='submit' name='lgsl_check_updates'   value='{$lgsl_config['text']['upd']}' /> </td>
-        </tr>
-      </table>
+      " . lgsl_main_buttons() . "
     </div>
   </form>";
 
@@ -417,6 +455,24 @@
 
   function lgsl_help_info() {
     global $lgsl_config;
+    $funcs = [
+      ["href" => "http://php.net/fsockopen", "name" => "FSOCKOPEN", "test" => function_exists("fsockopen"), "desc" => "fso"],
+      ["href" => "http://php.net/curl", "name" => "CURL", "test" => LGSL::isEnabled("curl"), "desc" => "crl"],
+      ["href" => "http://php.net/mbstring", "name" => "MBSTRING", "test" => function_exists("mb_convert_encoding"), "desc" => "mbs"],
+      ["href" => "http://php.net/bzip2", "name" => "BZIP2", "test" => function_exists("bzdecompress"), "desc" => "bz2"],
+      ["href" => "http://php.net/gd2", "name" => "GD", "test" => extension_loaded("gd"), "desc" => "gd2"],
+      ["href" => "http://php.net/zlib", "name" => "ZLIB", "test" => function_exists("gzuncompress"), "desc" => "zli"],
+    ];
+    $output = "";
+    foreach ($funcs as $func) {
+      $output .= "
+      <tr>
+        <td> <a href='{$func['href']}'>{$func['name']}</a> </td>
+        <td> {$lgsl_config['text']['enb']}: ".($func['test'] ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
+        <td> ( {$lgsl_config['text'][$func['desc']]} ) </td>
+      </tr>
+      ";
+    }
     return "
     <div class='admin-help-info'>
       <i class='space'></i>
@@ -425,46 +481,38 @@
       {$lgsl_config['text']['faq']}
       <i class='space'></i>
       <table cellspacing='10' cellpadding='0'>
-        <tr>
-          <td> <a href='http://php.net/fsockopen'>FSOCKOPEN</a> </td>
-          <td> {$lgsl_config['text']['enb']}: ".(function_exists("fsockopen") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( {$lgsl_config['text']['fso']} ) </td>
-        </tr>
-        <tr>
-          <td> <a href='http://php.net/curl'>CURL</a> </td>
-          <td> {$lgsl_config['text']['enb']}: ".((LGSL::isEnabled("curl")) ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( {$lgsl_config['text']['crl']} ) </td>
-        </tr>
-        <tr>
-          <td> <a href='http://php.net/mbstring'>MBSTRING</a> </td>
-          <td> {$lgsl_config['text']['enb']}: ".(function_exists("mb_convert_encoding") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( {$lgsl_config['text']['mbs']} ) </td>
-        </tr>
-        <tr>
-          <td> <a href='http://php.net/bzip2'>BZIP2</a> </td>
-          <td> {$lgsl_config['text']['enb']}: ".(function_exists("bzdecompress") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( {$lgsl_config['text']['bz2']} ) </td>
-        </tr>
-        <tr>
-          <td> <a href='http://php.net/gd2'>GD</a> </td>
-          <td> {$lgsl_config['text']['enb']}: ".(extension_loaded("gd") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( {$lgsl_config['text']['gd2']} ) </td>
-        </tr>
-        <tr>
-          <td> <a href='http://php.net/zlib'>ZLIB</a> </td>
-          <td> {$lgsl_config['text']['enb']}: ".(function_exists("gzuncompress") ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
-          <td> ( {$lgsl_config['text']['zli']} ) </td>
-        </tr>
+        {$output}
       </table>
       <i class='space2x'></i>
     </div>";
   }
 
-//------------------------------------------------------------------------------------------------------------+
-
   function lgsl_stripslashes_deep($value) {
     $value = is_array($value) ? array_map('tltneon\LGSL\lgsl_stripslashes_deep', $value) : stripslashes($value);
     return $value;
+  }
+
+  function lgsl_return_buttons() {
+    return "
+    <form method='post' action='' style='padding: 15px;'>
+      <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+      <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
+    </form>";
+  }
+  function lgsl_main_buttons() {
+    global $lgsl_config;
+    $management = $_POST['lgsl_management'] ? $lgsl_config['text']['avm'] : $lgsl_config['text']['nrm'];
+    return "
+    <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
+      <tr>
+        <td><input type='submit' name='lgsl_save_1'          value='{$lgsl_config['text']['skc']}' /> </td>
+        <td><input type='submit' name='lgsl_save_2'          value='{$lgsl_config['text']['srh']}' /> </td>
+        <td><input type='submit' name='lgsl_map_image_paths' value='{$lgsl_config['text']['mip']}' /> </td>
+        <td><input type='submit' name='lgsl_switch'          value='{$management}' /> </td>
+        <td><input type='submit' name='lgsl_server_protocol_detection' value='Detect Protocol' /> </td>
+        <td><input type='submit' name='lgsl_check_updates'   value='{$lgsl_config['text']['upd']}' /> </td>
+      </tr>
+    </table>";
   }
 
 //------------------------------------------------------------------------------------------------------------+

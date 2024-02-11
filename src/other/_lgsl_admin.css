@@ -29,6 +29,9 @@ textarea[name='form_list'] {
 	font-size: 1.2em;
 	font-family: courier new, monospace;
 }
+input[name^='form_s_port'] {
+	width: 55px;
+}
 .inlined {
 	display: inline-block;
 	width: 300px;
@@ -61,7 +64,7 @@ textarea[name='form_list'] {
 	display: block;
 	height: 4em;
 }
-@media(max-width: 414px){
+@media(max-width: 414px) {
 	.inlined {
 		display: block;
 		width: 100%;
@@ -72,3 +75,9 @@ textarea[name='form_list'] {
 		padding: 7px;
 	}
 }
+
+/* Detection Section */
+div#admin_page > #protocols_list select, div#admin_page > #protocols_list input:not([type="submit"]) {width: 300px; text-align: left !important;}
+div#admin_page > #protocols_list select {height: 300px !important;}
+div#admin_page > #protocols_list {text-align: right;}
+div#admin_page > #protocols_log, div#admin_page > #protocols_list {width: 49.8%;display: inline-block; vertical-align: top; font-family: monospace;}
