@@ -375,7 +375,6 @@
       foreach ($mysqli_result as $s) {
         $server = new Server();
         $server->from_array($db->lgsl_unserialize_server_data($s));
-        $server->validate();
 
 				if (!LGSL::requestHas($request, "c") && !LGSL::timer("check")) { // CACHE ONLY REQUEST
 					$needed = "";
@@ -650,16 +649,15 @@
     private $_server;
     private $_players = [];
     private $_history = [];
-    private $_valid = false;
     
     function __construct($options = []) {
       $this->_base = array_merge([
         "id" => 0,
-        "ip" => "",
+        "ip" => null,
         "c_port" => 0,
         "q_port" => 0,
         "s_port" => 0,
-        "type" => "",
+        "type" => null,
         "status" => 0,
         "pending" => 1
       ], $options);
@@ -667,7 +665,7 @@
         "players" => 0,
         "playersmax" => 0,
         "name" => LGSL::NONE,
-        "game" => "",
+        "game" => $this->_base['type'],
         "mode" => "none",
         "password" => 0,
         "map" => "World"
@@ -687,7 +685,6 @@
       }
       if ($result) {
         $this->from_array($result);
-        $this->validate();
 				if (!LGSL::requestHas($request, "c")) { // CACHE ONLY REQUEST
 					global $lgsl_config;
 					$needed = "";
@@ -731,8 +728,6 @@
       if ($lgsl_config['locations'] && empty($this->_other['location'])) {
         $this->_other['location'] = $lgsl_config['locations'] ? $this->queryLocation() : "";
       }
-
-      $this->validate();
     }
     
     public function updateValues(&$data) {
@@ -760,11 +755,8 @@
       $server['h'] = $this->_history;
       return $server;
     }
-    public function validate() {
-      $this->_valid = true;
-    }
     public function isvalid() {
-      return $this->_valid;
+      return (isset($this->_base['ip']) || isset($this->_base['id'])) && isset($this->_base['q_port']) && isset($this->_base['type']);
     }
 
     public function get_id() {
@@ -799,13 +791,13 @@
       return $this->_base['type'];
     }
     public function get_game() {
-      return $this->_server['game'] ?? $this->_base['type'];
+      return $this->_server['game'] ? $this->_server['game'] : $this->_base['type'];
     }
     public function set_game($game) {
       return $this->_server['game'] = $game;
     }
     public function get_mode() {
-      return $this->_server['mode'] ?? 'none';
+      return $this->_server['mode'] ? $this->_server['mode'] : 'none';
     }
     public function get_map($formatted = false) {
 			if ($formatted) return $this->_server['map'] ? preg_replace("/[^a-z0-9_]/", "_", strtolower($this->_server['map'])) : LGSL::NONE;
@@ -877,40 +869,41 @@
 
     public function get_software_link() {
       $lgsl_software_link = [
-        "arma3"         => "steam://connect/{IP}:{C_PORT}",
-        "callofdutyiw"  => "javascript:prompt('Put it into console:', 'connect {IP}:{C_PORT}')",
-        "callofduty4"   => "cod4://{IP}:{S_PORT}",
-        "conanexiles"   => "steam://connect/{IP}:{C_PORT}",
-        "cs2d"          => "steam://connect/{IP}:{C_PORT}",
-        "discord"       => "https://discord.gg/{IP}",
-        "factorio"      => "steam://connect/{IP}",
-        "farmsim"       => "steam://connect/{IP}:{C_PORT}",
-        "fivem"         => "fivem://connect/{IP}:{C_PORT}",
-        "gtac"          => "gtac://connect/{IP}:{C_PORT}/gta:{GAME}",
-        "halflife"      => "steam://connect/{IP}:{C_PORT}",
-        "halflifewon"   => "steam://connect/{IP}:{C_PORT}",
-        "jc2mp"         => "steam://connect/{IP}:{C_PORT}",
-        "killingfloor"  => "steam://connect/{IP}:{C_PORT}",
-        "mafiac"        => "mafiac://connect/{IP}:{C_PORT}/mafia:{GAME}",
-        "minecraft"     => "minecraft://{IP}:{C_PORT}/",
-        "mta"           => "mtasa://{IP}:{C_PORT}",
-        "mumble"        => "mumble://{IP}/",
-        "openttd"       => "steam://connect/{IP}:{C_PORT}",
-        "ragemp"        => "rage://v/connect?ip={IP}:{C_PORT}",
-        "redorchestra"  => "steam://connect/{IP}:{C_PORT}",
-        "rfactor"       => "rfactor://{IP}:{C_PORT}",
-        "samp"          => "samp://{IP}:{C_PORT}",
-        "scum"          => "steam://connect/{IP}:{C_PORT}",
-        "sf"            => "steam://connect/{IP}:{C_PORT}",
-        "soldat"        => "soldat://{IP}:{C_PORT}",
-        "source"        => "steam://connect/{IP}:{C_PORT}",
-        "test"          => "https://github.com/tltneon/lgsl",
-        "teeworlds"     => "steam://connect/{IP}:{C_PORT}",
-        "terraria"      => "steam://connect/{IP}:{C_PORT}",
-        "ts3"           => "ts3server://{IP}?port={C_PORT}",
-        "teaspeak"      => "ts3server://{IP}?port={C_PORT}",
-        "warsow"        => "warsow://{IP}:{C_PORT}",
-        "wow"           => "javascript:prompt('Put it into your realm list:', 'set realmlist {IP}')"];
+        Protocol::ARMA3         => "steam://connect/{IP}:{C_PORT}",
+        Protocol::CALLOFDUTYIW  => "javascript:prompt('Put it into console:', 'connect {IP}:{C_PORT}')",
+        Protocol::CALLOFDUTY4   => "cod4://{IP}:{S_PORT}",
+        Protocol::CONANEXILES   => "steam://connect/{IP}:{C_PORT}",
+        Protocol::CS2D          => "steam://connect/{IP}:{C_PORT}",
+        Protocol::DISCORD       => "https://discord.gg/{IP}",
+        Protocol::FACTORIO      => "steam://connect/{IP}",
+        Protocol::FARMSIM       => "steam://connect/{IP}:{C_PORT}",
+        Protocol::FIVEM         => "fivem://connect/{IP}:{C_PORT}",
+        Protocol::GTAC          => "gtac://connect/{IP}:{C_PORT}/gta:{GAME}",
+        Protocol::HALFLIFE      => "steam://connect/{IP}:{C_PORT}",
+        Protocol::HALFLIFEWON   => "steam://connect/{IP}:{C_PORT}",
+        Protocol::JC2MP         => "steam://connect/{IP}:{C_PORT}",
+        Protocol::KILLINGFLOOR  => "steam://connect/{IP}:{C_PORT}",
+        Protocol::MAFIAC        => "mafiac://connect/{IP}:{C_PORT}/mafia:{GAME}",
+        Protocol::MINECRAFT     => "minecraft://{IP}:{C_PORT}/",
+        Protocol::MTA           => "mtasa://{IP}:{C_PORT}",
+        Protocol::MUMBLE        => "mumble://{IP}/",
+        Protocol::OPENTTD       => "steam://connect/{IP}:{C_PORT}",
+        Protocol::RAGEMP        => "rage://v/connect?ip={IP}:{C_PORT}",
+        Protocol::REDORCHESTRA  => "steam://connect/{IP}:{C_PORT}",
+        Protocol::RFACTOR       => "rfactor://{IP}:{C_PORT}",
+        Protocol::SAMP          => "samp://{IP}:{C_PORT}",
+        Protocol::SCUM          => "steam://connect/{IP}:{C_PORT}",
+        Protocol::SF            => "steam://connect/{IP}:{C_PORT}",
+        Protocol::SOLDAT        => "soldat://{IP}:{C_PORT}",
+        Protocol::SOURCE        => "steam://connect/{IP}:{C_PORT}",
+        Protocol::TEST          => "https://github.com/tltneon/lgsl",
+        Protocol::TEEWORLDS     => "steam://connect/{IP}:{C_PORT}",
+        Protocol::TERRARIA      => "steam://connect/{IP}:{C_PORT}",
+        Protocol::TITANFALL2    => "northstar://server@{IP}",
+        Protocol::TS3           => "ts3server://{IP}?port={C_PORT}",
+        Protocol::TEASPEAK      => "ts3server://{IP}?port={C_PORT}",
+        Protocol::WARSOW        => "warsow://{IP}:{C_PORT}",
+        Protocol::WOW            => "javascript:prompt('Put it into your realm list:', 'set realmlist {IP}')"];
     
         // SOFTWARE PORT IS THE QUERY PORT UNLESS SET
         if (!$this->get_s_port()) {
@@ -1099,6 +1092,9 @@
 			$s = $this->get_status();
 			return $s === self::PASSWORDED || $s === self::ONLINE;
 		}
+    public function trimError() {
+      unset($this->_extra['_error']);
+    }
 		public function queryLocation() {
 			global $lgsl_config;
       if ($lgsl_config['locations'] !== 1 && $lgsl_config['locations'] !== true) { return $lgsl_config['locations']; }

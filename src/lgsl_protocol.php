@@ -133,6 +133,7 @@
     public const SWAT4 = "swat4";
     public const TEEWORLDS = "teeworlds";
     public const TERRARIA = "terraria";
+    public const TITANFALL2 = "titanfall2";
     public const TRIBES = "tribes";
     public const TRIBES2 = "tribes2";
     public const TRIBESV = "tribesv";
@@ -169,7 +170,7 @@
         $this->_lgsl_need[$value] = true;
       }
     }
-    static public function lgsl_connection_type($type) {
+    static public function lgslConnectionType($type) {
       $protocol = [
         self::BEAMMP        => self::HTTP,
         self::BFBC2         => self::TCP,
@@ -181,6 +182,7 @@
         self::RAGEMP        => self::HTTP,
         self::SCUM          => self::HTTP,
         self::TERRARIA      => self::HTTP,
+        self::TITANFALL2    => self::HTTP,
         self::TS            => self::TCP,
         self::TS3           => self::TCP,
         self::TEASPEAK      => self::TCP,
@@ -188,6 +190,9 @@
         self::WOW           => self::TCP
       ];
       return $protocol[$type] ?? self::UDP;
+    }
+    static public function lgslProtocolWithoutPort($type) {
+      return in_array($type, [self::DISCORD, self::TITANFALL2]);
     }
     static public function lgslList($type = null) {
       $list = [
@@ -302,6 +307,7 @@
         self::SWAT4         => ["03", "SWAT 4"],
         self::TEEWORLDS     => ["21", "Teeworlds"],
         self::TERRARIA      => ["Query38", "Terraria"],
+        self::TITANFALL2    => ["Query50", "Titanfall 2"],
         self::TRIBES        => ["23", "Tribes (Starsiege)"],
         self::TRIBES2       => ["25", "Tribes 2"],
         self::TRIBESV       => ["09", "Tribes Vengeance"],
@@ -346,61 +352,62 @@
     }
     static public function lgsl_port_conversion($type, $c_port, $q_port, $s_port) { // GAMES WHERE Q_PORT IS NOT EQUAL TO C_PORT
       $types = [ //        |C > Q |C def |Q def |C > S
-        "aarmy"         => [1,     1716,  1717],
-        "aarmy3"        => [0,     8777,  39300],
-        "arcasimracing" => [-100,  34397, 34297],
-        "arma3"         => [0,     2302,  2303],
-        "bfbc2"         => [0,     19567, 48888],
-        "bfvietnam"     => [0,     15567, 23000],
-        "bf1942"        => [0,     14567, 23000],
-        "bf2"           => [0,     16567, 29900],
-        "bf3"           => [22000, 25200, 47200],
-        "bf2142"        => [0,     17567, 29900],
-        "callofdutybo3" => [0,     27017, 27017],
-        "cube"          => [1,     28785, 28786],
-        "dh2005"        => [0,     23459, 34567],
-        "discord"       => [0,     1,     1],
-        "factorio"      => [0,     34197, 34197],
-        "farcry"        => [123,   49001, 49124],
-        "fivem"         => [0,     30120, 30120],
-        "flashpoint"    => [1,     2302,  2303],
-        "frontlines"    => [2,     5476,  5478],
-        "ghostrecon"    => [2,     2346,  2348],
-        "gtr2"          => [1,     34297, 34298],
-        "had2"          => [3,     11001, 11004],
-        "kingpin"       => [-10,   31510, 31500],
-        "killingfloor"  => [1,     7708,  7709],
-        "minecraft"     => [0,     25565, 25565],
-        "mohaa"         => [97,    12203, 12300],
-        "mohaab"        => [97,    12203, 12300],
-        "mohaas"        => [97,    12203, 12300],
-        "mohpa"         => [97,    13203, 13300],
-        "mta"           => [123,   22003, 22126],
-        "painkiller"    => [123,   3455,  3578],
-        "ragemp"        => [0,     22005, 22005],
-        "ravenshield"   => [1000,  7777,  8777],
-        "redorchestra"  => [1,     7758,  7759],
-        "rfactor"       => [-100,  34397, 34297],
-        "serioussam"    => [1,     25600, 25601],
-        "soldat"        => [123,   23073, 23196],
-        "sf"            => [0,     7777,  15777],
-        "stalker"       => [2,     5447,  5445],
-        "stalkercop"    => [2,     5447,  5445],
-        "stalkercs"     => [2,     5447,  5445],
-        "starwarsrc"    => [0,     7777,  11138],
-        "swat4"         => [1,     10780, 10781],
-        "terraria"      => [101,   7777,  7878],
-        "tribesv"       => [1,     7777,  7778],
-        "ts"            => [0,     8767,  51234],
-        "ts3"           => [0,     9987,  10011],
-        "teaspeak"      => [0,     9987,  10101],
-        "ut"            => [1,     7777,  7778],
-        "ut2003"        => [1,     7757,  7758,  10],
-        "ut2004"        => [1,     7777,  7778,  10],
-        "ut3"           => [0,     7777,  6500],
-        "vietcong"      => [10000, 5425,  15425],
-        "vietcong2"     => [0,     5001,  19967],
-        "wow"           => [0,     3724,  8085],
+        self::AARMY         => [1,     1716,  1717],
+        self::AARMY3        => [0,     8777,  39300],
+        self::ARCASIMRACING => [-100,  34397, 34297],
+        self::ARMA3         => [0,     2302,  2303],
+        self::BFBC2         => [0,     19567, 48888],
+        self::BFVIETNAM     => [0,     15567, 23000],
+        self::BF1942        => [0,     14567, 23000],
+        self::BF2           => [0,     16567, 29900],
+        self::BF3           => [22000, 25200, 47200],
+        self::BF2142        => [0,     17567, 29900],
+        self::CALLOFDUTYBO3 => [0,     27017, 27017],
+        self::CUBE          => [1,     28785, 28786],
+        self::DH2005        => [0,     23459, 34567],
+        self::DISCORD       => [0,     1,     1],
+        self::FACTORIO      => [0,     34197, 34197],
+        self::FARCRY        => [123,   49001, 49124],
+        self::FIVEM         => [0,     30120, 30120],
+        self::FLASHPOINT    => [1,     2302,  2303],
+        self::FRONTLINES    => [2,     5476,  5478],
+        self::GHOSTRECON    => [2,     2346,  2348],
+        self::GTR2          => [1,     34297, 34298],
+        self::HAD2          => [3,     11001, 11004],
+        self::KINGPIN       => [-10,   31510, 31500],
+        self::KILLINGFLOOR  => [1,     7708,  7709],
+        self::MINECRAFT     => [0,     25565, 25565],
+        self::MOHAA         => [97,    12203, 12300],
+        self::MOHAAB        => [97,    12203, 12300],
+        self::MOHAAS        => [97,    12203, 12300],
+        self::MOHPA         => [97,    13203, 13300],
+        self::MTA           => [123,   22003, 22126],
+        self::PAINKILLER    => [123,   3455,  3578],
+        self::RAGEMP        => [0,     22005, 22005],
+        self::RAVENSHIELD   => [1000,  7777,  8777],
+        self::REDORCHESTRA  => [1,     7758,  7759],
+        self::RFACTOR       => [-100,  34397, 34297],
+        self::SERIOUSSAM    => [1,     25600, 25601],
+        self::SOLDAT        => [123,   23073, 23196],
+        self::SF            => [0,     7777,  15777],
+        self::STALKER       => [2,     5447,  5445],
+        self::STALKERCOP    => [2,     5447,  5445],
+        self::STALKERCS     => [2,     5447,  5445],
+        self::STARWARSRC    => [0,     7777,  11138],
+        self::SWAT4         => [1,     10780, 10781],
+        self::TERRARIA      => [101,   7777,  7878],
+        self::TITANFALL2    => [0,     1,     1],
+        self::TRIBESV       => [1,     7777,  7778],
+        self::TS            => [0,     8767,  51234],
+        self::TS3           => [0,     9987,  10011],
+        self::TEASPEAK      => [0,     9987,  10101],
+        self::UT            => [1,     7777,  7778],
+        self::UT2003        => [1,     7757,  7758,  10],
+        self::UT2004        => [1,     7777,  7778,  10],
+        self::UT3           => [0,     7777,  6500],
+        self::VIETCONG      => [10000, 5425,  15425],
+        self::VIETCONG2     => [0,     5001,  19967],
+        self::WOW           => [0,     3724,  8085],
       ];
       if (!isset($types[$type])) {
         if (!$q_port) $q_port = $c_port;
@@ -442,7 +449,7 @@
 				$this->set_requested();
 				return;
 			}*/
-      $protocol = $this->lgsl_connection_type($this->_server->get_type());
+      $protocol = $this->lgslConnectionType($this->_server->get_type());
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
         $isNew = strpos($this->lgsl_protocol_function($this->_server->get_type()), "Query") !== false;
@@ -3205,7 +3212,7 @@
       $this->_data['o']['time_execution'] = $time - microtime();
       if ($status !== $this::NO_RESPOND) {
         if ($status === $this::SUCCESS) {
-          // clear error
+          $this->_server->trimError();
         }
         if ($status === $this::WITH_ERROR) {
           $this->_data['e']['_error'] = $this->_data['e']['_error'] ?? "Probably protocol mistake";
@@ -3223,7 +3230,7 @@
     }
   }
   abstract class QueryJson extends Query {
-    public function fetch(string $url): array {
+    public function fetch(string $url) {
       $this->_fp->write($url);
       return $this->_fp->readJson();
     }
@@ -3297,7 +3304,6 @@
       }
       if (!isset($items['name'])) return $this::WITH_ERROR;
       $this->_data['s']['name']         = $ver ? Helper::lgslUnescape($items['name']) : $items['name'];
-      $this->_data['s']['map']          = $this->_data['b']['type'];
       $this->_data['s']['players']      = (int) ($items[$ver ? 'clientsonline' : 'currentusers']);
       $this->_data['s']['playersmax']   = (int) ($items[$ver ? 'maxclients' : 'maxusers']);
       $this->_data['s']['password']     = (int) ($items[$ver ? 'flag_password' : 'password']);
@@ -3396,7 +3402,6 @@
       $this->_data['e']['version'] = $buffer['iv'];
 
       if ($this->need('p')) {
-        //$this->set_requested('p');
         $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/players.json");
 
         foreach($buffer as $key => $value) {
@@ -3415,8 +3420,6 @@
         $this->_data['e']['_error_fetching_info'] = $buffer['message'];
         return $this::NO_RESPOND;
       }
-      //$this->set_requested('se');
-      $this->_data['s']['map'] = 'discord';
       $this->_data['s']['name'] = $buffer['guild']['name'];
       $this->_data['s']['players'] = $buffer['approximate_presence_count'];
       $this->_data['s']['playersmax'] = $buffer['approximate_member_count'];
@@ -3785,6 +3788,31 @@
   }
   class Query49 extends QueryStatus {  // Windward
     protected $packets = ["\x0b\x00\x00\x00\x03\x0c\x00\x00\x00\x04LGSL\x00"];
+  }
+  class Query50 extends QueryJson { // Titanfall 2 (by tltneon)
+    public function process() {
+      $buffer = $this->fetch("https://northstar.tf/client/servers");
+      if (!$buffer) return $this::NO_RESPOND;
+      $find = array_filter($buffer, function($k) {
+        return $k['id'] == $this->_server->get_ip();
+      });
+      if (!$find) return $this::NO_RESPOND;
+      $find = reset($find);
+
+      $this->_data['s']['name'] = Helper::lgslParseColor($find['name'], '2');
+      $this->_data['s']['players'] = $find['playerCount'];
+      $this->_data['s']['playersmax'] = $find['maxPlayers'];
+      $this->_data['s']['password'] = $find['hasPassword'];
+      $this->_data['s']['map'] = $find['map'];
+      $this->_data['e']['description'] = $find['description'];
+      $this->_data['e']['version'] = $find['version'];
+      $this->_data['e']['region'] = $find['region'];
+      $this->_data['s']['mode'] = $find['playlist'];
+      $this->_data['e']['modInfo'] = array_reduce($find['modInfo']['Mods'], function($a, $c) {
+        return "{$a}\n{$c['Name']} {$c['Version']}";
+      }, "");
+      return $this::SUCCESS;
+    }
   }
 
   class QueryTest extends Query {
