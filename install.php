@@ -344,7 +344,7 @@
 			$output .= check('MySQL', function_exists("mysqli_connect"), 'used for mysql db');
 			$output .= check('PHP 7.1', version_compare(PHP_VERSION, "7.1.0") >= 0, 'errors may occurs if PHP < 7.1');
 			$output .= check('FSOCKOPEN', function_exists("fsockopen") && fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3), 'mainly used for querying');
-			$output .= check('CURL', function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec"), 'optional: for some games');
+			$output .= check('CURL', LGSL::isEnabled("curl"), 'optional: for some games');
 			$output .= check('BZ2', function_exists("bzdecompress"), 'optional: for some games');
 			$output .= check('GD', function_exists("gd"), 'optional: for charts & userbars');
 		}

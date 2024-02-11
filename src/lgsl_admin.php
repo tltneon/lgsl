@@ -26,7 +26,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
   if (!function_exists("fsockopen") && !$lgsl_config['feed']['method']) {
-    if ((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec"))) {
+    if (LGSL::isEnabled("curl")) {
       $output = "<div class='center'><i class='space'></i><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><i class='space'></i></div>".lgsl_help_info(); return;
     } else {
       $output = "<div class='center'><i class='space'></i><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><i class='space'></i></div>".lgsl_help_info(); return;
@@ -432,7 +432,7 @@
         </tr>
         <tr>
           <td> <a href='http://php.net/curl'>CURL</a> </td>
-          <td> {$lgsl_config['text']['enb']}: ".((function_exists("curl_init") && function_exists("curl_setopt") && function_exists("curl_exec")) ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
+          <td> {$lgsl_config['text']['enb']}: ".((LGSL::isEnabled("curl")) ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
           <td> ( {$lgsl_config['text']['crl']} ) </td>
         </tr>
         <tr>

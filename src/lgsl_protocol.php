@@ -29,7 +29,6 @@
     public const ARMA2 = "arma2";
     public const ARMA3 = "arma3";
     public const AVP2 = "avp2";
-    public const AVP2010 = "avp2010";
     public const BEAMMP = "beammp";
     public const BFBC2 = "bfbc2";
     public const BFVIETNAM = "bfvietnam";
@@ -192,140 +191,139 @@
     }
     static public function lgslList($type = null) {
       $list = [
-        "aarmy" => ["09", "Americas Army"],
-        "aarmy3" => ["26", "Americas Army 3"],
-        "arcasimracing" => ["16", "Arca Sim Racing"],
-        "arma" => ["09", "ArmA: Armed Assault"],
-        "arma2" => ["09", "ArmA 2"],
-        "arma3" => ["05", "ArmA 3 / DayZ"],
-        "avp2" => ["03", "Aliens VS. Predator 2"],
-        "avp2010" => ["31", "Aliens VS. Predator (2010 By Rebellion)"],
-        self::BEAMMP => ["Query48", "BeamMP"],
-        "bfbc2" => ["30", "Battlefield Bad Company 2"],
-        "bfvietnam" => ["09", "Battlefield Vietnam"],
-        "bf1942" => ["03", "Battlefield 1942"],
-        "bf2" => ["06", "Battlefield 2"],
-        "bf3" => ["30", "Battlefield 3"],
-        "bf4" => ["06", "Battlefield 4"],
-        "bf2142" => ["06", "Battlefield 2142"],
-        "callofduty" => ["02", "Call Of Duty"],
-        "callofdutybo3" => ["05", "Call Of Duty: Black Ops 3"],
-        "callofdutyiw" => ["02", "Call Of Duty (IW5, IW6x)"],
-        "callofdutyuo" => ["02", "Call Of Duty: United Offensive"],
-        "callofdutywaw" => ["02", "Call Of Duty: World at War"],
-        "callofduty2" => ["02", "Call Of Duty 2"],
-        "callofduty4" => ["02", "Call Of Duty 4 / CoD4X"],
-        "cncrenegade" => ["03", "Command and Conquer: Renegade"],
-        "conanexiles" => ["05", "Conan Exiles"],
-        "cryofall" => ["Query44", "Cryofall"],
-        "crysis" => ["06", "Crysis"],
-        "crysiswars" => ["06", "Crysis Wars"],
-        "cs2d" => ["29", "Counter-Strike 2D"],
-        "cube" => ["24", "Cube Engine"],
-        "discord" => ["36", "Discord"],
-        "doomskulltag" => ["27", "Doom - Skulltag"],
-        "doomzdaemon" => ["28", "Doom - ZDaemon"],
-        "doom3" => ["10", "Doom 3"],
-        "dh2005" => ["09", "Deer Hunter 2005"],
-        "eco" => ["40", "ECO"],
-        "factorio" => ["Query42", "Factorio"],
-        "had2" => ["03", "Hidden and Dangerous 2"],
-        "halflife" => ["05", "Half-life Steam Protocol (CS 1.6, etc)"],
-        "halflifewon" => ["05", "Half-Life WON Protocol [OLD] (CS 1.5)"],
-        "halo" => ["03", "Halo"],
-        "il2" => ["03", "IL-2 Sturmovik"],
-        "farcry" => ["08", "Far Cry"],
-        "farmsim" => ["40", "Farming Simulator"],
-        "fear" => ["09", "F.E.A.R."],
-        "fivem" => ["35", "FiveM / RedM"],
-        "flashpoint" => ["03", "Operation Flashpoint"],
-        "freelancer" => ["14", "Freelancer"],
-        "frontlines" => ["20", "Frontlines: Fuel Of War"],
-        "f1c9902" => ["03", "F1 Challenge 99-02"],
-        "gamespy1" => ["03", "Generic GameSpy 1"],
-        "gamespy2" => ["09", "Generic GameSpy 2"],
-        "gamespy3" => ["06", "Generic GameSpy 3"],
-        "ghostrecon" => ["19", "Ghost Recon"],
-        "graw" => ["06", "Ghost Recon: Advanced Warfighter"],
-        "graw2" => ["09", "Ghost Recon: Advanced Warfighter 2"],
-        "gtac" => ["Query45", "GTA Connected"],
-        "gtr2" => ["15", "GTR 2"],
-        "jediknight2" => ["02", "JediKnight 2: Jedi Outcast"],
-        "jediknightja" => ["02", "JediKnight: Jedi Academy"],
-        "jc2mp" => ["06", "Just Cause 2 Multiplayer"],
-        "killingfloor" => ["13", "Killing Floor"],
-        "kingpin" => ["03", "Kingpin: Life of Crime"],
-        "m2mp" => ["39", "Mafia II Multiplayer"],
-        "mafiac" => ["Query45", "Mafia Connected"],
-        "minecraft" => ["06", "Minecraft"],
-        "mohaa" => ["03", "Medal of Honor: Allied Assault"],
-        "mohaab" => ["03", "Medal of Honor: Allied Assault Breakthrough"],
-        "mohaas" => ["03", "Medal of Honor: Allied Assault Spearhead"],
-        "mohpa" => ["03", "Medal of Honor: Pacific Assault"],
-        "mta" => ["08", "Multi Theft Auto"],
-        "mumble" => ["Query43", "Mumble"],
-        "nascar2004" => ["09", "Nascar Thunder 2004"],
-        "necesse" => ["Query47", "Necesse"],
-        "neverwinter" => ["09", "NeverWinter Nights"],
-        "neverwinter2" => ["09", "NeverWinter Nights 2"],
-        "nexuiz" => ["02", "Nexuiz"],
-        "openttd" => ["22", "Open Transport Tycoon Deluxe"],
-        "painkiller" => ["08", "PainKiller"],
-        "plainsight" => ["32", "Plain Sight"],
-        "prey" => ["10", "Prey"],
-        "quakeworld" => ["07", "Quake World"],
-        "quakewars" => ["10", "Enemy Territory: Quake Wars"],
-        "quake2" => ["02", "Quake 2"],
-        "quake3" => ["02", "Quake 3"],
-        "quake4" => ["10", "Quake 4"],
-        "ragemp" => ["34", "Rage:MP"],
-        "ravenshield" => ["04", "Raven Shield"],
-        "redorchestra" => ["13", "Red Orchestra"],
-        "rfactor" => ["16", "rFactor"],
-        "samp" => ["12", "San Andreas Multiplayer"],
-        "savage" => ["17", "Savage"],
-        "savage2" => ["18", "Savage 2"],
-        "serioussam" => ["03", "Serious Sam"],
-        "serioussam2" => ["09", "Serious Sam 2"],
-        "scum" => ["37", "SCUM"],
-        "sf" => ["Query41", "Satisfactory"],
-        "shatteredh" => ["05", "Shattered Horizon"],
-        "sof2" => ["02", "Soldier of Fortune 2"],
-        "soldat" => ["08", "Soldat"],
-        "source" => ["05", "Source Protocol (Half-Life 2, etc.)"],
-        "srb2" => ["Query46", "Sonic Robo Blast 2"],
-        "stalker" => ["06", "S.T.A.L.K.E.R."],
-        "stalkercop" => ["09", "S.T.A.L.K.E.R. Call of Pripyat"],
-        "stalkercs" => ["09", "S.T.A.L.K.E.R. Clear Sky"],
-        "startrekef" => ["02", "StarTrek Elite-Force"],
-        "starwarsbf" => ["09", "Star Wars: Battlefront"],
-        "starwarsbf2" => ["09", "Star Wars: Battlefront 2"],
-        "starwarsrc" => ["09", "Star Wars: Republic Commando"],
-        "swat4" => ["03", "SWAT 4"],
-        "teeworlds" => ["21", "Teeworlds"],
-        "terraria" => ["38", "Terraria"],
-        "tribes" => ["23", "Tribes (Starsiege)"],
-        "tribes2" => ["25", "Tribes 2"],
-        "tribesv" => ["09", "Tribes Vengeance"],
-        "ts" => ["33", "Teamspeak"],
-        "ts3" => ["33", "Teamspeak 3"],
-        "teaspeak" => ["33", "Teaspeak"],
-        "warsow" => ["02", "Warsow"],
-        "warsowold" => ["02", "Warsow (v0.4.2 <)"],
-        "urbanterror" => ["02", "UrbanTerror"],
-        "ut" => ["03", "Unreal Tournament"],
-        "ut2003" => ["13", "Unreal Tournament 2003"],
-        "ut2004" => ["13", "Unreal Tournament 2004"],
-        "ut3" => ["11", "Unreal Tournament 3"],
-        "vcmp" => ["12", "Vice City Multiplayer"],
-        "vietcong" => ["03", "Vietcong"],
-        "vietcong2" => ["09", "Vietcong 2"],
-        "windward" => ["Query49", "Windward"],
-        "wolfet" => ["02", "Wolfenstein: Enemy Territory"],
-        "wolfrtcw" => ["02", "Wolfenstein: Return To Castle Wolfenstein"],
-        "wolf2009" => ["10", "Wolfenstein (2009 By Raven)"],
-        "wow" => ["QueryStatus", "World of Warcraft"],
-        "test" => ["01", "~ Test (For PHP Developers)"],
+        self::AARMY         => ["09", "Americas Army"],
+        self::AARMY3        => ["26", "Americas Army 3"],
+        self::ARCASIMRACING => ["16", "Arca Sim Racing"],
+        self::ARMA          => ["09", "ArmA: Armed Assault"],
+        self::ARMA2         => ["09", "ArmA 2"],
+        self::ARMA3         => ["05", "ArmA 3 / DayZ"],
+        self::AVP2          => ["03", "Aliens VS. Predator 2"],
+        self::BEAMMP        => ["Query48", "BeamMP"],
+        self::BFBC2         => ["30", "Battlefield Bad Company 2"],
+        self::BFVIETNAM     => ["09", "Battlefield Vietnam"],
+        self::BF1942        => ["03", "Battlefield 1942"],
+        self::BF2           => ["06", "Battlefield 2"],
+        self::BF3           => ["30", "Battlefield 3"],
+        self::BF4           => ["06", "Battlefield 4"],
+        self::BF2142        => ["06", "Battlefield 2142"],
+        self::CALLOFDUTY    => ["02", "Call Of Duty"],
+        self::CALLOFDUTYBO3 => ["05", "Call Of Duty: Black Ops 3"],
+        self::CALLOFDUTYIW  => ["02", "Call Of Duty (IW5, IW6x)"],
+        self::CALLOFDUTYUO  => ["02", "Call Of Duty: United Offensive"],
+        self::CALLOFDUTYWAW => ["02", "Call Of Duty: World at War"],
+        self::CALLOFDUTY2   => ["02", "Call Of Duty 2"],
+        self::CALLOFDUTY4   => ["02", "Call Of Duty 4 / CoD4X"],
+        self::CNCRENEGADE   => ["03", "Command and Conquer: Renegade"],
+        self::CONANEXILES   => ["05", "Conan Exiles"],
+        self::CRYOFALL      => ["Query44", "Cryofall"],
+        self::CRYSIS        => ["06", "Crysis"],
+        self::CRYSISWARS    => ["06", "Crysis Wars"],
+        self::CS2D          => ["29", "Counter-Strike 2D"],
+        self::CUBE          => ["24", "Cube Engine"],
+        self::DISCORD       => ["Query36", "Discord"],
+        self::DOOMSKULLTAG  => ["27", "Doom - Skulltag"],
+        self::DOOMZDAEMON   => ["28", "Doom - ZDaemon"],
+        self::DOOM3         => ["10", "Doom 3"],
+        self::DH2005        => ["09", "Deer Hunter 2005"],
+        self::ECO           => ["Query40", "ECO"],
+        self::FACTORIO      => ["Query42", "Factorio"],
+        self::HAD2          => ["03", "Hidden and Dangerous 2"],
+        self::HALFLIFE      => ["05", "Half-Life Steam Protocol (CS 1.6, etc)"],
+        self::HALFLIFEWON   => ["05", "Half-Life WON Protocol [OLD] (CS 1.5)"],
+        self::HALO          => ["03", "Halo"],
+        self::IL2           => ["03", "IL-2 Sturmovik"],
+        self::FARCRY        => ["08", "Far Cry"],
+        self::FARMSIM       => ["40", "Farming Simulator 2019"],
+        self::FEAR          => ["09", "F.E.A.R."],
+        self::FIVEM         => ["Query35", "FiveM / RedM"],
+        self::FLASHPOINT    => ["03", "Operation Flashpoint"],
+        self::FREELANCER    => ["14", "Freelancer"],
+        self::FRONTLINES    => ["20", "Frontlines: Fuel Of War"],
+        self::F1C9902       => ["03", "F1 Challenge 99-02"],
+        self::GAMESPY1      => ["03", "Generic GameSpy 1"],
+        self::GAMESPY2      => ["09", "Generic GameSpy 2"],
+        self::GAMESPY3      => ["06", "Generic GameSpy 3"],
+        self::GHOSTRECON    => ["19", "Ghost Recon"],
+        self::GRAW          => ["06", "Ghost Recon: Advanced Warfighter"],
+        self::GRAW2         => ["09", "Ghost Recon: Advanced Warfighter 2"],
+        self::GTAC          => ["Query45", "GTA Connected"],
+        self::GTR2          => ["15", "GTR 2"],
+        self::JEDIKNIGHT2   => ["02", "JediKnight 2: Jedi Outcast"],
+        self::JEDIKNIGHTJA  => ["02", "JediKnight: Jedi Academy"],
+        self::JC2MP         => ["06", "Just Cause 2 Multiplayer"],
+        self::KILLINGFLOOR  => ["13", "Killing Floor"],
+        self::KINGPIN       => ["03", "Kingpin: Life of Crime"],
+        self::M2MP          => ["Query39", "Mafia II Multiplayer"],
+        self::MAFIAC        => ["Query45", "Mafia Connected"],
+        self::MINECRAFT     => ["06", "Minecraft"],
+        self::MOHAA         => ["03", "Medal of Honor: Allied Assault"],
+        self::MOHAAB        => ["03", "Medal of Honor: Allied Assault Breakthrough"],
+        self::MOHAAS        => ["03", "Medal of Honor: Allied Assault Spearhead"],
+        self::MOHPA         => ["03", "Medal of Honor: Pacific Assault"],
+        self::MTA           => ["08", "Multi Theft Auto"],
+        self::MUMBLE        => ["Query43", "Mumble"],
+        self::NASCAR2004    => ["09", "Nascar Thunder 2004"],
+        self::NECESSE       => ["Query47", "Necesse"],
+        self::NEVERWINTER   => ["09", "NeverWinter Nights"],
+        self::NEVERWINTER2  => ["09", "NeverWinter Nights 2"],
+        self::NEXUIZ        => ["02", "Nexuiz"],
+        self::OPENTTD       => ["22", "Open Transport Tycoon Deluxe"],
+        self::PAINKILLER    => ["08", "PainKiller"],
+        self::PLAINSIGHT    => ["Query32", "Plain Sight"],
+        self::PREY          => ["10", "Prey"],
+        self::QUAKEWORLD    => ["07", "Quake World"],
+        self::QUAKEWARS     => ["10", "Enemy Territory: Quake Wars"],
+        self::QUAKE2        => ["02", "Quake 2"],
+        self::QUAKE3        => ["02", "Quake 3"],
+        self::QUAKE4        => ["10", "Quake 4"],
+        self::RAGEMP        => ["Query34", "Rage:MP"],
+        self::RAVENSHIELD   => ["04", "Raven Shield"],
+        self::REDORCHESTRA  => ["13", "Red Orchestra"],
+        self::RFACTOR       => ["16", "rFactor"],
+        self::SAMP          => ["12", "San Andreas Multiplayer"],
+        self::SAVAGE        => ["17", "Savage"],
+        self::SAVAGE2       => ["18", "Savage 2"],
+        self::SERIOUSSAM    => ["03", "Serious Sam"],
+        self::SERIOUSSAM2   => ["09", "Serious Sam 2"],
+        self::SCUM          => ["Query37", "SCUM"],
+        self::SF            => ["Query41", "Satisfactory"],
+        self::SHATTEREDH    => ["05", "Shattered Horizon"],
+        self::SOF2          => ["02", "Soldier of Fortune 2"],
+        self::SOLDAT        => ["08", "Soldat"],
+        self::SOURCE        => ["05", "Source Protocol (Half-Life 2, etc.)"],
+        self::SRB2          => ["Query46", "Sonic Robo Blast 2"],
+        self::STALKER       => ["06", "S.T.A.L.K.E.R."],
+        self::STALKERCOP    => ["09", "S.T.A.L.K.E.R. Call of Pripyat"],
+        self::STALKERCS     => ["09", "S.T.A.L.K.E.R. Clear Sky"],
+        self::STARTREKEF    => ["02", "StarTrek Elite-Force"],
+        self::STARWARSBF    => ["09", "Star Wars: Battlefront"],
+        self::STARWARSBF2   => ["09", "Star Wars: Battlefront 2"],
+        self::STARWARSRC    => ["09", "Star Wars: Republic Commando"],
+        self::SWAT4         => ["03", "SWAT 4"],
+        self::TEEWORLDS     => ["21", "Teeworlds"],
+        self::TERRARIA      => ["Query38", "Terraria"],
+        self::TRIBES        => ["23", "Tribes (Starsiege)"],
+        self::TRIBES2       => ["25", "Tribes 2"],
+        self::TRIBESV       => ["09", "Tribes Vengeance"],
+        self::TS            => ["Query33", "Teamspeak"],
+        self::TS3           => ["Query33", "Teamspeak 3"],
+        self::TEASPEAK      => ["Query33", "Teaspeak"],
+        self::WARSOW        => ["02", "Warsow"],
+        self::WARSOWOLD     => ["02", "Warsow (v0.4.2 <)"],
+        self::URBANTERROR   => ["02", "UrbanTerror"],
+        self::UT            => ["03", "Unreal Tournament"],
+        self::UT2003        => ["13", "Unreal Tournament 2003"],
+        self::UT2004        => ["13", "Unreal Tournament 2004"],
+        self::UT3           => ["11", "Unreal Tournament 3"],
+        self::VCMP          => ["12", "Vice City Multiplayer"],
+        self::VIETCONG      => ["03", "Vietcong"],
+        self::VIETCONG2     => ["09", "Vietcong 2"],
+        self::WINDWARD      => ["Query49", "Windward"],
+        self::WOLFET        => ["02", "Wolfenstein: Enemy Territory"],
+        self::WOLFRTCW      => ["02", "Wolfenstein: Return To Castle Wolfenstein"],
+        self::WOLF2009      => ["10", "Wolfenstein (2009 By Raven)"],
+        self::WOW           => ["QueryStatus", "World of Warcraft"],
+        self::TEST          => ["QueryTest", "~ Test (For PHP Developers)"],
       ];
       return $list[$type] ?? $list;
     }
@@ -438,12 +436,12 @@
 			$this->_server_timestamp = $this->_server->get_timestamps();
 		}
     public function query() {
-			if ($this->_server->get_type() === "test") {
+			/*if ($this->_server->get_type() === "test") {
 				$status = $this->lgsl_query_01();
 				$this->_server->set_status($status);
 				$this->set_requested();
 				return;
-			}
+			}*/
       $protocol = $this->lgsl_connection_type($this->_server->get_type());
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
@@ -475,56 +473,6 @@
     
     public function lgsl_query_err($type = null) {
       return $this->_server->set_name("LGSL PROBLEM: FUNCTION DOES NOT EXIST FOR TYPE {$type}");
-    }
-    public function lgsl_query_01() {
-      //---------------------------------------------------------+
-      //  PROTOCOL FOR DEVELOPING WITHOUT USING LIVE SERVERS TO HELP ENSURE RETURNED
-      //  DATA IS SANITIZED AND THAT LONG SERVER AND PLAYER NAMES ARE HANDLED PROPERLY
-  
-      $server['s'] = [
-      "game"       => "test_game",
-      "name"       => "test_ServerNameThatsOften'Really'LongAndCanHaveSymbols<hr />ThatWill\"Screw\"UpHtmlUnlessEntitied",
-      "map"        => "test_map",
-      "players"    => rand(0,  16),
-      "playersmax" => rand(16, 32),
-      "password"   => rand(0,  1)];
-  
-      //---------------------------------------------------------+
-  
-      $server['e'] = [
-      "testextra1" => "normal",
-      "testextra2" => 123,
-      "testextra3" => time(),
-      "testextra4" => "",
-      "testextra5" => "<b>Setting<hr />WithHtml</b>",
-      "testextra6" => "ReallyLongSettingLikeSomeMapCyclesThatHaveNoSpacesAndCauseThePageToGoReallyWideIfNotBrokenUp"];
-  
-      //---------------------------------------------------------+
-  
-      $server['p']['0']['name']  = "Normal";
-      $server['p']['0']['score'] = "12";
-      $server['p']['0']['ping']  = "34";
-  
-      $server['p']['1']['name']  = "\xc3\xa9\x63\x68\x6f\x20\xd0\xb8-d0\xb3\xd1\x80\xd0\xbe\xd0\xba"; // UTF PLAYER NAME
-      $server['p']['1']['score'] = "56";
-      $server['p']['1']['ping']  = "78";
-  
-      $server['p']['2']['name']  = "One&<Two>&Three&\"Four\"&'Five'";
-      $server['p']['2']['score'] = "90";
-      $server['p']['2']['ping']  = "12";
-  
-      $server['p']['3']['name']  = "ReallyLongPlayerNameBecauseTheyAreUberCoolAndAreInFiveClans";
-      $server['p']['3']['score'] = "90";
-      $server['p']['3']['ping']  = "12";
-  
-      //---------------------------------------------------------+
-  
-      if (rand(0, 10) == 5) { $server['p'] = []; } // RANDOM NO PLAYERS
-      if (rand(0, 10) == 5) { return FALSE; }           // RANDOM GOING OFFLINE
-  
-      //---------------------------------------------------------+
-      $this->_server->from_array($server);
-      return TRUE;
     }
     public function lgsl_query_02() {
       $server = $this->_server->to_array();
@@ -3201,396 +3149,16 @@
 			
       return TRUE;
     }
-    public function lgsl_query_31() {
-      $server = $this->_server->to_array();
-      //---------------------------------------------------------+
-      //  AVP 2010 ONLY ROUGHLY FOLLOWS THE SOURCE QUERY FORMAT
-      //  SERVER RULES ARE ON THE END OF THE INFO RESPONSE
-  
-      $this->_fp_write("\xFF\xFF\xFF\xFF\x54Source Engine Query\x00");
-  
-      $buffer = $this->_fp_read();
-  
-      if (!$buffer) { return FALSE; }
-  
-      $buffer->skip(5); // REMOVE HEADER
-  
-      $server['e']['netcode']     = $buffer->cutByteOrd();
-      $server['s']['name']        = $buffer->cutString();
-      $server['s']['map']         = $buffer->cutString();
-      $server['s']['game']        = $buffer->cutString();
-      $server['e']['description'] = $buffer->cutString();
-      $server['e']['appid']       = $buffer->cutByteUnpack(2, "S");
-      $server['s']['players']     = $buffer->cutByteOrd();
-      $server['s']['playersmax']  = $buffer->cutByteOrd();
-      $server['e']['bots']        = $buffer->cutByteOrd();
-      $server['e']['dedicated']   = $buffer->cutByte();
-      $server['e']['os']          = $buffer->cutByte();
-      $server['s']['password']    = $buffer->cutByteOrd();
-      $server['e']['anticheat']   = $buffer->cutByteOrd();
-      $server['e']['version']     = $buffer->cutString();
-  
-      $buffer->skip(1);
-      $server['e']['hostport']     = $buffer->cutByteUnpack(2, "S");
-      $server['e']['friendlyfire'] = $buffer->char(124);
-  
-      // DOES NOT RETURN PLAYER INFORMATION
-  
-      //---------------------------------------------------------+
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_32() {
-      $server = $this->_server->to_array();
-      //---------------------------------------------------------+
-  
-      $this->_fp_write("\x05\x00\x00\x01\x0A");
-  
-      $buffer = $this->_fp_read();
-  
-      if (!$buffer) { return FALSE; }
-  
-      $buffer = substr($buffer, 5); // REMOVE HEADER
-  
-      $server['s']['name']       = $buffer->cutPascal();
-      $server['s']['map']        = $buffer->cutPascal();
-      $server['s']['players']    = $buffer->cutByteOrd();
-      $server['s']['playersmax'] = 0; // HELD ON MASTER
-  
-      // DOES NOT RETURN PLAYER INFORMATION
-  
-      //---------------------------------------------------------+
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_33() {
-      $server = $this->_server->to_array();
-      $buffer = $this->_fp_read();
-			if (!$buffer) { return FALSE; }
-      if ($server['b']['type'] === 'teaspeak') {
-        if ($buffer->has('TeaSpeak') && $this->_fp_read()->has('TeaSpeak')) {
-          return FALSE;
-        }
-      } else {
-        if (!$buffer->has('TS')) {
-          return FALSE;
-        }
-      }
-      $ver = $server['b']['type'] === 'ts' ? 0 : 1;
-      $param = [
-				['sel ', 'si', "\r\n", 'pl'],
-				['use port=', 'serverinfo', ' ', 'clientlist -country', 'channellist -topic']
-			];
-      if ($ver) { $this->_fp_read(); }
-      $this->_fp_write("{$param[$ver][0]}{$server['b']['c_port']}\n"); // select virtualserver
-      if (strtoupper($this->_fp_read()->get(-4, -2)) != 'OK') { return FALSE; }
-			
-			$getPackets = function($message) {
-				$this->_fp_write($message);
-				$buffer = $this->_fp_read();
-				if (!$buffer || $buffer->get(0, 5) === 'error') { return FALSE; }
-				while (strtoupper($buffer->get(-4, -2)) != 'OK') {
-					$part = $this->_fp_read();
-					if ($part && $part->get(0, 5) != 'error') { $buffer->add($part); } else { break; }
-				}
-				return $buffer;
-			};
-
-			$buffer = $getPackets("{$param[$ver][1]}\n"); // request serverinfo
-      while ($val = $buffer->cutString(7 + 7 * $ver, $param[$ver][2])) {
-        $key = $this->lgsl_cut_string($val, 0, '='); $items[$key] = $val;
-      }
-      if (!isset($items['name'])) return FALSE;
-      $server['s']['name']         = $ver ? Helper::lgslUnescape($items['name']) : $items['name'];
-      $server['s']['map']          = $server['b']['type'];
-      $server['s']['players']      = (int) ($items[$ver ? 'clientsonline' : 'currentusers']);
-      $server['s']['playersmax']   = (int) ($items[$ver ? 'maxclients' : 'maxusers']);
-      $server['s']['password']     = (int) ($items[$ver ? 'flag_password' : 'password']);
-      $server['e']['platform']     = $items['platform'];
-      $server['e']['motd']         = Helper::lgslParseColor($ver ? Helper::lgslUnescape($items['welcomemessage']) : $items['welcomemessage'], 'bbcode');
-      $server['e']['uptime']       = Helper::lgslTime($items['uptime']);
-      $server['e']['banner']       = Helper::lgslUnescape($items['hostbanner_url']);
-      $server['e']['channelscount']= $items[$ver ? 'channelsonline' : 'currentchannels'];
-      if ($ver) { $server['e']['version'] = Helper::lgslUnescape($items['version']); }
-
-      if ($this->_lgsl_need['p'] && $server['s']['players'] > 0) {
-				$buffer = $getPackets("{$param[$ver][3]}\n"); // request playerlist
-
-        $i = 0;
-        if ($ver) {
-          while ($items = $buffer->cutString(0, '|')) {
-            $this->lgsl_cut_string($items, 0, 'e='); $name = $this->lgsl_cut_string($items, 0, ' ');
-            if (substr($name, 0, 15) === 'Unknown\sfrom\s') { continue; }
-            $server['p'][$i]['name'] = Helper::lgslUnescape($name); $this->lgsl_cut_string($items, 0, 'ry');
-            $server['p'][$i]['country'] = substr($items, 0, 1) === '=' ? substr($items, 1, 2) : ''; $i++;
-          }
-        } else {
-          $buffer = substr($buffer, 89, -4);
-          while ($items = $buffer->cutString(0, "\r\n")) {
-            $items = explode("\t", $items);
-            $server['p'][$i]['name'] = substr($items[14], 1, -1);
-            $server['p'][$i]['ping'] = $items[7];
-            $server['p'][$i]['time'] = Helper::lgslTime($items[8]); $i++;
-          }
-        }
-      }
-
-      if ($this->_lgsl_need['e'] && $ver) {
-				$buffer = $getPackets("{$param[$ver][4]}\n"); // request channellist
-        $lvl = [];
-        $server['e']['channels'] = "<style>.gray{color:gray;}</style><div style='text-align: left !important;'>";
-        while ($items = $buffer->cutString(0, '|')) {
-          $cid = str_pad($this->lgsl_cut_string($items, 4, ' '), 5, '0', STR_PAD_LEFT);
-          $pid = str_pad($this->lgsl_cut_string($items, 4, ' '), 5, '0', STR_PAD_LEFT);
-          $this->lgsl_cut_string($items, 0, 'e=');
-          $name = $this->lgsl_cut_string($items, 0, ' ');
-          $chars = "";
-          if ((int) $pid == 0) {
-            $lvl = [$cid];
-          } else {
-            $i = count($lvl)-1;
-            while ($i > -1) {
-              if ($lvl[$i] == $pid) {
-                $lvl = array_slice($lvl, 0, $i+1);
-                $lvl[] = $cid;
-                $chars = str_repeat("|--", $i+1);
-                break;
-              }
-              $i--;
-            }
-            if ($i == -1)
-              $lvl = [$cid];
-          }
-          $server['e']['channels'] .= "<span class='gray'>{$chars}</span> " . preg_replace("/(\[\*?[clr]spacer\d{0,10}\])/", "", Helper::lgslUnescape($name)) . "\n";
-        }
-        $server['e']['channels'] .= "</div>";
-      }
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_34() {
-			$this->_lgsl_fp->write("https://cdn.rage.mp/master/");
-			$buffer = $this->_lgsl_fp->readJson();
-			if (!$buffer) return FALSE;
-      $server = $this->_server->to_array();  
-      if (isset($buffer["{$server['b']['ip']}:{$server['b']['c_port']}"])) {
-        $value = $buffer["{$server['b']['ip']}:{$server['b']['c_port']}"];
-        $server['s']['name']       = $value['name'];
-        $server['s']['map']        = "ragemp";
-        $server['s']['players']    = $value['players'];
-        $server['s']['playersmax'] = $value['maxplayers'];
-        $server['e']['url']        = $value['url'];
-        $server['e']['peak']       = $value['peak'];
-        $server['s']['mode']       = $value['gamemode'];
-        $server['e']['lang']       = $value['lang'];
-        $this->set_requested();
-        $this->_server->from_array($server);
-        return TRUE;
-      }
-      return FALSE;
-    }
-    public function lgsl_query_35() {
-			$this->_lgsl_fp->write("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/dynamic.json");
-			$buffer = $this->_lgsl_fp->readJson();
-
-      if (!$buffer) return FALSE;
-      $server = $this->_server->to_array();
-      $server['s']['name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem');
-      $server['s']['players'] = $buffer['clients'];
-      $server['s']['playersmax'] = $buffer['sv_maxclients'];
-      $server['s']['map'] = $buffer['mapname'];
-      if ($server['s']['map'] == 'redm-map-one') {
-        $server['s']['game'] = 'redm';
-      }
-      $server['e']['gametype'] = $buffer['gametype'];
-      $server['e']['version'] = $buffer['iv'];
-
-      if ($this->_lgsl_need['p']) {
-        $this->set_requested('p');
-
-				$this->_lgsl_fp->write("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/players.json");
-				$buffer = $this->_lgsl_fp->readJson();
-
-        foreach($buffer as $key => $value) {
-          $server['p'][$key]['name'] = $value['name'];
-          $server['p'][$key]['ping'] = $value['ping'];
-        }
-      }
-      $this->set_requested('se');
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_36() { // Discord
-			$this->_lgsl_fp->write("https://discord.com/api/v9/invites/{$this->_server->get_ip()}?with_counts=true");
-			$buffer = $this->_lgsl_fp->readJson();
-      if (!$buffer) return false;
-      if (isset($buffer['message'])) {
-        $server['e']['_error_fetching_info'] = $buffer['message'];
-        return FALSE;
-      }
-      $server = $this->_server->to_array();
-      $this->set_requested('se');
-      $server['s']['map'] = 'discord';
-      $server['s']['name'] = $buffer['guild']['name'];
-      $server['s']['players'] = $buffer['approximate_presence_count'];
-      $server['s']['playersmax'] = $buffer['approximate_member_count'];
-      $server['e']['id'] = $buffer['guild']['id'];
-      $server['e']['expires_at'] = $buffer['expires_at'] ? $buffer['expires_at'] : '--';
-      $server['e']['members'] = $buffer['approximate_member_count'];
-      $server['e']['premium_subscriptions'] = $buffer['guild']['premium_subscription_count'];
-      if($buffer['guild']['description']) {
-        $server['e']['description'] = $buffer['guild']['description'];
-      }
-      if (isset($buffer['guild']['welcome_screen'])) {
-        if ($buffer['guild']['welcome_screen']['description']) $server['e']['description'] = $buffer['guild']['welcome_screen']['description'];
-        if ($buffer['guild']['welcome_screen']['welcome_channels'])
-        $server['e']['welcome_channels'] = array_reduce($buffer['guild']['welcome_screen']['welcome_channels'], function($a, $c) {
-          return "{$a}\n{$c['emoji_name']} {$c['description']}";
-        }, "");
-      }
-      $server['e']['features'] = implode(', ', $buffer['guild']['features'] ?? []);
-      $server['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
-      if (isset($buffer['inviter'])) {
-        $server['e']['inviter'] = "{$buffer['inviter']['username']}#{$buffer['inviter']['discriminator']}";
-      }
-  
-      if ($this->_lgsl_need['p']) {
-        $this->set_requested('p');
-  
-				$this->_lgsl_fp->write("https://discordapp.com/api/guilds/{$server['e']['id']}/widget.json");
-				$buffer = $this->_lgsl_fp->readJson();
-  
-        if (isset($buffer['code']) and $buffer['code'] == 0) {
-          $server['e']['_error_fetching_users'] = $buffer['message'];
-        }
-  
-        if (isset($buffer['channels'])) {
-          foreach ($buffer['channels'] as $key => $value) {
-            $server['e']["channel{$key}"] = $value['name'];
-          }
-        }
-  
-        if (isset($buffer['members'])) {
-          foreach ($buffer['members'] as $key => $value) {
-            $server['p'][$key]['name'] = $value['username'];
-            $server['p'][$key]['status'] = $value['status'];
-            $server['p'][$key]['game'] = isset($value['game']) ? $value['game']['name'] : '--';
-          }
-        }
-      }
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_37() {
-			$this->_lgsl_fp->write("https://api.hellbz.de/scum/api.php?address={$this->_server->get_ip()}&port={$this->_server->get_c_port()}");
-			$buffer = $this->_lgsl_fp->readJson();
-
-      if (!$buffer['success']) return FALSE;
-
-      $server = $this->_server->to_array();
-      $server['s']['name']        = $buffer['data'][0]['name'];
-      $server['s']['map']         = "SCUM";
-      $server['s']['players']     = $buffer['data'][0]['players'];
-      $server['s']['playersmax']  = $buffer['data'][0]['players_max'];
-      $server['e']['time']        = $buffer['data'][0]['time'];
-      $server['e']['version']     = $buffer['data'][0]['version'];
-      $this->set_requested();
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_38() {
-			$this->_lgsl_fp->write("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/v2/server/status?players=true");
-			$buffer = $this->_lgsl_fp->readJson();
-
-			if (!$buffer) return false;
-      if ($buffer['status'] != '200') {
-				$server = $this->_server->to_array();
-        $server['e']['_error2']    = $buffer['error'];
-				$this->_server->from_array($server);
-        return TRUE;
-      }
-      $server = $this->_server->to_array();
-      $server['s']['name']        = $buffer['name'];
-      $server['s']['map']         = $buffer['world'];
-      $server['s']['players']     = $buffer['playercount'];
-      $server['s']['playersmax']  = $buffer['maxplayers'];
-      $server['s']['password']    = $buffer['serverpassword'];
-      $server['e']['uptime']      = $buffer['uptime'];
-      $server['e']['version']     = $buffer['serverversion'];
-      $this->set_requested();
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_39() {
-      $this->_fp_write("M2MPi");
-      $buffer = $this->_fp_read(1024);  
-      if (!$buffer) return FALSE;  
-      $buffer->skip(4);
-      $server = $this->_server->to_array();
-      $server['s']['name']        = $buffer->cutPascal(1, -1);
-      $server['s']['map']         = "Empire Bay";
-      $server['s']['players']     = $buffer->cutPascal(1, -1);
-      $server['s']['playersmax']  = $buffer->cutPascal(1, -1);
-      $server['e']['gamemode']    = $buffer->cutPascal(1, -1);
-      $this->set_requested();
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_40() { // HTTP server status
+    public function lgsl_query_40() { // Farming Simulator 2019
 			$server = $this->_server->to_array();
-			$urls = [
-				'farmsim' => "http://{$server['b']['ip']}:{$server['b']['q_port']}/index.html",
-				'eco' => "http://{$server['b']['ip']}:{$server['b']['q_port']}/info"
-      ];
-			$this->_fp_write($urls[$server['b']['type']]);
+			$this->_fp_write("http://{$server['b']['ip']}:{$server['b']['q_port']}/index.html");
 			$buffer = $this->_fp_read_raw();
 			if (!$buffer) return FALSE;
 			$this->set_requested();
-			switch ($server['b']['type']) {
-				// Farming Simulator 2022
-				case 'farmsim': {
-					preg_match('/<h2>Login to [\w\d\s\/\\:()&@"\'-]+<\/h2>/', $buffer, $name);
-
-					$server['s']['name']        = substr($name[0], 12, strlen($name[0])-17);
-					$server['s']['map']         = "Farm";
-					$this->_server->from_array($server);
-
-					return strpos($buffer, 'status-indicator online') !== FALSE;
-				}
-				// ECO
-				case 'eco': {
-					$buffer = json_decode($buffer, true);
-
-					$server['s']['name']        = strip_tags($buffer['Description']);
-					$server['s']['map']         = "World";
-					$server['s']['players']     = $buffer['OnlinePlayers'];
-					$server['s']['playersmax']  = $buffer['TotalPlayers'];
-					$server['s']['password']    = (int) $buffer['HasPassword'];
-					
-					if ($server['s']['players']) {
-						foreach ($buffer['OnlinePlayersNames'] as $key => $value) {
-							$server['p'][$key]['name'] = $value;
-						}
-					}
-					
-					$server['e']['Laws']    = $buffer['Laws'];
-					$server['e']['Plants']    = $buffer['Plants'];
-					$server['e']['Animals']    = $buffer['Animals'];
-					$server['e']['Version']    = $buffer['Version'];
-					$server['e']['Discord']    = $buffer['DiscordAddress'];
-					$server['e']['JoinUrl']    = $buffer['JoinUrl'];
-					$server['e']['WorldSize']    = $buffer['WorldSize'];
-					$server['e']['EconomyDesc']    = $buffer['EconomyDesc'];
-					$server['e']['description']    = $buffer['DetailedDescription'];
-					$server['e']['PeakActivePlayers']    = $buffer['PeakActivePlayers'];
-					$server['e']['TimeSinceStart']    = Helper::lgslTime($buffer['TimeSinceStart'] + 3600);
-					$server['e']['HasMeteor']    = $buffer['HasMeteor'] ? 1 : 0;
-					if ($buffer['HasMeteor']) $server['e']['TimeLeft'] = Helper::lgslTime($buffer['TimeLeft']);
-					$this->_server->from_array($server);
-					return TRUE;
-				}
-				default: return FALSE;
-			}
+      preg_match('/<h2>Login to [\w\d\s\/\\:()&@"\'-]+<\/h2>/', $buffer, $name);
+      $server['s']['name']        = substr($name[0], 12, strlen($name[0])-17);
+      $this->_server->from_array($server);
+      return strpos($buffer, 'status-indicator online') !== FALSE;
     }
     //---------------------------------------------------------+
 
@@ -3615,9 +3183,7 @@
     protected const NO_RESPOND = 0;
     protected const SUCCESS = 1;
     protected const WITH_ERROR = 2;
-    protected $_server;
-    protected $_fp;
-    protected $_need;
+    protected $_server, $_fp, $_need;
     protected $_data = [];
 		public function __construct(&$server, &$fp, &$need) {
       $this->_server = $server;
@@ -3625,16 +3191,26 @@
       $this->_need = $need;
       return $this;
     }
-    public function process() {}
-    public function execute() {
+    public function need($key): bool {
+      if ($this->_need[$key]) {
+        $this->_need[$key] = false;
+        return true;
+      }
+      return false;
+    }
+    public function process() {return 0;}
+    public function execute(): int {
       $time = microtime();
       $status = $this->process();
       $this->_data['o']['time_execution'] = $time - microtime();
       if ($status !== $this::NO_RESPOND) {
-        $this->_server->updateValues($this->_data);
         if ($status === $this::SUCCESS) {
           // clear error
         }
+        if ($status === $this::WITH_ERROR) {
+          $this->_data['e']['_error'] = $this->_data['e']['_error'] ?? "Probably protocol mistake";
+        }
+        $this->_server->updateValues($this->_data);
       }
       return $status;
     }
@@ -3647,28 +3223,320 @@
     }
   }
   abstract class QueryJson extends Query {
-    protected $url = [];
-    public function fetch($line = 0) {
-      $this->_fp->write($this->url[$line]);
+    public function fetch(string $url): array {
+      $this->_fp->write($url);
       return $this->_fp->readJson();
     }
   }
   class QueryStatus extends QuerySocket { // Only status
-    public function extras(&$buffer) {}
-    public function process() {
+    public function process(): int {
       $buffer = $this->fetch();
       if (!$buffer) return $this::NO_RESPOND;		
       $this->_data['s']['name'] = Protocol::lgslList($this->_server->get_type())[1] . " Server";
-      $this->extras($buffer);
+      $this->postProcess($buffer);
+      return $this::SUCCESS;
+    }
+    public function postProcess(&$buffer) {}
+  }
+	
+  class Query32 extends QuerySocket { // Plain Sight
+    protected $packets = ["\x05\x00\x00\x01\x0A"];
+    public function process() {
+      $buffer = $this->fetch();
+      if (!$buffer) return $this::NO_RESPOND;
+      $buffer->skip(5); // REMOVE HEADER
+      $this->_data['s']['name']    = $buffer->cutPascal();
+      $this->_data['s']['map']     = $buffer->cutPascal();
+      $this->_data['s']['players'] = $buffer->cutByteOrd();
       return $this::SUCCESS;
     }
   }
-	
-  
+  class Query33 extends Query { // TeamSpeak 1 / 3 / TeaSpeak
+    public function read($length = 4096) {
+      return $this->_fp->read($length);
+    }
+    public function fetch($packet = "", $length = 4096) {
+      $this->_fp->write($packet);
+      return $this->read($length);
+    }
+    public function process() {
+      $buffer = $this->fetch();
+      if (!$buffer) return $this::NO_RESPOND;
+      if ($this->_server->get_type() === 'teaspeak') {
+        if ($buffer->has('TeaSpeak') && $this->_fp->read()->has('TeaSpeak')) {
+          return $this::WITH_ERROR;
+        }
+      } else {
+        if (!$buffer->has('TS')) {
+          return $this::WITH_ERROR;
+        }
+      }
+      $ver = $this->_server->get_type() === Protocol::TS ? 0 : 1;
+      $param = [
+        ['sel ', 'si', "\r\n", 'pl'],
+        ['use port=', 'serverinfo', ' ', 'clientlist -country', 'channellist -topic']
+      ];
+      if ($ver) { $this->fetch(); }
+      $buffer = $this->fetch("{$param[$ver][0]}{$this->_server->get_c_port()}\n"); // select virtualserver
+      if (!$buffer) return $this::WITH_ERROR;		
+      if (strtoupper($buffer->get(-4, -2)) != 'OK') { return $this::WITH_ERROR; }
+      
+      $getPackets = function($message) {
+        $buffer = $this->fetch($message);
+        if (!$buffer || $buffer->get(0, 5) === 'error') { return $this::WITH_ERROR; }
+        while (strtoupper($buffer->get(-4, -2)) != 'OK') {
+          $part = $this->read();
+          if ($part && $part->get(0, 5) != 'error') { $buffer->add($part); } else { break; }
+        }
+        return $buffer;
+      };
 
+      $buffer = $getPackets("{$param[$ver][1]}\n"); // request serverinfo
+      while ($val = $buffer->cutString(7 + 7 * $ver, $param[$ver][2])) {
+        $key = Helper::lgslCutString($val, 0, '='); $items[$key] = $val;
+      }
+      if (!isset($items['name'])) return $this::WITH_ERROR;
+      $this->_data['s']['name']         = $ver ? Helper::lgslUnescape($items['name']) : $items['name'];
+      $this->_data['s']['map']          = $this->_data['b']['type'];
+      $this->_data['s']['players']      = (int) ($items[$ver ? 'clientsonline' : 'currentusers']);
+      $this->_data['s']['playersmax']   = (int) ($items[$ver ? 'maxclients' : 'maxusers']);
+      $this->_data['s']['password']     = (int) ($items[$ver ? 'flag_password' : 'password']);
+      $this->_data['e']['platform']     = $items['platform'];
+      $this->_data['e']['motd']         = Helper::lgslParseColor($ver ? Helper::lgslUnescape($items['welcomemessage']) : $items['welcomemessage'], 'bbcode');
+      $this->_data['e']['uptime']       = Helper::lgslTime($items['uptime']);
+      $this->_data['e']['banner']       = Helper::lgslUnescape($items['hostbanner_url']);
+      $this->_data['e']['channelscount']= $items[$ver ? 'channelsonline' : 'currentchannels'];
+      if ($ver) { $this->_data['e']['version'] = Helper::lgslUnescape($items['version']); }
+
+      if ($this->need('p') && $this->_data['s']['players'] > 0) {
+        $buffer = $getPackets("{$param[$ver][3]}\n"); // request playerlist
+
+        $i = 0;
+        if ($ver) {
+          while ($items = $buffer->cutString(0, '|')) {
+            Helper::lgslCutString($items, 0, 'e='); $name = Helper::lgslCutString($items, 0, ' ');
+            if (substr($name, 0, 15) === 'Unknown\sfrom\s') { continue; }
+            $this->_data['p'][$i]['name'] = Helper::lgslUnescape($name); Helper::lgslCutString($items, 0, 'ry');
+            $this->_data['p'][$i]['country'] = substr($items, 0, 1) === '=' ? substr($items, 1, 2) : ''; $i++;
+          }
+        } else {
+          $buffer->skip(89, 4);
+          while ($items = $buffer->cutString(0, "\r\n")) {
+            $items = explode("\t", $items);
+            $this->_data['p'][$i]['name'] = substr($items[14], 1, -1);
+            $this->_data['p'][$i]['ping'] = $items[7];
+            $this->_data['p'][$i]['time'] = Helper::lgslTime($items[8]); $i++;
+          }
+        }
+      }
+
+      if ($this->need('e') && $ver) {
+        $buffer = $getPackets("{$param[$ver][4]}\n"); // request channellist
+        $lvl = [];
+        $channels = "<style>.gray{color:gray;}</style><div style='text-align: left !important;'>";
+        while ($items = $buffer->cutString(0, '|')) {
+          $cid = str_pad(Helper::lgslCutString($items, 4, ' '), 5, '0', STR_PAD_LEFT);
+          $pid = str_pad(Helper::lgslCutString($items, 4, ' '), 5, '0', STR_PAD_LEFT);
+          Helper::lgslCutString($items, 0, 'e=');
+          $name = Helper::lgslCutString($items, 0, ' ');
+          $chars = "";
+          if ((int) $pid == 0) {
+            $lvl = [$cid];
+          } else {
+            $i = count($lvl)-1;
+            while ($i > -1) {
+              if ($lvl[$i] == $pid) {
+                $lvl = array_slice($lvl, 0, $i+1);
+                $lvl[] = $cid;
+                $chars = str_repeat("|--", $i+1);
+                break;
+              }
+              $i--;
+            }
+            if ($i == -1)
+              $lvl = [$cid];
+          }
+          $channels .= "<span class='gray'>{$chars}</span> " . preg_replace("/(\[\*?[clr]? ?spacer\d{0,10}\])/", "", Helper::lgslUnescape($name)) . "\n";
+        }
+        $this->_data['e']['channels'] = "{$channels}</div>";
+      }
+      return $this::SUCCESS;
+    }
+  }
+  class Query34 extends QueryJson { // Rage:MP
+    public function process() {
+      $buffer = $this->fetch("https://cdn.rage.mp/master/");
+      if (!$buffer) return $this::NO_RESPOND;
+      if ($value = $buffer["{$this->_server->get_ip()}:{$this->_server->get_c_port()}"]) {
+        $this->_data['s']['name']       = $value['name'];
+        $this->_data['s']['map']        = "RageMP";
+        $this->_data['s']['players']    = $value['players'];
+        $this->_data['s']['playersmax'] = $value['maxplayers'];
+        $this->_data['e']['url']        = $value['url'];
+        $this->_data['e']['peak']       = $value['peak'];
+        $this->_data['s']['mode']       = $value['gamemode'];
+        $this->_data['e']['lang']       = $value['lang'];
+        return $this::SUCCESS;
+      }
+      return $this::NO_RESPOND;
+    }
+  }
+  class Query35 extends QueryJson { // FiveM / RedM
+    public function process() {
+      $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/dynamic.json");
+      if (!$buffer) return $this::NO_RESPOND;
+      $this->_data['s']['name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem');
+      $this->_data['s']['players'] = $buffer['clients'];
+      $this->_data['s']['playersmax'] = $buffer['sv_maxclients'];
+      $this->_data['s']['map'] = $buffer['mapname'];
+      if ($this->_data['s']['map'] == 'redm-map-one') {
+        $this->_data['s']['game'] = 'redm';
+      }
+      $this->_data['s']['mode'] = $buffer['gametype'];
+      $this->_data['e']['version'] = $buffer['iv'];
+
+      if ($this->need('p')) {
+        //$this->set_requested('p');
+        $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/players.json");
+
+        foreach($buffer as $key => $value) {
+          $this->_data['p'][$key]['name'] = $value['name'];
+          $this->_data['p'][$key]['ping'] = $value['ping'];
+        }
+      }
+      return $this::SUCCESS;
+    }
+  }
+  class Query36 extends QueryJson { // Discord
+    public function process() {
+      $buffer = $this->fetch("https://discord.com/api/v9/invites/{$this->_server->get_ip()}?with_counts=true");
+      if (!$buffer) return $this::NO_RESPOND;
+      if (isset($buffer['message'])) {
+        $this->_data['e']['_error_fetching_info'] = $buffer['message'];
+        return $this::NO_RESPOND;
+      }
+      //$this->set_requested('se');
+      $this->_data['s']['map'] = 'discord';
+      $this->_data['s']['name'] = $buffer['guild']['name'];
+      $this->_data['s']['players'] = $buffer['approximate_presence_count'];
+      $this->_data['s']['playersmax'] = $buffer['approximate_member_count'];
+      $this->_data['e']['id'] = $buffer['guild']['id'];
+      $this->_data['e']['expires_at'] = $buffer['expires_at'] ?? LGSL::NONE;
+      $this->_data['e']['members'] = $buffer['approximate_member_count'];
+      $this->_data['e']['premium_subscriptions'] = $buffer['guild']['premium_subscription_count'];
+      if($buffer['guild']['description']) {
+        $this->_data['e']['description'] = $buffer['guild']['description'];
+      }
+      if (isset($buffer['guild']['welcome_screen'])) {
+        if ($buffer['guild']['welcome_screen']['description']) $this->_data['e']['description'] = $buffer['guild']['welcome_screen']['description'];
+        if ($buffer['guild']['welcome_screen']['welcome_channels'])
+        $this->_data['e']['welcome_channels'] = array_reduce($buffer['guild']['welcome_screen']['welcome_channels'], function($a, $c) {
+          return "{$a}\n{$c['emoji_name']} {$c['description']}";
+        }, "");
+      }
+      $this->_data['e']['features'] = implode(', ', $buffer['guild']['features'] ?? []);
+      $this->_data['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
+      if (isset($buffer['inviter'])) {
+        $this->_data['e']['inviter'] = "{$buffer['inviter']['username']}#{$buffer['inviter']['discriminator']}";
+      }
+
+      if ($this->need('p')) {
+        //$this->set_requested('p');
+        $buffer = $this->fetch("https://discordapp.com/api/guilds/{$this->_server->getE('id')}/widget.json");
+
+        if (isset($buffer['code']) and $buffer['code'] == 0) {
+          $this->_data['e']['_error_fetching_users'] = $buffer['message'];
+        }
+
+        if (isset($buffer['channels'])) {
+          foreach ($buffer['channels'] as $key => $value) {
+            $this->_data['e']["channel{$key}"] = $value['name'];
+          }
+        }
+
+        if (isset($buffer['members'])) {
+          foreach ($buffer['members'] as $key => $value) {
+            $this->_data['p'][$key]['name'] = $value['username'];
+            $this->_data['p'][$key]['status'] = $value['status'];
+            $this->_data['p'][$key]['game'] = isset($value['game']) ? $value['game']['name'] : LGSL::NONE;
+          }
+        }
+      }
+      return $this::SUCCESS;
+    }
+  }
+  class Query37 extends QueryJson { // SCUM
+    public function process() {
+      $buffer = $this->fetch("https://api.hellbz.de/scum/api.php?address={$this->_server->get_ip()}&port={$this->_server->get_c_port()}");
+      if (!$buffer || !$buffer['success'] || $buffer['servers'] == 0) return $this::NO_RESPOND;
+      $this->_data['s']['name']        = $buffer['data'][0]['name'];
+      $this->_data['s']['map']         = "SCUM";
+      $this->_data['s']['players']     = $buffer['data'][0]['players'];
+      $this->_data['s']['playersmax']  = $buffer['data'][0]['players_max'];
+      $this->_data['e']['time']        = $buffer['data'][0]['time'];
+      $this->_data['e']['version']     = $buffer['data'][0]['version'];
+      return $this::SUCCESS;
+    }
+  }
+  class Query38 extends QueryJson { // Terraria
+    public function process() {
+      $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/v2/server/status?players=true");
+      if (!$buffer) return $this::NO_RESPOND;
+      if ($buffer['status'] != '200') {
+        $this->_data['e']['_error2']    = $buffer['error'];
+        return $this::WITH_ERROR;
+      }
+      $this->_data['s']['name']        = $buffer['name'];
+      $this->_data['s']['map']         = $buffer['world'];
+      $this->_data['s']['players']     = $buffer['playercount'];
+      $this->_data['s']['playersmax']  = $buffer['maxplayers'];
+      $this->_data['s']['password']    = $buffer['serverpassword'];
+      $this->_data['e']['uptime']      = $buffer['uptime'];
+      $this->_data['e']['version']     = $buffer['serverversion'];
+      $this->_data['e']['world']       = $buffer['world'];
+      return $this::SUCCESS;
+    }
+  }
+  class Query39 extends QuerySocket {  // Mafia 2 MP
+    protected $packets = ["M2MPi"];
+    public function process() {
+      $buffer = $this->fetch();
+      if (!$buffer) return $this::NO_RESPOND;
+      $buffer->skip(4);
+      $this->_data['s']['name']        = $buffer->cutPascal(1, -1);
+      $this->_data['s']['map']         = "Empire Bay";
+      $this->_data['s']['players']     = $buffer->cutPascal(1, -1);
+      $this->_data['s']['playersmax']  = $buffer->cutPascal(1, -1);
+      $this->_data['e']['gamemode']    = $buffer->cutPascal(1, -1);
+      return $this::SUCCESS;
+    }
+  }
+  class Query40 extends QueryJson { // ECO
+    public function process() {
+      $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/info");
+      if (!$buffer) return $this::NO_RESPOND;
+      $this->_data['s']['name']        = strip_tags($buffer['Description']);
+      $this->_data['s']['players']     = $buffer['OnlinePlayers'];
+      $this->_data['s']['playersmax']  = $buffer['TotalPlayers'];
+      $this->_data['s']['password']    = (int) $buffer['HasPassword'];
+      
+      if ($this->_data['s']['players']) {
+        foreach ($buffer['OnlinePlayersNames'] as $key => $value) {
+          $this->_data['p'][$key]['name'] = $value;
+        }
+      }
+      unset($buffer['Description'], $buffer['OnlinePlayers'], $buffer['OnlinePlayersNames']);
+      $this->_data['e'] = $buffer;
+      $this->_data['e']['TimeSinceStart']    = Helper::lgslTime($buffer['TimeSinceStart'] + 3600);
+      $this->_data['e']['HasMeteor']    =  Helper::bool($buffer['HasMeteor']);
+      if ($buffer['HasMeteor']) $this->_data['e']['TimeLeft'] = Helper::lgslTime($buffer['TimeLeft']);
+      return $this::SUCCESS;
+    }
+  }
+  /* Query 41-49 */
   class Query41 extends QueryStatus {  // Satisfactory
     protected $packets = ["\x00\x00\xd6\x9c\x28\x25\x00\x00\x00\x00"];
-    public function extras(&$buffer) {
+    public function postProcess(&$buffer) {
       $buffer->skip(11);
       $version = $buffer->cutByteUnpack(1, "H*");
       $version = $buffer->cutByteUnpack(1, "H*") . $version;
@@ -3703,9 +3571,9 @@
       $this->_data['s']['password']    = $buffer->cutByteOrd();
       $buffer->skip(1);
       $buffer->skip($buffer->cutByteOrd());
-      $this->_data['e']['public']      = $buffer->cutByteOrd() ? "true" : "false";
+      $this->_data['e']['public']      = Helper::bool($buffer->cutByteOrd());
       $buffer->skip(1);
-      $this->_data['e']['lan']         = $buffer->cutByteOrd() ? "true" : "false";
+      $this->_data['e']['lan']         = Helper::bool($buffer->cutByteOrd());
 
       $this->_data['e']['mods']        = "";
       $gamemodes = $buffer->cutByteOrd();
@@ -3728,7 +3596,6 @@
         if (strlen($this->_data['p'][$i]['name']) == 0) $this->_data['p'][$i]['name'] = '*unknown*';
       }
       $this->_data['s']['players']     = count($this->_data['p']);
-      $this->_data['s']['map']         = "World";
       return $this::SUCCESS;
     }
   }
@@ -3872,12 +3739,12 @@
       $this->_data['s']['players'] = $buffer->cutByteOrd();
       $this->_data['s']['playersmax'] = $buffer->cutByteOrd();
       $settings = $buffer->cutByteOrd();
-      $this->_data['e']["allowOutsideCharacters"] = $settings & 64 ? 1 : 0;
-      $this->_data['e']["forcedPvP"] = $settings & 32 ? 1 : 0;
-      $this->_data['e']["disableMobSpawns"] = $settings & 16 ? 1 : 0;
-      $this->_data['e']["playerHunger"] = $settings & 8 ? 1 : 0;
-      $this->_data['e']["survivalMode"] = $settings & 4 ? 1 : 0;
-      $this->_data['e']["allowCheats"] = $settings & 2 ? 1 : 0;
+      $this->_data['e']["allowOutsideCharacters"] = Helper::bool($settings & 64);
+      $this->_data['e']["forcedPvP"] = Helper::bool($settings & 32);
+      $this->_data['e']["disableMobSpawns"] = Helper::bool($settings & 16);
+      $this->_data['e']["playerHunger"] = Helper::bool($settings & 8);
+      $this->_data['e']["survivalMode"] = Helper::bool($settings & 4);
+      $this->_data['e']["allowCheats"] = Helper::bool($settings & 2);
       $buffer->skip(5);
       $this->_data['e']["version"] = $buffer->cutPascal(1, 6);
       $difficulty = ["Casual", "Easy", "Normal", "Hard", "Brutal"];
@@ -3891,11 +3758,9 @@
       return $this::SUCCESS;
     }
   }
-  class Query48 extends QueryJson {
-    protected $url = ["https://backend.beammp.com/servers-info"];
+  class Query48 extends QueryJson { // BeamMP
     public function process() {
-      $buffer = $this->fetch();
-      if (!$buffer) $buffer = $this->fetch();
+      $buffer = $this->fetch("https://backend.beammp.com/servers-info");
       if (!$buffer) return $this::NO_RESPOND;
       $find = array_filter($buffer, function($k) {
         return $k['ip'] == $this->_server->get_ip() && ((int) $k['port']) == $this->_server->get_q_port();
@@ -3921,6 +3786,36 @@
   class Query49 extends QueryStatus {  // Windward
     protected $packets = ["\x0b\x00\x00\x00\x03\x0c\x00\x00\x00\x04LGSL\x00"];
   }
+
+  class QueryTest extends Query {
+    public function process() {
+        $this->_data = [
+            's' => [
+                "game"       => "test_game",
+                "name"       => "test_ServerNameThatsOften'Really'LongAndCanHaveSymbols<hr />ThatWill\"Screw\"UpHtmlUnlessEntitied",
+                "map"        => "test_map",
+                "players"    => rand(0,  16),
+                "playersmax" => rand(16, 32),
+                "password"   => rand(0,  1)],
+            'e' => [
+                "testextra1" => "normal",
+                "testextra2" => 123,
+                "testextra3" => time(),
+                "testextra4" => "",
+                "testextra5" => "<b>Setting<hr />WithHtml</b>",
+                "testextra6" => "ReallyLongSettingLikeSomeMapCyclesThatHaveNoSpacesAndCauseThePageToGoReallyWideIfNotBrokenUp"],
+            'p' => [
+                ["name" => "Normal", "score" => "12", "ping" => "34"],
+                ["name" => "\xc3\xa9\x63\x68\x6f\x20\xd0\xb8-d0\xb3\xd1\x80\xd0\xbe\xd0\xba", "score" => "56", "ping" => "78"],
+                ["name" => "One&<Two>&Three&\"Four\"&'Five'", "score" => "90", "ping" => "12"],
+                ["name" => "ReallyLongPlayerNameBecauseTheyAreUberCoolAndAreInFiveClans", "score" => "90", "ping" => "12"],
+            ]
+        ];    
+        if (rand(0, 10) == 5) { $this->_data['p'] = []; } // RANDOM NO PLAYERS
+        if (rand(0, 10) == 5) { return $this::NO_RESPOND; }
+        return $this::SUCCESS;
+    }
+  }
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 	class Buffer {
@@ -3938,7 +3833,7 @@
 			return $this->_string;
 		}
 		public function add($string = ""): void {
-			if (gettype($string) == "string") {
+			if (gettype($string) === "string") {
 				$this->_string .= $string;
 			} else {
 				$this->_string .= $string->getAll();
@@ -3950,8 +3845,12 @@
 		public function length(): int {
 			return strlen($this->_string);
 		}
-		public function skip(int $length): void {
-			$this->set(substr($this->_string, $length));
+		public function skip(int $left, int $right = null): void {
+      if ($right) {
+        $this->set(substr($this->_string, $left, -$right));
+      } else {
+        $this->set(substr($this->_string, $left));
+      }
 		}
 		public function char(int $position): string {
 			return $this->_string[$position];
@@ -3991,7 +3890,7 @@
 			$this->_string = substr($this->_string, $start + $length + $end);
 			return $string;
 		}
-		public static function join(array &$array) {
+		public static function &join(array &$array): Buffer {
 			if (count($array) == 1) {
 				return $array[0];
 			}
@@ -4018,13 +3917,14 @@
 		public function open(&$server) {
       global $lgsl_config;
 			if ($this->_isHttp()) {
-        if (!function_exists('curl_init') || !function_exists('curl_setopt') || !function_exists('curl_exec')) return false;
+        if (!LGSL::isEnabled("curl")) return false;
         $this->_stream = curl_init('');
         curl_setopt($this->_stream, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($this->_stream, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($this->_stream, CURLOPT_CONNECTTIMEOUT, $lgsl_config['timeout']);
         curl_setopt($this->_stream, CURLOPT_TIMEOUT, 1);
         curl_setopt($this->_stream, CURLOPT_HTTPHEADER, ['Accept: application/json']);
+        curl_setopt($this->_stream, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; U; Linux i686; en-GB; rv:1.9.1.4) Gecko/20091028");
 				$this->_server = $server;
       } else {
         $this->_stream = @fsockopen("{$this->_protocol}://{$server->get_ip()}", $server->get_q_port(), $errno, $errstr, 1);
@@ -4183,6 +4083,18 @@
     static function lgslUnescape($text) {
       return str_replace(['\t', '\v', '\r', '\n', '\f', '\s', '\p', '\/'], [' ', ' ', ' ', ' ', ' ', ' ', '|', '/'], $text);
     }
+    static function lgslCutString(&$buffer, $start_byte = 0, $end_marker = "\x00") {
+      $buffer = substr($buffer, $start_byte);
+      $length = strpos($buffer, $end_marker);
+      if ($length === FALSE) { $length = strlen($buffer); }
+      $string = substr($buffer, 0, $length);
+      $buffer = substr($buffer, $length + strlen($end_marker));
+      return $string;
+    }
+    static function bool($condition) {
+      if ($condition) return 'true';
+      return 'false';
+    }
   }
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
@@ -4298,7 +4210,7 @@
 
     if ($scheme == 'http') {
       
-      if(!function_exists('curl_init') || !function_exists('curl_setopt') || !function_exists('curl_exec')) return FALSE;
+      if(!LGSL::isEnabled("curl")) return FALSE;
 
       $lgsl_fp =  curl_init('');
       curl_setopt($lgsl_fp, CURLOPT_RETURNTRANSFER, 1);
@@ -4387,7 +4299,7 @@
 
 //---------------------------------------------------------+
 
-    if (function_exists('curl_init') && function_exists('curl_setopt') && function_exists('curl_exec') && $lgsl_feed_method == 1)
+    if (LGSL::isEnabled("curl") && $lgsl_feed_method == 1)
     {
       $lgsl_curl = curl_init();
 
@@ -4711,7 +4623,7 @@
 //-------- WANNA BE HERE? https://github.com/tltneon/lgsl/wiki/Who-uses-LGSL -> LET CREDITS STAY :P ----------+
 
   function lgsl_version() {
-    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 7.0.0";
+    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v " . LGSL::VERSION;
   }
 
 //------------------------------------------------------------------------------------------------------------+

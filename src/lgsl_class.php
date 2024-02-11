@@ -17,6 +17,8 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
   class LGSL {
+    const NONE = "--";
+    const VERSION = "7.0.0";
     static function db() {
       $db = new Database();
       $db->instance();
@@ -58,7 +60,7 @@
   
       $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode";
   
-      if (function_exists('curl_init') && function_exists('curl_setopt') && function_exists('curl_exec')) {
+      if (LGSL::isEnabled("curl")) {
         $lgsl_curl = curl_init();
   
         curl_setopt($lgsl_curl, CURLOPT_HEADER, 0);
@@ -169,6 +171,11 @@
       }
       return $url;
     }
+		static public function isEnabled($func) {
+			switch ($func) {
+        case "curl": return function_exists('curl_init') && function_exists('curl_setopt') && function_exists('curl_exec');
+      }
+		}
 		static public function locationCoords($code) {
 			$a = ["AD"=>[0,0],"AE"=>[16,0],"AF"=>[32,0],"AG"=>[48,0],"AI"=>[64,0],"AL"=>[80,0],"AM"=>[96,0],"AN"=>[112,0],"AO"=>[128,0],"AR"=>[144,0],"AS"=>[160,0],"AT"=>[176,0],"AU"=>[192,0],"AW"=>[0,11],"AX"=>[16,11],"AZ"=>[32,11],
 						"BA"=>[48,11],"BB"=>[64,11],"BD"=>[80,11],"BE"=>[96,11],"BF"=>[112,11],"BG"=>[128,11],"BH"=>[144,11],"BI"=>[160,11],"BJ"=>[176,11],"BM"=>[192,11],"BN"=>[0,22],"BO"=>[16,22],"BR"=>[32,22],"BS"=>[48,22],"BT"=>[64,22],"BV"=>[80,22],
@@ -659,7 +666,7 @@
       $this->_server = [
         "players" => 0,
         "playersmax" => 0,
-        "name" => "--",
+        "name" => LGSL::NONE,
         "game" => "",
         "mode" => "none",
         "password" => 0,
@@ -771,13 +778,13 @@
       if ($this->_base['c_port'] > 1)
         return $this->_base['c_port'];
 			if ($intOnly) return 0;
-      return "--";
+      return LGSL::NONE;
     }
     public function get_q_port($intOnly = true) {
       if ($this->_base['q_port'] > 1)
         return $this->_base['q_port'];
 			if ($intOnly) return 0;
-      return "--";
+      return LGSL::NONE;
     }
     public function get_s_port() {
       return $this->_base['s_port'];
@@ -792,17 +799,17 @@
       return $this->_base['type'];
     }
     public function get_game() {
-      return $this->_server['game'] ? $this->_server['game'] : $this->_base['type'];
+      return $this->_server['game'] ?? $this->_base['type'];
     }
     public function set_game($game) {
       return $this->_server['game'] = $game;
     }
     public function get_mode() {
-      return $this->_server['mode'] ? $this->_server['mode'] : 'none';
+      return $this->_server['mode'] ?? 'none';
     }
     public function get_map($formatted = false) {
-			if ($formatted) return $this->_server['map'] ? preg_replace("/[^a-z0-9_]/", "_", strtolower($this->_server['map'])) : "--";
-      return $this->_server['map'] ? $this->_server['map'] : "--";
+			if ($formatted) return $this->_server['map'] ? preg_replace("/[^a-z0-9_]/", "_", strtolower($this->_server['map'])) : LGSL::NONE;
+      return $this->_server['map'] ? $this->_server['map'] : LGSL::NONE;
     }
     public function get_players() {
       return $this->_players;
@@ -815,7 +822,7 @@
     }
     public function get_name($html = true) {
       if ($this->get_pending()) {
-				return "--";
+				return LGSL::NONE;
       }
 			if ($html) {
 				$d = LGSL::DB();
@@ -828,7 +835,7 @@
     }
     public function get_players_count($out = null) {
       if ($this->get_pending() || $this->get_status() === self::OFFLINE) {
-        return $out ? 0 : "--";
+        return $out ? 0 : LGSL::NONE;
       }
       if ($out === 'active') {
         return (int) (isset($this->_server['players']) ? $this->_server['players'] : 0);
@@ -849,7 +856,7 @@
           return "{$this->_server['players']}/{$this->_server['playersmax']}";
         }
       }
-      return '--';
+      return LGSL::NONE;
     }
     
     public function set_queried() {
@@ -1070,6 +1077,9 @@
     public function set_extra_value($name, $value) {
       $this->_extra[$name] = $value;
     }
+    public function getE($name) {
+      return $this->_extra[$name] ?? LGSL::NONE;
+    }
     public function set_status($status) {
       $this->_base['status'] = (int) $status;
     }
@@ -1097,7 +1107,7 @@
   
       $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode";
   
-      if (function_exists('curl_init') && function_exists('curl_setopt') && function_exists('curl_exec')) {
+      if (LGSL::isEnabled("curl")) {
         $lgsl_curl = curl_init();
   
         curl_setopt($lgsl_curl, CURLOPT_HEADER, 0);
