@@ -357,7 +357,7 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
       foreach ($mysqli_result as $mysqli_row) {
         $id = $mysqli_row['id']; // ID USED AS [] ONLY RETURNS TICKED CHECKBOXES
         $hasSPort = $isDisabled(!($mysqli_row['type'] === Protocol::UT2003 || $mysqli_row['type'] === Protocol::UT2004));
-        $isDiscord = $isDisabled($mysqli_row['type'] === Protocol::DISCORD);
+        $noPort = $isDisabled(Protocol::lgslProtocolWithoutPort($mysqli_row['type']));
 
         $output .= "
         <tr>
@@ -381,8 +381,8 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
             </select>
           </td>
           <td class='center'><input type='text'   name='form_ip[{$id}]'     value='{$mysqli_row['ip']}'   size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value='{$mysqli_row['c_port']}' min='0' max='65536' {$isDiscord} /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value='{$mysqli_row['q_port']}' min='0' max='65536' {$isDiscord} /></td>
+          <td class='center'><input type='number' name='form_c_port[{$id}]' value='{$mysqli_row['c_port']}' min='0' max='65536' {$noPort} /></td>
+          <td class='center'><input type='number' name='form_q_port[{$id}]' value='{$mysqli_row['q_port']}' min='0' max='65536' {$noPort} /></td>
           <td class='center'><input type='number' name='form_s_port[{$id}]' value='{$mysqli_row['s_port']}' min='0' max='65536' {$hasSPort} /></td>
           <td>
             <select name='form_zone[$id]'>";

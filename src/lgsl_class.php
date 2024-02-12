@@ -80,8 +80,8 @@
   
       return $location;
     }
-    static public function group_totals($server_list = FALSE) {
-      if (!is_array($server_list)) { return Database::get_statistics(); }
+    static public function groupTotals($server_list = FALSE) {
+      if (!is_array($server_list)) { return Database::getStatistics(); }
 
       $total = ["players"=>0, "playersmax"=>0, "servers"=>0, "servers_online"=>0, "servers_offline"=>0];
 
@@ -148,7 +148,7 @@
       global $lgsl_config;
       return $lgsl_config['no_realpath'] ? $path : realpath($path);
     }
-    static function build_link($url, $params)
+    static function buildLink($url, $params)
     {
       if (!strpos($url, '?')) { // IS NO PARAMS
         return "{$url}?" . http_build_query($params);
@@ -316,22 +316,21 @@
 			return $this->_connection->get_all();
 		}
 
-    public function load_server($query) {
+
+    public function loadServer(Server $server) {
+      global $lgsl_config;
+      $query = "SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE ";
+      if ($server->get_id()) {
+        $query .= "id = '{$server->get_id()}';";
+      } elseif ($server->get_ip()) {
+        $c_port = $server->get_c_port() > 1 ? "AND c_port = '{$server->get_c_port()}'" : "";
+        $query .= "ip = '{$server->get_ip()}' {$c_port};";
+      }
       $result = $this->query($query, true);
       if ($result) {
-        return $this->lgsl_unserialize_server_data($result);
+        return $this->lgslUnserializeServerData($result);
       }
       return null;
-    }
-    function get_server_by_id($id) {
-			return $this->load_server($this->_connection->get_server_by_id_query_string($id));
-    }
-
-    function get_server_by_ip($ip, $c_port) {
-      global $lgsl_config;
-			if ($c_port > 1) $c_port = "AND c_port = '{$c_port}'";
-			else $c_port = "";
-      return $this->load_server("SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE ip = '{$ip}' {$c_port};");
     }
     
     static function get_servers_group($options = []) {
@@ -370,7 +369,7 @@
       $output = [];
       foreach ($mysqli_result as $s) {
         $server = new Server();
-        $server->from_array($db->lgsl_unserialize_server_data($s));
+        $server->from_array($db->lgslUnserializeServerData($s));
 
 				if (!LGSL::requestHas($request, "c") && !LGSL::timer("check")) { // CACHE ONLY REQUEST
 					$needed = "";
@@ -387,7 +386,7 @@
       }
       return $output;
     }
-    static public function get_statistics() {
+    static public function getStatistics() {
       global $lgsl_config;
       $db = LGSL::db();
 
@@ -417,7 +416,7 @@
         $this->execute($mysqli_query);
     }
     
-    function lgsl_unserialize_server_data($data) {
+    function lgslUnserializeServerData($data) {
       $server = [];
       foreach (['name', 'game', 'mode', 'map', 'players', 'playersmax'] as $i) {
         $server['s'][$i] = $data[$i];
@@ -490,10 +489,6 @@
 		public function escape_string($string = "") {
 			return $this->_connection->escape_string($string);
 		}
-		public function get_server_by_id_query_string($id) {
-      global $lgsl_config;
-      return "SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE id = {$id};";
-		}
 	}
 	class SqliteWrapper extends DBWrapper {
     public $_id = 'rowid';
@@ -525,10 +520,6 @@
 			global $lgsl_config;
 			$t = $this->query("SELECT rowid as id, * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
 			return $t->fetch_all();
-		}
-		public function get_server_by_id_query_string($id) {
-      global $lgsl_config;
-      return "SELECT rowid as id, * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE rowid = {$id};";
 		}
 	}
 	class PostgresWrapper extends DBWrapper {
@@ -563,10 +554,6 @@
 			global $lgsl_config;
 			$t = $this->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
 			return $t->fetch_all();
-		}
-		public function get_server_by_id_query_string($id) {
-      global $lgsl_config;
-      return "SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE id = {$id};";
 		}
 	}
 
@@ -674,11 +661,7 @@
     
     public function lgsl_cached_query($request = 'seph') {
       $db = LGSL::db();
-      if ($this->_base['id']) {
-        $result = $db->get_server_by_id($this->_base['id']);
-      } elseif ($this->_base['ip']) {
-        $result = $db->get_server_by_ip($this->_base['ip'], $this->_base['c_port']);
-      }
+      $result = $db->loadServer($this);
       if ($result) {
         $this->from_array($result);
 				if (!LGSL::requestHas($request, "c")) { // CACHE ONLY REQUEST
