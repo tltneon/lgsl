@@ -25,6 +25,7 @@
     public const AARMY = "aarmy";
     public const AARMY3 = "aarmy3";
     public const ARCASIMRACING = "arcasimracing";
+    public const ARKASCENDED = "arkascended";
     public const ARMA = "arma";
     public const ARMA2 = "arma2";
     public const ARMA3 = "arma3";
@@ -100,6 +101,7 @@
     public const NEXUIZ = "nexuiz";
     public const OPENTTD = "openttd";
     public const PAINKILLER = "painkiller";
+    public const PALWORLD = "palworld";
     public const PLAINSIGHT = "plainsight";
     public const PREY = "prey";
     public const QUAKEWORLD = "quakeworld";
@@ -172,6 +174,7 @@
     }
     static public function lgslConnectionType($type) {
       $protocol = [
+        self::ARKASCENDED   => self::HTTP,
         self::BEAMMP        => self::HTTP,
         self::BFBC2         => self::TCP,
         self::BF3           => self::TCP,
@@ -179,6 +182,7 @@
         self::FARMSIM       => self::HTTP,
         self::ECO           => self::HTTP,
         self::FIVEM         => self::HTTP,
+        self::PALWORLD      => self::HTTP,
         self::RAGEMP        => self::HTTP,
         self::SCUM          => self::HTTP,
         self::TERRARIA      => self::HTTP,
@@ -199,6 +203,7 @@
         self::AARMY         => ["09", "Americas Army"],
         self::AARMY3        => ["26", "Americas Army 3"],
         self::ARCASIMRACING => ["16", "Arca Sim Racing"],
+        self::ARKASCENDED   => ["Query52", "ARK: Survival Ascended"],
         self::ARMA          => ["09", "ArmA: Armed Assault"],
         self::ARMA2         => ["09", "ArmA 2"],
         self::ARMA3         => ["05", "ArmA 3 / DayZ"],
@@ -274,6 +279,7 @@
         self::NEXUIZ        => ["02", "Nexuiz"],
         self::OPENTTD       => ["22", "Open Transport Tycoon Deluxe"],
         self::PAINKILLER    => ["08", "PainKiller"],
+        self::PALWORLD      => ["Query51", "Palworld"],
         self::PLAINSIGHT    => ["Query32", "Plain Sight"],
         self::PREY          => ["10", "Prey"],
         self::QUAKEWORLD    => ["07", "Quake World"],
@@ -3235,6 +3241,39 @@
       return $this->_fp->readJson();
     }
   }
+  abstract class QueryEOS extends QueryJson { // Epic Online Services
+    protected $grant_type = "client_credentials";
+    protected $deployment_id, $user_id, $user_secret;
+    protected function filter($k) { return true; }
+    public function process() {
+      $ch = $this->_fp->getStream();
+      // auth
+      curl_setopt($ch, CURLOPT_POST, 1);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Basic ' . base64_encode("{$this->user_id}:{$this->user_secret}"), 'Accept-Encoding: deflate, gzip', 'Content-Type: application/x-www-form-urlencoded']);
+      $external_auth_add = "";
+      if ($this->grant_type == "external_auth") {
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "deviceModel=PC");
+        $buffer = $this->fetch("https://api.epicgames.dev/auth/v1/accounts/deviceid");
+        $external_auth_add = "&external_auth_type=deviceid_access_token&external_auth_token={$buffer['access_token']}&nonce=ABCHFA3qgUCJ1XTPAoGDEF&display_name=User";
+      }
+      curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type={$this->grant_type}&deployment_id={$this->deployment_id}{$external_auth_add}");
+      $buffer = $this->fetch("https://api.epicgames.dev/auth/v1/oauth/token");
+      if (!$buffer) return $this::NO_RESPOND;
+      // request servers by ip
+      curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer {$buffer['access_token']}", 'Accept: application/json', 'Content-Type: application/json']);
+      curl_setopt($ch, CURLOPT_POSTFIELDS, '{"criteria": [{"key": "attributes.ADDRESS_s", "op": "EQUAL", "value": "' . $this->_server->get_ip(true) . '"}], "maxResults": 200}'); // v1 not supported "op": "ANY_OF"
+      $buffer = $this->fetch("https://api.epicgames.dev/matchmaking/v1/{$this->deployment_id}/filter");
+      if (!$buffer || $buffer['count'] == 0) return $this::NO_RESPOND;
+      // filtering by port
+      $find = array_filter($buffer['sessions'], function($k) {
+        return $this->filter($k);
+      });
+      if (!$find) return $this::NO_RESPOND;
+      return $this->placeData(reset($find));
+    }
+    protected function placeData($buffer) {return 0;}
+  }
   class QueryStatus extends QuerySocket { // Only status
     public function process(): int {
       $buffer = $this->fetch();
@@ -3246,6 +3285,7 @@
     public function postProcess(&$buffer) {}
   }
 	
+  /* Query 31-39 */
   class Query32 extends QuerySocket { // Plain Sight
     protected $packets = ["\x05\x00\x00\x01\x0A"];
     public function process() {
@@ -3814,7 +3854,50 @@
       return $this::SUCCESS;
     }
   }
-
+  /* Query 51-59 */
+  class Query51 extends QueryEOS { // Palworld
+    protected $grant_type = "external_auth";
+    protected $deployment_id = "0a18471f93d448e2a1f60e47e03d3413";
+    protected $user_id = "xyza78916PZ5DF0fAahu4tnrKKyFpqRE";
+    protected $user_secret = "j0NapLEPm3R3EOrlQiM8cRLKq3Rt02ZVVwT0SkZstSg";
+    protected function filter($k) {
+      return $k['attributes']['GAMESERVER_PORT_l'] == $this->_server->get_c_port();
+    }
+    protected function placeData($find) {
+      $this->_data['s']['name'] = $find['attributes']['NAME_s'];
+      $this->_data['s']['map'] = $find['attributes']['MAPNAME_s'];
+      $this->_data['s']['password'] = $find['attributes']['SERVERPASSWORD_b'];
+      $this->_data['s']['players'] = $find['attributes']['PLAYERS_l'];
+      $this->_data['s']['playersmax'] = $find['settings']['maxPublicPlayers'];
+      
+      $this->_data['e']['anticheat'] = Helper::bool($find['attributes']['BANTICHEATPROTECTED_b']);
+      $this->_data['e']['allowJoinInProgress'] = Helper::bool($find['settings']['allowJoinInProgress']);
+      $this->_data['e']['description'] = $find['attributes']['DESCRIPTION_s'];
+      $this->_data['e']['version'] = $find['attributes']['VERSION_s'];
+      return $this::SUCCESS;
+    }
+  }
+  class Query52 extends QueryEOS { // ARK: Survival Ascended
+    protected $deployment_id = "ad9a8feffb3b4b2ca315546f038c3ae2";
+    protected $user_id = "xyza7891muomRmynIIHaJB9COBKkwj6n";
+    protected $user_secret = "PP5UGxysEieNfSrEicaD1N2Bb3TdXuD7xHYcsdUHZ7s";
+    protected function filter($k) {
+      return $k['attributes']['ADDRESSBOUND_s'] === "{$this->_server->get_ip()}:{$this->_server->get_c_port()}" || $k['attributes']['ADDRESSBOUND_s'] === "0.0.0.0:{$this->_server->get_c_port()}";
+    }
+    protected function placeData($find) {
+      $this->_data['s']['name'] = $find['attributes']['CUSTOMSERVERNAME_s'];
+      $this->_data['s']['map'] = $find['attributes']['MAPNAME_s'];
+      $this->_data['s']['password'] = $find['attributes']['SERVERPASSWORD_b'];
+      $this->_data['s']['players'] = $find['totalPlayers'];
+      $this->_data['s']['playersmax'] = $find['settings']['maxPublicPlayers'];
+      
+      $this->_data['e']['anticheat'] = Helper::bool($find['attributes']['SERVERUSESBATTLEYE_b']);
+      $this->_data['e']['allowJoinInProgress'] = Helper::bool($find['settings']['allowJoinInProgress']);
+      $this->_data['e']['day'] = $find['attributes']['DAYTIME_s'];
+      $this->_data['e']['version'] = "v{$find['attributes']['BUILDID_s']}.{$find['attributes']['MINORBUILDID_s']}";
+      return $this::SUCCESS;
+    }
+  }
   class QueryTest extends Query {
     public function process() {
         $this->_data = [
