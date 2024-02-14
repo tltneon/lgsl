@@ -22,6 +22,7 @@
     $lgsl_type_list = array(
     "aarmy"         => "Americas Army",
     "aarmy3"        => "Americas Army 3",
+    "arkascended"   => "ARK: Survival Ascended",
     "arcasimracing" => "Arca Sim Racing",
     "arma"          => "ArmA: Armed Assault",
     "arma2"         => "ArmA 2",
@@ -98,6 +99,7 @@
     "neverwinter2"  => "NeverWinter Nights 2",
     "nexuiz"        => "Nexuiz",
     "openttd"       => "Open Transport Tycoon Deluxe",
+    "palworld"      => "Palworld",
     "painkiller"    => "PainKiller",
     "plainsight"    => "Plain Sight",
     "prey"          => "Prey",
@@ -171,6 +173,7 @@
     "aarmy"         => "09",
     "aarmy_"        => "03",
     "aarmy3"        => "26",
+    "arkascended"   => "52",
     "arcasimracing" => "16",
     "arma"          => "09",
     "arma2"         => "09",
@@ -253,6 +256,7 @@
     "openttd"       => "22",
     "painkiller"    => "08",
     "painkiller_"   => "09",
+    "palworld"      => "51",
     "plainsight"    => "32",
     "prey"          => "10",
     "quakeworld"    => "07",
@@ -309,8 +313,6 @@
     "wolfrtcw"      => "02",
     "wolf2009"      => "10",
     "wow"           => "41");
-
-    return $lgsl_protocol_list;
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -467,6 +469,7 @@
   function lgsl_gametype_scheme($type)
   {
     $lgsl_scheme_list = array(
+    "arkascended"   => "http",
     "beammp"        => "http",
     "bfbc2"         => "tcp",
     "bf3"           => "tcp",
@@ -474,6 +477,7 @@
     "eco"           => "http",
     "farmsim"       => "http",
     "fivem"         => "http",
+    "palworld"      => "http",
     "ragemp"        => "http",
     "scum"          => "http",
     "terraria"      => "http",
@@ -4460,6 +4464,76 @@
 			}, explode(';', $find['playerslist']));
 		}
 		return TRUE;
+  }
+
+  function lgsl_query_eos(&$server, &$lgsl_fp, $grant_type, $deployment_id, $user_id, $user_secret) { // Epic Online Services
+    // auth
+    curl_setopt($lgsl_fp, CURLOPT_POST, 1);
+    curl_setopt($lgsl_fp, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($lgsl_fp, CURLOPT_HTTPHEADER, ['Authorization: Basic ' . base64_encode("{$user_id}:{$user_secret}"), 'Accept-Encoding: deflate, gzip', 'Content-Type: application/x-www-form-urlencoded']);
+    $external_auth_add = "";
+    if ($grant_type == "external_auth") {
+      curl_setopt($lgsl_fp, CURLOPT_POSTFIELDS, "deviceModel=PC");
+      curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.epicgames.dev/auth/v1/accounts/deviceid");
+      $buffer = curl_exec($lgsl_fp);
+      $buffer = json_decode($buffer, true);
+      $external_auth_add = "&external_auth_type=deviceid_access_token&external_auth_token={$buffer['access_token']}&nonce=ABCHFA3qgUCJ1XTPAoGDEF&display_name=User";
+    }
+    curl_setopt($lgsl_fp, CURLOPT_POSTFIELDS, "grant_type={$grant_type}&deployment_id={$deployment_id}{$external_auth_add}");
+    curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.epicgames.dev/auth/v1/oauth/token");
+    $buffer = curl_exec($lgsl_fp);
+    $buffer = json_decode($buffer, true);
+    if (!$buffer) return false;
+    // request servers by ip
+    curl_setopt($lgsl_fp, CURLOPT_HTTPHEADER, ["Authorization: Bearer {$buffer['access_token']}", 'Accept: application/json', 'Content-Type: application/json']);
+    curl_setopt($lgsl_fp, CURLOPT_POSTFIELDS, '{"criteria": [{"key": "attributes.ADDRESS_s", "op": "EQUAL", "value": "' . $server['b']['ip'] . '"}], "maxResults": 200}'); // v1 not supported "op": "ANY_OF"
+    curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.epicgames.dev/matchmaking/v1/{$deployment_id}/filter");
+    $buffer = curl_exec($lgsl_fp);
+    $buffer = json_decode($buffer, true);
+    if (!$buffer || $buffer['count'] == 0) return false;
+    return $buffer['sessions'];
+  }
+  function lgsl_query_51(&$server, &$lgsl_need, &$lgsl_fp) { // Palworld
+    $buffer = lgsl_query_eos($server, $lgsl_fp, "external_auth", "0a18471f93d448e2a1f60e47e03d3413", "xyza78916PZ5DF0fAahu4tnrKKyFpqRE", "j0NapLEPm3R3EOrlQiM8cRLKq3Rt02ZVVwT0SkZstSg");
+    if (!$buffer) return false;
+    // filtering by port
+    $find = array_filter($buffer, function($k) use($server) {
+      return $k['attributes']['GAMESERVER_PORT_l'] == $server['b']['c_port'];
+    });
+    if (!$find) return false;
+    $find = reset($find);
+    $server['s']['name'] = $find['attributes']['NAME_s'];
+    $server['s']['map'] = $find['attributes']['MAPNAME_s'];
+    $server['s']['password'] = $find['attributes']['SERVERPASSWORD_b'];
+    $server['s']['players'] = $find['attributes']['PLAYERS_l'];
+    $server['s']['playersmax'] = $find['settings']['maxPublicPlayers'];
+    
+    $server['e']['anticheat'] = $find['attributes']['BANTICHEATPROTECTED_b'];
+    $server['e']['allowJoinInProgress'] = $find['settings']['allowJoinInProgress'];
+    $server['e']['description'] = $find['attributes']['DESCRIPTION_s'];
+    $server['e']['version'] = $find['attributes']['VERSION_s'];
+    return true;
+  }
+  function lgsl_query_52(&$server, &$lgsl_need, &$lgsl_fp) { // ARK: Survival Ascended
+    $buffer = lgsl_query_eos($server, $lgsl_fp, "client_credentials", "ad9a8feffb3b4b2ca315546f038c3ae2", "xyza7891muomRmynIIHaJB9COBKkwj6n", "PP5UGxysEieNfSrEicaD1N2Bb3TdXuD7xHYcsdUHZ7s");
+    if (!$buffer) return false;
+    // filtering by port
+    $find = array_filter($buffer, function($k) use($server) {
+      return $k['attributes']['ADDRESSBOUND_s'] === "{$server['b']['ip']}:{$server['b']['c_port']}" || $k['attributes']['ADDRESSBOUND_s'] === "0.0.0.0:{$server['b']['c_port']}";
+    });
+    if (!$find) return false;
+    $find = reset($find);
+    $server['s']['name'] = $find['attributes']['CUSTOMSERVERNAME_s'];
+    $server['s']['map'] = $find['attributes']['MAPNAME_s'];
+    $server['s']['password'] = $find['attributes']['SERVERPASSWORD_b'];
+    $server['s']['players'] = $find['totalPlayers'];
+    $server['s']['playersmax'] = $find['settings']['maxPublicPlayers'];
+    
+    $server['e']['anticheat'] = $find['attributes']['SERVERUSESBATTLEYE_b'];
+    $server['e']['allowJoinInProgress'] = $find['settings']['allowJoinInProgress'];
+    $server['e']['day'] = $find['attributes']['DAYTIME_s'];
+    $server['e']['version'] = "v{$find['attributes']['BUILDID_s']}.{$find['attributes']['MINORBUILDID_s']}";
+    return true;
   }
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
