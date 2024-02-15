@@ -85,7 +85,7 @@
         $total['playersmax'] += $server->get_players_count('max');
 
         $total['servers']++;
-        if (in_array($server->get_status(), [Server::ONLINE, Server::PASSWORDED])) {
+        if ($server->isOnline()) {
           $total['servers_online']++;
         } else {
           $total['servers_offline']++;
@@ -138,13 +138,11 @@
 				return round($time_taken, 2);
 			}
 		}
-    static function realpath($path)
-    {
+    static function realpath($path) {
       global $lgsl_config;
       return $lgsl_config['no_realpath'] ? $path : realpath($path);
     }
-    static function buildLink($url, $params)
-    {
+    static function buildLink($url, $params) {
       if (!strpos($url, '?')) { // IS NO PARAMS
         return "{$url}?" . http_build_query($params);
       }
@@ -168,24 +166,30 @@
       }
 		}
 		static public function locationCoords($code) {
-			$a = ["AD"=>[0,0],"AE"=>[16,0],"AF"=>[32,0],"AG"=>[48,0],"AI"=>[64,0],"AL"=>[80,0],"AM"=>[96,0],"AN"=>[112,0],"AO"=>[128,0],"AR"=>[144,0],"AS"=>[160,0],"AT"=>[176,0],"AU"=>[192,0],"AW"=>[0,11],"AX"=>[16,11],"AZ"=>[32,11],
-						"BA"=>[48,11],"BB"=>[64,11],"BD"=>[80,11],"BE"=>[96,11],"BF"=>[112,11],"BG"=>[128,11],"BH"=>[144,11],"BI"=>[160,11],"BJ"=>[176,11],"BM"=>[192,11],"BN"=>[0,22],"BO"=>[16,22],"BR"=>[32,22],"BS"=>[48,22],"BT"=>[64,22],"BV"=>[80,22],
-						"BW"=>[96,22],"BY"=>[112,22],"BZ"=>[128,22],"CA"=>[144,22],"CC"=>[160,22],"CD"=>[176,22],"CF"=>[192,22],"CG"=>[0,33],"CH"=>[16,33],"CI"=>[32,33],"CK"=>[48,33],"CL"=>[64,33],"CM"=>[80,33],"CN"=>[96,33],"CO"=>[112,33],"CR"=>[128,33],
-						"CS"=>[144,33],"CU"=>[160,33],"CV"=>[176,33],"CX"=>[192,33],"CY"=>[0,44],"CZ"=>[16,44],"DE"=>[32,44],"DJ"=>[48,44],"DK"=>[64,44],"DM"=>[80,44],"DO"=>[96,44],"DZ"=>[112,44],"EC"=>[128,44],"EE"=>[144,44],"EG"=>[160,44],"EH"=>[176,44],
-						"ER"=>[192,44],"ES"=>[0,55],"ET"=>[16,55],"EU"=>[32,55],"FI"=>[48,55],"FJ"=>[64,55],"FK"=>[80,55],"FM"=>[96,55],"FO"=>[112,55],"FR"=>[128,55],"GA"=>[144,55],"GB"=>[160,55],"GD"=>[176,55],"GE"=>[192,55],"GF"=>[0,66],"GH"=>[16,66],
-						"GI"=>[32,66],"GL"=>[48,66],"GM"=>[64,66],"GN"=>[80,66],"GP"=>[96,66],"GQ"=>[112,66],"GR"=>[128,66],"GS"=>[144,66],"GT"=>[160,66],"GU"=>[176,66],"GW"=>[192,66],"GY"=>[0,77],"HK"=>[16,77],"HM"=>[32,77],"HN"=>[48,77],"HR"=>[64,77],
-						"HT"=>[80,77],"HU"=>[96,77],"ID"=>[112,77],"IE"=>[128,77],"IL"=>[144,77],"IN"=>[160,77],"IO"=>[176,77],"IQ"=>[192,77],"IR"=>[0,88],"IS"=>[16,88],"IT"=>[32,88],"JM"=>[48,88],"JO"=>[64,88],"JP"=>[80,88],"KE"=>[96,88],"KG"=>[112,88],
-						"KH"=>[128,88],"KI"=>[144,88],"KM"=>[160,88],"KN"=>[176,88],"KP"=>[192,88],"KR"=>[0,99],"KW"=>[16,99],"KY"=>[32,99],"KZ"=>[48,99],"LA"=>[64,99],"LB"=>[80,99],"LC"=>[96,99],"LI"=>[112,99],"LK"=>[128,99],"LR"=>[144,99],"LS"=>[160,99],
-						"LT"=>[176,99],"LU"=>[192,99],"LV"=>[0,110],"LY"=>[16,110],"MA"=>[32,110],"MC"=>[48,110],"MD"=>[64,110],"ME"=>[80,110],"MG"=>[96,110],"MH"=>[112,110],"MK"=>[128,110],"ML"=>[144,110],"MM"=>[160,110],"MN"=>[176,110],"MO"=>[192,110],
-						"MP"=>[0,121],"MQ"=>[16,121],"MR"=>[32,121],"MS"=>[48,121],"MT"=>[64,121],"MU"=>[96,121],"MV"=>[112,121],"MW"=>[128,121],"MX"=>[144,121],"MY"=>[160,121],"MZ"=>[176,121],"NA"=>[192,121],"NC"=>[0,132],"NE"=>[16,132],"NF"=>[32,132],
-						"NG"=>[48,132],"NI"=>[64,132],"NL"=>[80,132],"NO"=>[96,132],"NP"=>[112,132],"NR"=>[128,132],"NU"=>[144,132],"NZ"=>[160,132],"OFF"=>[176,132],"OM"=>[192,132],"PA"=>[0,143],"PE"=>[16,143],"PF"=>[32,143],"PG"=>[48,143],"PH"=>[64,143],
-						"PK"=>[80,143],"PL"=>[96,143],"PM"=>[112,143],"PN"=>[128,143],"PR"=>[144,143],"PS"=>[160,143],"PT"=>[176,143],"PW"=>[192,143],"PY"=>[0,154],"QA"=>[16,154],"RE"=>[32,154],"RO"=>[48,154],"RS"=>[64,154],"RU"=>[80,154],"RW"=>[96,154],
-						"SA"=>[112,154],"SB"=>[128,154],"SC"=>[144,154],"SD"=>[160,154],"SE"=>[176,154],"SG"=>[192,154],"SH"=>[0,165],"SI"=>[16,165],"SJ"=>[32,165],"SK"=>[48,165],"SL"=>[64,165],"SM"=>[80,165],"SN"=>[96,165],"SO"=>[112,165],"SR"=>[128,165],
-						"ST"=>[144,165],"SV"=>[160,165],"SY"=>[176,165],"SZ"=>[192,165],"TC"=>[0,176],"TD"=>[16,176],"TF"=>[32,176],"TG"=>[48,176],"TH"=>[64,176],"TJ"=>[80,176],"TK"=>[96,176],"TL"=>[112,176],"TM"=>[128,176],"TN"=>[144,176],"TO"=>[160,176],
-						"TR"=>[176,176],"TT"=>[192,176],"TV"=>[0,187],"TW"=>[16,187],"TZ"=>[32,187],"UA"=>[48,187],"UG"=>[64,187],"UK"=>[80,187],"UM"=>[96,187],"US"=>[112,187],"UY"=>[128,187],"UZ"=>[144,187],"VA"=>[160,187],"VC"=>[176,187],"VE"=>[192,187],
-						"VG"=>[208,0],"VI"=>[208,11],"VN"=>[208,22],"VU"=>[208,33],"WF"=>[208,44],"WS"=>[208,55],"XX"=>[208,66],"YE"=>[208,77],"YT"=>[208,88],"ZA"=>[208,99],"ZM"=>[208,110],"ZW"=>[208,121]];
-			return $a[$code];
+      $a = array_search($code, [
+        "AD","AE","AF","AG","AI","AL","AM","AN","AO","AR","AS","AT","AU","VG",
+        "AW","AX","AZ","BA","BB","BD","BE","BF","BG","BH","BI","BJ","BM","VI",
+        "BN","BO","BR","BS","BT","BV","BW","BY","BZ","CA","CC","CD","CF","VN",
+        "CG","CH","CI","CK","CL","CM","CN","CO","CR","CS","CU","CV","CX","VU",
+        "CY","CZ","DE","DJ","DK","DM","DO","DZ","EC","EE","EG","EH","ER","WF",
+        "ES","ET","EU","FI","FJ","FK","FM","FO","FR","GA","GB","GD","GE","WS",
+        "GF","GH","GI","GL","GM","GN","GP","GQ","GR","GS","GT","GU","GW","XX",
+        "GY","HK","HM","HN","HR","HT","HU","ID","IE","IL","IN","IO","IQ","YE",
+        "IR","IS","IT","JM","JO","JP","KE","KG","KH","KI","KM","KN","KP","YT",
+        "KR","KW","KY","KZ","LA","LB","LC","LI","LK","LR","LS","LT","LU","ZA",
+        "LV","LY","MA","MC","MD","ME","MG","MH","MK","ML","MM","MN","MO","ZM",
+        "MP","MQ","MR","MS","MT",  "","MU","MV","MW","MX","MY","MZ","NA","ZW",
+        "NC","NE","NF","NG","NI","NL","NO","NP","NR","NU","NZ","OFF","OM","",
+        "PA","PE","PF","PG","PH","PK","PL","PM","PN","PR","PS","PT","PW","",
+        "PY","QA","RE","RO","RS","RU","RW","SA","SB","SC","SD","SE","SG","",
+        "SH","SI","SJ","SK","SL","SM","SN","SO","SR","ST","SV","SY","SZ","",
+        "TC","TD","TF","TG","TH","TJ","TK","TL","TM","TN","TO","TR","TT","",
+        "TV","TW","TZ","UA","UG","UK","UM","US","UY","UZ","VA","VC","VE"]);
+      return [$a % 14 * 16, floor($a / 14) * 11];
 		}
+    static public function normalizeString($string) {
+      return preg_replace("/[^a-z0-9_]/", "_", strtolower($string));
+    }
   }
 //------------------------------------------------------------------------------------------------------------+
   class Database {
@@ -209,7 +213,7 @@
 				$type = $lgsl_config['db']['type'];
 			}
       if ($lgsl_config['cms'] !== 'sa') {
-        $this->load_cms_config();
+        $this->loadCmsConfig();
       }
       $types = [
         'mysql' => 'tltneon\LGSL\MysqlWrapper',
@@ -239,9 +243,9 @@
       $this->_connection->clear();
     }
 
-    public function load_cms_config() {
+    public function loadCmsConfig() {
       global $lgsl_config, $lgsl_file_path;
-      switch($lgsl_config['cms']) {
+      switch ($lgsl_config['cms']) {
         case "e107":
           @include "{$lgsl_file_path}../../../e107_config.php";
           $lgsl_config['db']['server'] = $mySQLserver;
@@ -253,7 +257,7 @@
 
         case "joomla":
           @include_once "{$lgsl_file_path}../../../configuration.php";
-          $joomla_config = new JConfig();
+          $joomla_config = new \JConfig();
           $lgsl_config['db']['server'] = $joomla_config->host;
           $lgsl_config['db']['user']   = $joomla_config->user;
           $lgsl_config['db']['pass']   = $joomla_config->password;
@@ -339,9 +343,9 @@
       $zone         = isset($options['zone'])         ? (int) $options['zone']           : 0;
       $hide_offline = isset($options['hide_offline']) ? (int) $options['hide_offline']   : (int) $lgsl_config['hide_offline'][$zone];
       $random       = isset($options['random'])       ? (int) $options['random']         : (int) $lgsl_config['random'][$zone];
-      $type         = empty($options['type'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['type']));
-      $game         = empty($options['game'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['game']));
-      $mode         = empty($options['mode'])         ? ""                               : preg_replace("/[^a-z0-9_]/", "_", strtolower($options['mode']));
+      $type         = empty($options['type'])         ? ""                               : LGSL::normalizeString($options['type']);
+      $game         = empty($options['game'])         ? ""                               : LGSL::normalizeString($options['game']);
+      $mode         = empty($options['mode'])         ? ""                               : LGSL::normalizeString($options['mode']);
       $page         = empty($options['page'])         ? ""                               : "LIMIT {$limit} OFFSET " . strval($limit*((int)$options['page'] - 1));
       $status       = empty($options['status'])       ? ""                               : 1;
       $order        = empty($options['order'])        ? ""                               : $options['order'];
@@ -349,20 +353,19 @@
       $server_limit = empty($options['limit'])        ? ""                               : $lgsl_config['pagination_lim'];
       $server_limit = empty($random)                  ? $server_limit                    : $random;
 
-                           $mysqli_where   = ["`disabled`=0"];
-      if ($zone != 0)    { $mysqli_where[] = "FIND_IN_SET('{$zone}',`zone`)"; }
-      if ($type != "")   { $mysqli_where[] = "`type`='{$type}'"; }
-      if ($game != "")   { $mysqli_where[] = "`game`='{$game}'"; }
-      if ($mode != "")   { $mysqli_where[] = "`mode`='{$mode}'"; }
-      if ($status != "") { $mysqli_where[] = "`status`={$status}"; }
+                           $where   = ["`disabled`=0"];
+      if ($zone != 0)    { $where[] = "FIND_IN_SET('{$zone}',`zone`)"; }
+      if ($type != "")   { $where[] = "`type`='{$type}'"; }
+      if ($game != "")   { $where[] = "`game`='{$game}'"; }
+      if ($mode != "")   { $where[] = "`mode`='{$mode}'"; }
+      if ($status != "") { $where[] = "`status`={$status}"; }
       if ($server_limit != "") { $server_limit = "LIMIT {$server_limit}"; }
       if ($sort != "") { $sort = "ORDER BY {$options['sort']} {$order}"; }
 
-      $mysqli_query  = "SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $mysqli_where)." {$sort} {$server_limit} {$page}";
-      $mysqli_result = $db->query($mysqli_query);
+      $result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $where)." {$sort} {$server_limit} {$page}");
 
       $output = [];
-      foreach ($mysqli_result as $s) {
+      foreach ($result as $s) {
         $server = new Server();
         $server->from_array($db->lgslUnserializeServerData($s));
 
@@ -385,9 +388,9 @@
       global $lgsl_config;
       $db = LGSL::db();
 
-      $mysqli_query  = "SELECT COUNT(*) as servers, SUM(players) as players, SUM(playersmax) as playersmax, SUM(STATUS) as servers_online, COUNT(*)-SUM(status) as servers_offline FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE disabled = 0;";
-      $mysqli_result = $db->query($mysqli_query, true);
-      return $mysqli_result;
+      $query  = "SELECT COUNT(*) as servers, SUM(players) as players, SUM(playersmax) as playersmax, SUM(STATUS) as servers_online, COUNT(*)-SUM(status) as servers_offline FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE disabled = 0;";
+      $result = $db->query($query, true);
+      return $result;
     }
 
     function lgsl_save_cache(&$server) {
@@ -395,7 +398,7 @@
       $packed_cache = $this->escape_string(base64_encode(serialize($server->to_array())));
       $packed_times = $this->escape_string(implode("_", $server->get_timestamps()));
       $status = (int) ($server->get_status() === Server::ONLINE);
-      $mysqli_query  = "
+      $this->execute("
         UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`
         SET `status`='{$status}',
             `cache`='{$packed_cache}',
@@ -406,9 +409,7 @@
             `mode`='{$this->escape_string($server->get_mode())}',
             `name`='{$this->escape_string($server->get_name())}',
             `map`='{$server->get_map()}'
-        WHERE `id` = '{$server->get_id()}'
-        ";
-        $this->execute($mysqli_query);
+        WHERE `id` = '{$server->get_id()}';");
     }
     
     function lgslUnserializeServerData($data) {
@@ -700,7 +701,7 @@
       }
 
       if ($lgsl_config['locations'] && empty($this->_other['location'])) {
-        $this->_other['location'] = $lgsl_config['locations'] ? $this->queryLocation() : "";
+        $this->_other['location'] = $this->queryLocation();
       }
     }
     
@@ -777,7 +778,7 @@
       return $this->_server['mode'] ? $this->_server['mode'] : 'none';
     }
     public function get_map($formatted = false) {
-			if ($formatted) return $this->_server['map'] ? preg_replace("/[^a-z0-9_]/", "_", strtolower($this->_server['map'])) : LGSL::NONE;
+			if ($formatted) return $this->_server['map'] ? LGSL::normalizeString($this->_server['map']) : LGSL::NONE;
       return $this->_server['map'] ? $this->_server['map'] : LGSL::NONE;
     }
     public function get_players() {
@@ -880,7 +881,7 @@
         Protocol::TS3           => "ts3server://{IP}?port={C_PORT}",
         Protocol::TEASPEAK      => "ts3server://{IP}?port={C_PORT}",
         Protocol::WARSOW        => "warsow://{IP}:{C_PORT}",
-        Protocol::WOW            => "javascript:prompt('Put it into your realm list:', 'set realmlist {IP}')"];
+        Protocol::WOW           => "javascript:prompt('Put it into your realm list:', 'set realmlist {IP}')"];
     
         // SOFTWARE PORT IS THE QUERY PORT UNLESS SET
         if (!$this->get_s_port()) {
@@ -910,16 +911,17 @@
       if ($this->get_status() === self::PASSWORDED) return "{$this->add_url_path()}other/map_overlay_password.gif";
       return "{$this->add_url_path()}other/overlay.gif";
     }
-    public function get_map_image($check_exists = true, $id = -1) {
+    public function get_map_image($check_exists = true) {
       global $lgsl_file_path, $lgsl_url_path;
 
-      $type = preg_replace("/[^a-z0-9_]/", "_", strtolower($this->get_type()));
-      $game = preg_replace("/[^a-z0-9_]/", "_", strtolower($this->get_game()));
-      $map  = preg_replace("/[^a-z0-9_]/", "_", strtolower($this->get_map()));
+      $type = LGSL::normalizeString($this->get_type());
+      $game = LGSL::normalizeString($this->get_game());
+      $map  = LGSL::normalizeString($this->get_map());
   
       if ($check_exists !== true) { return "{$lgsl_url_path}maps/{$type}/{$game}/{$map}.jpg"; }
   
-      if ($this->_base['status']) {
+      $id = "_{$this->get_id()}";
+      if ($this->isOnline()) {
         $path_list = [
         "maps/{$type}/{$game}/{$map}.jpg",
         "maps/{$type}/{$game}/{$map}.gif",
@@ -927,27 +929,15 @@
         "maps/{$type}/{$map}.jpg",
         "maps/{$type}/{$map}.gif",
         "maps/{$type}/{$map}.png",
+        "other/map_no_image_{$id}.jpg",
         "other/map_no_image.jpg"];
-        if ($id > -1) {
-          $path_list_id = [
-            "other/map_no_image_{$id}.jpg",
-            "other/map_no_image_{$id}.gif",
-            "other/map_no_image_{$id}.png"];
-          $path_list = array_merge($path_list, $path_list_id);
-        }
       } else {
         $path_list = [
         "maps/{$type}/map_no_response.jpg",
         "maps/{$type}/map_no_response.gif",
         "maps/{$type}/map_no_response.png",
+        "other/map_no_response_{$id}.jpg",
         "other/map_no_response.jpg"];
-        if ($id > -1) {
-          $path_list_id = [
-            "other/map_no_response_{$id}.jpg",
-            "other/map_no_response_{$id}.gif",
-            "other/map_no_response_{$id}.png"];
-          $path_list = array_merge($path_list, $path_list_id);
-        }
       }
   
       foreach ($path_list as $path) {
@@ -961,8 +951,8 @@
       return "[ {$lgsl_config['text']['typ']}: {$this->get_type()} ] [ {$lgsl_config['text']['gme']}: {$this->get_game()} ]";
     }
     public function game_icon($path = '') {
-      $type = preg_replace("/[^a-z0-9_]/", "_", strtolower($this->get_type()));
-      $game = preg_replace("/[^a-z0-9_]/", "_", strtolower($this->get_game()));
+      $type = LGSL::normalizeString($this->get_type());
+      $game = LGSL::normalizeString($this->get_game());
 
       $path_list = [
       "icons/{$type}/{$game}.gif",
@@ -977,7 +967,6 @@
       return "{$path}other/icon_unknown.gif";
     }
     public function icon_status($path = '') {
-      global $lgsl_url_path;
       switch ($this->get_status()) {
         case self::PENDING: return "{$path}other/icon_unknown.gif";
         case self::OFFLINE: return "{$path}other/icon_no_response.gif";
@@ -987,7 +976,7 @@
     }
     public function location_text() {
       global $lgsl_config;
-      return  "{$lgsl_config['text']['loc']} {$this->getLocation()}";
+      return "{$lgsl_config['text']['loc']} {$this->getLocation()}";
     }
     public function getLocation() {
       return $this->_other['location'] ?? "XX";
