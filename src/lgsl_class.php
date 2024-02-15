@@ -28,20 +28,15 @@
     static function link($s = "", $p = "") {
       global $lgsl_config, $lgsl_url_path;
       $index = $lgsl_config['direct_index'] ? "index.php" : "";
+      if ($lgsl_config['cms'] === "sa") {
+        return "{$lgsl_url_path}../{$index}" . ($s ? ($p ? "?ip={$s}&port={$p}" : "?s={$s}") : "");
+      }
 
-      switch($lgsl_config['cms']) {
-        case "e107": $link = $s ? e_PLUGIN_ABS."lgsl/{$index}?s={$s}" : e_PLUGIN_ABS."lgsl/{$index}"; break;
-        case "joomla": $link = $s ? JRoute::_("index.php?option=com_lgsl&s={$s}") : JRoute::_("index.php?option=com_lgsl"); break;
-        case "drupal": $link = $s ? url("LGSL/{$s}") : url("LGSL"); break;
-        case "phpnuke": $link = $s ? "modules.php?name=LGSL&s={$s}" : "modules.php?name=LGSL"; break;
-        /*"sa"*/
-        default: 
-          $link = $s ? 
-                    $p ?
-                      "{$lgsl_url_path}../{$index}?ip={$s}&port={$p}" :
-                      "{$lgsl_url_path}../{$index}?s={$s}" :
-                      "{$lgsl_url_path}../{$index}";
-        break;
+      switch ($lgsl_config['cms']) {
+        case "e107": $link = e_PLUGIN_ABS . "lgsl/{$index}" . ($s ? "?s={$s}" : ""); break;
+        case "joomla": $link = JRoute::_("index.php?option=com_lgsl" . ($s ? "&s={$s}" : "")); break;
+        case "drupal": $link = url("LGSL" . ($s ? "/{$s}" : "")); break;
+        case "phpnuke": $link = "modules.php?name=LGSL" . ($s ? "&s={$s}" : ""); break;
       }
       return $link;
     }
