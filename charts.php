@@ -15,6 +15,16 @@
 		}
 		return $result;
 	}
+  function findMax(&$server) {
+    $history = $server->get_history();
+    $max = 1;
+    if (count($history) > 0) {
+      foreach ($history as $item) {
+        if ($item['p'] > $max) $max = $item['p'];
+      }
+    }
+    return $max + 1;
+  }
 
   // SETTINGS
 
@@ -44,7 +54,7 @@
     imagedestroy($im);
     exit();
   }
-  $max = $server->get_players_count('max') > 0 ? $server->get_players_count('max') : 1;
+  $max = $server->get_players_count('max') > 0 ? $server->get_players_count('max') : findMax($server);
   $x0 = 30;
   $y0 = 20;
   $period = 60 * 60 * 24; // 1 day
@@ -91,7 +101,7 @@
   }
   imagestring($im, 1, $x0 - 6, $maxY + 2, $str, $black);
 
-  if ($max > 1) {
+  if (count($history) > 0) {
     $ySteps = ($maxY-$y0) / $yStep - 1;
     for ($i = 1; $i < $ySteps + 1; $i++) {
       imageline($im, $x0 + 1, (int) $maxY - $yStep * $i, $maxX, (int) $maxY - $yStep * $i, $gray);
@@ -121,8 +131,8 @@
 		}
 	}
 
-  $game_id = makeImage($server->game_icon('src/'), 16, 16);                          // create game icon
-  imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);                             // place game icon
+  $game_id = makeImage($server->game_icon('src/'), 16, 16); // create game icon
+  imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);             // place game icon
 
   $font = dirname(__FILE__) . '/src/other/cousine.ttf';
 	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim($server->get_name(false)));
