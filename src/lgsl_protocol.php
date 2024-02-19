@@ -139,7 +139,6 @@
     const TS3 = "ts3";
     const TEASPEAK = "teaspeak";
     const WARSOW = "warsow";
-    const WARSOWOLD = "warsowold";
     const URBANTERROR = "urbanterror";
     const UT = "ut";
     const UT2003 = "ut2003";
@@ -284,7 +283,7 @@
         self::RAVENSHIELD   => ["04", "Raven Shield"],
         self::REDORCHESTRA  => ["Query13", "Red Orchestra"],
         self::RFACTOR       => ["Query16", "rFactor"],
-        self::SAMP          => ["12", "San Andreas Multiplayer"],
+        self::SAMP          => ["Query12", "San Andreas Multiplayer"],
         self::SAVAGE        => ["Query17", "Savage"],
         self::SAVAGE2       => ["Query18", "Savage 2"],
         self::SERIOUSSAM    => ["03", "Serious Sam"],
@@ -313,13 +312,12 @@
         self::TS3           => ["Query33", "Teamspeak 3"],
         self::TEASPEAK      => ["Query33", "Teaspeak"],
         self::WARSOW        => ["02", "Warsow"],
-        self::WARSOWOLD     => ["02", "Warsow (v0.4.2 <)"],
         self::URBANTERROR   => ["02", "UrbanTerror"],
         self::UT            => ["03", "Unreal Tournament"],
         self::UT2003        => ["Query13", "Unreal Tournament 2003"],
         self::UT2004        => ["Query13", "Unreal Tournament 2004"],
         self::UT3           => ["11", "Unreal Tournament 3"],
-        self::VCMP          => ["12", "Vice City Multiplayer"],
+        self::VCMP          => ["Query12", "Vice City Multiplayer"],
         self::VIETCONG      => ["03", "Vietcong"],
         self::VIETCONG2     => ["09", "Vietcong 2"],
         self::WINDWARD      => ["Query49", "Windward"],
@@ -481,7 +479,6 @@
       $server = $this->_server->to_array();
 
       if     ($server['b']['type'] == "quake2")              { $this->_fp_write("\xFF\xFF\xFF\xFFstatus");        }
-      elseif ($server['b']['type'] == "warsowold")           { $this->_fp_write("\xFF\xFF\xFF\xFFgetinfo");       }
       elseif ($server['b']['type'] == "callofdutyiw")        { $this->_fp_write("\xFF\xFF\xFF\xFFgetinfo LGSL");  } // IW6x
       elseif (strpos($server['b']['type'], "moh") !== FALSE) { $this->_fp_write("\xFF\xFF\xFF\xFF\x02getstatus"); } // mohaa_ mohaab_ mohaas_ mohpa_
       else                                                   { $this->_fp_write("\xFF\xFF\xFF\xFFgetstatus");     }
@@ -599,7 +596,7 @@
         $packet = $this->_fp_read(4096);
   
         // QUERY PORT CHECK AS THE CONNECTION PORT WILL ALSO RESPOND
-        if (!$packet->has("\\")) { return FALSE; }
+        if (!$packet || !$packet->has("\\")) { return FALSE; }
   
         // REMOVE SLASH PREFIX
         if ($packet->get(0) == "\\") { $packet->skip(1); }
@@ -1145,7 +1142,7 @@
       $buffer->skip(1); // REMOVE HEADER \x02
 
       while ($buffer->length() > 0) {
-        if ($buffer[0] == "\x00") { break; }
+        if ($buffer->get(0) == "\x00") { break; }
 
         $field = $buffer->cutString(0, "\x00\x00");
         $field = strtolower($field);
@@ -1537,6 +1534,7 @@
       $status = $this->lgsl_query_06();
   
       if (!$status) { return FALSE; }
+      $server = $this->_server->to_array();
   
       //---------------------------------------------------------+
   
@@ -1545,156 +1543,34 @@
   
       //---------------------------------------------------------+
   
-      $lgsl_ut3_key = [
-      "s0"          => "bots_skill",
-      "s6"          => "pure",
-      "s7"          => "password",
-      "s8"          => "bots_vs",
-      "s10"         => "forcerespawn",
-      "p268435703"  => "bots",
-      "p268435704"  => "goalscore",
-      "p268435705"  => "timelimit",
-      "p268435717"  => "mutators_default",
-      "p1073741826" => "gamemode",
-      "p1073741827" => "description",
-      "p1073741828" => "mutators_custom"];
+      $lgsl_ut3_key = ["s0" => "bots_skill", "s6" => "pure", "s7" => "password", "s8" => "bots_vs", "s10" => "forcerespawn", "p268435703" => "bots",
+      "p268435704" => "goalscore", "p268435705" => "timelimit", "p268435717" => "mutators_default", "p1073741826" => "gametype", "p1073741827" => "description",
+      "p1073741828" => "mutators_custom", "s32779" => "gamemode_id"];
   
       foreach ($lgsl_ut3_key as $old => $new) {
         if (!isset($server['e'][$old])) { continue; }
         $server['e'][$new] = $server['e'][$old];
         unset($server['e'][$old]);
       }
+      $modes = ["DM", "WAR", "VCTF", "TDM", "DUEL"];
+      $server['s']['mode'] = $modes[$server['e']['gamemode_id']];
+      unset($server['e']['s1'], $server['e']['s9'], $server['e']['s11'], $server['e']['s12'], $server['e']['s13'], $server['e']['s14']);
   
       //---------------------------------------------------------+
   
-      $part = explode(".", $server['e']['gamemode']);
+      $part = explode(".", $server['e']['gametype']);
   
       if ($part[0] && (stristr($part[0], "UT") === FALSE)) {
         $server['s']['game'] = $part[0];
       }
   
       //---------------------------------------------------------+
-  
-      $tmp = $server['e']['mutators_default'];
-             $server['e']['mutators_default'] = "";
-  
-      if ($tmp & 1)     { $server['e']['mutators_default'] .= " BigHead";           }
-      if ($tmp & 2)     { $server['e']['mutators_default'] .= " FriendlyFire";      }
-      if ($tmp & 4)     { $server['e']['mutators_default'] .= " Handicap";          }
-      if ($tmp & 8)     { $server['e']['mutators_default'] .= " Instagib";          }
-      if ($tmp & 16)    { $server['e']['mutators_default'] .= " LowGrav";           }
-      if ($tmp & 64)    { $server['e']['mutators_default'] .= " NoPowerups";        }
-      if ($tmp & 128)   { $server['e']['mutators_default'] .= " NoTranslocator";    }
-      if ($tmp & 256)   { $server['e']['mutators_default'] .= " Slomo";             }
-      if ($tmp & 1024)  { $server['e']['mutators_default'] .= " SpeedFreak";        }
-      if ($tmp & 2048)  { $server['e']['mutators_default'] .= " SuperBerserk";      }
-      if ($tmp & 8192)  { $server['e']['mutators_default'] .= " WeaponReplacement"; }
-      if ($tmp & 16384) { $server['e']['mutators_default'] .= " WeaponsRespawn";    }
-  
-      $server['e']['mutators_default'] = str_replace(" ",    " / ", trim($server['e']['mutators_default']));
-      $server['e']['mutators_custom']  = str_replace("\x1c", " / ",      $server['e']['mutators_custom']);
+
+      $server['e']['mutators_default'] = Helper::bitComparer($server['e']['mutators_default'], ["BigHead","FriendlyFire","Handicap","Instagib","LowGrav","?","NoPowerups","NoTranslocator","Slomo","?","SpeedFreak","SuperBerserk","?","WeaponReplacement","WeaponsRespawn"]);
+      $server['e']['mutators_custom']  = str_replace("\x1c", " / ", $server['e']['mutators_custom']);
   
       //---------------------------------------------------------+
       $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_12() {
-      $server = $this->_server->to_array();
-      //---------------------------------------------------------+
-      $ip = explode('.', $this->_server->get_ip(true));
-      $sPacket = chr($ip[0]).chr($ip[1]).chr($ip[2]).chr($ip[3]).chr($this->_server->get_q_port() & 0xFF).chr($this->_server->get_q_port() >> 8 & 0xFF);
-      if     ($server['b']['type'] == "samp") { $challenge_packet = "SAMP{$sPacket}"; }
-      elseif ($server['b']['type'] == "vcmp") { $challenge_packet = "VCMP{$sPacket}"; $this->_lgsl_need['e'] = FALSE; }
-  
-      if     ($this->_lgsl_need['s']) { $challenge_packet .= "i"; }
-      elseif ($this->_lgsl_need['e']) { $challenge_packet .= "r"; }
-      elseif ($this->_lgsl_need['p'] && $server['b']['type'] == "samp") { $challenge_packet .= "d"; }
-      elseif ($this->_lgsl_need['p'] && $server['b']['type'] == "vcmp") { $challenge_packet .= "c"; }
-  
-      $this->_fp_write($challenge_packet);
-      $buffer = $this->_fp_read();
-  
-      if (!$buffer) { // IN CASE OF PACKET LOSS
-        $this->_fp_write($challenge_packet);
-        $buffer = $this->_fp_read();
-      }
-      if (!$buffer) {
-        if ($this->_lgsl_need['s'] || $this->_server->get_status() === Server::OFFLINE) return FALSE;
-        return true;
-      }
-  
-      //---------------------------------------------------------+
-  
-      $buffer->skip(10); // REMOVE HEADER
-  
-      $response_type = $buffer->cutByte();
-  
-      //---------------------------------------------------------+
-  
-      if ($response_type == "i") {
-        $this->_lgsl_need['s'] = FALSE;
-  
-        if ($server['b']['type'] == "vcmp") { $buffer->skip(12); }
-  
-        $server['s']['password']   = $buffer->cutByteOrd();
-        $server['s']['players']    = $buffer->cutByteUnpack(2, "S");
-        $server['s']['playersmax'] = $buffer->cutByteUnpack(2, "S");
-        $server['s']['name']       = $buffer->cutPascal(4);
-        $server['s']['mode']       = $buffer->cutPascal(4);
-        $server['s']['map']        = $buffer->cutPascal(4);
-				$this->set_requested('s');
-      }
-  
-      //---------------------------------------------------------+
-  
-      elseif ($response_type == "r") {
-        $item_total = $buffer->cutByteUnpack(2, "S");
-  
-        for ($i=0; $i < $item_total; $i++) {
-          if ($buffer->length() == 0) { return FALSE; }  
-          $data_key   = strtolower($buffer->cutPascal());
-          $data_value = $buffer->cutPascal();
-  
-          $server['e'][$data_key] = $data_value;
-        }
-				$this->set_requested('e');
-      }
-  
-      //---------------------------------------------------------+
-  
-      elseif ($response_type == "d") {
-        $player_total = $buffer->cutByteUnpack(2, "S");
-  
-        for ($i=0; $i < $player_total; $i++) {
-          if ($buffer->length() == 0) { return FALSE; }  
-  
-          $server['p'][$i]['pid']   = $buffer->cutByteOrd();
-          $server['p'][$i]['name']  = $buffer->cutPascal();
-          $server['p'][$i]['score'] = $buffer->cutByteUnpack(4, "S");
-          $server['p'][$i]['ping']  = $buffer->cutByteUnpack(4, "S");
-        }
-				$this->set_requested('p');
-      }
-      
-      //---------------------------------------------------------+
-  
-      elseif ($response_type == "c") {  
-        $player_total = $buffer->cutByteUnpack(2, "S");
-  
-        for ($i=0; $i<$player_total; $i++) {
-          if ($buffer->length() == 0) { return FALSE; }  
-  
-          $server['p'][$i]['name']  = $buffer->cutPascal();
-        }
-				$this->set_requested('p');
-      }
-			
-			$this->_server->from_array($server);
-      if ($this->_lgsl_need['s'] || $this->_lgsl_need['e'] || $this->_lgsl_need['p']) {
-				return call_user_func([$this, "lgsl_query_12"]);
-			}
-  
-      //---------------------------------------------------------+
       return TRUE;
     }
     public function lgsl_query_40() { // Farming Simulator 2019
@@ -1829,7 +1705,74 @@
   /* Query 11-20 */
 
 
-  class Query13 extends QuerySocket { // Killing Floor | Red Orchestra
+  class Query12 extends QuerySocket { // SAMP | VCMP
+    protected $separatedPackets = true;
+    public function process() {
+      $ip = explode('.', $this->_server->get_ip(true));
+      $isVcmp = $this->_server->get_type() === Protocol::VCMP;
+      $sPacket = chr($ip[0]).chr($ip[1]).chr($ip[2]).chr($ip[3]).chr($this->_server->get_q_port() & 0xFF).chr($this->_server->get_q_port() >> 8 & 0xFF);
+      if ($isVcmp) { $challenge_packet = "VCMP{$sPacket}"; $this->_need['e'] = FALSE; }
+      else { $challenge_packet = "SAMP{$sPacket}"; }
+
+      if     ($this->need('s')) { $challenge_packet .= "i"; }
+      elseif ($this->need('e')) { $challenge_packet .= "r"; }
+      elseif ($this->need('p') && !$isVcmp) { $challenge_packet .= "d"; }
+      elseif ($this->need('p') && $isVcmp) { $challenge_packet .= "c"; }
+
+      $buffer = $this->fetch($challenge_packet);
+      if (!$buffer) { // IN CASE OF PACKET LOSS
+        $buffer = $this->fetch($challenge_packet);
+      }
+      if (!$buffer) return $this::NO_RESPOND;
+      $buffer->show();
+
+      $buffer->skip(10); // REMOVE HEADER
+      $response_type = $buffer->cutByte();
+      if ($response_type == "i") {
+        if ($isVcmp) { $buffer->skip(12); }
+        $this->_data['s']['password']   = $buffer->cutByteOrd();
+        $this->_data['s']['players']    = $buffer->cutByteUnpack(2, "S");
+        $this->_data['s']['playersmax'] = $buffer->cutByteUnpack(2, "S");
+        $this->_data['s']['name']       = iconv('cp1251//IGNORE', 'utf-8//IGNORE', $buffer->cutPascal(4));
+        $this->_data['s']['mode']       = iconv('cp1251//IGNORE', 'utf-8//IGNORE', $buffer->cutPascal(4));
+        $this->_data['s']['map']        = $buffer->cutPascal(4);
+      }
+      elseif ($response_type == "r") {
+        $item_total = $buffer->cutByteUnpack(2, "S");
+
+        for ($i=0; $i < $item_total; $i++) {
+          if ($buffer->length() == 0) { return $this::WITH_ERROR; }  
+          $data_key   = strtolower($buffer->cutPascal());
+          $data_value = $buffer->cutPascal();
+
+          $this->_data['e'][$data_key] = $data_value;
+        }
+      }
+      elseif ($response_type == "d") {
+        $player_total = $buffer->cutByteUnpack(2, "S");
+
+        for ($i=0; $i < $player_total; $i++) {
+          if ($buffer->length() == 0) { return $this::WITH_ERROR; }  
+
+          $this->_data['p'][$i]['pid']   = $buffer->cutByteOrd();
+          $this->_data['p'][$i]['name']  = $buffer->cutPascal();
+          $this->_data['p'][$i]['score'] = $buffer->cutByteUnpack(4, "S");
+          $this->_data['p'][$i]['ping']  = $buffer->cutByteUnpack(4, "S");
+        }
+      }
+      elseif ($response_type == "c") {
+        $player_total = $buffer->cutByteUnpack(2, "S");
+
+        for ($i=0; $i<$player_total; $i++) {
+          if ($buffer->length() == 0) { return $this::WITH_ERROR; }  
+
+          $this->_data['p'][$i]['name']  = $buffer->cutPascal();
+        }
+      }
+      return $this::SUCCESS;
+    }
+  }
+  class Query13 extends QuerySocket { // Killing Floor | Red Orchestra | Unreal Tournament 2003 | Unreal Tournament 2004
     public function process() {
       $buffer_s = ""; $this->_fp->write("\x21\x21\x21\x21\x00"); // REQUEST [s]
       $buffer_e = ""; $this->_fp->write("\x21\x21\x21\x21\x01"); // REQUEST [e]
