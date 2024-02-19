@@ -4504,13 +4504,16 @@
     $find = reset($find);
     $server['s']['name'] = $find['attributes']['NAME_s'];
     $server['s']['map'] = $find['attributes']['MAPNAME_s'];
-    $server['s']['password'] = $find['attributes']['SERVERPASSWORD_b'];
+    $server['s']['password'] = $find['attributes']['ISPASSWORD_b'];
     $server['s']['players'] = $find['attributes']['PLAYERS_l'];
     $server['s']['playersmax'] = $find['settings']['maxPublicPlayers'];
     
-    $server['e']['anticheat'] = $find['attributes']['BANTICHEATPROTECTED_b'];
+    $server['e']['anticheat'] = $find['attributes']['BANTICHEATPROTECTED_b'] ? 1 : 0;
     $server['e']['allowJoinInProgress'] = $find['settings']['allowJoinInProgress'];
-    $server['e']['description'] = $find['attributes']['DESCRIPTION_s'];
+    $server['e']['create_time'] = Date("d.m.Y", $find['attributes']['CREATE_TIME_l']);
+    $server['e']['days'] = $find['attributes']['DAYS_l'];
+    $server['e']['dedicated'] = $find['attributes']['BISDEDICATED_b'];
+    $server['e']['description'] = isset($find['attributes']['DESCRIPTION_s']) ? $find['attributes']['DESCRIPTION_s'] : "";
     $server['e']['version'] = $find['attributes']['VERSION_s'];
     return true;
   }
