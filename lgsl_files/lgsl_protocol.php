@@ -398,6 +398,7 @@
     "nexuiz"        => "qtracker://{IP}:{S_PORT}?game=Nexuiz&action=show",
     "openttd"       => "steam://connect/{IP}:{C_PORT}",
     "painkiller"    => "qtracker://{IP}:{S_PORT}?game=Painkiller&action=show",
+    "palworld"      => "javascript:prompt('Put it into console:', '{IP}:{C_PORT}')",
     "plainsight"    => "http://www.plainsightgame.com",
     "prey"          => "qtracker://{IP}:{S_PORT}?game=Prey&action=show",
     "quakeworld"    => "qtracker://{IP}:{S_PORT}?game=QuakeWorld&action=show",
