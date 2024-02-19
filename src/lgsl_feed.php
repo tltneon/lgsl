@@ -15,18 +15,35 @@
 
 //------------------------------------------------------------------------------------------------------------+
 
-  $type    = isset($_GET['type'])    ? $_GET['type']    : "";
-  $ip      = isset($_GET['ip'])      ? $_GET['ip']      : "";
-  $c_port  = isset($_GET['c_port'])  ? intval($_GET['c_port'])            : 0;
-  $q_port  = isset($_GET['q_port'])  ? intval($_GET['q_port'])            : 0;
-  $s_port  = isset($_GET['s_port'])  ? intval($_GET['s_port'])            : 0;
-  $request = isset($_GET['request']) ? $_GET['request'] : "";
-  $version = isset($_GET['version']) ? $_GET['version'] : "";
-  $xml     = isset($_GET['xml'])     ? intval($_GET['xml'])               : 0;
-  $format  = isset($_GET['format'])  ? intval($_GET['format'])            : 0;
+  $type    = $_GET['type'] ?? "";
+  $ip      = $_GET['ip'] ?? "";
+  $request = $_GET['request'] ?? "sc";
+  $c_port  = intval($_GET['c_port'] ?? 0);
+  $q_port  = intval($_GET['q_port'] ?? 0);
+  $s_port  = intval($_GET['s_port'] ?? 0);
+  $xml     = intval($_GET['xml'] ?? 0);
+  $format  = intval($_GET['format'] ?? 0);
 
 //------------------------------------------------------------------------------------------------------------+
 // VALIDATE REQUEST
+
+  if (!$type && !$ip && $lgsl_config['api']) {
+    $servers = Database::get_servers_group(['request' => $request]);
+    $result = [];
+    foreach ($servers as $server) {
+      $result[] = [
+        'name' => $server->get_name(),
+        'ip' => $server->get_ip(),
+        'port' => $server->get_c_port(),
+        'game' => $server->get_game(),
+        'map' => $server->get_map(),
+        'players' => $server->get_players_count('active'),
+        'maxplayers' => $server->get_players_count('max'),
+        'online' => $server->isOnline()
+      ];
+    }
+    exit(json_encode($result, true));
+  }
 
   if (!$type || !$ip || (!Protocol::lgslProtocolWithoutPort($type) && (!$c_port || !$q_port)) || !$request) {
     exit("LGSL FEED PROBLEM: INCOMPLETE REQUEST");
@@ -68,7 +85,7 @@
 //------------------------------------------------------------------------------------------------------------+
 // QUERY SERVER
 
-  $server = new Server(array("type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port));
+  $server = new Server(["type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port]);
   $server->lgsl_cached_query($request);
 
 //------------------------------------------------------------------------------------------------------------+
@@ -82,21 +99,18 @@
 
   if (is_dir("logs") && is_writable("logs")) {
     $file_path = "logs/log_feed_{$_SERVER['REMOTE_ADDR']}.html";
-
     if (filesize($file_path) > 1234567) { unlink($file_path); }
-
     $file_handle = fopen($file_path, "a");
 
     $file_string  = "
     [ ".date("Y/m/d H:i:s")." ] {$type}:{$ip}:{$c_port}:{$q_port}:{$s_port}:{$request}
-    [ <a href='http://".$_SERVER['REMOTE_ADDR'] ."'>".$_SERVER['REMOTE_ADDR'] ."</a> ]
-    [ <a href='"       .$_SERVER['HTTP_REFERER']."'>".$_SERVER['HTTP_REFERER']."</a> ]
+    [ <a href='http://{$_SERVER['REMOTE_ADDR']}'>{$_SERVER['REMOTE_ADDR']}</a> ]
+    [ <a href='{$_SERVER['HTTP_REFERER']}'>{$_SERVER['HTTP_REFERER']}</a> ]
     ".($version ? " [ {$version} ] " : "")."
     ".($xml     ? " [ XML ]        " : "")."
-    <br />";
+    <br>";
 
     fwrite($file_handle, $file_string);
-
     fclose($file_handle);
   }
 
@@ -118,7 +132,6 @@
 // XML OUTPUT
 
   header("content-type: text/xml");
-
   echo "<?xml version='1.0' encoding='UTF-8' ?>\r\n<server>\r\n";
 
   foreach ($server as $a => $b) {
