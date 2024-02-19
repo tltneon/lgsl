@@ -23,6 +23,7 @@
 		const HTTP = "http";
 		// Query protocols
     const AARMY = "aarmy";
+    const ALTV = "altv";
     const ARCASIMRACING = "arcasimracing";
     const ARKASCENDED = "arkascended";
     const ARMA = "arma";
@@ -169,6 +170,7 @@
     }
     static public function lgslConnectionType($type) {
       $protocol = [
+        self::ALTV          => self::HTTP,
         self::ARKASCENDED   => self::HTTP,
         self::BEAMMP        => self::HTTP,
         self::BFBC2         => self::TCP,
@@ -196,6 +198,7 @@
     static public function lgslList($type = null) {
       $list = [
         self::AARMY         => ["09", "Americas Army"],
+        self::ALTV          => ["Query53", "Alt:V"],
         self::ARCASIMRACING => ["16", "Arca Sim Racing"],
         self::ARKASCENDED   => ["Query52", "ARK: Survival Ascended"],
         self::ARMA          => ["09", "ArmA: Armed Assault"],
@@ -3124,6 +3127,35 @@
       return $this::SUCCESS;
     }
   }
+  class Query53 extends QueryJson { // Alt:V
+    public function process() {
+      $buffer = $this->fetch("https://altv.mp/api/servers");
+      if (!$buffer) return $this::NO_RESPOND;
+
+      $find = array_filter($buffer, function($k) {
+        return explode(":", $k['address'])[0] == $this->_server->get_ip();
+      });
+      if (!$find) return $this::NO_RESPOND;
+      $find = reset($find);
+
+      $this->_data['s']['name'] = Helper::lgslParseColor($find['name'], '2');
+      $this->_data['s']['players'] = $find['playersCount'];
+      $this->_data['s']['playersmax'] = $find['maxPlayersCount'];
+      $this->_data['s']['password'] = $find['passworded'];
+      $this->_data['s']['mode'] = $find['gameMode'];
+      $this->_data['e']['description'] = $find['description'];
+      $this->_data['e']['version'] = $find['version'];
+      $this->_data['e']['region'] = $find['region'];
+      $this->_data['e']['language'] = $find['language'];
+      $this->_data['e']['website'] = $find['website'];
+      $this->_data['e']['banner'] = $find['bannerUrl'] ? "<img src='{$find['bannerUrl']}'>" : "";
+      $this->_data['e']['tags'] = array_reduce($find['tags'], function($a, $c) {
+        return "{$a}\n{$c}";
+      }, "");
+      return $this::SUCCESS;
+    }
+  }
+  
   class QueryTest extends Query {
     public function process() {
         $this->_data = [

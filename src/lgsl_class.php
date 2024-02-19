@@ -847,6 +847,7 @@
 
     public function get_software_link() {
       $lgsl_software_link = [
+        Protocol::ALTV          => "altv://connect/{IP}:{C_PORT}",
         Protocol::ARMA3         => "steam://connect/{IP}:{C_PORT}",
         Protocol::CALLOFDUTYIW  => "javascript:prompt('Put it into console:', 'connect {IP}:{C_PORT}')",
         Protocol::CALLOFDUTY4   => "cod4://{IP}:{S_PORT}",
