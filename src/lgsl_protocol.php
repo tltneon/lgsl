@@ -86,6 +86,7 @@
     const M2MP = "m2mp";
     const MAFIAC = "mafiac";
     const MINECRAFT = "minecraft";
+    const MINECRAFTPE = "minecraftpe";
     const MOHAA = "mohaa";
     const MOHAAB = "mohaab";
     const MOHAAS = "mohaas";
@@ -210,7 +211,7 @@
         self::BFVIETNAM     => ["09", "Battlefield Vietnam"],
         self::BF1942        => ["03", "Battlefield 1942"],
         self::BF2           => ["06", "Battlefield 2"],
-        self::BF3           => ["30", "Battlefield 3"],
+        self::BF3           => ["Query30", "Battlefield 3"],
         self::BF4           => ["06", "Battlefield 4"],
         self::BF2142        => ["06", "Battlefield 2142"],
         self::CALLOFDUTY    => ["02", "Call Of Duty"],
@@ -261,6 +262,7 @@
         self::M2MP          => ["Query39", "Mafia II Multiplayer"],
         self::MAFIAC        => ["Query45", "Mafia Connected"],
         self::MINECRAFT     => ["06", "Minecraft"],
+        self::MINECRAFTPE   => ["Query54", "Minecraft Pocket/Bedrock Edition"],
         self::MOHAA         => ["03", "Medal of Honor: Allied Assault"],
         self::MOHAAB        => ["03", "Medal of Honor: Allied Assault Breakthrough"],
         self::MOHAAS        => ["03", "Medal of Honor: Allied Assault Spearhead"],
@@ -374,6 +376,7 @@
         self::KINGPIN       => [-10,   31510, 31500],
         self::KILLINGFLOOR  => [1,     7708,  7709],
         self::MINECRAFT     => [0,     25565, 25565],
+        self::MINECRAFTPE   => [0,     19132, 19132],
         self::MOHAA         => [97,    12203, 12300],
         self::MOHAAB        => [97,    12203, 12300],
         self::MOHAAS        => [97,    12203, 12300],
@@ -3155,6 +3158,24 @@
       return $this::SUCCESS;
     }
   }
+  class Query54 extends QuerySocket { // Minecraft PE | Minecraft BE
+    public function process() {
+      $buffer = $this->fetch("\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFE\xFE\xFE\xFE\xFD\xFD\xFD\xFD\x12\x34\x56\x78LGSLLIST");
+      if (!$buffer) return $this::NO_RESPOND;
+      $buffer->skip(35);
+      $buffer->show();
+      $this->_data['s']['game'] = $buffer->cutString(0, ";");
+      $this->_data['s']['name'] = Helper::lgslParseColor($buffer->cutString(0, ";"), "minecraft");
+      $this->_data['e']['protocol'] = $buffer->cutString(0, ";");
+      $this->_data['e']['version'] = $buffer->cutString(0, ";");
+      $this->_data['s']['players'] = $buffer->cutString(0, ";");
+      $this->_data['s']['playersmax'] = $buffer->cutString(0, ";");
+      $this->_data['e']['id'] = $buffer->cutString(0, ";");
+      $this->_data['e']['motd'] = Helper::lgslParseColor($buffer->cutString(0, ";"), "minecraft");
+      $this->_data['s']['mode'] = $buffer->cutString(0, ";");
+      return $this::SUCCESS;
+    }
+  }
   
   class QueryTest extends Query {
     public function process() {
@@ -3368,7 +3389,7 @@
         case "fivem": return preg_replace("/\^\d/", "", $string);
         case "painkiller": return preg_replace("/#./", "", $string);
         case "swat4": return preg_replace("/\[c=......\]/Usi", "", $string);
-        case "minecraft": return preg_replace("/[�§]\w/S", "", $string);
+        case "minecraft": return preg_replace("/(§.)/S", "", $string);
         case "factorio": return preg_replace("/\[[-a-z=0-9\#\/\.,\s?]*\]/S", "", $string);				
 				case "bbcode": return preg_replace('/\[[^\]]+\]/', '', $string);
 				
