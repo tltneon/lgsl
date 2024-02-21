@@ -430,7 +430,7 @@
       return [(int) $c_port, (int) $q_port, (int) $s_port];
     }
   
-    public function lgsl_protocol_function($type) {
+    public function lgslProtocolClass($type) {
       $list = $this->lgsl_protocol_list();
       return $list[$type] ?? "err";
     }
@@ -443,21 +443,15 @@
 			$this->_server_timestamp = $this->_server->get_timestamps();
 		}
     public function query() {
-			/*if ($this->_server->get_type() === "test") {
-				$status = $this->lgsl_query_01();
-				$this->_server->set_status($status);
-				$this->set_requested();
-				return;
-			}*/
       $protocol = $this->lgslConnectionType($this->_server->get_type());
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
-        $isNew = strpos($this->lgsl_protocol_function($this->_server->get_type()), "Query") !== false;
+        $isNew = strpos($this->lgslProtocolClass($this->_server->get_type()), "Query") !== false;
         if ($isNew) {
-          $query = __NAMESPACE__ . "\\" . $this->lgsl_protocol_function($this->_server->get_type());
+          $query = __NAMESPACE__ . "\\" . $this->lgslProtocolClass($this->_server->get_type());
           $status = (new $query($this->_server, $this->_lgsl_fp, $this->_lgsl_need))->execute();
         } else {
-				  $status = call_user_func([$this, "lgsl_query_{$this->lgsl_protocol_function($this->_server->get_type())}"], $this->_server->get_type());
+				  $status = call_user_func([$this, "lgsl_query_{$this->lgslProtocolClass($this->_server->get_type())}"], $this->_server->get_type());
         }
 			} else {
         $this->_server->set_extra_value('_error', 'Can\'t establish the connection to server.');
@@ -3163,7 +3157,6 @@
       $buffer = $this->fetch("\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFE\xFE\xFE\xFE\xFD\xFD\xFD\xFD\x12\x34\x56\x78LGSLLIST");
       if (!$buffer) return $this::NO_RESPOND;
       $buffer->skip(35);
-      $buffer->show();
       $this->_data['s']['game'] = $buffer->cutString(0, ";");
       $this->_data['s']['name'] = Helper::lgslParseColor($buffer->cutString(0, ";"), "minecraft");
       $this->_data['e']['protocol'] = $buffer->cutString(0, ";");
@@ -3219,7 +3212,10 @@
 		public function get(int $start = 0, int $length = 1): string {
 			return substr($this->_string, $start, $length);
 		}
-		public function getAll(): string {
+		public function getAll($s = false): string {
+      if ($s) {
+        return str_replace("\x00", "[null]", $this->_string);
+      }
 			return $this->_string;
 		}
 		public function add($string = ""): void {
@@ -3297,7 +3293,7 @@
 	class Stream {
 		private $_protocol;
 		private $_stream;
-		private $_server;
+		protected $_server;
 		public function __construct($protocol) {
 			$this->_protocol = $protocol;
 		}
