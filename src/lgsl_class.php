@@ -795,8 +795,7 @@
 				return LGSL::NONE;
       }
 			if ($html) {
-				$d = LGSL::DB();
-				return $d->escape_string($this->_server['name']);
+				return htmlspecialchars($this->_server['name'], ENT_QUOTES);
 			}				
       return $this->_server['name'];
     }
