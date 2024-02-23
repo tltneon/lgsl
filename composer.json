@@ -48,7 +48,8 @@
 		}
 	],
 	"require": {
-		"php": ">=7.1|>=8.0"
+		"php": ">=7.1|>=8.0",
+		"phpunit/phpunit": "<=8.5.34"
 	},
 	"suggest": {
 		"ext-gd": "*",
