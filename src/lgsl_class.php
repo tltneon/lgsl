@@ -1116,7 +1116,7 @@
     // USE FULL DOMAIN PATH TO AVOID ALIAS PROBLEMS
 
     $host_path  = (!isset($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) != "on") ? "http://" : "https://";
-    $host_path .= $_SERVER['HTTP_HOST'];
+    $host_path .= $_SERVER['HTTP_HOST'] ?? "";
 
     // GET FULL PATHS ( EXTRA CODE FOR WINDOWS AND IIS - NO DOCUMENT_ROOT - BACKSLASHES - DOUBLESLASHES - ETC )
 
@@ -1173,7 +1173,7 @@
   require "{$lgsl_file_path}lgsl_config.php";
   require "{$lgsl_file_path}lgsl_protocol.php";
 
-  $auth   = md5($_SERVER['REMOTE_ADDR'].md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
+  $auth   = md5(($_SERVER['REMOTE_ADDR'] ?? "").md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
   $cookie = $_COOKIE['lgsl_admin_auth'] ?? "";
   $lgsl_url_path = lgsl_url_path();
 

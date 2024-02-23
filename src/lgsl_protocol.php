@@ -1626,13 +1626,13 @@
     }
     public function process() {return 0;}
     public function execute(): int {
-      $time = microtime();
+      $time = microtime(true);
       $status = $this->process();
       if ($this->separatedPackets) {
         if ($this->_need['e']) $status |= $this->process();
         if ($this->_need['p']) $status |= $this->process();
       }
-      $this->_data['o']['time_execution'] = $time - microtime();
+      $this->_data['o']['time_execution'] = $time - microtime(true);
       if ($status !== $this::NO_RESPOND) {
         if ($status === $this::SUCCESS) {
           $this->_server->trimError();
