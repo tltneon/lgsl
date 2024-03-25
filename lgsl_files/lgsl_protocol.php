@@ -4495,27 +4495,28 @@
     return $buffer['sessions'];
   }
   function lgsl_query_51(&$server, &$lgsl_need, &$lgsl_fp) { // Palworld
-    $buffer = lgsl_query_eos($server, $lgsl_fp, "external_auth", "0a18471f93d448e2a1f60e47e03d3413", "xyza78916PZ5DF0fAahu4tnrKKyFpqRE", "j0NapLEPm3R3EOrlQiM8cRLKq3Rt02ZVVwT0SkZstSg");
-    if (!$buffer) return false;
-    // filtering by port
-    $find = array_filter($buffer, function($k) use($server) {
-      return $k['attributes']['GAMESERVER_PORT_l'] == $server['b']['c_port'];
-    });
-    if (!$find) return false;
-    $find = reset($find);
-    $server['s']['name'] = $find['attributes']['NAME_s'];
-    $server['s']['map'] = $find['attributes']['MAPNAME_s'];
-    $server['s']['password'] = $find['attributes']['ISPASSWORD_b'];
-    $server['s']['players'] = $find['attributes']['PLAYERS_l'];
-    $server['s']['playersmax'] = $find['settings']['maxPublicPlayers'];
+    curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.palworldgame.com/server/list");
+    $buffer = curl_exec($lgsl_fp);
+    if (!$buffer) $buffer = curl_exec($lgsl_fp);
+    if (!$buffer) return FALSE;
+		$buffer = json_decode($buffer, true);
+		$find = array_filter($buffer['server_list'], function($k) use ($server) {
+			return $k['address'] == $server['b']['ip'] && ((int) $k['port']) == ((int) $server['b']['q_port']);
+		});
+		if (!$find) return FALSE;
+		$find = reset($find);
+    $server['s']['name'] = $find['name'];
+    $server['s']['map'] = $find['map_name'];
+    $server['s']['password'] = $find['is_password'];
+    $server['s']['players'] = $find['current_players'];
+    $server['s']['playersmax'] = $find['max_players'];
     
-    $server['e']['anticheat'] = $find['attributes']['BANTICHEATPROTECTED_b'] ? 1 : 0;
-    $server['e']['allowJoinInProgress'] = $find['settings']['allowJoinInProgress'];
-    $server['e']['create_time'] = Date("d.m.Y", $find['attributes']['CREATE_TIME_l']);
-    $server['e']['days'] = $find['attributes']['DAYS_l'];
-    $server['e']['dedicated'] = $find['attributes']['BISDEDICATED_b'];
-    $server['e']['description'] = isset($find['attributes']['DESCRIPTION_s']) ? $find['attributes']['DESCRIPTION_s'] : "";
-    $server['e']['version'] = $find['attributes']['VERSION_s'];
+    $server['e']['server_id'] = $find['server_id'];
+    $server['e']['create_time'] = Date("d.m.Y", $find['created_at']);
+    $server['e']['days'] = $find['days'];
+    $server['e']['server_time'] = $find['server_time'];
+    $server['e']['description'] = isset($find['description']) ? $find['description'] : "";
+    $server['e']['version'] = $find['version'];
     return true;
   }
   function lgsl_query_52(&$server, &$lgsl_need, &$lgsl_fp) { // ARK: Survival Ascended
