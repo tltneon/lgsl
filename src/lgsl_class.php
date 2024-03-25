@@ -480,7 +480,7 @@
 		public function get_all() {
 			global $lgsl_config;
 			$t = $this->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
-			return $t->fetch_all(MYSQLI_ASSOC);
+			return $t->fetch_all();
 		}
 		public function escape_string($string = "") {
 			return $this->_connection->escape_string($string);

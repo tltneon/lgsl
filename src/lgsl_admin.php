@@ -501,7 +501,7 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
   }
   function lgsl_main_buttons() {
     global $lgsl_config;
-    $management = $_POST['lgsl_management'] ? $lgsl_config['text']['avm'] : $lgsl_config['text']['nrm'];
+    $management = isset($_POST['lgsl_management']) && $_POST['lgsl_management'] == 1 ? $lgsl_config['text']['avm'] : $lgsl_config['text']['nrm'];
     return "
     <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
       <tr>
