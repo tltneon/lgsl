@@ -139,6 +139,9 @@
 	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $server->get_address()));
 	imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
 
+  $s = (isset($_SERVER['HTTPS']) ? 's' : '');
+  header("Link: <http{$s}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}>; rel=\"canonical\"");
+  header("X-Powered-By: PHP/" . phpversion() . " LGSL/" . LGSL::VERSION); 
   imagepng($im);
   imagedestroy($im);
 ?>

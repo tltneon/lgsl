@@ -243,6 +243,9 @@
   }
 
   header("Content-type: image/gif");
+  $s = (isset($_SERVER['HTTPS']) ? 's' : '');
+  header("Link: <http{$s}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}>; rel=\"canonical\"");
+  header("X-Powered-By: PHP/" . phpversion() . " LGSL/" . LGSL::VERSION); 
 	imagegif($im);
 	imagedestroy($im);
 ?>
