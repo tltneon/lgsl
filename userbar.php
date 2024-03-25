@@ -28,7 +28,7 @@
     }
 
     $server['s']['playersmax'] = $server['s']['playersmax'] > 0 ? $server['s']['playersmax'] : 1;
-    $scaleX = $w / max($x0);
+    $scaleX = $w / (count($x0) > 0 ? max($x0) : 1);
     $scaleY = $h / $server['s']['playersmax'];
 
     imagestring($im, 1, $x - 10, $y + $h - 4, "0", $axis);
@@ -48,7 +48,7 @@
 
   require "lgsl_files/lgsl_class.php";
   $query = "cs";
-  $bar   = (isset($_GET['t']) ? (int) $_GET['t'] : 1 );
+  $bar   = (isset($_GET['t']) ? (int) $_GET['t'] : 1);
   if ($bar == 3) { $query .= "p"; }
   $server = isset($_GET['s']) ? lgsl_query_cached("", "", "", "", "", $query, (int) $_GET['s']) : lgsl_query_cached("", $_GET['ip'], (int) $_GET['port'], "", "", $query);
   if (!$server) {
@@ -61,11 +61,14 @@
     imagedestroy($im);
     exit();
   }
-  $misc   = lgsl_server_misc($server);
+  $misc = lgsl_server_misc($server);
+  global $lgsl_url_path;
+  $misc['icon_game'] = str_replace($lgsl_url_path, "lgsl_files/", $misc['icon_game']);
+  $misc['icon_location'] = str_replace($lgsl_url_path, "lgsl_files/", $misc['icon_location']);
+  $misc['icon_status'] = str_replace($lgsl_url_path, "lgsl_files/", $misc['icon_status']);  
 
   switch ($bar) {
     case 2: {
-      header("Content-type: image/png");
       // SETTINGS
       $w = 468;
       $h = 64;
@@ -102,11 +105,10 @@
       imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game     */  ucfirst($server['s']['game']));
       imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:{$time} /{$server['s']['game']}");
 
-      drawHistory($im, 374, 24, 80, 24, $server);
+      if ($lgsl_config['history']) drawHistory($im, 374, 24, 80, 24, $server);
       break;
     }
     case 3: {
-      header("Content-type: image/jpeg");
       // SETTINGS
       $w = 160;
       $h = 248;
@@ -182,7 +184,6 @@
       break;
     }
     default: {
-      header("Content-type: image/gif");
       // SETTINGS
       $w = 350;
       $h = 20;
@@ -213,6 +214,7 @@
     }
   }
 
+  header("Content-type: image/gif");
   imagegif($im);
   imagedestroy($im);
 ?>

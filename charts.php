@@ -41,6 +41,10 @@
     exit();
   }
   $misc   = lgsl_server_misc($server);
+  global $lgsl_url_path;
+  $misc['icon_game'] = str_replace($lgsl_url_path, "lgsl_files/", $misc['icon_game']);
+  $misc['icon_location'] = str_replace($lgsl_url_path, "lgsl_files/", $misc['icon_location']);
+  $misc['icon_status'] = str_replace($lgsl_url_path, "lgsl_files/", $misc['icon_status']);  
   $server['s']['playersmax'] = $server['s']['playersmax'] > 0 ? $server['s']['playersmax'] : 1;
 
   $x0 = 30;
@@ -61,7 +65,7 @@
 
   $maxX = $w - $x0;
   $maxY = $h - $y0;
-  $scaleX = ($maxX-$x0) / max($x);
+  $scaleX = ($maxX-$x0) / (count($x) > 0 ? max($x) : 1);
   $scaleY = ($maxY-$y0) / $server['s']['playersmax'];
 
   // DRAW AXIS
