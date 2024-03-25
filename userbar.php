@@ -85,7 +85,6 @@
 
   switch ($bar) {
     case 2: {
-      header("Content-type: image/png");
       // SETTINGS
       $w = 468;
       $h = 64;
@@ -125,11 +124,10 @@
       imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game     */  ucfirst($server->get_game()));
       imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:{$time} /{$server->get_game()}");
 
-      drawHistory($im, 374, 24, 80, 24, $server);
+      if ($lgsl_config['history']) drawHistory($im, 374, 24, 80, 24, $server);
       break;
     }
     case 3: {
-      header("Content-type: image/jpeg");
       // SETTINGS
       $w = 160;
       $h = 248;
@@ -167,11 +165,13 @@
       $game_id = @makeImage($server->game_icon('src/'), 16, 16);                              // create game icon
       imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                           // place game icon
 
-      $loc_id = @makeImage("src/other/locations.gif", 224, 198);              // create location icon
-			$result = imagecreatetruecolor(16, 11);
-			$pos = LGSL::locationCoords($server->getLocation());
-			imagecopyresampled($result, $loc_id, 0, 0, $pos[0], $pos[1], 16, 11, 16, 11);
-      imagecopy($im, $result, $w-36, $h-13, 0, 0, 16, 11);                           // place location icon
+      if ($lgsl_config['locations']) {
+        $loc_id = @makeImage("src/other/locations.gif", 224, 198);              // create location icon
+        $result = imagecreatetruecolor(16, 11);
+        $pos = LGSL::locationCoords($server->getLocation());
+        imagecopyresampled($result, $loc_id, 0, 0, $pos[0], $pos[1], 16, 11, 16, 11);
+        imagecopy($im, $result, $w-36, $h-13, 0, 0, 16, 11);                           // place location icon
+      }
 
       //imagestringup($im, 2, 2, $h - 16 - 8, ucfirst($server['s']['game']), $color_nm);
       imagefilledrectangle($im, 17, 0, 20, $h, $border);
@@ -242,6 +242,7 @@
     }
   }
 
+  header("Content-type: image/gif");
 	imagegif($im);
 	imagedestroy($im);
 ?>
