@@ -1671,6 +1671,7 @@
       if ($this->grant_type == "external_auth") {
         curl_setopt($ch, CURLOPT_POSTFIELDS, "deviceModel=PC");
         $buffer = $this->fetch("https://api.epicgames.dev/auth/v1/accounts/deviceid");
+        if (!$buffer) return $this::NO_RESPOND;
         $external_auth_add = "&external_auth_type=deviceid_access_token&external_auth_token={$buffer['access_token']}&nonce=ABCHFA3qgUCJ1XTPAoGDEF&display_name=User";
       }
       curl_setopt($ch, CURLOPT_POSTFIELDS, "grant_type={$this->grant_type}&deployment_id={$this->deployment_id}{$external_auth_add}");
@@ -1724,7 +1725,6 @@
         $buffer = $this->fetch($challenge_packet);
       }
       if (!$buffer) return $this::NO_RESPOND;
-      $buffer->show();
 
       $buffer->skip(10); // REMOVE HEADER
       $response_type = $buffer->cutByte();
