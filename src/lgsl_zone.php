@@ -111,7 +111,7 @@
       $zone_count ++;
 //------------------------------------------------------------------------------------------------------------+
 
-      $marquee = strlen($server->get_name()) > 25;
+      $marquee = strlen($server->get_name()) > 25 ? "class='on'" : "";
       $output .= "
       <td style='vertical-align:top; text-align:center'>
 
@@ -130,7 +130,7 @@
           <tr>
             <td title='{$server->get_name()}' style='padding:0px; text-align:center'>
               <div class='marquee' style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
-                <span ". ($marquee ? "class='on'" : "") .">{$server->get_name()}</span>
+                <span {$marquee}>{$server->get_name()}</span>
               </div>
             </td>
           </tr>
@@ -142,7 +142,12 @@
                   <img alt='' src='{$server->get_map_image()}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
                   <img alt='' src='{$server->map_password_image()}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
                   <img alt='' src='{$server->add_url_path($server->game_icon())}'          title='{$server->text_type_game()}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
+                  ";
+                  if ($lgsl_config['locations'])
+                  $output .= "
                   <img alt='' class='details_location_image flag f{$server->getLocation()}' title='{$server->location_text()}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
+                  ";
+                  $output .= "
                 </a>
               </div>
             </td>
