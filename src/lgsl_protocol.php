@@ -198,17 +198,17 @@
     }
     static public function lgslList($type = null) {
       $list = [
-        self::AARMY         => ["09", "Americas Army"],
+        self::AARMY         => ["Query09", "Americas Army"],
         self::ALTV          => ["Query53", "Alt:V"],
         self::ARCASIMRACING => ["16", "Arca Sim Racing"],
         self::ARKASCENDED   => ["Query52", "ARK: Survival Ascended"],
-        self::ARMA          => ["09", "ArmA: Armed Assault"],
-        self::ARMA2         => ["09", "ArmA 2"],
+        self::ARMA          => ["Query09", "ArmA: Armed Assault"],
+        self::ARMA2         => ["Query09", "ArmA 2"],
         self::ARMA3         => ["05", "ArmA 3 / DayZ"],
         self::AVP2          => ["03", "Aliens VS. Predator 2"],
         self::BEAMMP        => ["Query48", "BeamMP"],
         self::BFBC2         => ["Query30", "Battlefield Bad Company 2"],
-        self::BFVIETNAM     => ["09", "Battlefield Vietnam"],
+        self::BFVIETNAM     => ["Query09", "Battlefield Vietnam"],
         self::BF1942        => ["03", "Battlefield 1942"],
         self::BF2           => ["06", "Battlefield 2"],
         self::BF3           => ["Query30", "Battlefield 3"],
@@ -230,8 +230,8 @@
         self::CUBE          => ["Query24", "Cube Engine"],
         self::DISCORD       => ["Query36", "Discord"],
         self::DOOMSKULLTAG  => ["Query27", "Doom (Zandronum)"],
-        self::DOOM3         => ["10", "Doom 3"],
-        self::DH2005        => ["09", "Deer Hunter 2005"],
+        self::DOOM3         => ["Query10", "Doom 3"],
+        self::DH2005        => ["Query09", "Deer Hunter 2005"],
         self::ECO           => ["Query40", "ECO"],
         self::FACTORIO      => ["Query42", "Factorio"],
         self::HAD2          => ["03", "Hidden and Dangerous 2"],
@@ -239,20 +239,20 @@
         self::HALFLIFEWON   => ["05", "Half-Life WON Protocol [OLD] (CS 1.5)"],
         self::HALO          => ["03", "Halo"],
         self::IL2           => ["03", "IL-2 Sturmovik"],
-        self::FARCRY        => ["08", "Far Cry"],
+        self::FARCRY        => ["Query08", "Far Cry"],
         self::FARMSIM       => ["40", "Farming Simulator 2019"],
-        self::FEAR          => ["09", "F.E.A.R."],
+        self::FEAR          => ["Query09", "F.E.A.R."],
         self::FIVEM         => ["Query35", "FiveM / RedM"],
         self::FLASHPOINT    => ["03", "Operation Flashpoint"],
         self::FREELANCER    => ["Query14", "Freelancer"],
         self::FRONTLINES    => ["Query20", "Frontlines: Fuel Of War"],
         self::F1C9902       => ["03", "F1 Challenge 99-02"],
         self::GAMESPY1      => ["03", "Generic GameSpy 1"],
-        self::GAMESPY2      => ["09", "Generic GameSpy 2"],
+        self::GAMESPY2      => ["Query09", "Generic GameSpy 2"],
         self::GAMESPY3      => ["06", "Generic GameSpy 3"],
         self::GHOSTRECON    => ["Query19", "Ghost Recon"],
         self::GRAW          => ["06", "Ghost Recon: Advanced Warfighter"],
-        self::GRAW2         => ["09", "Ghost Recon: Advanced Warfighter 2"],
+        self::GRAW2         => ["Query09", "Ghost Recon: Advanced Warfighter 2"],
         self::GTAC          => ["Query45", "GTA Connected"],
         self::JEDIKNIGHT2   => ["02", "JediKnight 2: Jedi Outcast"],
         self::JEDIKNIGHTJA  => ["02", "JediKnight: Jedi Academy"],
@@ -267,23 +267,23 @@
         self::MOHAAB        => ["03", "Medal of Honor: Allied Assault Breakthrough"],
         self::MOHAAS        => ["03", "Medal of Honor: Allied Assault Spearhead"],
         self::MOHPA         => ["03", "Medal of Honor: Pacific Assault"],
-        self::MTA           => ["08", "Multi Theft Auto"],
+        self::MTA           => ["Query08", "Multi Theft Auto"],
         self::MUMBLE        => ["Query43", "Mumble"],
-        self::NASCAR2004    => ["09", "Nascar Thunder 2004"],
+        self::NASCAR2004    => ["Query09", "Nascar Thunder 2004"],
         self::NECESSE       => ["Query47", "Necesse"],
-        self::NEVERWINTER   => ["09", "NeverWinter Nights"],
-        self::NEVERWINTER2  => ["09", "NeverWinter Nights 2"],
+        self::NEVERWINTER   => ["Query09", "NeverWinter Nights"],
+        self::NEVERWINTER2  => ["Query09", "NeverWinter Nights 2"],
         self::NEXUIZ        => ["02", "Nexuiz"],
         self::OPENTTD       => ["Query22", "Open Transport Tycoon Deluxe"],
-        self::PAINKILLER    => ["08", "PainKiller"],
+        self::PAINKILLER    => ["Query08", "PainKiller"],
         self::PALWORLD      => ["Query51", "Palworld"],
         self::PLAINSIGHT    => ["Query32", "Plain Sight"],
-        self::PREY          => ["10", "Prey"],
-        self::QUAKEWORLD    => ["07", "Quake World"],
-        self::QUAKEWARS     => ["10", "Enemy Territory: Quake Wars"],
+        self::PREY          => ["Query10", "Prey"],
+        self::QUAKEWORLD    => ["Query07", "Quake World"],
+        self::QUAKEWARS     => ["Query10", "Enemy Territory: Quake Wars"],
         self::QUAKE2        => ["02", "Quake 2"],
         self::QUAKE3        => ["02", "Quake 3"],
-        self::QUAKE4        => ["10", "Quake 4"],
+        self::QUAKE4        => ["Query10", "Quake 4"],
         self::RAGEMP        => ["Query34", "Rage:MP"],
         self::RAVENSHIELD   => ["04", "Raven Shield"],
         self::REDORCHESTRA  => ["Query13", "Red Orchestra"],
@@ -292,27 +292,27 @@
         self::SAVAGE        => ["Query17", "Savage"],
         self::SAVAGE2       => ["Query18", "Savage 2"],
         self::SERIOUSSAM    => ["03", "Serious Sam"],
-        self::SERIOUSSAM2   => ["09", "Serious Sam 2"],
+        self::SERIOUSSAM2   => ["Query09", "Serious Sam 2"],
         self::SCUM          => ["Query37", "SCUM"],
         self::SF            => ["Query41", "Satisfactory"],
         self::SHATTEREDH    => ["05", "Shattered Horizon"],
         self::SOF2          => ["02", "Soldier of Fortune 2"],
-        self::SOLDAT        => ["08", "Soldat"],
+        self::SOLDAT        => ["Query08", "Soldat"],
         self::SOURCE        => ["05", "Source Protocol (Half-Life 2, etc.)"],
         self::SRB2          => ["Query46", "Sonic Robo Blast 2"],
         self::STALKER       => ["06", "S.T.A.L.K.E.R."],
-        self::STALKERCOP    => ["09", "S.T.A.L.K.E.R. Call of Pripyat"],
-        self::STALKERCS     => ["09", "S.T.A.L.K.E.R. Clear Sky"],
+        self::STALKERCOP    => ["Query09", "S.T.A.L.K.E.R. Call of Pripyat"],
+        self::STALKERCS     => ["Query09", "S.T.A.L.K.E.R. Clear Sky"],
         self::STARTREKEF    => ["02", "StarTrek Elite-Force"],
-        self::STARWARSBF    => ["09", "Star Wars: Battlefront"],
-        self::STARWARSBF2   => ["09", "Star Wars: Battlefront 2"],
-        self::STARWARSRC    => ["09", "Star Wars: Republic Commando"],
+        self::STARWARSBF    => ["Query09", "Star Wars: Battlefront"],
+        self::STARWARSBF2   => ["Query09", "Star Wars: Battlefront 2"],
+        self::STARWARSRC    => ["Query09", "Star Wars: Republic Commando"],
         self::SWAT4         => ["03", "SWAT 4"],
         self::TEEWORLDS     => ["Query21", "Teeworlds"],
         self::TERRARIA      => ["Query38", "Terraria"],
         self::TITANFALL2    => ["Query50", "Titanfall 2"],
         self::TRIBES2       => ["Query25", "Tribes 2"],
-        self::TRIBESV       => ["09", "Tribes Vengeance"],
+        self::TRIBESV       => ["Query09", "Tribes Vengeance"],
         self::TS            => ["Query33", "Teamspeak"],
         self::TS3           => ["Query33", "Teamspeak 3"],
         self::TEASPEAK      => ["Query33", "Teaspeak"],
@@ -324,11 +324,10 @@
         self::UT3           => ["11", "Unreal Tournament 3"],
         self::VCMP          => ["Query12", "Vice City Multiplayer"],
         self::VIETCONG      => ["03", "Vietcong"],
-        self::VIETCONG2     => ["09", "Vietcong 2"],
+        self::VIETCONG2     => ["Query09", "Vietcong 2"],
         self::WINDWARD      => ["Query49", "Windward"],
         self::WOLFET        => ["02", "Wolfenstein: Enemy Territory"],
         self::WOLFRTCW      => ["02", "Wolfenstein: Return To Castle Wolfenstein"],
-        self::WOLF2009      => ["10", "Wolfenstein (2009 By Raven)"],
         self::WOW           => ["QueryStatus", "World of Warcraft"],
         self::TEST          => ["QueryTest", "~ Test (For PHP Developers)"],
       ];
@@ -1177,354 +1176,6 @@
       $this->_server->from_array($server);
       return TRUE;
     }
-    public function lgsl_query_07() {
-      $server = $this->_server->to_array();
-      //---------------------------------------------------------+
-  
-      $this->_fp_write("\xFF\xFF\xFF\xFFstatus\x00");
-  
-      $buffer = $this->_fp_read(4096);
-  
-      if (!$buffer) { return FALSE; }
-  
-      //---------------------------------------------------------+
-  
-      $buffer = substr($buffer, 6, -2); // REMOVE HEADER AND FOOTER
-      $part   = explode("\n", $buffer); // SPLIT INTO SETTINGS/PLAYER/PLAYER/PLAYER
-  
-      //---------------------------------------------------------+
-  
-      $item = explode("\\", $part[0]);
-  
-      foreach ($item as $item_key => $data_key) {
-        if ($item_key % 2) { continue; } // SKIP ODD KEYS
-  
-        $data_key               = strtolower($data_key);
-        $server['e'][$data_key] = $item[$item_key+1];
-      }
-  
-      //---------------------------------------------------------+
-  
-      array_shift($part); // REMOVE SETTINGS
-  
-      foreach ($part as $key => $data) {
-        preg_match("/(.*) (.*) (.*) (.*) \"(.*)\" \"(.*)\" (.*) (.*)/s", $data, $match); // GREEDY MATCH FOR SKINS
-  
-        $server['p'][$key]['pid']         = $match[1];
-        $server['p'][$key]['score']       = $match[2];
-        $server['p'][$key]['time']        = $match[3];
-        $server['p'][$key]['ping']        = $match[4];
-        $server['p'][$key]['name']        = Helper::lgslParseColor($match[5], $server['b']['type']);
-        $server['p'][$key]['skin']        = $match[6];
-        $server['p'][$key]['skin_top']    = $match[7];
-        $server['p'][$key]['skin_bottom'] = $match[8];
-      }
-  
-      //---------------------------------------------------------+
-  
-      $server['s']['game']       = $server['e']['*gamedir'];
-      $server['s']['name']       = $server['e']['hostname'];
-      $server['s']['map']        = $server['e']['map'];
-      $server['s']['players']    = $server['p'] ? count($server['p']) : 0;
-      $server['s']['playersmax'] = $server['e']['maxclients'];
-      $server['s']['password']   = isset($server['e']['needpass']) && $server['e']['needpass'] > 0 && $server['e']['needpass'] < 4 ? 1 : 0;
-  
-      //---------------------------------------------------------+
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    ///
-    public function lgsl_query_08() {
-      $server = $this->_server->to_array();
-      //---------------------------------------------------------+
-  
-      $this->_fp_write("s"); // ASE ( ALL SEEING EYE ) PROTOCOL
-      $buffer = $this->_fp_read();
-      if (!$buffer) { return FALSE; }
-  
-      //---------------------------------------------------------+
-  
-      $buffer->skip(4); // REMOVE HEADER
-  
-      $server['e']['gamename']   = $buffer->cutPascal(1, -1);
-      $server['e']['hostport']   = $buffer->cutPascal(1, -1);
-      $server['s']['name']       = Helper::lgslParseColor($buffer->cutPascal(1, -1), $server['b']['type']);
-      $server['e']['gamemode']   = $buffer->cutPascal(1, -1);
-      $server['s']['map']        = $buffer->cutPascal(1, -1);
-      $server['e']['version']    = $buffer->cutPascal(1, -1);
-      $server['s']['password']   = $buffer->cutPascal(1, -1);
-      $server['s']['players']    = $buffer->cutPascal(1, -1);
-      $server['s']['playersmax'] = $buffer->cutPascal(1, -1);
-
-      while ($buffer->length() > 0 && $buffer->char(0) != "\x01") {
-        $item_key   = strtolower($buffer->cutPascal(1, -1));
-        $item_value = $buffer->cutPascal(1, -1);
-  
-        $server['e'][$item_key] = $item_value;
-      }
-  
-      $buffer->skip(1); // REMOVE END MARKER
-  
-      //---------------------------------------------------------+
-  
-      $player_key = 0;
-  
-      while ($buffer->length() > 0) {
-        $bit_flags = $buffer->cutByte(); // FIELDS HARD CODED BELOW BECAUSE GAMES DO NOT USE THEM PROPERLY
-  
-        if     ($bit_flags == "\x3D")                 { $field_list = ["name",                  "score", "",     "time"]; } // FARCRY PLAYERS CONNECTING
-        elseif ($server['b']['type'] == "farcry")     { $field_list = ["name", "team", "",      "score", "ping", "time"]; } // FARCRY PLAYERS JOINED
-        elseif ($server['b']['type'] == "mta")        { $field_list = ["name", "",      "",     "score", "ping", ""    ]; }
-        elseif ($server['b']['type'] == "painkiller") { $field_list = ["name", "",     "skin",  "score", "ping", ""    ]; }
-        elseif ($server['b']['type'] == "soldat")     { $field_list = ["name", "team", "",      "score", "ping", "time"]; }
-  
-        foreach ($field_list as $item_key) {
-          $item_value = $buffer->cutPascal(1, -1);
-  
-          if (!$item_key) { continue; }
-  
-          if ($item_key == "name") { Helper::lgslParseColor($item_value, $server['b']['type']); }
-  
-          $server['p'][$player_key][$item_key] = $item_value;
-        }
-  
-        $player_key ++;
-      }
-  
-      //---------------------------------------------------------+
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_09() {
-      $server = $this->_server->to_array();
-      //---------------------------------------------------------+
-  
-      // SERIOUS SAM 2 RETURNS ALL PLAYER NAMES AS "Unknown Player" SO SKIP OR CONVERT ANY PLAYER REQUESTS
-      if ($server['b']['type'] == "serioussam2") { $this->_lgsl_need['p'] = FALSE; if (!$this->_lgsl_need['s'] && !$this->_lgsl_need['e']) { $this->_lgsl_need['s'] = TRUE; } }
-  
-      //---------------------------------------------------------+
-  
-      if ($this->_lgsl_need['s'] || $this->_lgsl_need['e']) {
-        $this->_lgsl_need['s'] = FALSE; $this->_lgsl_need['e'] = FALSE;
-  
-        $this->_fp_write("\xFE\xFD\x00\x21\x21\x21\x21\xFF\x00\x00\x00");
-  
-        $buffer = $this->_fp_read(4096);
-  
-        $buffer = substr($buffer, 5, -2); // REMOVE HEADER AND FOOTER
-  
-        if (!$buffer) { return FALSE; }
-  
-        $item = explode("\x00", $buffer);
-  
-        foreach ($item as $item_key => $data_key) {
-          if ($item_key % 2) { continue; } // SKIP EVEN KEYS
-  
-          $data_key = strtolower($data_key);
-          $server['e'][$data_key] = $item[$item_key+1];
-        }
-  
-        if (isset($server['e']['hostname']))   { $server['s']['name']       = $server['e']['hostname']; }
-        if (isset($server['e']['mapname']))    { $server['s']['map']        = $server['e']['mapname']; }
-        if (isset($server['e']['numplayers'])) { $server['s']['players']    = $server['e']['numplayers']; }
-        if (isset($server['e']['maxplayers'])) { $server['s']['playersmax'] = $server['e']['maxplayers']; }
-        if (isset($server['e']['password']))   { $server['s']['password']   = $server['e']['password']; }
-  
-        if (!empty($server['e']['gamename']))   { $server['s']['game'] = $server['e']['gamename']; }   // AARMY
-        if (!empty($server['e']['gsgamename'])) { $server['s']['game'] = $server['e']['gsgamename']; } // FEAR
-        if (!empty($server['e']['game_id']))    { $server['s']['game'] = $server['e']['game_id']; }    // BFVIETNAM
-  
-        if ($server['b']['type'] == "arma" || $server['b']['type'] == "arma2") {
-          $server['s']['map'] = $server['e']['mission'];
-        } elseif ($server['b']['type'] == "vietcong2") {
-          $server['e']['extinfo_autobalance'] = ord($server['e']['extinfo'][18]) == 2 ? "off" : "on";
-          // [ 13 = Vietnam and RPG Mode 19 1b 99 9b ] [ 22 23 = Mounted MG Limit ]
-          // [ 27 = Idle Limit ] [ 18 = Auto Balance ] [ 55 = Chat and Blind Spectator 5a 5c da dc ]
-        }
-      }
-  
-      //---------------------------------------------------------+
-  
-      elseif ($this->_lgsl_need['p']) {
-        $this->_lgsl_need['p'] = FALSE;
-  
-        $this->_fp_write("\xFE\xFD\x00\x21\x21\x21\x21\x00\xFF\x00\x00");
-  
-        $buffer = $this->_fp_read(4096);
-  
-        $buffer = substr($buffer, 7, -1); // REMOVE HEADER / PLAYER TOTAL / FOOTER
-  
-        if (!$buffer) { return FALSE; }
-  
-        if (strpos($buffer, "\x00\x00") === FALSE) { return TRUE; } // NO PLAYERS
-  
-        $buffer     = explode("\x00\x00",$buffer, 2);            // SPLIT FIELDS FROM ITEMS
-        $buffer[0]  = str_replace("_",      "",     $buffer[0]); // REMOVE UNDERSCORES FROM FIELDS
-        $buffer[0]  = str_replace("player", "name", $buffer[0]); // LGSL STANDARD
-        $field_list = explode("\x00",$buffer[0]);                // SPLIT UP FIELDS
-        $item       = explode("\x00",$buffer[1]);                // SPLIT UP ITEMS
-  
-        $item_position = 0;
-        $item_total    = count($item);
-        $player_key    = 0;
-  
-        do {
-          foreach ($field_list as $field) {
-            $server['p'][$player_key][$field] = $item[$item_position];
-  
-            $item_position ++;
-          }
-  
-          $player_key ++;
-        }
-        while ($item_position < $item_total);
-      }
-  
-      //---------------------------------------------------------+
-      $this->_server->from_array($server);
-      return TRUE;
-    }
-    public function lgsl_query_10() {
-      $server = $this->_server->to_array();
-      //---------------------------------------------------------+
-  
-      if ($server['b']['type'] == "quakewars") { $this->_fp_write("\xFF\xFFgetInfoEX\xFF"); }
-      else                                     { $this->_fp_write("\xFF\xFFgetInfo\xFF");   }
-  
-      $buffer = $this->_fp_read(4096);
-  
-      if (!$buffer) { return FALSE; }
-  
-      //---------------------------------------------------------+
-  
-      if     ($server['b']['type'] == "wolf2009")  { $buffer = substr($buffer, 31); }  // REMOVE HEADERS
-      elseif ($server['b']['type'] == "quakewars") { $buffer = substr($buffer, 33); }
-      else                                         { $buffer = substr($buffer, 23); }
-  
-      $buffer = Helper::lgslParseColor($buffer, "2");
-  
-      //---------------------------------------------------------+
-  
-      while ($buffer && $buffer[0] != "\x00") {
-        $item_key   = strtolower(lgsl_cut_string($buffer));
-        $item_value = lgsl_cut_string($buffer);
-  
-        $server['e'][$item_key] = $item_value;
-      }
-  
-      //---------------------------------------------------------+
-  
-      $buffer = substr($buffer, 2);
-  
-      $player_key = 0;
-  
-      //---------------------------------------------------------+
-  
-      if ($server['b']['type'] == "wolf2009") { // WOLFENSTEIN: (PID)(PING)(NAME)(TAGPOSITION)(TAG)(BOT)
-        while ($buffer && $buffer[0] != "\x10") { // STOPS AT PID 16
-          $server['p'][$player_key]['pid']     = ord(lgsl_cut_byte($buffer, 1));
-          $server['p'][$player_key]['ping']    = Helper::lgslUnpack(lgsl_cut_byte($buffer, 2), "S");
-          $server['p'][$player_key]['rate']    = Helper::lgslUnpack(lgsl_cut_byte($buffer, 2), "S");
-          $server['p'][$player_key]['unknown'] = Helper::lgslUnpack(lgsl_cut_byte($buffer, 2), "S");
-          $player_name                         = lgsl_cut_string($buffer);
-          $player_tag_position                 = ord(lgsl_cut_byte($buffer, 1));
-          $player_tag                          = lgsl_cut_string($buffer);
-          $server['p'][$player_key]['bot']     = ord(lgsl_cut_byte($buffer, 1));
-  
-          if     ($player_tag == "")           { $server['p'][$player_key]['name'] = $player_name; }
-          elseif ($player_tag_position == "0") { $server['p'][$player_key]['name'] = $player_tag." ".$player_name; }
-          else                                 { $server['p'][$player_key]['name'] = $player_name." ".$player_tag; }
-  
-          $player_key ++;
-        }
-      }
-  
-      //---------------------------------------------------------+
-  
-      elseif ($server['b']['type'] == "quakewars") { // QUAKEWARS: (PID)(PING)(NAME)(TAGPOSITION)(TAG)(BOT)
-        while ($buffer && $buffer[0] != "\x20") { // STOPS AT PID 32
-          $server['p'][$player_key]['pid']  = ord(lgsl_cut_byte($buffer, 1));
-          $server['p'][$player_key]['ping'] = Helper::lgslUnpack(lgsl_cut_byte($buffer, 2), "S");
-          $player_name                      = lgsl_cut_string($buffer);
-          $player_tag_position              = ord(lgsl_cut_byte($buffer, 1));
-          $player_tag                       = lgsl_cut_string($buffer);
-          $server['p'][$player_key]['bot']  = ord(lgsl_cut_byte($buffer, 1));
-  
-              if ($player_tag_position == "")  { $server['p'][$player_key]['name'] = $player_name; }
-          elseif ($player_tag_position == "1") { $server['p'][$player_key]['name'] = $player_name." ".$player_tag; }
-          else                                 { $server['p'][$player_key]['name'] = $player_tag." ".$player_name; }
-  
-          $player_key ++;
-        }
-  
-        $buffer                      = substr($buffer, 1);
-        $server['e']['si_osmask']    = Helper::lgslUnpack(lgsl_cut_byte($buffer, 4), "I");
-        $server['e']['si_ranked']    = ord(lgsl_cut_byte($buffer, 1));
-        $server['e']['si_timeleft']  = Helper::lgslTime(Helper::lgslUnpack(lgsl_cut_byte($buffer, 4), "I") / 1000);
-        $server['e']['si_gamestate'] = ord(lgsl_cut_byte($buffer, 1));
-        $buffer                      = substr($buffer, 2);
-  
-        $player_key = 0;
-  
-        while ($buffer && $buffer[0] != "\x20") { // QUAKEWARS EXTENDED: (PID)(XP)(TEAM)(KILLS)(DEATHS)
-          $server['p'][$player_key]['pid']    = ord(lgsl_cut_byte($buffer, 1));
-          $server['p'][$player_key]['xp']     = intval(Helper::lgslUnpack(lgsl_cut_byte($buffer, 4), "f"));
-          $server['p'][$player_key]['team']   = lgsl_cut_string($buffer);
-          $server['p'][$player_key]['score']  = Helper::lgslUnpack(lgsl_cut_byte($buffer, 4), "i");
-          $server['p'][$player_key]['deaths'] = Helper::lgslUnpack(lgsl_cut_byte($buffer, 4), "i");
-          $player_key ++;
-        }
-      }
-  
-      //---------------------------------------------------------+
-  
-      elseif ($server['b']['type'] == "quake4") { // QUAKE4: (PID)(PING)(RATE)(NULLNULL)(NAME)(TAG)
-        while ($buffer && $buffer[0] != "\x20") { // STOPS AT PID 32
-          $server['p'][$player_key]['pid']  = ord(lgsl_cut_byte($buffer, 1));
-          $server['p'][$player_key]['ping'] = Helper::lgslUnpack(lgsl_cut_byte($buffer, 2), "S");
-          $server['p'][$player_key]['rate'] = Helper::lgslUnpack(lgsl_cut_byte($buffer, 2), "S");
-          $buffer                           = substr($buffer, 2);
-          $player_name                      = lgsl_cut_string($buffer);
-          $player_tag                       = lgsl_cut_string($buffer);
-          $server['p'][$player_key]['name'] = $player_tag ? $player_tag." ".$player_name : $player_name;
-  
-          $player_key ++;
-        }
-      }
-  
-      //---------------------------------------------------------+
-  
-      else { // DOOM3 AND PREY: (PID)(PING)(RATE)(NULLNULL)(NAME)
-        while ($buffer && $buffer[0] != "\x20") { // STOPS AT PID 32
-          $server['p'][$player_key]['pid']  = ord(lgsl_cut_byte($buffer, 1));
-          $server['p'][$player_key]['ping'] = Helper::lgslUnpack(lgsl_cut_byte($buffer, 2), "S");
-          $server['p'][$player_key]['rate'] = Helper::lgslUnpack(lgsl_cut_byte($buffer, 2), "S");
-          $buffer                           = substr($buffer, 2);
-          $server['p'][$player_key]['name'] = lgsl_cut_string($buffer);
-  
-          $player_key ++;
-        }
-      }
-  
-      //---------------------------------------------------------+
-  
-      $server['s']['game']       = $server['e']['gamename'];
-      $server['s']['name']       = $server['e']['si_name'];
-      $server['s']['map']        = $server['e']['si_map'];
-      $server['s']['players']    = $server['p'] ? count($server['p']) : 0;
-      $server['s']['playersmax'] = $server['e']['si_maxplayers'];
-  
-      if ($server['b']['type'] == "wolf2009" || $server['b']['type'] == "quakewars") {
-        $server['s']['map']      = str_replace(".entities", "", $server['s']['map']);
-        $server['s']['password'] = $server['e']['si_needpass'];
-      } else {
-        $server['s']['password'] = $server['e']['si_usepass'];
-      }
-  
-      //---------------------------------------------------------+
-      $this->_server->from_array($server);
-      return TRUE;
-    }
     public function lgsl_query_11() {
       $server = $this->_server->to_array();
       //---------------------------------------------------------+
@@ -1702,7 +1353,240 @@
     }
     public function postProcess(&$buffer) {}
   }
-	
+	/* Query 01-10 */
+
+  class Query07 extends QuerySocket { // Quake World
+    public function process() {
+      $buffer = $this->fetch("\xFF\xFF\xFF\xFFstatus\x00");
+      if (!$buffer) return $this::NO_RESPOND;
+
+      $buffer->skip(6, 2); // REMOVE HEADER AND FOOTER
+      $part = explode("\n", $buffer->getAll()); // SPLIT INTO SETTINGS/PLAYER/PLAYER/PLAYER
+
+      $item = explode("\\", $part[0]);
+      foreach ($item as $item_key => $data_key) {
+        if ($item_key % 2) { continue; } // SKIP ODD KEYS
+        $data_key = strtolower($data_key);
+        $this->_data['e'][$data_key] = $item[$item_key+1];
+      }
+
+      array_shift($part); // REMOVE SETTINGS
+      $this->_data['p'] = [];
+      foreach ($part as $key => $data) {
+        preg_match("/(.*) (.*) (.*) (.*) \"(.*)\" \"(.*)\" (.*) (.*)/s", $data, $match); // GREEDY MATCH FOR SKINS
+
+        $this->_data['p'][$key]['pid']         = $match[1];
+        $this->_data['p'][$key]['score']       = $match[2];
+        $this->_data['p'][$key]['time']        = $match[3];
+        $this->_data['p'][$key]['ping']        = $match[4];
+        $this->_data['p'][$key]['name']        = Helper::lgslParseColor($match[5], $this->_server->get_type());
+        $this->_data['p'][$key]['skin']        = $match[6];
+        $this->_data['p'][$key]['skin_top']    = $match[7];
+        $this->_data['p'][$key]['skin_bottom'] = $match[8];
+      }
+
+      $this->_data['s']['game']       = $this->_data['e']['*gamedir'];
+      $this->_data['s']['name']       = $this->_data['e']['hostname'];
+      $this->_data['s']['map']        = $this->_data['e']['map'];
+      $this->_data['s']['players']    = $this->_data['p'] ? count($this->_data['p']) : 0;
+      $this->_data['s']['playersmax'] = $this->_data['e']['maxclients'];
+      $this->_data['s']['password']   = isset($this->_data['e']['needpass']) && $this->_data['e']['needpass'] > 0 && $this->_data['e']['needpass'] < 4 ? 1 : 0;
+      return $this::SUCCESS;
+    }
+  }
+  class Query08 extends QuerySocket { // All Seeing Eye | MTA
+    public function process() {
+      $buffer = $this->fetch("s");
+      if (!$buffer) return $this::NO_RESPOND;
+
+      $buffer->skip(4); // REMOVE HEADER
+      $this->_data['e']['gamename']   = $buffer->cutPascal(1, -1);
+      $this->_data['e']['hostport']   = $buffer->cutPascal(1, -1);
+      $this->_data['s']['name']       = Helper::lgslParseColor($buffer->cutPascal(1, -1), $this->_server->get_type());
+      $this->_data['e']['gamemode']   = $buffer->cutPascal(1, -1);
+      $this->_data['s']['map']        = $buffer->cutPascal(1, -1);
+      $this->_data['e']['version']    = $buffer->cutPascal(1, -1);
+      $this->_data['s']['password']   = $buffer->cutPascal(1, -1);
+      $this->_data['s']['players']    = $buffer->cutPascal(1, -1);
+      $this->_data['s']['playersmax'] = $buffer->cutPascal(1, -1);
+
+      while ($buffer->length() > 0 && $buffer->char(0) != "\x01") {
+        $item_key   = strtolower($buffer->cutPascal(1, -1));
+        $item_value = $buffer->cutPascal(1, -1);
+
+        $server['e'][$item_key] = $item_value;
+      }
+      $buffer->skip(1); // REMOVE END MARKER
+
+      $player_key = 0;
+      $fields = [
+        "farcryconnecting" => ["name", "score", "", "time"],
+        Protocol::FARCRY => ["name", "team", "", "score", "ping", "time"],
+        Protocol::MTA => ["name", "", "", "score", "ping", ""],
+        Protocol::PAINKILLER => ["name", "", "skin", "score", "ping", ""],
+        Protocol::SOLDAT => ["name", "team", "", "score", "ping", "time"]
+      ];
+
+      while ($buffer->length() > 0) {
+        $bit_flags = $buffer->cutByte(); // FIELDS HARD CODED BELOW BECAUSE GAMES DO NOT USE THEM PROPERLY
+
+        if ($bit_flags === "\x3D") {
+          $field_list = $fields["farcryconnecting"]; // FARCRY PLAYERS CONNECTING
+        } else {
+          $field_list = $fields[$this->_server->get_type()];
+        }
+
+        foreach ($field_list as $item_key) {
+          $item_value = $buffer->cutPascal(1, -1);
+          if (!$item_key) { continue; }
+          if ($item_key === "name") { Helper::lgslParseColor($item_value, $this->_server->get_type()); }
+          $this->_data['p'][$player_key][$item_key] = $item_value;
+        }
+        $player_key ++;
+      }
+      return $this::SUCCESS;
+    }
+  }
+  class Query09 extends QuerySocket { // GameSpy QR2 | SERIOUS SAM 2 | STALKER | ArmA 2
+    public function process() {
+      if ($this->_server->get_type() === Protocol::SERIOUSSAM2) { $this->_need['p'] = FALSE; } // SERIOUS SAM 2 RETURNS ALL PLAYER NAMES AS "Unknown Player" SO SKIP ANY PLAYER REQUESTS
+      if ($this->need('s') || $this->need('e')) {
+        $this->_need['e'] = FALSE;
+        $buffer = $this->fetch("\xFE\xFD\x00\x21\x21\x21\x21\xFF\x00\x00\x00");
+        if (!$buffer) return $this::NO_RESPOND;
+
+        $buffer->skip(5, 2); // REMOVE HEADER AND FOOTER
+        $item = explode("\x00", $buffer->getAll());
+
+        foreach ($item as $item_key => $data_key) {
+          if ($item_key % 2) { continue; } // SKIP EVEN KEYS
+
+          $data_key = strtolower($data_key);
+          $this->_data['e'][$data_key] = $item[$item_key+1];
+        }
+
+        $this->_data['s']['name']       = $this->_data['e']['hostname'] ?? "";
+        $this->_data['s']['map']        = $this->_data['e']['mapname'] ?? "";
+        $this->_data['s']['players']    = $this->_data['e']['numplayers'] ?? "";
+        $this->_data['s']['playersmax'] = $this->_data['e']['maxplayers'] ?? "";
+        $this->_data['s']['password']   = $this->_data['e']['password'] ?? "";
+        $this->_data['s']['mode']       = $this->_data['e']['gametype'] ?? "";
+
+        if (!empty($this->_data['e']['gamename']))   { $this->_data['s']['game'] = $this->_data['e']['gamename']; }   // AARMY
+        if (!empty($this->_data['e']['gsgamename'])) { $this->_data['s']['game'] = $this->_data['e']['gsgamename']; } // FEAR
+        if (!empty($this->_data['e']['game_id']))    { $this->_data['s']['game'] = $this->_data['e']['game_id']; }    // BFVIETNAM
+
+        if (in_array($this->_server->get_type(), [Protocol::ARMA, Protocol::ARMA2])) {
+          $this->_data['s']['map'] = $this->_data['e']['mission'];
+        } elseif ($this->_server->get_type() === Protocol::VIETCONG2) {
+          $this->_data['e']['extinfo_autobalance'] = Helper::bool(ord($this->_data['e']['extinfo'][18]) === 2);
+        }
+      }
+      if ($this->need('p') && $this->_data['s']['players']) {
+        $buffer = $this->fetch("\xFE\xFD\x00\x21\x21\x21\x21\x00\xFF\x00\x00");
+        if (!$buffer) return $this::WITH_ERROR;
+
+        $buffer->skip(7, 1); // REMOVE HEADER / PLAYER TOTAL / FOOTER
+        if (!$buffer->has("\x00\x00")) { return $this::SUCCESS; } // NO PLAYERS
+
+        $buffer     = explode("\x00\x00", $buffer->getAll(), 2); // SPLIT FIELDS FROM ITEMS
+        $buffer[0]  = str_replace("_",      "",     $buffer[0]); // REMOVE UNDERSCORES FROM FIELDS
+        $buffer[0]  = str_replace("player", "name", $buffer[0]); // LGSL STANDARD
+        $field_list = explode("\x00", $buffer[0]);               // SPLIT UP FIELDS
+        $item       = explode("\x00", $buffer[1]);               // SPLIT UP ITEMS
+
+        $item_position = 0;
+        $item_total    = count($item);
+        $player_key    = 0;
+
+        do {
+          foreach ($field_list as $field) {
+            $this->_data['p'][$player_key][$field] = iconv('cp1251//IGNORE', 'utf-8//IGNORE', $item[$item_position]);
+            $item_position ++;
+          }
+          $player_key ++;
+        }
+        while ($item_position < $item_total);
+      }
+      return $this::SUCCESS;
+    }
+  }
+  class Query10 extends QuerySocket { // QUAKEWARS | QUAKE4 | DOOM3 | PREY
+    public function process() {
+      $quakewars = $this->_server->get_type() === Protocol::QUAKEWARS;
+      $ex = ($quakewars ? "EX" : "");
+      $buffer = $this->fetch("\xFF\xFFgetInfo{$ex}\xFF");
+      if (!$buffer) return $this::NO_RESPOND;
+
+      if ($quakewars) { $buffer->skip(10); } // REMOVE HEADERS
+      $buffer->skip(23);
+      $buffer->set(Helper::lgslParseColor($buffer->getAll(), "2"));
+      while ($buffer->length() && $buffer->get() != "\x00") {
+        $this->_data['e'][strtolower($buffer->cutString())] = $buffer->cutString();
+      }
+      $buffer->skip(2);
+
+      $player_key = 0;
+      if ($quakewars) { // QUAKEWARS: (PID)(PING)(NAME)(TAGPOSITION)(TAG)(BOT)
+        while ($buffer->length() && $buffer->get() != "\x20") { // STOPS AT PID 32
+          $this->_data['p'][$player_key]['pid']  = $buffer->cutByteOrd();
+          $this->_data['p'][$player_key]['ping'] = $buffer->cutByteUnpack(2, "S");
+          $this->_data['p'][$player_key]['name'] = $buffer->cutString();
+          $player_tag_position              = $buffer->cutByte();
+          $player_tag                       = $buffer->cutString();
+          $this->_data['p'][$player_key]['bot']  = $buffer->cutByteOrd();
+
+          if ($player_tag_position == "1") { $this->_data['p'][$player_key]['name'] .= " {$player_tag}"; }
+          elseif ($player_tag_position != "") { $this->_data['p'][$player_key]['name'] = "{$player_tag} {$this->_data['p'][$player_key]['name']}"; }
+          $player_key ++;
+        }
+
+        $buffer->skip(1);
+        $this->_data['e']['si_osmask']    = $buffer->cutByteUnpack(4, "I");
+        $this->_data['e']['si_ranked']    = $buffer->cutByteOrd();
+        $this->_data['e']['si_timeleft']  = Helper::lgslTime($buffer->cutByteUnpack(4, "I") / 1000);
+        $this->_data['e']['si_gamestate'] = $buffer->cutByteOrd();
+        $buffer->skip(2);
+
+        $player_key = 0;
+        while ($buffer->length() && $buffer->get() != "\x20") { // QUAKEWARS EXTENDED: (PID)(XP)(TEAM)(KILLS)(DEATHS)
+          $this->_data['p'][$player_key]['pid']    = $buffer->cutByteOrd();
+          $this->_data['p'][$player_key]['xp']     = (int) $buffer->cutByteUnpack(4, "f");
+          $this->_data['p'][$player_key]['team']   = $buffer->cutString();
+          $this->_data['p'][$player_key]['score']  = $buffer->cutByteUnpack(4, "i");
+          $this->_data['p'][$player_key]['deaths'] = $buffer->cutByteUnpack(4, "i");
+          $player_key ++;
+        }
+      } else { // DOOM3 AND PREY: (PID)(PING)(RATE)(NULLNULL)(NAME) // QUAKE4: (PID)(PING)(RATE)(NULLNULL)(NAME)(TAG)
+        while ($buffer->length() && $buffer->get() != "\x20") { // STOPS AT PID 32
+          $this->_data['p'][$player_key]['pid']  = $buffer->cutByteOrd();
+          $this->_data['p'][$player_key]['ping'] = $buffer->cutByteUnpack(2, "S");
+          $this->_data['p'][$player_key]['rate'] = $buffer->cutByteUnpack(2, "S");
+          $buffer->skip(2);
+          $this->_data['p'][$player_key]['name'] = $buffer->cutString();
+          if ($this->_server->get_type() === Protocol::QUAKE4) {
+            $player_tag = $buffer->cutString();
+            $this->_data['p'][$player_key]['name'] = "{$player_tag} {$this->_data['p'][$player_key]['name']}";
+          }
+          $player_key ++;
+        }
+      }
+
+      $this->_data['s']['game']       = $this->_data['e']['gamename'];
+      $this->_data['s']['name']       = $this->_data['e']['si_name'];
+      $this->_data['s']['map']        = $this->_data['e']['si_map'];
+      $this->_data['s']['players']    = $this->_data['p'] ? count($this->_data['p']) : 0;
+      $this->_data['s']['playersmax'] = $this->_data['e']['si_maxplayers'];
+
+      if ($quakewars) {
+        $this->_data['s']['map']      = str_replace([".entities", "maps/"], ["",""], $this->_data['s']['map']);
+        $this->_data['s']['password'] = $this->_data['e']['si_needpass'];
+      } else {
+        $this->_data['s']['password'] = $this->_data['e']['si_usepass'];
+      }
+      return $this::SUCCESS;
+    }
+  }
   /* Query 11-20 */
 
 
@@ -2034,7 +1918,6 @@
       if (!$buffer) return $this::NO_RESPOND;
 
       $buffer->skip(4); // REMOVE HEADER
-      $buffer->show();
       $response_type = $buffer->cutByte();
       if ($response_type == "I") {
         $this->_data['e']['netcode']     = $buffer->cutByteOrd();
