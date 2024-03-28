@@ -2964,25 +2964,28 @@
     }
   }
   /* Query 51-60 */
-  class Query51 extends QueryEOS { // Palworld
-    protected $grant_type = "external_auth";
-    protected $deployment_id = "0a18471f93d448e2a1f60e47e03d3413";
-    protected $user_id = "xyza78916PZ5DF0fAahu4tnrKKyFpqRE";
-    protected $user_secret = "j0NapLEPm3R3EOrlQiM8cRLKq3Rt02ZVVwT0SkZstSg";
-    protected function filter($k) {
-      return $k['attributes']['GAMESERVER_PORT_l'] == $this->_server->get_c_port();
-    }
-    protected function placeData($find) {
-      $this->_data['s']['name'] = $find['attributes']['NAME_s'];
-      $this->_data['s']['map'] = $find['attributes']['MAPNAME_s'];
-      $this->_data['s']['password'] = $find['attributes']['SERVERPASSWORD_b'];
-      $this->_data['s']['players'] = $find['attributes']['PLAYERS_l'];
-      $this->_data['s']['playersmax'] = $find['settings']['maxPublicPlayers'];
-      
-      $this->_data['e']['anticheat'] = Helper::bool($find['attributes']['BANTICHEATPROTECTED_b']);
-      $this->_data['e']['allowJoinInProgress'] = Helper::bool($find['settings']['allowJoinInProgress']);
-      $this->_data['e']['description'] = $find['attributes']['DESCRIPTION_s'];
-      $this->_data['e']['version'] = $find['attributes']['VERSION_s'];
+  class Query51 extends QueryJSON { // Palworld
+    public function process() {
+      $search = ($this->_server->get_name() === "" ? "list" : "search?q=" . str_replace(" ", "%20", $this->_server->get_name()));
+      $buffer = $this->fetch("https://api.palworldgame.com/server/{$search}");
+      if (!$buffer) return $this::NO_RESPOND;
+      if (!$buffer['server_list']) return $this::NO_RESPOND;
+      $find = array_filter($buffer['server_list'], function($k) {
+        return $k['address'] == $this->_server->get_ip() && ((int) $k['port']) == ((int) $this->_server->get_q_port());
+      });
+      if (!$find) return FALSE;
+      $find = reset($find);
+      $this->_data['s']['name'] = $find['name'];
+      $this->_data['s']['map'] = $find['map_name'];
+      $this->_data['s']['password'] = $find['is_password'];
+      $this->_data['s']['players'] = $find['current_players'];
+      $this->_data['s']['playersmax'] = $find['max_players'];
+      $this->_data['e']['server_id'] = $find['server_id'];
+      $this->_data['e']['create_time'] = Date("d.m.Y", $find['created_at']);
+      $this->_data['e']['days'] = $find['days'];
+      $this->_data['e']['server_time'] = $find['server_time'];
+      $this->_data['e']['description'] = isset($find['description']) ? $find['description'] : "";
+      $this->_data['e']['version'] = $find['version'];
       return $this::SUCCESS;
     }
   }
