@@ -45,9 +45,9 @@
     $scaleX = $w / (count($x0) > 0 ? max($x0) : 1);
     $scaleY = $h / $max;
 
-    imagestring($im, 1, $x - 15, $y + $h - 4, "0", $axis);
-    imagestring($im, 1, $x - 15, floor($y + $h / 2) - 4, floor($max / 2), $axis);
-    imagestring($im, 1, $x - 15, $y - 4, $max, $axis);
+    imagestring($im, 1, $x - 27, $y + $h - 4, str_pad("0", 5, " ", STR_PAD_LEFT), $axis);
+    imagestring($im, 1, $x - 27, floor($y + $h / 2) - 4, str_pad(floor($max / 2), 5, " ", STR_PAD_LEFT), $axis);
+    imagestring($im, 1, $x - 27, $y - 4, str_pad($max, 5, " ", STR_PAD_LEFT), $axis);
     imageline($im, $x, $y + $h, $x + $w, $y + $h, $axis);
     imageline($im, $x, $y - 1, $x, $y + $h, $axis);
     imageline($im, $x + 1, floor($y + $h / 2), $x + $w - 2, floor($y + $h / 2), $grid);
