@@ -31,9 +31,9 @@
     $scaleX = $w / (count($x0) > 0 ? max($x0) : 1);
     $scaleY = $h / $server['s']['playersmax'];
 
-    imagestring($im, 1, $x - 10, $y + $h - 4, "0", $axis);
-    imagestring($im, 1, $x - 10, floor($y + $h / 2) - 4, floor($server['s']['playersmax'] / 2), $axis);
-    imagestring($im, 1, $x - 10, $y - 4, $server['s']['playersmax'], $axis);
+    imagestring($im, 1, $x - 27, $y + $h - 4, str_pad("0", 5, " ", STR_PAD_LEFT), $axis);
+    imagestring($im, 1, $x - 27, floor($y + $h / 2) - 4, str_pad(floor($server['s']['playersmax'] / 2), 5, " ", STR_PAD_LEFT), $axis);
+    imagestring($im, 1, $x - 27, $y - 4, str_pad($server['s']['playersmax'], 5, " ", STR_PAD_LEFT), $axis);
     imageline($im, $x, $y + $h, $x + $w, $y + $h, $axis);
     imageline($im, $x, $y - 1, $x, $y + $h, $axis);
     imageline($im, $x + 1, floor($y + $h / 2), $x + $w - 2, floor($y + $h / 2), $grid);
