@@ -62,7 +62,7 @@
 								`s_port`     VARCHAR (5)   NOT NULL DEFAULT '0',
 								`map`        VARCHAR (255) NOT NULL DEFAULT '',
 								`players`    SMALLINT (5)  NOT NULL DEFAULT '0',
-								`playersmax` SMALLINT (5)  NOT NULL DEFAULT '0',
+								`playersmax` SMALLINT (5)  UNSIGNED NOT NULL DEFAULT '0',
 								`zone`       VARCHAR (255) NOT NULL DEFAULT '',
 								`disabled`   TINYINT (1)   NOT NULL DEFAULT '0',
 								`comment`    VARCHAR (255) NOT NULL DEFAULT '',
