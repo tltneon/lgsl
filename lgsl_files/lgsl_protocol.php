@@ -4495,7 +4495,8 @@
     return $buffer['sessions'];
   }
   function lgsl_query_51(&$server, &$lgsl_need, &$lgsl_fp) { // Palworld
-    curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.palworldgame.com/server/list");
+    $search = ($server['s']['name'] === "" ? "list" : "search?q=" . str_replace(" ", "%20", $server['s']['name']));
+    curl_setopt($lgsl_fp, CURLOPT_URL, "https://api.palworldgame.com/server/{$search}");
     $buffer = curl_exec($lgsl_fp);
     if (!$buffer) $buffer = curl_exec($lgsl_fp);
     if (!$buffer) return FALSE;
