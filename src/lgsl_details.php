@@ -224,7 +224,7 @@
         <tbody>";
 
       foreach ($extras as $field => $value) {
-        $value = preg_replace('/((https*:\/\/|https*:\/\/www\.|www\.)[\w\d\.\-\/=$?​]*)/i', "<a href='$1' target='_blank'>$1</a>", $value);
+        $value = preg_replace('/((https*:\/\/|https*:\/\/www\.|www\.)[\w\d\.\-\/:=$?​]*)/i', "<a href='$1' target='_blank'>$1</a>", $value);
         $output .= "
           <tr>
             <td> {$field} </td>
