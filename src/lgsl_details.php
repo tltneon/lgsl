@@ -32,7 +32,6 @@
     $fields = $server->sort_player_fields();
     //$server = lgsl_sort_players($server->get_players());
     //$server = lgsl_sort_extras($server->get_extras());
-    //$server = lgsl_server_html($server);
 
   //------------------------------------------------------------------------------------------------------------+
 
@@ -108,16 +107,11 @@
 					
 					if ($lgsl_config['image_mod']) {
 						if (extension_loaded('gd')) {
-							$output .= "
-							<div style='overflow-x: auto;'><img src='userbar.php?{$g}' alt='{$server->get_name()}'/></div>
-							<textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}[/img][/url]</textarea><br /><br />
-
-							<div style='overflow-x: auto;'><img src='userbar.php?{$g}&t=2' alt='{$server->get_name()}'/></div>
-							<textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=2[/img][/url]</textarea><br /><br />
-
-							<img src='userbar.php?{$g}&t=3' alt='{$server->get_name()}'/><br />
-							<textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t=3[/img][/url]</textarea>
-							";
+              for ($i = 1; $i < 4; $i++) {
+                $output .= "
+                <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t={$i}' alt='{$server->get_name()}'/></div>
+                <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t={$i}[/img][/url]</textarea><br /><br />";
+              }
 						} else {
 							$output .= "<div id='invalid_server_id'> Error while trying to display image userbar: GD library not loaded (see php.ini) </div>";
 						}

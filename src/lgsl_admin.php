@@ -123,9 +123,11 @@
 //------------------------------------------------------------------------------------------------------------+
 
   if (!empty($_POST['lgsl_check_updates'])) {
-    $context = stream_context_create(["http" => ["header" => "User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"]]);
-    $lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/branches/lgsl7", false, $context);
-    if (!$lgsl_fp) {
+    $stream = new Stream(PROTOCOL::HTTP);
+    $stream->open();
+    $stream->write("https://api.github.com/repos/tltneon/lgsl/branches/lgsl7");
+    $buffer1 = $stream->readJson();
+    if (!$buffer1) {
       $output .= "
       <div class='tt'>
         CAN'T LOAD DATA FROM GITHUB.COM -> NO INTERNET CONNECTION?
@@ -137,10 +139,8 @@
       ";
       return;
     }
-    $buffer1 = json_decode($lgsl_fp, true);
-
-    $lgsl_fp = file_get_contents("https://api.github.com/repos/tltneon/lgsl/releases/latest", false, $context);
-    $buffer2 = json_decode($lgsl_fp, true);
+    $stream->write("https://api.github.com/repos/tltneon/lgsl/releases/latest");
+    $buffer2 = $stream->readJson();
 
     $blocks = [
       ["Latest commit (LGSL7)", $buffer1["commit"]["commit"]["message"], date($lgsl_config['text']['tzn'], strtotime($buffer1["commit"]["commit"]["author"]["date"])), "https://github.com/tltneon/lgsl/archive/refs/heads/lgsl7.zip", $buffer1["commit"]["html_url"]],
@@ -168,7 +168,6 @@
       </div>
 			" . lgsl_return_buttons() . "
       ";
-
     return;
   }
 

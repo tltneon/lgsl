@@ -57,7 +57,8 @@
   $max = $server->get_players_count('max') > 0 ? $server->get_players_count('max') : findMax($server);
   $x0 = 30;
   $y0 = 20;
-  $period = 60 * 60 * 24; // 1 day
+  global $lgsl_config;
+  $period = 3600 * $lgsl_config['history_hours'];
   $xStep = 30;
   $yStep = (int) ($max > 32 ? 9 : 100 / $max) + 1;
 
@@ -138,6 +139,7 @@
 	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim($server->get_name(false)));
 	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $server->get_address()));
 	imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
+  imagettftext($im, 6, 0, $w - 110, $h-3, $black, $font, "Shows last {$lgsl_config['history_hours']} hours");
 
   $s = (isset($_SERVER['HTTPS']) ? 's' : '');
   header("Link: <http{$s}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}>; rel=\"canonical\"");

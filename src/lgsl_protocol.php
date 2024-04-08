@@ -2998,7 +2998,7 @@
 		private function _isHttp() {
 			return $this->_protocol === Protocol::HTTP;
 		}
-		public function open(&$server) {
+		public function open(&$server = null) {
       global $lgsl_config;
 			if ($this->_isHttp()) {
         if (!LGSL::isEnabled("curl")) return false;

@@ -24,7 +24,8 @@
     $grid = imagecolorallocate($im, 90, 90, 90);
     $chart = imagecolorallocate($im, 120, 255, 120);
     $x0 = $y0 = [];
-    $period = 60 * 60 *24;
+    global $lgsl_config;
+    $period = 3600 * $lgsl_config['history_hours'];
     $history = $server->get_history();
     $avg = 0; $avgc = 0;
     foreach ($history as $key) {
@@ -52,7 +53,7 @@
     imageline($im, $x, $y - 1, $x, $y + $h, $axis);
     imageline($im, $x + 1, floor($y + $h / 2), $x + $w - 2, floor($y + $h / 2), $grid);
     imageline($im, $x + 1, $y, $x + $w - 2, $y, $grid);
-    imagestringup($im, 1, $x + $w + 3, $y + $h, "24 hrs", $grid);
+    imagestringup($im, 1, $x + $w + 3, $y + $h, "{$lgsl_config['history_hours']} hrs", $grid);
     imageantialias($im, true);
     imagesetthickness($im, 2);
     for ($i=1; $i < count($x0); $i++) {

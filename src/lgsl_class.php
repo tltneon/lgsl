@@ -673,7 +673,7 @@
       if ($lgsl_config['history'] and LGSL::requestHas($request, "h") and $this->get_status() != self::PENDING) {
         $last = end($this->_history);
         if (!$last || time() - $last['t'] >= 60 * 15) { // RECORD IF 15 MINS IS PASSED
-          $history_limit = $lgsl_config['history_hours'] * 60 * 60;
+          $history_limit = $lgsl_config['history_hours'] * 3600;
           foreach ($this->_history as $key => $value) {
             if (time() - $this->_history[$key]['t'] > $history_limit) { // NOT OLDER THAN $lgsl_config['history_hours'] HOURS
               unset($this->_history[$key]);
