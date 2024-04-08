@@ -493,9 +493,10 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
   }
 
   function lgsl_return_buttons() {
+    $management = isset($_POST['lgsl_management']) && $_POST['lgsl_management'] == 1 ?? 0;
     return "
     <form method='post' action='' style='padding: 15px;'>
-      <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
+      <input type='hidden' name='lgsl_management' value='{$management}' />
       <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
     </form>";
   }
