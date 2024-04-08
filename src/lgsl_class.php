@@ -453,6 +453,11 @@
 			global $lgsl_config;
 			$this->execute("TRUNCATE TABLE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
 		}
+		public function get_all() {
+			global $lgsl_config;
+			$t = $this->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
+			return $t->fetch_all();
+		}
   }
 	class MysqlWrapper extends DBWrapper {
 		public function connect() {
@@ -476,11 +481,6 @@
 		public function get_error() {
 			if ($this->_connection->connect_errno === 0) return null;
 			return "{$this->_connection->connect_error} ({$this->_connection->connect_errno})";
-		}
-		public function get_all() {
-			global $lgsl_config;
-			$t = $this->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
-			return $t->fetch_all();
 		}
 		public function escape_string($string = "") {
 			return $this->_connection->escape_string($string);
@@ -512,11 +512,6 @@
 			$string = str_replace("WHERE `id`", "WHERE `rowid`", $string);
 			$this->_connection->exec($string);
 		}
-		public function get_all() {
-			global $lgsl_config;
-			$t = $this->query("SELECT rowid as id, * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
-			return $t->fetch_all();
-		}
 	}
 	class PostgresWrapper extends DBWrapper {
 		public function connect() {
@@ -545,11 +540,6 @@
 		}
 		public function select_db() {
 			$this->connect();
-		}
-		public function get_all() {
-			global $lgsl_config;
-			$t = $this->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
-			return $t->fetch_all();
 		}
 	}
 
