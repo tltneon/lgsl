@@ -177,7 +177,7 @@
           <tr>";
 
           foreach ($fields as $field) {
-            $output .= "<td> {$player[$field]} </td>";
+            $output .= isset($player[$field]) ? "<td> {$player[$field]} </td>" : "<td> " . LGSL::NONE . " </td>";
           }
 
           $output .= "
