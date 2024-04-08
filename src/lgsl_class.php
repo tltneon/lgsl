@@ -854,7 +854,6 @@
         Protocol::CS2D          => "steam://connect/{IP}:{C_PORT}",
         Protocol::DISCORD       => "https://discord.gg/{IP}",
         Protocol::FACTORIO      => "steam://connect/{IP}",
-        Protocol::FARMSIM       => "steam://connect/{IP}:{C_PORT}",
         Protocol::FIVEM         => "fivem://connect/{IP}:{C_PORT}",
         Protocol::GTAC          => "gtac://connect/{IP}:{C_PORT}/gta:{GAME}",
         Protocol::HALFLIFE      => "steam://connect/{IP}:{C_PORT}",
