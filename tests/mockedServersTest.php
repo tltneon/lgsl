@@ -6,7 +6,7 @@
   use PHPUnit\Framework\TestCase;
     class StreamMock extends Stream {
         public $type = "";
-        public function open(&$server) {$this->type = $server->get_type(); return true;}
+        public function open(&$server = null) {$this->type = $server->get_type(); return true;}
         public function write($data) {}
         public function readRaw($length = 4096) {
             return str_replace("[null]", "\x00", example($this->type));
