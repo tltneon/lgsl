@@ -7,7 +7,7 @@
   <div class='bar bar6'></div>
   <div class='bar bar7'></div>
   <div class='bar bar8'></div>
-  <div class='center'>Querying data</div>
+  <div class='center' id="text"></div>
 </div>
 <style>
   .middle {top: 25%;left: 50%;transform: translate(-50%, -50%);position: absolute;}
@@ -27,3 +27,24 @@
     100% {transform: scaleY(0.1); background: transparent;}
   }
 </style>
+<script>
+  document.addEventListener("DOMContentLoaded", reloadLocale);
+  function reloadLocale() {
+    let lang =
+    document.cookie
+      .split(';')
+      .map(v => v.split('='))
+      .reduce((acc, v) => {
+        acc[decodeURIComponent(v[0].trim())] = decodeURIComponent(v[1].trim());
+        return acc;
+      }, {})
+      ["lgsl_lang"] ?? "english";
+    const langs = { // you can add here new other languages
+      english: "Querying data"
+    }
+    let el = document.querySelector("div#text");
+    if (el) {
+      el.innerText = langs[lang] ?? langs["english"];
+    }
+  }
+</script>

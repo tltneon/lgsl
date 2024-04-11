@@ -4,6 +4,8 @@
   header("Content-Type:text/html; charset=utf-8");
 
   require ("src/lgsl_config.php");
+  require ("src/lgsl_language.php");
+  $lang = new tltneon\LGSL\Lang($_COOKIE['lgsl_lang']);
 	if (empty($lgsl_config['installed'])) header("Location: install.php");
   global $output, $title;
 
@@ -52,9 +54,9 @@
   $s = $_GET['s'] ?? null;
   $ip = $_GET['ip'] ?? null;
   $port = $_GET['port'] ?? null;
-  if ($s === "add")                     { $output = load_page("add");     $title .= " | {$lgsl_config["text"]["aas"]}";}
-  elseif ((int) $s > 0 || $ip && $port) { $output = load_page("details");                                              }
-  else                                  { $output = load_page("list");                                                 }
+  if ($s === "add")                     { $output = load_page("add");     $title .= " | {$lang->get("aas")}";}
+  elseif ((int) $s > 0 || $ip && $port) { $output = load_page("details");                                    }
+  else                                  { $output = load_page("list");                                       }
 //------------------------------------------------------------------------------------------------------------+
 ?>
 <!DOCTYPE html>
@@ -75,11 +77,26 @@
   <body>
     <div id="topmenu">
       <?php
-                                        echo "<li><a href='../../'>{$lgsl_config['text']['mpg']}</a></li>";   // MAIN PAGE
-        if ($lgsl_config['public_add']) echo "<li><a href='?s=add'>{$lgsl_config['text']['aas']}</a></li>";   // ADD SERVER
-        if (file_exists("install.php")) echo "<li><a href='./install.php'>INSTALLATION PAGE</a></li>";        // INSTALLATION PAGE  
-        if ($s || $ip)                  echo "<li><a href='./'>{$lgsl_config['text']['bak']}</a></li>";       // BACK TO SERVERS LIST
+        $menu = [
+          ["condition" => true, "link" => '../../', "text" => $lang->get("mpg")], // MAIN PAGE
+          ["condition" => $lgsl_config['public_add'], "link" => '?s=add', "text" => $lang->get("aas")], // ADD SERVER
+          ["condition" => file_exists("install.php"), "link" => './install.php', "text" => $lang->get("isp")], // INSTALLATION PAGE 
+          ["condition" => $s || $ip, "link" => './', "text" => $lang->get("bak")] // BACK TO SERVERS LIST
+        ];
+        foreach ($menu as $item) {
+          if ($item["condition"]) {
+            echo "<li><a href='{$item["link"]}'>{$item["text"]}</a></li>";
+          }
+        }
       ?>
+      <select name='language' onChange='changeLang(event)'>
+      <?php
+        foreach (tltneon\LGSL\Lang::list() as $lang) {
+          $select = $_COOKIE['lgsl_lang'] === $lang ? "selected": "";
+          echo "<option {$select}>{$lang}</option>";
+        }
+      ?>
+      </select>
     </div>
     <a id="adminlink" href="admin.php"></a>
 
@@ -96,6 +113,12 @@
         }
       }
     ?>
+    <script>
+      function changeLang(event) {
+        document.cookie = `lgsl_lang=${event.target.value}; expires=Thu, 18 Dec 2099 12:00:00 UTC; path=/`;
+        location.reload();
+      }
+    </script>
   </body>
 </html>
 <!-- Powered by LGSL v7.0.0; <?php echo "Page loaded: ".round(microtime(true) - $time, 6)."s";?> -->

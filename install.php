@@ -225,8 +225,9 @@
 	\$lgsl_config['timeout']       = 0;                     // 1=gives more time for servers to respond but adds loading delay
 	\$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay
 	\$lgsl_config['cms']           = 'sa';                // sets which CMS specific code to use
-	\$lgsl_config['disabled_types']= false;
-	include('languages/{$conf['language']}.php');        // sets LGSL language
+	\$lgsl_config['disabled_types']= false; // allow to exclude some protocols (games) from list. usage: ['disabled_types']= ['halflifewon', 'test'];
+	\$lgsl_config['language']      = '{$conf['language']}'; // sets LGSL language
+	include('languages/{$conf['language']}.php');        // loads LGSL language
 ?>";
 			file_put_contents('src/lgsl_config.php', $config);
 			unlink('install.php');

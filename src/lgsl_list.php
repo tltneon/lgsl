@@ -12,6 +12,8 @@
 //------------------------------------------------------------------------------------------------------------+
 
   require "lgsl_class.php";
+  require "lgsl_language.php";
+  $lang = new Lang($_COOKIE['lgsl_lang']);
   global $output;
 
   $type = $_GET['type'] ?? '';

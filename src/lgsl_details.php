@@ -9,9 +9,9 @@
   |                                                                                                            |
   \-----------------------------------------------------------------------------------------------------------*/
 
-//------------------------------------------------------------------------------------------------------------+
-
   require "lgsl_class.php";
+  require "lgsl_language.php";
+  $lang = new Lang($_COOKIE['lgsl_lang']);
   global $output, $server, $title;
 
 //------------------------------------------------------------------------------------------------------------+
@@ -46,53 +46,47 @@
       <div id='servername_{$server->get_status()}'> {$server->get_name()} </div>
       <div class='details_info'>
         <div class='details_info_column'>
-          <a id='gamelink' href='{$server->get_software_link()}'>{$lgsl_config['text']['slk']}</a>
+          <a id='gamelink' href='{$server->get_software_link()}'>{$lang->get('slk')}</a>
           <div class='details_info_row'>
             <div class='details_info_scolumn'>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lgsl_config['text']['sts']}:</div><div class='details_info_ceil'>{$lgsl_config['text'][$server->get_status()]}</div></div>
+                <div class='details_info_ceil'>{$lang->get('sts')}:</div><div class='details_info_ceil'>{$lang->get($server->get_status())}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lgsl_config['text']['adr']}:</div><div class='details_info_ceil'>{$server->get_ip()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('adr')}:</div><div class='details_info_ceil'>{$server->get_ip()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lgsl_config['text']['cpt']}:</div><div class='details_info_ceil'>{$server->get_c_port()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('cpt')}:</div><div class='details_info_ceil'>{$server->get_c_port()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lgsl_config['text']['qpt']}:</div><div class='details_info_ceil'>{$server->get_q_port()}</div></div></div>
+                <div class='details_info_ceil'>{$lang->get('qpt')}:</div><div class='details_info_ceil'>{$server->get_q_port()}</div></div></div>
             <div class='details_info_scolumn'>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lgsl_config['text']['typ']}:</div><div class='details_info_ceil'>{$server->get_type()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('typ')}:</div><div class='details_info_ceil'>{$server->get_type()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lgsl_config['text']['gme']}:</div><div class='details_info_ceil'>{$server->get_game()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('gme')}:</div><div class='details_info_ceil'>{$server->get_game()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lgsl_config['text']['map']}:</div><div class='details_info_ceil'>{$server->get_map()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('map')}:</div><div class='details_info_ceil'>{$server->get_map()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lgsl_config['text']['plr']}:</div><div class='details_info_ceil'>{$server->get_players_count()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('plr')}:</div><div class='details_info_ceil'>{$server->get_players_count()}</div></div>
             </div>
           </div>
           <div class='details_info_row'>
             <div class='details_info_scolumn'>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>Mode:</div><div class='details_info_ceil'>{$server->get_mode()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('mod')}:</div><div class='details_info_ceil'>{$server->get_mode()}</div></div>
                 <div class='details_info_srow'>
-                  <div class='details_info_ceil'>{$lgsl_config['text']['lst']}:</div><div class='details_info_ceil'>{$server->get_timestamp()}</div></div></div>
+                  <div class='details_info_ceil'>{$lang->get('lst')}:</div><div class='details_info_ceil'>{$server->get_timestamp()}</div></div></div>
              
           </div>
         </div>
         <div class='details_info_column zone{$server->get_zone()}' style='background-image: url({$server->get_map_image()});'>
-          <i class='details_password_image zone{$server->get_zone()}' style='background-image: url({$server->map_password_image()});' title='{$lgsl_config['text']['map']}: {$server->get_map()}'></i>
+          <i class='details_password_image zone{$server->get_zone()}' style='background-image: url({$server->map_password_image()});' title='{$lang->get('map')}: {$server->get_map()}'></i>
 					<i class='details_location_image flag f{$server->getLocation()}' title='{$server->location_text()}'></i>
           <i class='details_game_image' style='background-image: url({$server->add_url_path($server->game_icon())});' title='{$server->text_type_game()}'></i>
         </div>
-      </div>";
-
-  //------------------------------------------------------------------------------------------------------------+
-
-    $output .= "<div class='spacer'></div>";
-
-  //------------------------------------------------------------------------------------------------------------+
+      </div>
+      <div class='spacer'></div>";
 
     $g = "ip={$server->get_ip()}&port={$server->get_c_port()}";
     if ($lgsl_config['history']) {
-      //print_r($server->get_history());
       $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server->get_name()}' style='border-radius: 6px;' id='chart' /></div>";
     }
 
@@ -101,7 +95,7 @@
 		$output .= "
         <details>
           <summary style='margin-bottom: 12px;'>
-            {$lgsl_config['text']['cts']}
+            {$lang->get('cts')}
           </summary>
           <div>";
 					
@@ -148,7 +142,7 @@
     <div id='details_playerlist'>";
 
     if ($server->get_players_count('active') == 0 || count($server->get_players()) == 0) {
-      $output .= "<div class='noinfo'>{$lgsl_config['text']['npi']}</div>";
+      $output .= "<div class='noinfo'>{$lang->get('npi')}</div>";
     } else {
       $players = $server->get_players();
       $output .= "
@@ -157,7 +151,7 @@
           <tr class='table_head'>";
 
         foreach ($fields as $field) {
-          $field = ucfirst($lgsl_config['text'][substr(strtolower($field), 0, 3)]);
+          $field = ucfirst($lang->get(substr(strtolower($field), 0, 3)));
           $output .= "<th> {$field} </th>";
         }
 
@@ -194,7 +188,7 @@
   // SHOW THE SETTINGS
 
     if (count($server->get_extras()) == 0) {
-      $output .= "<div class='noinfo'>{$lgsl_config['text']['nei']} </div>";
+      $output .= "<div class='noinfo'>{$lang->get('nei')} </div>";
     } else {
       $extras = $server->get_extras();
       $hide_options = count($extras) > 40;
@@ -202,7 +196,7 @@
          $output .= "
         <details>
           <summary style='margin-bottom: 12px;'>
-            {$lgsl_config['text']['ctb']}
+            {$lang->get('ctb')}
           </summary>
           <div>
          ";
@@ -211,8 +205,8 @@
       <table class='settings_table'>
         <thead>
           <tr class='table_head'>
-            <th> {$lgsl_config['text']['ehs']} </th>
-            <th> {$lgsl_config['text']['ehv']} </th>
+            <th> {$lang->get('ehs')} </th>
+            <th> {$lang->get('ehv')} </th>
           </tr>
         </thead>
         <tbody>";
@@ -244,7 +238,7 @@
     </div>";
   }
   else {
-    $output .= "<div id='invalid_server_id'> {$lgsl_config['text']['mid']} </div>";
+    $output .= "<div id='invalid_server_id'> {$lang->get('mid')} </div>";
   }
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -265,7 +259,7 @@
 			\"name\": \"Connect to server\",
 			\"url\": \"{$server->get_software_link()}\"
 		},
-		\"description\": \"{$server->get_name()} | game: {$server->get_game()} | ip: {$server->get_ip()}:{$server->get_c_port()} | status: {$lgsl_config['text'][$server->get_status()]} | players: {$server->get_players_count()}\",
+		\"description\": \"{$server->get_name()} | game: {$server->get_game()} | ip: {$server->get_ip()}:{$server->get_c_port()} | status: {$lang->get($server->get_status())} | players: {$server->get_players_count()}\",
 		\"identifier\": \"{$lgsl_server_id}\",
 		\"name\": \"{$server->get_name()}\",
 		\"playersOnline\": \"{$server->get_players_count("active")}\",
