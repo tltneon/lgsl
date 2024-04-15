@@ -3026,9 +3026,13 @@
       if ($this->_isHttp()) {
 				$result = curl_exec($this->_stream);
 				if (curl_errno($this->_stream)) {
-					$this->_server->set_extra_value('_error', 'Couldn\'t send request: ' . curl_error($this->_stream));
-          $this->_server->set_status(false);
-          return false;
+          if ($this->_server) {
+            $this->_server->set_extra_value('_error', 'Couldn\'t send request: ' . curl_error($this->_stream));
+            $this->_server->set_status(false);
+            return false;
+          } else {
+            return 'Couldn\'t send request: ' . curl_error($this->_stream);
+          }
 				} else {
 					$resultStatus = curl_getinfo($this->_stream, CURLINFO_HTTP_CODE);
 					if ($resultStatus != 200) {

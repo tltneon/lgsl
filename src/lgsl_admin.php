@@ -9,37 +9,27 @@
   |                                                                                                            |
   \-----------------------------------------------------------------------------------------------------------*/
 
-//------------------------------------------------------------------------------------------------------------+
-
   if (!defined("LGSL_ADMIN")) { header('HTTP/1.0 404 Not Found'); exit(); }
 
   require "lgsl_class.php";
-
-  $db = LGSL::db();
-  $lgsl_type_list     = Protocol::lgsl_type_list();
-  $lgsl_protocol_list = Protocol::lgsl_protocol_list();
-
-  $id        = 0;
-  $last_type = "source";
-  $zone_list = [0,1,2,3,4,5,6,7,8,9];
-
-//------------------------------------------------------------------------------------------------------------+
+  require "lgsl_language.php";
+  $lang = new Lang($_COOKIE['lgsl_lang']);
 
   if (!function_exists("fsockopen") && !$lgsl_config['feed']['method']) {
     if (LGSL::isEnabled("curl")) {
-      $output = "<div class='center'><i class='space'></i><b>FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION</b><i class='space'></i></div>".lgsl_help_info(); return;
+      $note = "FSOCKOPEN IS DISABLED - YOU MUST ENABLE THE FEED OPTION";
     } else {
-      $output = "<div class='center'><i class='space'></i><b>FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST</b><i class='space'></i></div>".lgsl_help_info(); return;
+      $note = "FSOCKOPEN AND CURL ARE DISABLED - LGSL WILL NOT WORK ON THIS HOST";
     }
+    $output = "<div class='center'><i class='space'></i><b>{$note}</b><i class='space'></i></div>".lgsl_help_info(); return;
   }
 
-//------------------------------------------------------------------------------------------------------------+
+  $lgsl_admin_class = new LGSLAdmin();
+  $db = LGSL::db();
+  $id = 0;
 
   if ($_POST) { $_POST = lgsl_stripslashes_deep($_POST); }
-
   @$db->set_charset("utf8");
-
-//------------------------------------------------------------------------------------------------------------+
 
   if (!empty($_POST['lgsl_save_1']) || !empty($_POST['lgsl_save_2'])) {
     if (!empty($_POST['lgsl_save_1'])) {
@@ -113,7 +103,7 @@
       if     (!$ip)                               { continue; }
       elseif ($c_port < 1 || $c_port > 65535)     { $disabled = 1; $c_port = 0; }
       elseif ($q_port < 1 || $q_port > 65535)     { $disabled = 1; $q_port = 0; }
-      elseif (!isset($lgsl_protocol_list[$type])) { $disabled = 1; }
+      elseif (!isset($lgsl_admin_class->getProtocols()[$type])) { $disabled = 1; }
 
       $query  = "INSERT INTO `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` (`type`,`ip`,`c_port`,`q_port`,`s_port`,`zone`,`disabled`,`comment`,`status`,`cache`,`cache_time`) VALUES ('{$type}','{$ip}','{$c_port}','{$q_port}','{$s_port}','{$zone}','{$disabled}','{$comment}','{$status}','{$cache}','{$cache_time}')";
 			$db->execute($query);
@@ -129,14 +119,10 @@
     $buffer1 = $stream->readJson();
     if (!$buffer1) {
       $output .= "
-      <div class='tt'>
+      <div class='tt' style='padding: 10px;'>
         CAN'T LOAD DATA FROM GITHUB.COM -> NO INTERNET CONNECTION?
       </div>
-      <form method='post' action='' style='padding-top: 40px; text-align: center;'>
-				<input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
-				<input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
-			</form>
-      ";
+      " . lgsl_return_buttons();
       return;
     }
     $stream->write("https://api.github.com/repos/tltneon/lgsl/releases/latest");
@@ -258,13 +244,13 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
   $log .= "Querying takes: ".round(microtime(true) - $time, 6)."s.";
 
   $output .= "
-  <h5>Protocol Detection Section: be aware that selecting bunch of protocols or ports may take a lot of time to proceed.</h5>
+  <h5 style='text-align:center;margin:auto;padding:10px;'>Protocol Detection Section: be aware that selecting bunch of protocols or ports may take a lot of time to proceed.</h5>
   <div id='protocols_list'>
     <form method='post'>
       Protocols:
       <select multiple name='protocols[]' style='height:175px'>
         ";
-          $prot = Protocol::lgsl_type_list();
+          $prot = $lgsl_admin_class->getProtocols();
           foreach ($prot as $k => $v) {
             $active = in_array($k, $_POST['protocols']) ? "selected='selected'" : '';
             $output .= "<option value='{$k}' {$active}>{$v}</option>";
@@ -300,7 +286,6 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
       <div class='center'>
         <textarea name='form_list' cols='90' rows='30' wrap='off' spellcheck='false'>\r\n";
 
-//---------------------------------------------------------+
         $result = $db->get_all();
 
         foreach ($result as $row) {
@@ -314,7 +299,6 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
           str_pad($row['disabled'], 2,  " ").":".
                                    $row['comment']            ."\r\n";
         }
-//---------------------------------------------------------+
         $output .= "
         </textarea>
       </div>
@@ -347,105 +331,15 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
           <td>[ Comment ]                      </td>
         </tr>";
 
-//---------------------------------------------------------+
-
       $result = $db->get_all();
-      $isDisabled = function($check) {
-        if ($check) return 'readonly onclick="return false;" style="background: #777; cursor: not-allowed;"';
-        return "";
-      };
-
       foreach ($result as $row) {
-        $id = $row['id']; // ID USED AS [] ONLY RETURNS TICKED CHECKBOXES
-        $hasSPort = $isDisabled(!in_array($row['type'], [Protocol::UT2003, Protocol::UT2004]));
-        $noPort = $isDisabled(Protocol::lgslProtocolWithoutPort($row['type']));
-
-        $output .= "
-        <tr>
-          <td>
-            <a href='".LGSL::link($id)."' style='text-decoration:none' target='_blank'>{$id}</a>
-          </td>
-          <td>
-            <select name='form_type[{$id}]'>";
-//---------------------------------------------------------+
-            foreach ($lgsl_type_list as $type => $description) {
-              $output .= "
-              <option ".($type === $row['type'] ? "selected='selected'" : "")." value='{$type}'>{$description}</option>";
-            }
-
-            if (!isset($lgsl_type_list[$row['type']])) {
-              $output .= "
-						<option selected='selected' value='{$row['type']}'>{$row['type']}</option>";
-            }
-//---------------------------------------------------------+
-            $output .= "
-            </select>
-          </td>
-          <td class='center'><input type='text'   name='form_ip[{$id}]'     value='{$row['ip']}'   size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value='{$row['c_port']}' min='0' max='65536' {$noPort} /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value='{$row['q_port']}' min='0' max='65536' {$noPort} /></td>
-          <td class='center'><input type='number' name='form_s_port[{$id}]' value='{$row['s_port']}' min='0' max='65536' {$hasSPort} /></td>
-          <td>
-            <select name='form_zone[$id]'>";
-//---------------------------------------------------------+
-            foreach ($zone_list as $zone) {
-              $output .= "
-              <option ".($zone == $row['zone'] ? "selected='selected'" : "")." value='{$zone}'>{$zone}</option>";
-            }
-
-            if (!isset($zone_list[$row['zone']])) {
-              $output .= "
-              <option selected='selected' value='{$row['zone']}'>{$row['zone']}</option>";
-            }
-//---------------------------------------------------------+
-//---------------------------------------------------------+
-            $output .= "
-            </select>
-          </td>
-          <td class='center'><input type='checkbox' name='form_disabled[{$id}]' value='1' ".(empty($row['disabled']) ? "" : "checked='checked'")." /></td>
-          <td class='center'><input type='text'     name='form_comment[{$id}]'  value='{$row['comment']}' size='20' maxlength='255' /></td>
-        </tr>";
-
-        $last_type = $row['type']; // SET LAST TYPE ( $row EXISTS ONLY WITHIN THE LOOP )
+        $output .= $lgsl_admin_class->drawServerRow($row);
       }
-//---------------------------------------------------------+
-        $id ++; // NEW SERVER ID CONTINUES ON FROM LAST
-
-        $output .= "
-        <tr>
-          <td>NEW<a href='https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports' target='_blank' id='new_q' style='position: absolute;background: #fff;border-radius: 10px;width: 14px;height: 14px;border: 2px solid;margin-top: 7px;' title='How to choose query protocol?'>?</a></td>
-          <td>
-            <select name='form_type[{$id}]'>";
-//---------------------------------------------------------+
-            foreach ($lgsl_type_list as $type => $description) {
-              $output .= "
-              <option ".($type == $last_type ? "selected='selected'" : "")." value='{$type}'>{$description}</option>";
-            }
-//---------------------------------------------------------+
-            $output .= "
-            </select>
-          </td>
-          <td class='center'><input type='text'   name='form_ip[{$id}]'     value=''  size='15' maxlength='255' /></td>
-          <td class='center'><input type='number' name='form_c_port[{$id}]' value=''  min='0'   max='65536'   /></td>
-          <td class='center'><input type='number' name='form_q_port[{$id}]' value=''  min='0'   max='65536'   /></td>
-          <td class='center'><input type='number' name='form_s_port[{$id}]' value='0' min='0'   max='65536'   /></td>
-          <td>
-            <select name='form_zone[{$id}]'>";
-//---------------------------------------------------------+
-            foreach ($zone_list as $zone) {
-              $output .= "
-              <option value='{$zone}'>{$zone}</option>";
-            }
-//---------------------------------------------------------+
-            $output .= "
-            </select>
-          </td>
-          <td class='center'><input type='checkbox' name='form_disabled[{$id}]' value='' /></td>
-          <td class='center'><input type='text'     name='form_comment[{$id}]'  value='' size='20' maxlength='255' /></td>
-        </tr>
+      $output .= $lgsl_admin_class->drawServerRow(['id' => $id++], true);
+      $output .= "
       </table>
 
-      <input type='hidden' name='lgsl_management' value='0' />
+      <input type='hidden' name='lgsl_management' value='0'>
       " . lgsl_main_buttons() . "
     </div>
   </form>";
@@ -453,6 +347,68 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
   $output .= lgsl_help_info();
 
 //------------------------------------------------------------------------------------------------------------+
+  class LGSLAdmin {
+    private $protocols = [];
+    private $zoneList = [0,1,2,3,4,5,6,7,8,9];
+    private $lastType = "source";
+    function __construct() {
+      $this->protocols = Protocol::lgsl_type_list();
+    }
+    function getProtocols() {
+      return $this->protocols;
+    }
+    function generateSelectBlock($form, $id, &$list, $code, $useDescription = false) {
+      $output = "
+      <select name='form_{$form}[$id]'>";
+        foreach ($list as $key => $item) {
+          if ($useDescription) $output .= "<option ".($key === $code ? "selected='selected'" : "")." value='{$key}'>{$item}</option>";
+          else $output .= "<option ".($item === $code ? "selected='selected'" : "")." value='{$item}'>{$item}</option>";
+        }
+        if (!isset($list[$code])) {
+          $output .= "<option selected='selected' value='{$code}'>{$code}</option>";
+        }
+      $output .= "
+      </select>";
+      return $output;
+    }
+    function drawServerRow(array $row, bool $isNew = false) {
+      $id = $row['id'];
+      if ($isNew) {
+        $row = ['type' => $this->lastType, 'ip' => '', 'c_port' => '', 'q_port' => '', 's_port' => '', 'zone' => 0, 'disabled' => '', 'comment' => ''];
+      }
+      $zone_list = [0,2,3];
+      $isDisabled = function($check) {
+        return $check ? 'readonly onclick="return false;" style="background: #777; cursor: not-allowed;"' : '';
+      };
+      $hasSPort = $isDisabled(!in_array($row['type'], [Protocol::UT2003, Protocol::UT2004]));
+      $noPort = $isDisabled(Protocol::lgslProtocolWithoutPort($row['type']));
+      $output = "
+      <tr>";
+        if ($isNew) {
+          $output .= "<td>NEW<a href='https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports' target='_blank' id='new_q' style='position: absolute;background: #fff;border-radius: 10px;width: 14px;height: 14px;border: 2px solid;margin-top: 7px;' title='How to choose query protocol?'>?</a></td>";
+        } else {
+          $output .= "<td><a href='".LGSL::link($id)."' style='text-decoration:none' target='_blank'>{$id}</a></td>";
+        }
+        $output .= "
+        <td>";
+          $output .= $this->generateSelectBlock("type", $id, $this->protocols, $row['type'], true);
+          $output .= "
+        </td>
+        <td class='center'><input type='text'   name='form_ip[{$id}]'     value='{$row['ip']}'   size='15' maxlength='255'></td>
+        <td class='center'><input type='number' name='form_c_port[{$id}]' value='{$row['c_port']}' min='0' max='65536' {$noPort}></td>
+        <td class='center'><input type='number' name='form_q_port[{$id}]' value='{$row['q_port']}' min='0' max='65536' {$noPort}></td>
+        <td class='center'><input type='number' name='form_s_port[{$id}]' value='{$row['s_port']}' min='0' max='65536' {$hasSPort}></td>
+        <td>";
+          $output .= $this->generateSelectBlock("zone", $id, $this->zoneList, $row['zone']);
+          $output .= "
+        </td>
+        <td class='center'><input type='checkbox' name='form_disabled[{$id}]' value='1' ".(empty($row['disabled']) ? "" : "checked='checked'")."></td>
+        <td class='center'><input type='text'     name='form_comment[{$id}]'  value='{$row['comment']}' size='20' maxlength='255'></td>
+      </tr>";
+      $this->lastType = $row['type'];
+      return $output;
+    }
+  }
 
   function lgsl_help_info() {
     global $lgsl_config;
@@ -496,7 +452,7 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
   function lgsl_return_buttons() {
     $management = isset($_POST['lgsl_management']) && $_POST['lgsl_management'] == 1 ?? 0;
     return "
-    <form method='post' action='' style='padding: 15px;'>
+    <form method='post' action='' style='padding: 15px;text-align:center;margin:auto'>
       <input type='hidden' name='lgsl_management' value='{$management}' />
       <input type='submit' name='lgsl_return' value='RETURN TO ADMIN' />
     </form>";
