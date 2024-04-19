@@ -9,17 +9,10 @@
   |                                                                                                            |
   \-----------------------------------------------------------------------------------------------------------*/
 
-//------------------------------------------------------------------------------------------------------------+
-
   require "lgsl_class.php";
   global $output;
 
-//-----------------------------------------------------------------------------------------------------------+
-
   if ($lgsl_config['public_add']) {
-
-  //-----------------------------------------------------------------------------------------------------------+
-
     $lgsl_type_list = Protocol::lgsl_type_list();
     unset($lgsl_type_list['test']);
 
@@ -39,8 +32,6 @@
 
     list($c_port, $q_port, $s_port) = Protocol::lgsl_port_conversion($type, $c_port, $q_port, $s_port);
 
-  //-----------------------------------------------------------------------------------------------------------+
-
     $output .= "
     <form method='post' action='{$url}'>
       <div>
@@ -59,12 +50,12 @@
             <td> {$lgsl_config['text']['typ']} </td>
             <td>
               <select name='form_type'>";
-    //---------------------------------------------------------+
+
               foreach ($lgsl_type_list as $key => $value) {
                 $output .= "
                 <option ".($key == $type ? "selected='selected'" : "")." value='{$key}'> {$value} </option>";
               }
-    //---------------------------------------------------------+
+
               $output .= "
               </select>
             </td>
@@ -101,13 +92,10 @@
       </div>
     </form>";
 
-  //-----------------------------------------------------------------------------------------------------------+
 
     if (isset($_POST['lgsl_submit_test']) || isset($_POST['lgsl_submit_add'])) {
       if (isset($lgsl_type_list[$type]) && $ip && $c_port && $q_port) {
         if ($type === "discord") {$c_port = 1; $q_port = 1;}
-
-      //-----------------------------------------------------------------------------------------------------------+
 
         $db = LGSL::db();
 
@@ -116,8 +104,6 @@
         $c_port = $db->escape_string($c_port);
         $s_port = $db->escape_string($s_port);
         $type   = $db->escape_string($type);
-
-      //-----------------------------------------------------------------------------------------------------------+
 
         $ip_check = gethostbyname($ip);
         $mysql_query = $db->query("SELECT `ip`,`disabled` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE (`ip`='{$ip}' OR `ip`='$ip_check') AND `q_port`='{$q_port}'", true);
@@ -135,13 +121,10 @@
             </div>";
         } else {
 
-        //-----------------------------------------------------------------------------------------------------------+
-
           $server = new Server(["type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port]);
 					$server->lgsl_live_query("s");
 
           if ($server->get_status() != Server::OFFLINE) {
-          //-----------------------------------------------------------------------------------------------------------+
 
             if (!empty($_POST['lgsl_submit_add'])) {
               $disabled = ($lgsl_config['public_add'] == "2") ? "0" : "1";
@@ -165,8 +148,6 @@
               <br />
               </div>";
             } else {
-
-            //-----------------------------------------------------------------------------------------------------------+
 
               $output .= "
               <form method='post' action=''>

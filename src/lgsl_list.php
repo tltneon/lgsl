@@ -31,8 +31,6 @@
   }
 
   $server_list = Database::get_servers_group(["type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order]);
-
-//------------------------------------------------------------------------------------------------------------+
   $servers = count($server_list);
   if ($servers == 0 && $page < 2) {
     $output .= "<div id='back_to_servers_list'><a href='./admin.php'>ADD YOUR FIRST SERVER</a></div>";
@@ -133,8 +131,6 @@
       </div>
       ";
   }
-
-//------------------------------------------------------------------------------------------------------------+
 
   if ($lgsl_config['list']['totals']) {
     $total = LGSL::groupTotals();

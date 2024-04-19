@@ -8,8 +8,6 @@
  |                                                                                                            |
  \-----------------------------------------------------------------------------------------------------------*/
 
-//------------------------------------------------------------------------------------------------------------+
-
   global $lgsl_config, $lgsl_zone_number;
   $lgsl_zone_number = $_GET['zone'] ?? null;
   $ip = $_GET['ip'] ?? null;
@@ -26,8 +24,6 @@
   $zone_count = 0;
   $output = '';
 
-//------------------------------------------------------------------------------------------------------------+
-
   $request     = empty($lgsl_config['players'][$lgsl_zone_number]) ? "s" : "sp";
   if ($lgsl_zone_number) {
     $server_list = Database::get_servers_group(["request"=>$request, "zone"=>$lgsl_zone_number]);
@@ -37,13 +33,9 @@
   }
   //$server_list = lgsl_sort_servers($server_list);
 
-//------------------------------------------------------------------------------------------------------------+
-
   if (!$server_list) {
     $output .= "<div style='margin:auto; text-align:center'>NO SERVERS IN ZONE {$lgsl_zone_number}</div>"; return;
   }
-
-//------------------------------------------------------------------------------------------------------------+
 
   $output .= "
 	<link rel='stylesheet' href='other/_lgsl_locations.css' type='text/css' />
@@ -101,7 +93,6 @@
 
     foreach ($server_list as $server) {
 
-//------------------------------------------------------------------------------------------------------------+
       if ($zone_count != 0 && !($zone_count % $zone_grid)) {
         $output .= "
         </tr>
@@ -109,7 +100,6 @@
       }
 
       $zone_count ++;
-//------------------------------------------------------------------------------------------------------------+
 
       $marquee = strlen($server->get_name()) > 25 ? "class='on'" : "";
       $output .= "
@@ -209,8 +199,6 @@
     $output .= "
     </tr>
   </table>";
-
-//------------------------------------------------------------------------------------------------------------+
 
 if ($lgsl_config['preloader']) {
   echo $output;
