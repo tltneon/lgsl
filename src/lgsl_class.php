@@ -1062,6 +1062,40 @@
 				return array_merge($fields_show, $fields_list);
 		}
   }
+  class Image {
+    static function makeImage($src, $width, $height) {
+      if (!file_exists($src)) {
+        error_log("Error with image: $src\n");
+        return null;
+      }
+      list($w, $h) = getimagesize($src);
+      $type = substr($src, -3);
+      header("Content-type: image/$type");
+      switch ($type) {
+        case 'gif': {$result = imagecreatefromgif($src); break;}
+        case 'png': {$result = imagecreatefrompng($src); break;}
+        case 'jpg': {$result = imagecreatefromjpeg($src); break;}
+      }
+      if ($width != $w || $height != $h) {
+        $image = $result;
+        $result = imagecreatetruecolor($width, $height);
+        imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
+      }
+      return $result;
+    }
+    static function makeImageError($width, $height, $text) {
+      header("Content-type: image/gif");
+      $text = "LGSL: {$text}";
+      $im = imagecreatetruecolor($width, $height);
+      $font = 6;
+      $white = imagecolorallocate($im, 255, 255, 255);
+      imagefill($im, 0, 0, $white);
+      imagestring($im, 1, (int)(($width - strlen($text) * $font) / 2), $font, $text, imagecolorallocate($im, 0, 0, 0));
+      imagegif($im);
+      imagedestroy($im);
+      exit();
+    }
+  }
 
 //------------------------------------------------------------------------------------------------------------+
 

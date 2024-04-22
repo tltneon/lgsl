@@ -1,20 +1,6 @@
 <?php
   namespace tltneon\LGSL;
 
-	function makeImage($src, $width, $height) {
-		list($w, $h) = getimagesize($src);
-		if (substr($src, -3) == 'gif') {
-			$result = imagecreatefromgif($src);
-		}	else {
-			$result = imagecreatefrompng($src);
-		}
-		if ($width != $w || $height != $h) {
-			$image = $result;
-			$result = imagecreatetruecolor($width, $height);
-			imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
-		}
-		return $result;
-	}
   function findMax(&$server) {
     $history = $server->get_history();
     $max = 1;
@@ -47,12 +33,7 @@
   $server = new Server(["ip" => $ip, "c_port" => $port, "id" => $s]);
   $server->lgsl_cached_query("cs");
   if (!$server) {
-    $white = imagecolorallocate($im, 255, 255, 255);
-    imagefill($im, 0, 0, $white);
-    imagestring($im, 1, (int) ($w / 2 - strlen($lgsl_config['text']['mid']) * 2.2), (int) ($h / 2), $lgsl_config['text']['mid'], $black);
-    imagepng($im);
-    imagedestroy($im);
-    exit();
+    Image::makeImageError($w, $h, $lgsl_config['text']['mid']);
   }
   $max = $server->get_players_count('max') > 0 ? $server->get_players_count('max') : findMax($server);
   $x0 = 30;
@@ -132,7 +113,7 @@
 		}
 	}
 
-  $game_id = makeImage($server->game_icon('src/'), 16, 16); // create game icon
+  $game_id = Image::makeImage($server->game_icon('src/'), 16, 16); // create game icon
   imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);             // place game icon
 
   $font = dirname(__FILE__) . '/src/other/cousine.ttf';

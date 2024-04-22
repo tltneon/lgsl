@@ -1,24 +1,6 @@
 <?php
   namespace tltneon\LGSL;
 
-	function makeImage($src, $width, $height) {
-		if (!file_exists($src)) {echo "error with image: $src\n"; return null;}
-		list($w, $h) = getimagesize($src);
-		$type = substr($src, -3);
-		header("Content-type: image/$type");
-    switch ($type) {
-      case 'gif': {$result = imagecreatefromgif($src); break;}
-      case 'png': {$result = imagecreatefrompng($src); break;}
-      case 'jpg': {$result = imagecreatefromjpeg($src); break;}
-    }
-		if ($width != $w || $height != $h) {
-			$image = $result;
-			$result = imagecreatetruecolor($width, $height);
-			imagecopyresampled($result, $image, 0, 0, 0, 0, $width, $height, $w, $h);
-		}
-		return $result;
-	}
-
   function drawHistory(&$im, $x, $y, $w, $h, &$server) {
     $axis = imagecolorallocate($im, 255, 255, 255);
     $grid = imagecolorallocate($im, 90, 90, 90);
@@ -71,14 +53,7 @@
   $server = new Server(["ip" => $ip, "c_port" => $port, "id" => $s]);
   $server->lgsl_cached_query($query);
   if (!$server) {
-    header("Content-type: image/gif");
-    $im = imagecreatetruecolor(350, 20);
-    $white = imagecolorallocate($im, 255, 255, 255);
-    imagefill($im, 0, 0, $white);
-    imagestring($im, 1, (int)(175 - strlen($lgsl_config['text']['mid']) * 2.2), 6, $lgsl_config['text']['mid'], imagecolorallocate($im, 0, 0, 0));
-    imagegif($im);
-    imagedestroy($im);
-    exit();
+    Image::makeImageError(350, 20, $lgsl_config['text']['mid']);
   }
 	
 	// SHARED SETTINGS
@@ -89,7 +64,7 @@
       // SETTINGS
       $w = 468;
       $h = 64;
-      $im = @makeImage("src/other/banner468x64.png", $w, $h);              // create background
+      $im = @Image::makeImage("src/other/banner468x64.png", $w, $h);              // create background
 			$color_nm = imagecolorallocate($im, 255, 255, 255);
 			$color_ip = imagecolorallocate($im, 255, 255, 255);
 			$color_mp = imagecolorallocate($im, 255, 255, 255);
@@ -115,7 +90,7 @@
         case Server::PASSWORDED: { $stat = $stat_ps; break; }
       }
       imagefilledrectangle($im, 14, 14, 47, 47, $stat);
-      $game_id = @makeImage($server->game_icon('src/'), 32, 32);                          // create game icon
+      $game_id = @Image::makeImage($server->game_icon('src/'), 32, 32);                          // create game icon
       imagecopy($im, $game_id, 16, 16, 0, 0, 32, 32);                             // place game icon
 
       imagettftext($im, 10, 0, 62,  19, $color_nm, $font, /* name     */  $server->get_name(false));
@@ -132,7 +107,7 @@
       // SETTINGS
       $w = 160;
       $h = 248;
-      $im = @makeImage("src/other/banner160x248.jpg", $w, $h);              // create background
+      $im = @Image::makeImage("src/other/banner160x248.jpg", $w, $h);              // create background
 			$color_nm = imagecolorallocate($im, 255, 255, 255);
 			$color_ip = imagecolorallocate($im, 255, 255, 255);
 			$color_mp = imagecolorallocate($im, 255, 255, 255);
@@ -163,11 +138,11 @@
       } else {
         imagefilledpolygon($im, [0,0, 16,0, 0,16], $stat);
       }
-      $game_id = @makeImage($server->game_icon('src/'), 16, 16);                              // create game icon
+      $game_id = @Image::makeImage($server->game_icon('src/'), 16, 16);                              // create game icon
       imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                           // place game icon
 
       if ($lgsl_config['locations']) {
-        $loc_id = @makeImage("src/other/locations.gif", 224, 198);              // create location icon
+        $loc_id = @Image::makeImage("src/other/locations.gif", 224, 198);              // create location icon
         $result = imagecreatetruecolor(16, 11);
         $pos = LGSL::locationCoords($server->getLocation());
         imagecopyresampled($result, $loc_id, 0, 0, $pos[0], $pos[1], 16, 11, 16, 11);
@@ -214,7 +189,7 @@
       // SETTINGS
       $w = 350;
       $h = 20;
-      $im = @makeImage("src/other/banner350x20.gif", $w, $h);              // create background
+      $im = @Image::makeImage("src/other/banner350x20.gif", $w, $h);              // create background
       $color_nm = imagecolorallocate($im, 128, 0, 0);
       $color_ip = imagecolorallocate($im, 255, 0, 0);
       $color_mp = imagecolorallocate($im, 0, 0, 0);
@@ -230,8 +205,8 @@
 
       $time = date(str_replace([':S', ':s', '/Y', '/y'], '', $lgsl_config['text']['tzn']));
 
-      $on_id = @makeImage($server->icon_status('src/'), 16, 16);                          // create status icon
-      $game_id = @makeImage($server->game_icon('src/'), 16, 16);                          // create game icon
+      $on_id = @Image::makeImage($server->icon_status('src/'), 16, 16);                          // create status icon
+      $game_id = @Image::makeImage($server->game_icon('src/'), 16, 16);                          // create game icon
       imagecopy($im, $on_id, 7, 2, 0, 0, 16, 16);                                 // place status icon
       imagecopy($im, $game_id, 25, 2, 0, 0, 16, 16);                              // place game icon
 
