@@ -42,19 +42,19 @@ $server = new LGSL\Server([
     "q_port" => "27015", // for querying
     "type" => "source" // protocol name
 ]);
-$server->lgsl_live_query("sep"); // s - server info, e - extra data, p - players info
+$server->queryLive("sep"); // s - server info, e - extra data, p - players info
 ```
 Get server data 
 ```php
-$server->get_status();
-$server->get_name();
-$server->get_ip();
-$server->get_c_port();
-$server->get_game();
-$server->get_map();
-$server->get_players_count();
-$server->get_software_link();
-$server->to_array(); // full data
+$server->getStatus();
+$server->getName();
+$server->getIp();
+$server->getConnectionPort();
+$server->getGame();
+$server->getMap();
+$server->getPlayersCount();
+$server->getConnectionLink();
+$server->toArray(); // full data
 ```
 
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
