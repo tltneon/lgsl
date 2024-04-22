@@ -6,7 +6,7 @@
   use PHPUnit\Framework\TestCase;
     class StreamMock extends Stream {
         public $type = "";
-        public function open(&$server = null) {$this->type = $server->get_type(); return true;}
+        public function open(&$server = null) {$this->type = $server->getType(); return true;}
         public function write($data) {}
         public function readRaw($length = 4096) {
             return str_replace("[null]", "\x00", example($this->type));
@@ -26,14 +26,14 @@
             foreach ([Protocol::MINECRAFTPE] as $type) {
                 $server = new Server(["ip" => "LgslServerIp.com", "c_port" => 25565, "q_port" => 25565, "type" => $type]);
                 $protocol = new Protocol($server, null);
-                $query =  "tltneon\LGSL\\" . $protocol->lgslProtocolClass($server->get_type());
+                $query =  "tltneon\LGSL\\" . $protocol->lgslProtocolClass($server->getType());
                 $stream = new StreamMock($server);
                 $stream->open($server);
                 $need = [];
                 $status = (new $query($server, $stream, $need))->execute();
-                $server->set_queried();
+                $server->queried();
 
-                $this->assertSame($server->get_name(), "LGSLSERVERNAME");
+                $this->assertSame($server->getName(), "LGSLSERVERNAME");
             }
         }
     }

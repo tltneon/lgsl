@@ -430,32 +430,25 @@
       $list = $this->lgsl_protocol_list();
       return $list[$type] ?? "err";
     }
-		public function set_requested($types = 'sep') {
-			$types = str_split($types);
-			foreach ($types as $type) {
-				$this->_lgsl_need[$type] = false;
-				$this->_server->set_timestamp($type, time());
-			}
-			$this->_server_timestamp = $this->_server->get_timestamps();
+		public function updateTimestamps() {
+			$this->_server->setTimestamp("sep", time());
 		}
     public function query() {
-      $protocol = $this->lgslConnectionType($this->_server->get_type());
+      $protocol = $this->lgslConnectionType($this->_server->getType());
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
-        $query = __NAMESPACE__ . "\\" . $this->lgslProtocolClass($this->_server->get_type());
+        $query = __NAMESPACE__ . "\\" . $this->lgslProtocolClass($this->_server->getType());
         if (class_exists($query)) {
           $status = (new $query($this->_server, $this->_lgsl_fp, $this->_lgsl_need))->execute();
         } else {
-          $this->_server->set_extra_value('_error', "LGSL PROBLEM: FUNCTION DOES NOT EXIST FOR TYPE {$this->_server->get_type()}");
-          $this->set_requested();
+          $this->_server->setExtraValue('_error', "LGSL PROBLEM: FUNCTION DOES NOT EXIST FOR TYPE {$this->_server->getType()}");
+          $this->updateTimestamps();
         }
 			} else {
-        $this->_server->set_extra_value('_error', 'Can\'t establish the connection to server.');
-				$this->set_requested();
+        $this->_server->setExtraValue('_error', 'Can\'t establish the connection to server.');
+				$this->updateTimestamps();
       }
-      $this->_server->set_status($status);
-			$this->_server->set_timestamps($this->_server_timestamp);
-			if ($this->_server->get_timestamp('s', true) == 0) $this->_server->set_timestamp('s', time());
+      $this->_server->setStatus($status);
 			$this->_lgsl_fp->close();
     }
   }
@@ -478,7 +471,7 @@
     public function need($key): bool {
       if ($this->_need[$key]) {
         $this->_need[$key] = false;
-        $this->_server->set_timestamp($key, time());
+        $this->_server->setTimestamp($key, time());
         return true;
       }
       return false;
@@ -538,7 +531,7 @@
       if (!$buffer) return $this::NO_RESPOND;
       // request servers by ip
       curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer {$buffer['access_token']}", 'Accept: application/json', 'Content-Type: application/json']);
-      curl_setopt($ch, CURLOPT_POSTFIELDS, '{"criteria": [{"key": "attributes.ADDRESS_s", "op": "EQUAL", "value": "' . $this->_server->get_ip(true) . '"}], "maxResults": 200}'); // v1 not supported "op": "ANY_OF"
+      curl_setopt($ch, CURLOPT_POSTFIELDS, '{"criteria": [{"key": "attributes.ADDRESS_s", "op": "EQUAL", "value": "' . $this->_server->getIp(true) . '"}], "maxResults": 200}'); // v1 not supported "op": "ANY_OF"
       $buffer = $this->fetch("https://api.epicgames.dev/matchmaking/v1/{$this->deployment_id}/filter");
       if (!$buffer || $buffer['count'] == 0) return $this::NO_RESPOND;
       // filtering by port
@@ -555,7 +548,7 @@
     public function process(): int {
       $buffer = $this->fetch($this->packets[0]);
       if (!$buffer) return $this::NO_RESPOND;
-      $this->_data['s']['name'] = Protocol::lgslList($this->_server->get_type())[1] . " Server";
+      $this->_data['s']['name'] = Protocol::lgslList($this->_server->getType())[1] . " Server";
       $this->postProcess($buffer);
       return $this::SUCCESS;
     }
@@ -565,17 +558,17 @@
 
   class Query02 extends QuerySocket { // 
     public function process() {
-      $isMoh = strpos($this->_server->get_type(), "moh") !== FALSE; // mohaa_ mohaab_ mohaas_ mohpa_
+      $isMoh = strpos($this->_server->getType(), "moh") !== FALSE; // mohaa_ mohaab_ mohaas_ mohpa_
       $mohSymbol = $isMoh ? "\x02" : "";
-      if     ($this->_server->get_type() === PROTOCOL::QUAKE2)       { $this->_fp->write("\xFF\xFF\xFF\xFFstatus");        }
-      elseif ($this->_server->get_type() === PROTOCOL::CALLOFDUTYIW) { $this->_fp->write("\xFF\xFF\xFF\xFFgetinfo LGSL");  }
+      if     ($this->_server->getType() === PROTOCOL::QUAKE2)       { $this->_fp->write("\xFF\xFF\xFF\xFFstatus");        }
+      elseif ($this->_server->getType() === PROTOCOL::CALLOFDUTYIW) { $this->_fp->write("\xFF\xFF\xFF\xFFgetinfo LGSL");  }
       else { $this->_fp->write("\xFF\xFF\xFF\xFF{$mohSymbol}getstatus"); }
 
       $buffer = $this->_fp->read();
       if (!$buffer) { return $this::NO_RESPOND; }
 
       $part = explode("\n", $buffer->getAll());  // SPLIT INTO PARTS: HEADER/SETTINGS/PLAYERS/FOOTER
-      if ($this->_server->get_type() !== PROTOCOL::CALLOFDUTYIW) {
+      if ($this->_server->getType() !== PROTOCOL::CALLOFDUTYIW) {
         array_pop($part);              // REMOVE FOOTER WHICH IS EITHER NULL OR "\challenge\"
       }
       $item = explode("\\", $part[1]); // SPLIT PART INTO ITEMS
@@ -611,12 +604,12 @@
       array_shift($part); // REMOVE SETTING
 
       $fieldType = "other";
-      if (strpos($this->_server->get_type(), "mohpa") !== FALSE) {
+      if (strpos($this->_server->getType(), "mohpa") !== FALSE) {
         $fieldType = "mohpa";
       } elseif ($isMoh) {
         $fieldType = "moh";
-      } elseif (in_array($this->_server->get_type(), [PROTOCOL::NEXUIZ, PROTOCOL::WARSOW])) {
-        $fieldType = $this->_server->get_type();
+      } elseif (in_array($this->_server->getType(), [PROTOCOL::NEXUIZ, PROTOCOL::WARSOW])) {
+        $fieldType = $this->_server->getType();
       }
       $fieldsList = [
         PROTOCOL::NEXUIZ => ["pattern" => "/(.*) (.*) (.*)\"(.*)\"/U", "fields" => [1=>"score", 2=>"ping", 3=>"team", 4=>"name"]],
@@ -645,8 +638,8 @@
   class Query03 extends QuerySocket { // GameSpy Generic 1
     protected $separatedPackets = true;
     public function process() {
-      $isBf1942 = $this->_server->get_type() === PROTOCOL::BF1942;
-      if     ($this->_server->get_type() == PROTOCOL::CNCRENEGADE) { $this->_fp->write("\\status\\"); }
+      $isBf1942 = $this->_server->getType() === PROTOCOL::BF1942;
+      if     ($this->_server->getType() == PROTOCOL::CNCRENEGADE) { $this->_fp->write("\\status\\"); }
       elseif ($this->need('s') || $this->need('e')) { $this->_fp->write("\\basic\\\\info\\\\rules\\"); $this->_need['e'] = FALSE; }
       elseif ($this->need('p')) { $this->_fp->write("\\players\\");}
 
@@ -719,13 +712,13 @@
           $this->_data['p'] = array_slice($this->_data['p'], 0, $this->_data['s']['players']);
         }
 
-        if ($this->_server->get_type() === PROTOCOL::FLASHPOINT) { // OPERATION FLASHPOINT BUG: 'GHOST' PLAYERS IN UN-USED 'TEAM' FIELD
+        if ($this->_server->getType() === PROTOCOL::FLASHPOINT) { // OPERATION FLASHPOINT BUG: 'GHOST' PLAYERS IN UN-USED 'TEAM' FIELD
           foreach ($this->_data['p'] as $key => $value) {
             unset($this->_data['p'][$key]['team']);
           }
         }
 
-        if ($this->_server->get_type() === PROTOCOL::AVP2) { // AVP2 BUG: PLAYER NUMBER PREFIXED TO NAMES
+        if ($this->_server->getType() === PROTOCOL::AVP2) { // AVP2 BUG: PLAYER NUMBER PREFIXED TO NAMES
           foreach ($this->_data['p'] as $key => $value) {
             $this->_data['p'][$key]['name'] = preg_replace("/[0-9]+~/", "", $this->_data['p'][$key]['name']);
           }
@@ -793,7 +786,7 @@
     protected $separatedPackets = true;
     public function process() {
       $xf = "\xFF\xFF\xFF\xFF";
-      $isOldProtocol = $this->_server->get_type() === PROTOCOL::HALFLIFEWON;
+      $isOldProtocol = $this->_server->getType() === PROTOCOL::HALFLIFEWON;
       $challenge_code = isset($this->_need['challenge']) ? $this->_need['challenge'] : "\x00\x00\x00\x00";
       $packets = [
         ['s' => "{$xf}details\x00", 'e' => "{$xf}rules\x00", 'p' => "{$xf}players\x00"],
@@ -956,7 +949,7 @@
   class Query06 extends QuerySocket { // Generic GameSpy 3
     public function process() {
       $challenge_code = "";
-      if (!in_array($this->_server->get_type(), [PROTOCOL::BF2, PROTOCOL::GRAW])) {
+      if (!in_array($this->_server->getType(), [PROTOCOL::BF2, PROTOCOL::GRAW])) {
         $buffer = $this->fetch("\xFE\xFD\x09\x21\x21\x21\x21\xFF\xFF\xFF\x01");
         if (!$buffer) return $this::NO_RESPOND;
         $buffer->skip(5, 1); // REMOVE HEADER AND TRAILING NULL
@@ -992,7 +985,7 @@
         }
 
         $buffer[$packet_order] = $packet;
-        if ($this->_server->get_type() == "minecraft" || $this->_server->get_type() == "jc2mp") { $packet_total = 1; }
+        if ($this->_server->getType() == "minecraft" || $this->_server->getType() == "jc2mp") { $packet_total = 1; }
 
       }
       while ($packet_count < $packet_total);
@@ -1040,11 +1033,11 @@
       $lgsl_conversion = ["hostname"=>"name", "gamename"=>"game", "mapname"=>"map", "gametype"=>"mode", "gamemode"=>"mode", "map"=>"map", "numplayers"=>"players", "maxplayers"=>"playersmax", "password"=>"password"];
       foreach ($lgsl_conversion as $e => $s) { if (isset($this->_data['e'][$e])) { $this->_data['s'][$s] = $this->_data['e'][$e]; unset($this->_data['e'][$e]); } }
 
-      if (in_array($this->_server->get_type(), [PROTOCOL::BF2, PROTOCOL::BF2142])) {
+      if (in_array($this->_server->getType(), [PROTOCOL::BF2, PROTOCOL::BF2142])) {
         $this->_data['s']['map'] = ucwords(str_replace("_", " ", $this->_data['s']['map']));
-      } elseif ($this->_server->get_type() === PROTOCOL::JC2MP) {
+      } elseif ($this->_server->getType() === PROTOCOL::JC2MP) {
         $this->_data['s']['map'] = 'Panau'; // MAP NAME CONSISTENCY
-      } elseif ($this->_server->get_type() === PROTOCOL::MINECRAFT) {
+      } elseif ($this->_server->getType() === PROTOCOL::MINECRAFT) {
         if (isset($this->_data['e']['gametype'])) {
           $this->_data['s']['game'] = strtolower($this->_data['e']['game_id']);
         }
@@ -1159,7 +1152,7 @@
         $this->_data['p'][$key]['score']       = $match[2];
         $this->_data['p'][$key]['time']        = $match[3];
         $this->_data['p'][$key]['ping']        = $match[4];
-        $this->_data['p'][$key]['name']        = Helper::lgslParseColor($match[5], $this->_server->get_type());
+        $this->_data['p'][$key]['name']        = Helper::lgslParseColor($match[5], $this->_server->getType());
         $this->_data['p'][$key]['skin']        = $match[6];
         $this->_data['p'][$key]['skin_top']    = $match[7];
         $this->_data['p'][$key]['skin_bottom'] = $match[8];
@@ -1182,7 +1175,7 @@
       $buffer->skip(4); // REMOVE HEADER
       $this->_data['e']['gamename']   = $buffer->cutPascal(1, -1);
       $this->_data['e']['hostport']   = $buffer->cutPascal(1, -1);
-      $this->_data['s']['name']       = Helper::lgslParseColor($buffer->cutPascal(1, -1), $this->_server->get_type());
+      $this->_data['s']['name']       = Helper::lgslParseColor($buffer->cutPascal(1, -1), $this->_server->getType());
       $this->_data['e']['gamemode']   = $buffer->cutPascal(1, -1);
       $this->_data['s']['map']        = $buffer->cutPascal(1, -1);
       $this->_data['e']['version']    = $buffer->cutPascal(1, -1);
@@ -1213,13 +1206,13 @@
         if ($bit_flags === "\x3D") {
           $field_list = $fields["farcryconnecting"]; // FARCRY PLAYERS CONNECTING
         } else {
-          $field_list = $fields[$this->_server->get_type()];
+          $field_list = $fields[$this->_server->getType()];
         }
 
         foreach ($field_list as $item_key) {
           $item_value = $buffer->cutPascal(1, -1);
           if (!$item_key) { continue; }
-          if ($item_key === "name") { Helper::lgslParseColor($item_value, $this->_server->get_type()); }
+          if ($item_key === "name") { Helper::lgslParseColor($item_value, $this->_server->getType()); }
           $this->_data['p'][$player_key][$item_key] = $item_value;
         }
         $player_key ++;
@@ -1229,7 +1222,7 @@
   }
   class Query09 extends QuerySocket { // GameSpy QR2 | SERIOUS SAM 2 | STALKER | ArmA 2
     public function process() {
-      if ($this->_server->get_type() === Protocol::SERIOUSSAM2) { $this->_need['p'] = FALSE; } // SERIOUS SAM 2 RETURNS ALL PLAYER NAMES AS "Unknown Player" SO SKIP ANY PLAYER REQUESTS
+      if ($this->_server->getType() === Protocol::SERIOUSSAM2) { $this->_need['p'] = FALSE; } // SERIOUS SAM 2 RETURNS ALL PLAYER NAMES AS "Unknown Player" SO SKIP ANY PLAYER REQUESTS
       if ($this->need('s') || $this->need('e')) {
         $this->_need['e'] = FALSE;
         $buffer = $this->fetch("\xFE\xFD\x00\x21\x21\x21\x21\xFF\x00\x00\x00");
@@ -1256,9 +1249,9 @@
         if (!empty($this->_data['e']['gsgamename'])) { $this->_data['s']['game'] = $this->_data['e']['gsgamename']; } // FEAR
         if (!empty($this->_data['e']['game_id']))    { $this->_data['s']['game'] = $this->_data['e']['game_id']; }    // BFVIETNAM
 
-        if (in_array($this->_server->get_type(), [Protocol::ARMA, Protocol::ARMA2])) {
+        if (in_array($this->_server->getType(), [Protocol::ARMA, Protocol::ARMA2])) {
           $this->_data['s']['map'] = $this->_data['e']['mission'];
-        } elseif ($this->_server->get_type() === Protocol::VIETCONG2) {
+        } elseif ($this->_server->getType() === Protocol::VIETCONG2) {
           $this->_data['e']['extinfo_autobalance'] = Helper::bool(ord($this->_data['e']['extinfo'][18]) === 2);
         }
       }
@@ -1293,7 +1286,7 @@
   }
   class Query10 extends QuerySocket { // QUAKEWARS | QUAKE4 | DOOM3 | PREY
     public function process() {
-      $quakewars = $this->_server->get_type() === Protocol::QUAKEWARS;
+      $quakewars = $this->_server->getType() === Protocol::QUAKEWARS;
       $ex = ($quakewars ? "EX" : "");
       $buffer = $this->fetch("\xFF\xFFgetInfo{$ex}\xFF");
       if (!$buffer) return $this::NO_RESPOND;
@@ -1344,7 +1337,7 @@
           $this->_data['p'][$player_key]['rate'] = $buffer->cutByteUnpack(2, "S");
           $buffer->skip(2);
           $this->_data['p'][$player_key]['name'] = $buffer->cutString();
-          if ($this->_server->get_type() === Protocol::QUAKE4) {
+          if ($this->_server->getType() === Protocol::QUAKE4) {
             $player_tag = $buffer->cutString();
             $this->_data['p'][$player_key]['name'] = "{$player_tag} {$this->_data['p'][$player_key]['name']}";
           }
@@ -1402,9 +1395,9 @@
   class Query12 extends QuerySocket { // SAMP | VCMP
     protected $separatedPackets = true;
     public function process() {
-      $ip = explode('.', $this->_server->get_ip(true));
-      $isVcmp = $this->_server->get_type() === Protocol::VCMP;
-      $sPacket = chr($ip[0]).chr($ip[1]).chr($ip[2]).chr($ip[3]).chr($this->_server->get_q_port() & 0xFF).chr($this->_server->get_q_port() >> 8 & 0xFF);
+      $ip = explode('.', $this->_server->getIp(true));
+      $isVcmp = $this->_server->getType() === Protocol::VCMP;
+      $sPacket = chr($ip[0]).chr($ip[1]).chr($ip[2]).chr($ip[3]).chr($this->_server->getQueryPort() & 0xFF).chr($this->_server->getQueryPort() >> 8 & 0xFF);
       if ($isVcmp) { $challenge_packet = "VCMP{$sPacket}"; $this->_need['e'] = FALSE; }
       else { $challenge_packet = "SAMP{$sPacket}"; }
 
@@ -1602,7 +1595,7 @@
       while ($key = strtolower($buffer->cutString(0, "\xFE"))) {
         if ($key == "players") { break; }
         $value = str_replace("\x00", "", $buffer->cutString(0, "\xFF"));
-        $this->_data['e'][$key] = Helper::lgslParseColor($value, $this->_server->get_type());
+        $this->_data['e'][$key] = Helper::lgslParseColor($value, $this->_server->getType());
       }
 
       $this->_data['s']['name']       = $this->_data['e']['name'];  unset($this->_data['e']['name']);
@@ -1619,7 +1612,7 @@
       while ($value = $buffer->cutString(0, "\x0a")) {
         if ($value[0] == "\x00") { break; }
         if ($value[0] != "\x20") { $team_key++; continue; }
-        $this->_data['p'][$player_key]['name'] = Helper::lgslParseColor(substr($value, 1), $this->_server->get_type());
+        $this->_data['p'][$player_key]['name'] = Helper::lgslParseColor(substr($value, 1), $this->_server->getType());
         $this->_data['p'][$player_key]['team'] = $this->_data['t'][$team_key]['name'];
         $player_key++;
       }
@@ -1722,7 +1715,7 @@
         $buffer->skip(5);
         $challenge = $buffer->cutByte(4);
         if     ($this->need('e')) { $buffer = $this->fetch("\xFF\xFF\xFF\xFF\x56{$challenge}"); }
-        elseif ($this->need('p') && $this->_server->get_players_count() > 0) { $buffer = $this->fetch("\xFF\xFF\xFF\xFF\x55{$challenge}"); }
+        elseif ($this->need('p') && $this->_server->getPlayersCount() > 0) { $buffer = $this->fetch("\xFF\xFF\xFF\xFF\x55{$challenge}"); }
       }
       if (!$buffer) return $this::NO_RESPOND;
 
@@ -2239,7 +2232,7 @@
     public function process() {
       $buffer = $this->fetch();
       if (!$buffer) return $this::NO_RESPOND;
-      if ($this->_server->get_type() === 'teaspeak') {
+      if ($this->_server->getType() === 'teaspeak') {
         if ($buffer->has('TeaSpeak') && $this->_fp->read()->has('TeaSpeak')) {
           return $this::WITH_ERROR;
         }
@@ -2248,7 +2241,7 @@
           return $this::WITH_ERROR;
         }
       }
-      $ver = $this->_server->get_type() === Protocol::TS ? 0 : 1;
+      $ver = $this->_server->getType() === Protocol::TS ? 0 : 1;
       $param = [
         ['sel ', 'si', "\r\n", 'pl'],
         ['use port=', 'serverinfo', ' ', 'clientlist -country', 'channellist -topic']
@@ -2343,7 +2336,7 @@
     public function process() {
       $buffer = $this->fetch("https://cdn.rage.mp/master/");
       if (!$buffer) return $this::NO_RESPOND;
-      if ($value = $buffer["{$this->_server->get_ip()}:{$this->_server->get_c_port()}"]) {
+      if ($value = $buffer["{$this->_server->getIp()}:{$this->_server->get_c_port()}"]) {
         $this->_data['s']['name']       = $value['name'];
         $this->_data['s']['map']        = "RageMP";
         $this->_data['s']['players']    = $value['players'];
@@ -2359,7 +2352,7 @@
   }
   class Query35 extends QueryJson { // FiveM / RedM
     public function process() {
-      $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/dynamic.json");
+      $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/dynamic.json");
       if (!$buffer) return $this::NO_RESPOND;
       $this->_data['s']['name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem');
       $this->_data['s']['players'] = $buffer['clients'];
@@ -2372,7 +2365,7 @@
       $this->_data['e']['version'] = $buffer['iv'];
 
       if ($this->need('p')) {
-        $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/players.json");
+        $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/players.json");
 
         foreach($buffer as $key => $value) {
           $this->_data['p'][$key]['name'] = $value['name'];
@@ -2384,7 +2377,7 @@
   }
   class Query36 extends QueryJson { // Discord
     public function process() {
-      $buffer = $this->fetch("https://discord.com/api/v9/invites/{$this->_server->get_ip()}?with_counts=true");
+      $buffer = $this->fetch("https://discord.com/api/v9/invites/{$this->_server->getIp()}?with_counts=true");
       if (!$buffer) return $this::NO_RESPOND;
       if (isset($buffer['message'])) {
         $this->_data['e']['_error_fetching_info'] = $buffer['message'];
@@ -2439,7 +2432,7 @@
   }
   class Query37 extends QueryJson { // SCUM
     public function process() {
-      $buffer = $this->fetch("https://api.hellbz.de/scum/api.php?address={$this->_server->get_ip()}&port={$this->_server->get_c_port()}");
+      $buffer = $this->fetch("https://api.hellbz.de/scum/api.php?address={$this->_server->getIp()}&port={$this->_server->get_c_port()}");
       if (!$buffer || !$buffer['success'] || $buffer['servers'] == 0) return $this::NO_RESPOND;
       $this->_data['s']['name']        = $buffer['data'][0]['name'];
       $this->_data['s']['map']         = "SCUM";
@@ -2452,7 +2445,7 @@
   }
   class Query38 extends QueryJson { // Terraria
     public function process() {
-      $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/v2/server/status?players=true");
+      $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/v2/server/status?players=true");
       if (!$buffer) return $this::NO_RESPOND;
       if ($buffer['status'] != '200') {
         $this->_data['e']['_error2']    = $buffer['error'];
@@ -2484,7 +2477,7 @@
   }
   class Query40 extends QueryJson { // ECO
     public function process() {
-      $buffer = $this->fetch("http://{$this->_server->get_ip()}:{$this->_server->get_q_port()}/info");
+      $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/info");
       if (!$buffer) return $this::NO_RESPOND;
       $this->_data['s']['name']        = strip_tags($buffer['Description']);
       $this->_data['s']['players']     = $buffer['OnlinePlayers'];
@@ -2724,7 +2717,7 @@
       $buffer = $this->fetch("https://backend.beammp.com/servers-info");
       if (!$buffer) return $this::NO_RESPOND;
       $find = array_filter($buffer, function($k) {
-        return $k['ip'] == $this->_server->get_ip() && ((int) $k['port']) == $this->_server->get_q_port();
+        return $k['ip'] == $this->_server->getIp() && ((int) $k['port']) == $this->_server->getQueryPort();
       });
       if (!$find) return $this::NO_RESPOND;
       $find = reset($find);
@@ -2752,7 +2745,7 @@
       $buffer = $this->fetch("https://northstar.tf/client/servers");
       if (!$buffer) return $this::NO_RESPOND;
       $find = array_filter($buffer, function($k) {
-        return $k['id'] == $this->_server->get_ip();
+        return $k['id'] == $this->_server->getIp();
       });
       if (!$find) return $this::NO_RESPOND;
       $find = reset($find);
@@ -2775,12 +2768,12 @@
   /* Query 51-60 */
   class Query51 extends QueryJSON { // Palworld
     public function process() {
-      $search = ($this->_server->get_name() === "" ? "list" : "search?q=" . str_replace(" ", "%20", $this->_server->get_name()));
+      $search = ($this->_server->getName() === "" ? "list" : "search?q=" . str_replace(" ", "%20", $this->_server->getName()));
       $buffer = $this->fetch("https://api.palworldgame.com/server/{$search}");
       if (!$buffer) return $this::NO_RESPOND;
       if (!$buffer['server_list']) return $this::NO_RESPOND;
       $find = array_filter($buffer['server_list'], function($k) {
-        return $k['address'] == $this->_server->get_ip() && ((int) $k['port']) == ((int) $this->_server->get_q_port());
+        return $k['address'] == $this->_server->getIp() && ((int) $k['port']) == ((int) $this->_server->getQueryPort());
       });
       if (!$find) return FALSE;
       $find = reset($find);
@@ -2803,7 +2796,7 @@
     protected $user_id = "xyza7891muomRmynIIHaJB9COBKkwj6n";
     protected $user_secret = "PP5UGxysEieNfSrEicaD1N2Bb3TdXuD7xHYcsdUHZ7s";
     protected function filter($k) {
-      return $k['attributes']['ADDRESSBOUND_s'] === "{$this->_server->get_ip()}:{$this->_server->get_c_port()}" || $k['attributes']['ADDRESSBOUND_s'] === "0.0.0.0:{$this->_server->get_c_port()}";
+      return $k['attributes']['ADDRESSBOUND_s'] === "{$this->_server->getIp()}:{$this->_server->get_c_port()}" || $k['attributes']['ADDRESSBOUND_s'] === "0.0.0.0:{$this->_server->get_c_port()}";
     }
     protected function placeData($find) {
       $this->_data['s']['name'] = $find['attributes']['CUSTOMSERVERNAME_s'];
@@ -2825,7 +2818,7 @@
       if (!$buffer) return $this::NO_RESPOND;
 
       $find = array_filter($buffer, function($k) {
-        return explode(":", $k['address'])[0] == $this->_server->get_ip();
+        return explode(":", $k['address'])[0] == $this->_server->getIp();
       });
       if (!$find) return $this::NO_RESPOND;
       $find = reset($find);
@@ -3011,10 +3004,10 @@
         curl_setopt($this->_stream, CURLOPT_USERAGENT, "Mozilla/5.0 (X11; U; Linux i686; en-GB; rv:1.9.1.4) Gecko/20091028");
 				$this->_server = $server;
       } else {
-        $this->_stream = @fsockopen("{$this->_protocol}://{$server->get_ip()}", $server->get_q_port(), $errno, $errstr, 1);
+        $this->_stream = @fsockopen("{$this->_protocol}://{$server->getIp()}", $server->getQueryPort(), $errno, $errstr, 1);
         if (!$this->_stream) {
-          $server->set_extra_value('_error', $errstr);
-          $server->set_status(false);
+          $server->setExtraValue('_error', $errstr);
+          $server->setStatus(false);
           return false;
         }
         stream_set_timeout($this->_stream, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
@@ -3027,8 +3020,8 @@
 				$result = curl_exec($this->_stream);
 				if (curl_errno($this->_stream)) {
           if ($this->_server) {
-            $this->_server->set_extra_value('_error', 'Couldn\'t send request: ' . curl_error($this->_stream));
-            $this->_server->set_status(false);
+            $this->_server->setExtraValue('_error', 'Couldn\'t send request: ' . curl_error($this->_stream));
+            $this->_server->setStatus(false);
             return false;
           } else {
             return 'Couldn\'t send request: ' . curl_error($this->_stream);
@@ -3036,7 +3029,7 @@
 				} else {
 					$resultStatus = curl_getinfo($this->_stream, CURLINFO_HTTP_CODE);
 					if ($resultStatus != 200) {
-						$this->_server->set_extra_value('_error', "Request failed: HTTP status code: {$resultStatus}");
+						$this->_server->setExtraValue('_error', "Request failed: HTTP status code: {$resultStatus}");
 					}
 				}
         return $result;

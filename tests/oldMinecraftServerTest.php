@@ -15,16 +15,16 @@
       ]);
       $this->assertIsObject($server);
 
-      $this->assertIsScalar($server->get_timestamp('s', true));
-      $server->lgsl_live_query('sep');
+      $this->assertIsScalar($server->getTimestamp(LGSL\Timestamp::SERVER));
+      $server->queryLive('sep');
 
-      $this->assertTrue($server->isvalid());
-      $this->assertIsArray($server->to_array());
-      $this->assertIsString($server->get_name());
-      $this->assertSame($server->get_game(), "minecraft");
+      $this->assertTrue($server->isValid());
+      $this->assertIsArray($server->toArray());
+      $this->assertIsString($server->getName());
+      $this->assertSame($server->getGame(), "minecraft");
       if ($server->isOnline())
-      $this->assertSame($server->get_map(), "freedonia");
-      $this->assertIsScalar($server->get_timestamp('s', true));
+      $this->assertSame($server->getMap(), "freedonia");
+      $this->assertIsScalar($server->getTimestamp(LGSL\Timestamp::SERVER));
       return $server;
     }
     
@@ -32,7 +32,7 @@
      * @depends testMinecraftServer
      */
     public function testMinecraftExtras(LGSL\Server $server): void {
-      $extra = $server->get_extras();
+      $extra = $server->getExtrasArray();
       $this->assertIsArray($extra);
       if ($server->isOnline()) {
         $this->assertArrayHasKey('version', $extra);
@@ -44,10 +44,10 @@
      * @depends testMinecraftServer
      */
     public function testMinecraftPlayers(LGSL\Server $server): void {
-      $players = $server->get_players();
+      $players = $server->getPlayersArray();
       $this->assertIsArray($players);
-      if ($server->get_players_count('active') > 0) {
-        $this->assertSame(count($server->get_players()), $server->get_players_count("active"));
+      if ($server->getPlayersCount() > 0) {
+        $this->assertSame(count($server->getPlayersArray()), $server->getPlayersCount());
       }
     }
   }

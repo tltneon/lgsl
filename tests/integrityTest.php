@@ -13,7 +13,7 @@
 			foreach (LGSL\Protocol::lgsl_type_list() as $type => $name) {
 				if ($type === LGSL\Protocol::TEST) continue;
 				$server = new LGSL\Server(["type" => $type]);
-				$this->assertNotSame($server->game_icon("src/"), "src/other/icon_unknown.gif", "{$type} has no icon");
+				$this->assertNotSame($server->getGameIcon("src/"), "src/other/icon_unknown.gif", "{$type} has no icon");
 			}
 		}
 	}

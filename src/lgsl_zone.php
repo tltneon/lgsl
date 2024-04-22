@@ -26,10 +26,10 @@
 
   $request     = empty($lgsl_config['players'][$lgsl_zone_number]) ? "s" : "sp";
   if ($lgsl_zone_number) {
-    $server_list = Database::get_servers_group(["request"=>$request, "zone"=>$lgsl_zone_number]);
+    $server_list = Database::getServersGroup(["request"=>$request, "zone"=>$lgsl_zone_number]);
   } else {
-    $server_list = [new Server(["ip"=>$ip, "port"=>$port])];
-    $server_list[0]->lgsl_cached_query($request);
+    $server_list = [new Server(["ip"=>$ip, "c_port"=>$port])];
+    $server_list[0]->queryCached($request);
   }
   //$server_list = lgsl_sort_servers($server_list);
 
@@ -101,7 +101,7 @@
 
       $zone_count ++;
 
-      $marquee = strlen($server->get_name()) > 25 ? "class='on'" : "";
+      $marquee = strlen($server->getName()) > 25 ? "class='on'" : "";
       $output .= "
       <td style='vertical-align:top; text-align:center'>
 
@@ -110,17 +110,17 @@
           <tr>
             <td title='{$lgsl_config['text']['slk']}' style='padding:0px; text-align:center'>
               <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
-                <a href='{$server->get_software_link()}' style='text-decoration:none'>
-                  {$server->get_address()}
+                <a href='{$server->getConnectionLink()}' style='text-decoration:none'>
+                  {$server->getAddress()}
                 </a>
               </div>
             </td>
           </tr>
 
           <tr>
-            <td title='{$server->get_name()}' style='padding:0px; text-align:center'>
+            <td title='{$server->getName()}' style='padding:0px; text-align:center'>
               <div class='marquee' style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
-                <span {$marquee}>{$server->get_name()}</span>
+                <span {$marquee}>{$server->getName()}</span>
               </div>
             </td>
           </tr>
@@ -128,14 +128,14 @@
           <tr>
             <td style='padding:0px; text-align:center'>
               <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; padding:0px; position:relative'>
-                <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."' target='_blank'>
-                  <img alt='' src='{$server->get_map_image()}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
-                  <img alt='' src='{$server->map_password_image()}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
-                  <img alt='' src='{$server->add_url_path($server->game_icon())}'          title='{$server->text_type_game()}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
+                <a href='".LGSL::link($server->getIp(), $server->getConnectionPort())."' target='_blank'>
+                  <img alt='' src='{$server->getMapImage()}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
+                  <img alt='' src='{$server->mapPasswordImage()}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
+                  <img alt='' src='{$server->addUrlPath($server->getGameIcon())}'          title='{$server->getGameFormatted()}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
                   ";
                   if ($lgsl_config['locations'])
                   $output .= "
-                  <img alt='' class='details_location_image flag f{$server->getLocation()}' title='{$server->location_text()}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
+                  <img alt='' class='details_location_image flag f{$server->getLocation()}' title='{$server->getLocationFormatted()}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
                   ";
                   $output .= "
                 </a>
@@ -144,23 +144,23 @@
           </tr>
 
           <tr>
-            <td title='{$server->get_map()}' style='padding:0px; text-align:center'>
+            <td title='{$server->getMap()}' style='padding:0px; text-align:center'>
               <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
-                {$server->get_map()}
+                {$server->getMap()}
               </div>
             </td>
           </tr>";
 
-        if ($server->get_players_count('active') /*&& isset($lgsl_config['players']) && isset($lgsl_config['players'][$lgsl_zone_number])*/) {
-          $zone_height = $lgsl_config['zone']['line_size'] * ($server->get_players_count('active') + 1);
+        if ($server->getPlayersCount() /*&& isset($lgsl_config['players']) && isset($lgsl_config['players'][$lgsl_zone_number])*/) {
+          $zone_height = $lgsl_config['zone']['line_size'] * ($server->getPlayersCount() + 1);
           $zone_height = $zone_height > $lgsl_config['zone']['height'] ? "{$lgsl_config['zone']['height']}px" : "{$zone_height}px";
 
           $output .= "
           <tr>
             <td style='border-radius: 4px;'>
               <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
-              <span style='padding:1px; float:right'> {$server->get_players_count()} </span>";
-              $players = $server->get_players();
+              <span style='padding:1px; float:right'> {$server->getPlayersCountFormatted()} </span>";
+              $players = $server->getPlayersArray();
               if (count($players) > 0) {
                 $output .= "<div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
 
@@ -171,7 +171,7 @@
 
                 $output .= "</div";
               } else {
-                $inner_width = $server->get_players_count('percent');
+                $inner_width = $server->getPlayersPercent();
                 $output .="
                 <br />
                 <div style='margin-top: 5px; border: 1px solid #555555; background-color: #222222; height: 4px;'>
@@ -186,7 +186,7 @@
           <tr>
             <td style='padding:0px; border:1px solid; border-radius: 4px;'>
               <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
-              <span style='padding:1px; float:right'> {$server->get_players_count()} </span>
+              <span style='padding:1px; float:right'> {$server->getPlayersCount()} </span>
             </td>
           </tr>";
         }

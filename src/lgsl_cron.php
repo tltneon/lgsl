@@ -33,7 +33,7 @@
          str_pad($db_row['s_port'], 12, " ")."\r\n";
 
     $server = new Server(["type" => $db_row['type'], "ip" => $db_row['ip'], "c_port" => $db_row['c_port'], "q_port" => $db_row['q_port']]);
-    $server->lgsl_cached_query($request);
+    $server->queryCached($request);
 
     flush();
     ob_flush();

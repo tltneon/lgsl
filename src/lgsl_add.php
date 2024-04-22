@@ -122,9 +122,9 @@
         } else {
 
           $server = new Server(["type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port]);
-					$server->lgsl_live_query("s");
+					$server->queryLive("s");
 
-          if ($server->get_status() != Server::OFFLINE) {
+          if ($server->getStatus() != Server::OFFLINE) {
 
             if (!empty($_POST['lgsl_submit_add'])) {
               $disabled = ($lgsl_config['public_add'] == "2") ? "0" : "1";
@@ -158,12 +158,12 @@
                 </div>
 
                 <table class='details_table' style='text-align: center; margin: auto; max-width: 500px;'>
-                  <tr> <td> <b> {$lgsl_config['text']['adr']} </b> </td> <td> {$server->get_ip()}:{$server->get_c_port()}                                          </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['sts']} </b> </td> <td> {$lgsl_config['text'][$server->get_status()]}                                   </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['nam']} </b> </td> <td> {$server->get_name()}                                   </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td> {$server->get_game()}                                   </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td> {$server->get_map()}                                    </td> </tr>
-                  <tr> <td> <b> {$lgsl_config['text']['plr']} </b> </td> <td> {$server->get_players_count('active')} / {$server->get_players_count('max')} </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['adr']} </b> </td> <td> {$server->getIp()}:{$server->getConnectionPort()}                                          </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['sts']} </b> </td> <td> {$lgsl_config['text'][$server->getStatus()]}                                   </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['nam']} </b> </td> <td> {$server->getName()}                                   </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['gme']} </b> </td> <td> {$server->getGame()}                                   </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['map']} </b> </td> <td> {$server->getMap()}                                    </td> </tr>
+                  <tr> <td> <b> {$lgsl_config['text']['plr']} </b> </td> <td> {$server->getPlayersCount('active')} / {$server->getPlayersCount('max')} </td> </tr>
                 </table>
 
                 <div>

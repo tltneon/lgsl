@@ -177,7 +177,7 @@
         echo "Allowed only .jpg and .gif extensions.\n";
       }
     }
-    $server_list = Database::get_servers_group(["request" => "sc"]);
+    $server_list = Database::getServersGroup(["request" => "sc"]);
 
     $output .= "
 		<div class='center'>
@@ -189,7 +189,7 @@
     foreach ($server_list as $server) {
       if (!$server->isOnline()) { continue; }
 
-      $image_map = $server->get_map_image();
+      $image_map = $server->getMapImage();
 
       $output .= "
       <p style='padding-bottom: 5px;'>
@@ -197,14 +197,14 @@
           <img src='{$image_map}' width='64' height='60' />
         </div>
         <div style='display: inline-block;vertical-align: super;text-align: left;'>
-          <div>{$lgsl_config['text']['map']}: {$server->get_map()}</div>
-          <div>Expected: /maps/{$server->get_type()}/{$server->get_game()}/{$server->get_map(true)}.jpg</div>
+          <div>{$lgsl_config['text']['map']}: {$server->getMap()}</div>
+          <div>Expected: /maps/{$server->getType()}/{$server->getGame()}/{$server->getMap(true)}.jpg</div>
           <div>Current: <a href='{$image_map}' target='_blank'>{$image_map}</a></div>
           <form action='admin.php' method='post' enctype='multipart/form-data'>
             Select image to upload:
             <input type='file' name='map' id='map' />
-            <input type='hidden' name='lgsl_map_upload_path' value='{$server->get_type()}/{$server->get_game()}' />
-            <input type='hidden' name='lgsl_map_upload_file' value='{$server->get_map()}' />
+            <input type='hidden' name='lgsl_map_upload_path' value='{$server->getType()}/{$server->getGame()}' />
+            <input type='hidden' name='lgsl_map_upload_file' value='{$server->getMap()}' />
             <input type='hidden' name='lgsl_management' value='{$_POST['lgsl_management']}' />
             <input type='hidden' name='lgsl_map_image_paths' value='true' />
             <input type='submit' name='lgsl_map_image_upload' value='Upload Image' />
@@ -236,8 +236,8 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
           "q_port" => $q, // for querying
           "type" => $p // protocol name from lgsl_type_list()
       ]);
-      $server->lgsl_live_query("s"); // s - server info, e - extra data, p - players info
-      $log .= "[type: {$server->get_type()}] " . ($server->get_status() === Server::OFFLINE ? $lgsl_config['text'][$server->get_status()] : "[game: {$server->get_game()}] [data: {$server->get_name()} | {$server->get_players_count()} | {$lgsl_config['text'][$server->get_status()]}]") ."<br>";
+      $server->queryLive("s"); // s - server info, e - extra data, p - players info
+      $log .= "[type: {$server->getType()}] " . ($server->getStatus() === Server::OFFLINE ? $lgsl_config['text'][$server->getStatus()] : "[game: {$server->getGame()}] [data: {$server->getName()} | {$server->getPlayersCount()} | {$lgsl_config['text'][$server->getStatus()]}]") ."<br>";
     }
     $log .= "<br>";
   }

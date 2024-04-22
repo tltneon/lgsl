@@ -8,7 +8,7 @@
     $x0 = $y0 = [];
     global $lgsl_config;
     $period = 3600 * $lgsl_config['history_hours'];
-    $history = $server->get_history();
+    $history = $server->getHistoryArray();
     $avg = 0; $avgc = 0;
     foreach ($history as $key) {
       if (time() - $key['t'] > $period) {
@@ -24,7 +24,7 @@
       array_unshift($y0, (int) ($avg / $avgc));
     }
 
-    $max = $server->get_players_count('max') > 0 ? $server->get_players_count('max') : 1;
+    $max = $server->getPlayersMaxCount() > 0 ? $server->getPlayersMaxCount() : 1;
     $scaleX = $w / (count($x0) > 0 ? max($x0) : 1);
     $scaleY = $h / $max;
 
@@ -51,7 +51,7 @@
   $ip = isset($_GET['ip']) ? $_GET['ip'] : null;
   $port = isset($_GET['port']) ? (int) $_GET['port'] : null;
   $server = new Server(["ip" => $ip, "c_port" => $port, "id" => $s]);
-  $server->lgsl_cached_query($query);
+  $server->queryCached($query);
   if (!$server) {
     Image::makeImageError(350, 20, $lgsl_config['text']['mid']);
   }
@@ -76,29 +76,29 @@
 			$stat_of = imagecolorallocate($im, 241, 171, 171);
 			$border = imagecolorallocatealpha($im, 0, 0, 0, 20);
       // MAIN SECTION
-      $link = $server->get_address();
-      if (strlen($link) > 22 && $server->get_type() != 'discord') $link = gethostbyname(explode(":", $link)[0]) . ":" . explode(":", $link)[1];
-      $max = "/{$server->get_players_count('max')}";
-      if ($server->get_players_count('max') > 999) $max = '';
+      $link = $server->getAddress();
+      if (strlen($link) > 22 && $server->getType() != 'discord') $link = gethostbyname(explode(":", $link)[0]) . ":" . explode(":", $link)[1];
+      $max = "/{$server->getPlayersMaxCount()}";
+      if ($server->getPlayersMaxCount() > 999) $max = '';
 
       $time = date(str_replace([':S', ':s', '/Y', '/y'], '', $lgsl_config['text']['tzn']));
 
-      switch ($server->get_status()) {
+      switch ($server->getStatus()) {
         case Server::ONLINE: { $stat = $stat_on; break; }
         case Server::OFFLINE: { $stat = $stat_of; break; }
         case Server::PENDING: { $stat = $stat_pn; break; }
         case Server::PASSWORDED: { $stat = $stat_ps; break; }
       }
       imagefilledrectangle($im, 14, 14, 47, 47, $stat);
-      $game_id = @Image::makeImage($server->game_icon('src/'), 32, 32);                          // create game icon
+      $game_id = @Image::makeImage($server->getGameIcon('src/'), 32, 32);                          // create game icon
       imagecopy($im, $game_id, 16, 16, 0, 0, 32, 32);                             // place game icon
 
-      imagettftext($im, 10, 0, 62,  19, $color_nm, $font, /* name     */  $server->get_name(false));
+      imagettftext($im, 10, 0, 62,  19, $color_nm, $font, /* name     */  $server->getName(false));
       imagettftext($im, 8,  0, 62,  32, $color_ip, $font, /* ip&port  */  str_replace('https://', '', $link));
-      imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$server->get_map()}");
-      imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server->get_players_count('active')}{$max}");
-      imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game     */  ucfirst($server->get_game()));
-      imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:{$time} /{$server->get_game()}");
+      imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$server->getMap()}");
+      imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server->getPlayersCount()}{$max}");
+      imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game     */  ucfirst($server->getGame()));
+      imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:{$time} /{$server->getGame()}");
 
       if ($lgsl_config['history']) drawHistory($im, 374, 24, 80, 24, $server);
       break;
@@ -119,26 +119,26 @@
 			$stat_of = imagecolorallocate($im, 241, 171, 171);
 			$border = imagecolorallocatealpha($im, 0, 0, 0, 20);
       // MAIN SECTION
-      $link = $server->get_address();
-      if (strlen($link) > 22 && $server->get_type() != 'discord') {
+      $link = $server->getAddress();
+      if (strlen($link) > 22 && $server->getType() != 'discord') {
         $link = gethostbyname(explode(":", $link)[0]) . ":" . explode(":", $link)[1];
       }
       $time = date(str_replace([':S', ':s', '/Y', '/y'], '', $lgsl_config['text']['tzn']));
 
-      switch ($server->get_status()) {
+      switch ($server->getStatus()) {
         case Server::ONLINE: { $stat = $stat_on; break; }
         case Server::OFFLINE: { $stat = $stat_of; break; }
         case Server::PENDING: { $stat = $stat_pn; break; }
         case Server::PASSWORDED: { $stat = $stat_ps; break; }
       }
       
-      imagettftext($im, 8, 90, 12, $h, $color_nm, $font, /* name  */ $server->get_name(false));
+      imagettftext($im, 8, 90, 12, $h, $color_nm, $font, /* name  */ $server->getName(false));
       if (version_compare(phpversion(), '8.0.0', '<')) {
         imagefilledpolygon($im, [0,0, 16,0, 0,16], 3, $stat);
       } else {
         imagefilledpolygon($im, [0,0, 16,0, 0,16], $stat);
       }
-      $game_id = @Image::makeImage($server->game_icon('src/'), 16, 16);                              // create game icon
+      $game_id = @Image::makeImage($server->getGameIcon('src/'), 16, 16);                              // create game icon
       imagecopy($im, $game_id, $w-16, $h-16, 0, 0, 16, 16);                           // place game icon
 
       if ($lgsl_config['locations']) {
@@ -154,27 +154,27 @@
       imagefilledrectangle($im, 17, $h-21, $w, $h-17, $border);
       imagefilledrectangle($im, 17, 0, $w, 14, $border);
       imagettftext($im, 8, 0, 25, 12, $color_nm, $font, /* name  */ $lgsl_config['text']['nam']);
-      imagettftext($im, 8, 0, 25, 32, $color_nm, $font, /* name  */ $server->get_name(false));
+      imagettftext($im, 8, 0, 25, 32, $color_nm, $font, /* name  */ $server->getName(false));
       imagefilledrectangle($im, 17, 40, $w, 54, $border);
       imagettftext($im, 8, 0, 25, 52, $color_ip, $font, /* ip  */  $lgsl_config['text']['adr']);
-      if ($server->get_game() == 'discord') {
+      if ($server->getGame() == 'discord') {
         imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $link));
       } else {
-        imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $server->get_ip()));
-        imagettftext($im, 8, 0, 118, 86, $color_ip, $font,/* port  */  ":{$server->get_c_port()}");
+        imagettftext($im, 8, 0, 25, 74, $color_ip, $font, /* ip  */  str_replace('https://', '', $server->getIp()));
+        imagettftext($im, 8, 0, 118, 86, $color_ip, $font,/* port  */  ":{$server->getConnectionPort()}");
       }
       imagefilledrectangle($im, 17, 100, $w, 114, $border);
-      imagettftext($im, 7, 0, 25, 112, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}: {$server->get_map()}");
+      imagettftext($im, 7, 0, 25, 112, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}: {$server->getMap()}");
       imagefilledrectangle($im, 17, 120, $w, 134, $border);
-      imagettftext($im, 7, 0, 25, 132, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}: {$server->get_players_count()}");
-      $players = $server->get_players();
-      if ($server->get_players_count('active') > 0 && count($players) > 0) {
+      imagettftext($im, 7, 0, 25, 132, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}: {$server->getPlayersCountFormatted()}");
+      $players = $server->getPlayersArray();
+      if ($server->getPlayersCount() > 0 && count($players) > 0) {
         $i = 0;
         foreach ($players as $player) {
           imagettftext($im, 7, 0, 25, 144 + 10 * $i, $color_pl, $font, /* player  */  $player['name']);
           $i++;
           if ($i > 7) {
-            imagettftext($im, 7, 0, 25, 144 + 10 * 8, $color_pl, $font, /* player  */  "+ " . ($server->get_players_count('active') - $i . " " . lcfirst($lgsl_config['text']['plr'])));
+            imagettftext($im, 7, 0, 25, 144 + 10 * 8, $color_pl, $font, /* player  */  "+ " . ($server->getPlayersCount() - $i . " " . lcfirst($lgsl_config['text']['plr'])));
             break;
           }
         }
@@ -196,25 +196,25 @@
       $color_pl = imagecolorallocate($im, 255, 94, 0);
       $color_tm = imagecolorallocate($im, 66, 66, 66);
       // MAIN SECTION
-      $link = $server->get_address();
-      if (strlen($link) > 22 && $server->get_type() != 'discord') $link = gethostbyname(explode(":", $link)[0]) . ":" . explode(":", $link)[1];
-      $map = $server->get_map();
+      $link = $server->getAddress();
+      if (strlen($link) > 22 && $server->getType() != 'discord') $link = gethostbyname(explode(":", $link)[0]) . ":" . explode(":", $link)[1];
+      $map = $server->getMap();
       if (strlen($map) > 15) $map = substr($map, 0, 13) . '..';
-      $max = "/{$server->get_players_count('max')}";
-      if ($server->get_players_count('max') > 999) $max = '';
+      $max = "/{$server->getPlayersMaxCount()}";
+      if ($server->getPlayersMaxCount() > 999) $max = '';
 
       $time = date(str_replace([':S', ':s', '/Y', '/y'], '', $lgsl_config['text']['tzn']));
 
-      $on_id = @Image::makeImage($server->icon_status('src/'), 16, 16);                          // create status icon
-      $game_id = @Image::makeImage($server->game_icon('src/'), 16, 16);                          // create game icon
+      $on_id = @Image::makeImage($server->getStatusIcon('src/'), 16, 16);                          // create status icon
+      $game_id = @Image::makeImage($server->getGameIcon('src/'), 16, 16);                          // create game icon
       imagecopy($im, $on_id, 7, 2, 0, 0, 16, 16);                                 // place status icon
       imagecopy($im, $game_id, 25, 2, 0, 0, 16, 16);                              // place game icon
 
       imagettftext($im, 7, 0, 43,  17, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$map}");
       imagettftext($im, 7, 0, 43,  9,  $color_ip, $font, /* ip&port  */  str_replace('https://', '', $link));
-      imagettftext($im, 8, 0, 156, 9,  $color_nm, $font, /* name     */  $server->get_name(false));
-      imagettftext($im, 7, 0, 156, 17, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server->get_players_count('active')}{$max}");
-      imagettftext($im, 5, 0, 238, 18, $color_tm, $font, /* updated  */  "upd:{$time} /{$server->get_game()}");
+      imagettftext($im, 8, 0, 156, 9,  $color_nm, $font, /* name     */  $server->getName(false));
+      imagettftext($im, 7, 0, 156, 17, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server->getPlayersCount()}{$max}");
+      imagettftext($im, 5, 0, 238, 18, $color_tm, $font, /* updated  */  "upd:{$time} /{$server->getGame()}");
     }
   }
 

@@ -30,7 +30,7 @@
     $uri = $_SERVER['HTTP_REFERER'];
   }
 
-  $server_list = Database::get_servers_group(["type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order]);
+  $server_list = Database::getServersGroup(["type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order]);
   $servers = count($server_list);
   if ($servers == 0 && $page < 2) {
     $output .= "<div id='back_to_servers_list'><a href='./admin.php'>ADD YOUR FIRST SERVER</a></div>";
@@ -55,46 +55,45 @@
     </tr>";
 
   foreach ($server_list as $server) {
-    $percent = $server->get_players_count('percent');
-    $lastupd = $server->get_timestamp();
-    $gamelink= LGSL::buildLink($uri, ["game" => $server->get_game()]);
+    $lastupd = $server->getTimestamp(Timestamp::SERVER);
+    $gamelink= LGSL::buildLink($uri, ["game" => $server->getGame()]);
 
     $output .= "
-    <tr class='server_{$server->get_status()}'>
+    <tr class='server_{$server->getStatus()}'>
 
       <td class='status_cell'>
-        <span title='{$lgsl_config['text'][$server->get_status()]} | {$lgsl_config['text']['lst']}: {$lastupd}' class='status_icon_{$server->get_status()}'></span>
+        <span title='{$lgsl_config['text'][$server->getStatus()]} | {$lgsl_config['text']['lst']}: {$lastupd}' class='status_icon_{$server->getStatus()}'></span>
         <a href='{$gamelink}'>
-          <img alt='{$server->get_name()}' src='{$server->add_url_path($server->game_icon())}' title='{$server->text_type_game()}' class='game_icon' />
+          <img alt='{$server->getName()}' src='{$server->addUrlPath($server->getGameIcon())}' title='{$server->getGameFormatted()}' class='game_icon' />
         </a>
       </td>
 
       <td title='{$lgsl_config['text']['slk']}' class='connectlink_cell'>
-        <a href='{$server->get_software_link()}'>
-          {$server->get_address()}
+        <a href='{$server->getConnectionLink()}'>
+          {$server->getAddress()}
         </a>
       </td>
 
-      <td title='{$server->get_name()}' class='servername_cell'>
+      <td title='{$server->getName()}' class='servername_cell'>
         <div class='servername_nolink'>
-          {$server->get_name()}
+          {$server->getName()}
         </div>
         <div class='servername_link'>
-          <a href='".LGSL::link($server->get_ip(), $server->get_c_port())."'>
-            {$server->get_name()}
+          <a href='".LGSL::link($server->getIp(), $server->getConnectionPort())."'>
+            {$server->getName()}
           </a>
         </div>
       </td>
 
-      <td class='map_cell' data-path='{$server->get_map_image()}'>
-        {$server->get_map()}
+      <td class='map_cell' data-path='{$server->getMapImage()}'>
+        {$server->getMap()}
       </td>
 
       <td class='players_cell'>
         <div class='outer_bar'>
-          <div class='inner_bar' style='width:{$percent}%;'>
-            <span class='players_numeric'>{$server->get_players_count()}</span>
-            <span class='players_percent{$percent}'>{$percent}%</span>
+          <div class='inner_bar' style='width:{$server->getPlayersPercent()}%;'>
+            <span class='players_numeric'>{$server->getPlayersCountFormatted()}</span>
+            <span class='players_percent{$server->getPlayersPercent()}'>{$server->getPlayersPercent()}%</span>
           </div>
         </div>
       </td>
@@ -103,13 +102,13 @@
 
       if ($lgsl_config['locations']) {
         $output .= "
-        <a href='".LGSL::locationLink($server->location_text())."' title='{$server->location_text()}'  target='_blank' class='contry_link'>
+        <a href='".LGSL::locationLink($server->getLocationFormatted())."' title='{$server->getLocationFormatted()}'  target='_blank' class='contry_link'>
           <i class='contry_icon flag f{$server->getLocation()}'></i>
         </a>";
       }
 
       $output .= "
-        <a href='".LGSL::link($server->get_ip(), $server->get_c_port(false))."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
+        <a href='".LGSL::link($server->getIp(), $server->getConnectionPort(false))."' class='details_icon' title='{$lgsl_config['text']['vsd']}'></a>
       </td>
 
     </tr>";

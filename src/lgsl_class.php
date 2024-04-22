@@ -10,7 +10,7 @@
  \-----------------------------------------------------------------------------------------------------------*/
 
   if (!function_exists('lgsl_url_path')) { // START OF DOUBLE LOAD PROTECTION
-  class LGSL {
+  abstract class LGSL {
     const NONE = "--";
     const VERSION = "7.0.0";
     static function db() {
@@ -34,6 +34,46 @@
       }
       return $link;
     }
+    static function filePath() {
+      $lgsl_path = __FILE__; // GET THE LGSL_CLASS.PHP PATH
+      $lgsl_path = dirname($lgsl_path)."/"; // SHORTEN TO JUST THE FOLDERS AND ADD TRAILING SLASH
+      return str_replace("\\", "/", $lgsl_path); // CONVERT WINDOWS BACKSLASHES TO FORWARDSLASHES
+    }
+    static function urlPath() {
+      global $lgsl_config;
+      if ($lgsl_config['url_path']) { // CHECK IF PATH HAS BEEN SET IN CONFIG
+        return $lgsl_config['url_path'];
+      }
+
+      $host_path  = (!isset($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) != "on") ? "http://" : "https://"; // USE FULL DOMAIN PATH TO AVOID ALIAS PROBLEMS
+      $host_path .= $_SERVER['HTTP_HOST'] ?? "";
+
+      // GET FULL PATHS ( EXTRA CODE FOR WINDOWS AND IIS - NO DOCUMENT_ROOT - BACKSLASHES - DOUBLESLASHES - ETC )
+      if ($_SERVER['DOCUMENT_ROOT']) {
+        $base_path = str_replace("\\", "/", LGSL::realpath($_SERVER['DOCUMENT_ROOT']));
+        $base_path = str_replace("//", "/", $base_path);
+      } else {
+        $file_path = str_replace("\\", "/", $_SERVER['SCRIPT_NAME']);
+        $file_path = str_replace("//", "/", $file_path);
+
+        $base_path = str_replace("\\", "/", $_SERVER['PATH_TRANSLATED']);
+        $base_path = str_replace("//", "/", $base_path);
+        $base_path = substr($base_path, 0, -strlen($file_path));
+      }
+
+      $lgsl_path = dirname(LGSL::realpath(__FILE__));
+      $lgsl_path = str_replace("\\", "/", $lgsl_path);
+
+      // REMOVE ANY TRAILING SLASHES
+      if (substr($base_path, -1) == "/") { $base_path = substr($base_path, 0, -1); }
+      if (substr($lgsl_path, -1) == "/") { $lgsl_path = substr($lgsl_path, 0, -1); }
+
+      if (substr($lgsl_path, 0, strlen($base_path)) == $base_path) { // USE THE DIFFERENCE BETWEEN PATHS
+        $url_path = substr($lgsl_path, strlen($base_path));
+        return "$host_path$url_path/";
+      }
+      return "/#LGSL_PATH_PROBLEM#{$base_path}#{$lgsl_path}#/";
+    }
     static function locationLink($location) {
       if (!$location) { return "#"; }
       return "https://www.google.com/maps/search/{$location}/";
@@ -46,21 +86,12 @@
       $url = "http://ip-api.com/json/".urlencode($ip)."?fields=countryCode";
   
       if (LGSL::isEnabled("curl")) {
-        $lgsl_curl = curl_init();
-  
-        curl_setopt($lgsl_curl, CURLOPT_HEADER, 0);
-        curl_setopt($lgsl_curl, CURLOPT_TIMEOUT, 2);
-        curl_setopt($lgsl_curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($lgsl_curl, CURLOPT_CONNECTTIMEOUT, 2);
-        curl_setopt($lgsl_curl, CURLOPT_URL, $url);
-  
-        $answer = curl_exec($lgsl_curl);
-        $answer = json_decode($answer, true);
+        $stream = new Stream(PROTOCOL::HTTP);
+        $stream->open();
+        $stream->write($url);
+        $answer = $stream->readJson();
         $location = $answer["countryCode"] ?? "XX";
-  
-        if (curl_error($lgsl_curl)) { $location = "XX"; }
-  
-        curl_close($lgsl_curl);
+        $stream->close();
       } else {
         $location = @file_get_contents($url);
       }
@@ -75,8 +106,8 @@
       $total = ["players"=>0, "playersmax"=>0, "servers"=>0, "servers_online"=>0, "servers_offline"=>0];
 
       foreach ($server_list as $server) {
-        $total['players']    += $server->get_players_count('active');
-        $total['playersmax'] += $server->get_players_count('max');
+        $total['players']    += $server->getPlayersCount();
+        $total['playersmax'] += $server->getPlayersMaxCount();
 
         $total['servers']++;
         if ($server->isOnline()) {
@@ -310,23 +341,22 @@
 		}
 
 
-    public function loadServer(Server $server) {
+    public function loadServer(Server &$server): void {
       global $lgsl_config;
       $query = "SELECT * FROM {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']} WHERE ";
-      if ($server->get_id()) {
-        $query .= "id = '{$server->get_id()}';";
-      } elseif ($server->get_ip()) {
-        $c_port = $server->get_c_port() > 1 ? "AND c_port = '{$server->get_c_port()}'" : "";
-        $query .= "ip = '{$server->get_ip()}' {$c_port};";
+      if ($server->getId()) {
+        $query .= "id = '{$server->getId()}';";
+      } elseif ($server->getIp()) {
+        $c_port = $server->getConnectionPort() > 1 ? "AND c_port = '{$server->getConnectionPort()}'" : "";
+        $query .= "ip = '{$server->getIp()}' {$c_port};";
       }
       $result = $this->query($query, true);
       if ($result) {
-        return $this->lgslUnserializeServerData($result);
+        $server->fromArray($this->unserializeData($result));
       }
-      return null;
     }
     
-    static function get_servers_group($options = []) {
+    static function getServersGroup($options = []) {
       global $lgsl_config;
       $db = LGSL::db();
 
@@ -361,17 +391,12 @@
       $output = [];
       foreach ($result as $s) {
         $server = new Server();
-        $server->from_array($db->lgslUnserializeServerData($s));
+        $server->fromArray($db->unserializeData($s));
 
 				if (!LGSL::requestHas($request, "c") && !LGSL::timer("check")) { // CACHE ONLY REQUEST
-					$needed = "";
-					$time = time();
-					if (LGSL::requestHas($request, "s") && $time > ($server->get_timestamp('s', true) + $lgsl_config['cache_time'])) { $needed .= "s"; }
-					if (LGSL::requestHas($request, "e") && $time > ($server->get_timestamp('e', true) + $lgsl_config['cache_time'])) { $needed .= "e"; }
-					if (LGSL::requestHas($request, "p") && $time > ($server->get_timestamp('p', true) + $lgsl_config['cache_time'])) { $needed .= "p"; }
-					if ($needed) {
-						$server->lgsl_live_query($request);
-						$db->lgsl_save_cache($server);
+					if ($server->checkTimestamps($request)) {
+						$server->queryLive($request);
+						$db->saveServer($server);
 					}
 				}
         $output[] = $server;
@@ -383,30 +408,28 @@
       $db = LGSL::db();
 
       $query  = "SELECT COUNT(*) as servers, SUM(players) as players, SUM(playersmax) as playersmax, SUM(STATUS) as servers_online, COUNT(*)-SUM(status) as servers_offline FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE disabled = 0;";
-      $result = $db->query($query, true);
-      return $result;
+      return $db->query($query, true);
     }
 
-    function lgsl_save_cache(&$server) {
+    function saveServer(&$server) {
       global $lgsl_config;
-      $packed_cache = $this->escape_string(base64_encode(serialize($server->to_array())));
-      $packed_times = $this->escape_string(implode("_", $server->get_timestamps()));
-      $status = (int) ($server->get_status() === Server::ONLINE);
+      $packed_cache = $this->escape_string(base64_encode(serialize($server->toArray())));
+      $status = (int) ($server->getStatus() === Server::ONLINE);
       $this->execute("
         UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`
         SET `status`='{$status}',
             `cache`='{$packed_cache}',
-            `cache_time`='{$packed_times}',
-            `players`='{$server->get_players_count('active')}',
-            `playersmax`='{$server->get_players_count('max')}',
-            `game`='{$server->get_game()}',
-            `mode`='{$this->escape_string($server->get_mode())}',
-            `name`='{$this->escape_string($server->get_name())}',
-            `map`='{$server->get_map()}'
-        WHERE `id` = '{$server->get_id()}';");
+            `cache_time`='{$server->getTimestamps()}',
+            `players`='{$server->getPlayersCount()}',
+            `playersmax`='{$server->getPlayersMaxCount()}',
+            `game`='{$server->getGame()}',
+            `mode`='{$this->escape_string($server->getMode())}',
+            `name`='{$this->escape_string($server->getName())}',
+            `map`='{$server->getMap()}'
+        WHERE `id` = '{$server->getId()}';");
     }
     
-    function lgslUnserializeServerData($data) {
+    function &unserializeData(array &$data): array {
       $server = [];
       foreach (['name', 'game', 'mode', 'map', 'players', 'playersmax'] as $i) {
         $server['s'][$i] = $data[$i];
@@ -426,7 +449,7 @@
         $server['p'] = $cache['p'];
         if (isset($cache['h'])) $server['h'] = $cache['h'];
         if (isset($cache['o']['location'])) $server['o']['location'] = $cache['o']['location'];
-        $server['s']['cache_time'] = explode("_", $data['cache_time']);
+        $server['s']['cache_time'] = new Timestamp($data['cache_time']);
       }
       return $server;
     }
@@ -631,7 +654,8 @@
         "game" => $this->_base['type'],
         "mode" => "none",
         "password" => 0,
-        "map" => "World"
+        "map" => "World",
+        "cache_time" => new Timestamp()
       ];
       $this->_other = [
         "zone" => null,
@@ -639,32 +663,26 @@
       ];
     }
     
-    public function lgsl_cached_query($request = 'seph') {
+    public function queryCached($request = 'seph') {
+      $request = "{$request}c"; // cached by default
       $db = LGSL::db();
-      $result = $db->loadServer($this);
-      if ($result) {
-        $this->from_array($result);
-				if (!LGSL::requestHas($request, "c")) { // CACHE ONLY REQUEST
-					global $lgsl_config;
-					$needed = "";
-					if (LGSL::requestHas($request, "s") && time() > ($this->get_timestamp('s', true) + $lgsl_config['cache_time'])) { $needed .= "s"; }
-					if (LGSL::requestHas($request, "e") && time() > ($this->get_timestamp('e', true) + $lgsl_config['cache_time'])) { $needed .= "e"; }
-					if (LGSL::requestHas($request, "p") && time() > ($this->get_timestamp('p', true) + $lgsl_config['cache_time'])) { $needed .= "p"; }
-					if (LGSL::requestHas($request, "h")) { $needed .= "h"; }
-					if ($needed) {
-						$this->lgsl_live_query($needed);
-						$db->lgsl_save_cache($this);
-					}
-				}
+      $db->loadServer($this);
+      global $lgsl_config;
+      $needed = $this->checkTimestamps($request);
+      if (LGSL::requestHas($request, "h")) { $needed .= "h"; }
+      if ($needed) {
+        $this->queryLive($needed);
+        $db->saveServer($this);
       }
     }
-    public function lgsl_live_query($request = 'seph') {
-      $this->set_queried();
+    public function queryLive($request = 'seph') {
+      if ($request === "h") return;
+      $this->queried();
       $protocol = new Protocol($this, $request);
       $protocol->query();
 
       global $lgsl_config;
-      if ($lgsl_config['history'] and LGSL::requestHas($request, "h") and $this->get_status() != self::PENDING) {
+      if ($lgsl_config['history'] && LGSL::requestHas($request, "h") && !$this->isPending()) {
         $last = end($this->_history);
         if (!$last || time() - $last['t'] >= 60 * 15) { // RECORD IF 15 MINS IS PASSED
           $history_limit = $lgsl_config['history_hours'] * 3600;
@@ -677,9 +695,9 @@
           }
           $this->_history = array_values($this->_history);
           array_push($this->_history, [
-            "s" => $this->get_status() != self::OFFLINE,
+            "s" => $this->getStatus() != self::OFFLINE,
             "t" => time(),
-            "p" => $this->get_players_count('active')
+            "p" => $this->getPlayersCount()
           ]);
         }
       }
@@ -694,9 +712,13 @@
 			$this->_extra = array_merge($this->_extra, $data['e'] ?? []);
 			$this->_other = array_merge($this->_other, $data['o'] ?? []);
 			$this->_server = array_merge($this->_server, $data['s'] ?? []);
-			$this->_players = $data['p'] ?? [];
+      if ($this->isOnline()) {
+        $this->_players = array_merge($this->_players, $data['p'] ?? []);
+      } else {
+			  $this->_players = [];
+      }
     }    
-    public function from_array($data) {
+    public function fromArray($data) {
 			$this->_base = isset($data['b']) ? array_merge($this->_base, $data['b']) : $this->_base;
 			$this->_extra = isset($data['e']) ? $data['e'] : [];
 			$this->_other = isset($data['o']) ? $data['o'] : [];
@@ -704,7 +726,7 @@
 			$this->_players = isset($data['p']) ? $data['p'] : [];
 			$this->_history = isset($data['h']) ? $data['h'] : [];
     }    
-    public function to_array() {
+    public function toArray() {
       return [
         'b' => $this->_base,
         'e' => $this->_extra,
@@ -714,68 +736,68 @@
         'h' => $this->_history
       ];
     }
-    public function isvalid() {
+    public function isValid() {
       return (isset($this->_base['ip']) || isset($this->_base['id'])) && isset($this->_base['q_port']) && isset($this->_base['type']);
     }
 
-    public function get_id() {
+    public function getId() {
       return $this->_base['id'];
     }
-    public function get_ip($forceIp = false) {
+    public function getIp($forceIp = false) {
       if ($forceIp) return gethostbyname($this->_base['ip']);
       return $this->_base['ip'];
     }
-    public function get_c_port($intOnly = true) {
+    public function getConnectionPort($intOnly = true) {
       if ($this->_base['c_port'] > 1)
         return $this->_base['c_port'];
 			if ($intOnly) return 0;
       return LGSL::NONE;
     }
-    public function get_q_port($intOnly = true) {
+    public function getQueryPort($intOnly = true) {
       if ($this->_base['q_port'] > 1)
         return $this->_base['q_port'];
 			if ($intOnly) return 0;
       return LGSL::NONE;
     }
-    public function get_s_port() {
+    public function getSoftwarePort() {
       return $this->_base['s_port'];
     }
-    public function get_address() {
+    public function getAddress() {
       if ($this->_base['type'] === Protocol::DISCORD) {
-        return "https://discord.gg/{$this->get_ip()}";
+        return "https://discord.gg/{$this->getIp()}";
       }
       if (Protocol::lgslProtocolWithoutPort($this->_base['type'])) {
         return $this->_base['ip'];
       }
       return "{$this->_base['ip']}:{$this->_base['c_port']}";
     }
-    public function get_type() {
+    public function getType() {
       return $this->_base['type'];
     }
-    public function get_game() {
+    public function getGame() {
       return $this->_server['game'] ? $this->_server['game'] : $this->_base['type'];
     }
-    public function set_game($game) {
+    public function setGame($game) {
       return $this->_server['game'] = $game;
     }
-    public function get_mode() {
+    public function getMode() {
       return $this->_server['mode'] ? $this->_server['mode'] : 'none';
     }
-    public function get_map($formatted = false) {
+    public function getMap($formatted = false) {
 			if ($formatted) return $this->_server['map'] ? LGSL::normalizeString($this->_server['map']) : LGSL::NONE;
       return $this->_server['map'] ? $this->_server['map'] : LGSL::NONE;
     }
-    public function get_players() {
-      return $this->_players;
+    public function getPlayersArray() {
+      return $this->_players ?? [];
     }
-    public function get_history() {
-      return $this->_history;
+    public function getHistoryArray() {
+      return $this->_history ?? [];
     }
-    public function get_extras() {
-      return $this->_extra;
+    public function getExtrasArray() {
+      return $this->_extra ?? [];
     }
-    public function get_name($html = true) {
-      if ($this->get_pending()) {
+    public function getName($html = true) {
+      if ($this->isPending()) {
 				return LGSL::NONE;
       }
 			if ($html) {
@@ -783,52 +805,49 @@
 			}				
       return $this->_server['name'];
     }
-    public function set_name($name) {
+    public function setName($name) {
       $this->_server['name'] = $name;
     }
-    public function get_players_count($out = null) {
-      if ($this->get_pending() || $this->get_status() === self::OFFLINE) {
-        return $out ? 0 : LGSL::NONE;
+    public function getPlayersCount() {
+      if ($this->isPending() || $this->getStatus() === self::OFFLINE) {
+        return 0;
       }
-      if ($out === 'active') {
-        return (int) (isset($this->_server['players']) ? $this->_server['players'] : 0);
-      }
-      if ($out === 'max') {
-        return (int) (isset($this->_server['playersmax']) ? $this->_server['playersmax'] : 0);
-      }
-      if ($out === 'bots') {
-        return (int) (isset($this->_extra['bots']) ? $this->_extra['bots'] : 0);
-      }
-      if ($out === 'percent') {
-        return (int) ($this->_server['players'] == 0 || $this->_server['playersmax'] == 0 ? 0 : floor($this->_server['players']/$this->_server['playersmax']*100));
-      }
-      if (isset($this->_server['players']) and isset($this->_server['playersmax'])) {
-        if ($this->_server['playersmax'] > 999) {
-          return $this->_server['players'];
+      return (int) $this->_server['players'] ?? 0;
+    }
+    public function getPlayersMaxCount() {
+      return (int) ($this->_server['playersmax'] ?? 0);
+    }
+    public function getBotsCount() {
+      return (int) $this->_extra['bots'] ?? 0;
+    }
+    public function getPlayersPercent() {
+      return (int) ($this->_server['players'] == 0 || $this->_server['playersmax'] == 0 ? 0 : floor($this->_server['players']/$this->_server['playersmax']*100));
+    }
+    public function getPlayersCountFormatted() {
+      if ($this->getPlayersCount() && $this->getPlayersMaxCount()) {
+        if ($this->getPlayersCount() > 9999) {
+          return $this->getPlayersCount();
         } else {
-          return "{$this->_server['players']}/{$this->_server['playersmax']}";
+          return "{$this->getPlayersCount()}/{$this->getPlayersMaxCount()}";
         }
       }
       return LGSL::NONE;
     }
+		public function getPlayersNames() {
+			return array_reduce($this->getPlayersArray(), function($a, $c) {
+        $a[] = $c['name'];
+        return $a;
+      }, []);
+		}
     
-    public function set_queried() {
+    public function queried() {
       $this->_base['pending'] = 0;
     }
-    public function get_pending() {
+    public function isPending() {
       return $this->_base['pending'];
     }
-		public function get_player_names() {
-			if ($this->get_players_count('active') > 0) {
-				return array_reduce($this->get_players(), function($a, $c) {
-					$a[] = $c['name'];
-					return $a;
-				}, []);
-			}
-			else return [];
-		}
 
-    public function get_software_link() {
+    public function getConnectionLink() {
       $lgsl_software_link = [
         Protocol::ALTV          => "altv://connect/{IP}:{C_PORT}",
         Protocol::ARMA3         => "steam://connect/{IP}:{C_PORT}",
@@ -867,43 +886,43 @@
         Protocol::WOW           => "javascript:prompt('Put it into your realm list:', 'set realmlist {IP}')"];
     
         // SOFTWARE PORT IS THE QUERY PORT UNLESS SET
-        if (!$this->get_s_port()) {
-          $s_port = $this->get_q_port();
+        if (!$this->getSoftwarePort()) {
+          $s_port = $this->getQueryPort();
         } else {
-          $s_port = $this->get_s_port();
+          $s_port = $this->getSoftwarePort();
         }
 				
-				if (empty($lgsl_software_link[$this->get_type()])) {
+				if (empty($lgsl_software_link[$this->getType()])) {
 					$link = "javascript:prompt('IP:', '{IP}:{C_PORT}')";
 				} else {
-					$link = $lgsl_software_link[$this->get_type()];
+					$link = $lgsl_software_link[$this->getType()];
 				}
     
         // INSERT DATA INTO STATIC LINK - CONVERT SPECIAL CHARACTERS - RETURN
-        return htmlentities(str_replace(["{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}", "{GAME}"], [$this->get_ip(), $this->get_c_port(), $this->get_q_port(), $s_port, $this->get_game()], $link), ENT_QUOTES);
+        return htmlentities(str_replace(["{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}", "{GAME}"], [$this->getIp(), $this->getConnectionPort(), $this->getQueryPort(), $s_port, $this->getGame()], $link), ENT_QUOTES);
     }
-		public function add_url_path($path = '') {
+		public function addUrlPath($path = '') {
       global $lgsl_url_path;
 			return "$lgsl_url_path$path";
 		}
-		public function add_file_path($path = '') {
+		public function addFilePath($path = '') {
 			global $lgsl_file_path;
 			return "$lgsl_file_path$path";
 		}
-    public function map_password_image() {
-      if ($this->get_status() === self::PASSWORDED) return "{$this->add_url_path()}other/map_overlay_password.gif";
-      return "{$this->add_url_path()}other/overlay.gif";
+    public function mapPasswordImage() {
+      if ($this->getStatus() === self::PASSWORDED) return "{$this->addUrlPath()}other/map_overlay_password.gif";
+      return "{$this->addUrlPath()}other/overlay.gif";
     }
-    public function get_map_image($check_exists = true) {
+    public function getMapImage($check_exists = true) {
       global $lgsl_file_path, $lgsl_url_path;
 
-      $type = LGSL::normalizeString($this->get_type());
-      $game = LGSL::normalizeString($this->get_game());
-      $map  = LGSL::normalizeString($this->get_map());
+      $type = LGSL::normalizeString($this->getType());
+      $game = LGSL::normalizeString($this->getGame());
+      $map  = LGSL::normalizeString($this->getMap());
   
       if ($check_exists !== true) { return "{$lgsl_url_path}maps/{$type}/{$game}/{$map}.jpg"; }
   
-      $id = "_{$this->get_id()}";
+      $id = "_{$this->getId()}";
       if ($this->isOnline()) {
         $path_list = [
         "maps/{$type}/{$game}/{$map}.jpg",
@@ -929,13 +948,13 @@
   
       return "#LGSL_DEFAULT_IMAGES_MISSING#";
     }
-    public function text_type_game() {
+    public function getGameFormatted() {
       global $lgsl_config;
-      return "[ {$lgsl_config['text']['typ']}: {$this->get_type()} ] [ {$lgsl_config['text']['gme']}: {$this->get_game()} ]";
+      return "[ {$lgsl_config['text']['typ']}: {$this->getType()} ] [ {$lgsl_config['text']['gme']}: {$this->getGame()} ]";
     }
-    public function game_icon($path = '') {
-      $type = LGSL::normalizeString($this->get_type());
-      $game = LGSL::normalizeString($this->get_game());
+    public function getGameIcon($path = '') {
+      $type = LGSL::normalizeString($this->getType());
+      $game = LGSL::normalizeString($this->getGame());
 
       $path_list = [
       "icons/{$type}/{$game}.gif",
@@ -949,66 +968,59 @@
 
       return "{$path}other/icon_unknown.gif";
     }
-    public function icon_status($path = '') {
-      switch ($this->get_status()) {
+    public function getStatusIcon($path = '') {
+      switch ($this->getStatus()) {
         case self::PENDING: return "{$path}other/icon_unknown.gif";
         case self::OFFLINE: return "{$path}other/icon_no_response.gif";
         case self::PASSWORDED: return "{$path}other/icon_online_password.gif";
 				default: return "{$path}other/icon_online.gif";
       }
     }
-    public function location_text() {
+    public function getLocationFormatted() {
       global $lgsl_config;
       return "{$lgsl_config['text']['loc']} {$this->getLocation()}";
     }
     public function getLocation() {
       return $this->_other['location'] ?? "XX";
     }
-    private function _cache_time_index(string $c = 's') {
-      $cache = ['s' => 0, 'e' => 1, 'p' => 2];
-      return $cache[$c];
+    public function getTimestamp($type = 's') {
+			return $this->_server['cache_time']->get($type);
     }
-    public function set_timestamp($types, $time) {
-      if (!isset($this->_server) || !isset($this->_server['cache_time'])) {
-        $this->_server['cache_time'] = [0, 0, 0];
+    public function getTimestampFormatted($type = 's') {
+			$time = $this->getTimestamp($type);
+      if ($time > 0) {
+        global $lgsl_config;
+        return Date($lgsl_config['text']['tzn'], $time);
       }
-      $types = str_split($types, 1);
-      foreach ($types as $type) {
-        $this->_server['cache_time'][$this->_cache_time_index($type)] = (int) $time;
-      }
+      return 'not queried';
     }
-    public function get_timestamp($type = 's', $raw = false) {
-			$time = 0;
-      if (isset($this->_server['cache_time'])) {
-				if (isset($this->_server['cache_time'][$this->_cache_time_index($type)])) {
-					$time = (int) $this->_server['cache_time'][$this->_cache_time_index($type)];
-				}
-        if ($time > 0) {
-					global $lgsl_config;
-					return $raw ? $time : Date($lgsl_config['text']['tzn'], $time);
-        }
-      }
-      return $raw ? $time : 'not queried';
+    public function setTimestamp($type, $time) {
+      $this->_server['cache_time']->set($type, $time);
     }
-    public function set_timestamps($cache_time) {
-      $this->_server['cache_time'] = $cache_time;
+    public function getTimestamps() {
+      return $this->_server['cache_time']->toString();
     }
-    public function get_timestamps() {
-      return isset($this->_server['cache_time']) ? $this->_server['cache_time'] : [];
+    public function checkTimestamps($request = "") {
+      global $lgsl_config;
+      $needed = "";
+      if (LGSL::requestHas($request, "s") && time() > ($this->getTimestamp(Timestamp::SERVER) + $lgsl_config['cache_time'])) { $needed .= "s"; }
+      if (LGSL::requestHas($request, "e") && time() > ($this->getTimestamp(Timestamp::EXTRAS) + $lgsl_config['cache_time'])) { $needed .= "e"; }
+      if (LGSL::requestHas($request, "p") && time() > ($this->getTimestamp(Timestamp::PLAYERS) + $lgsl_config['cache_time'])) { $needed .= "p"; }
+      return $needed;
     }
-    public function get_zone() {
+    public function getZone() {
       return isset($this->_other['zone']) ? $this->_other['zone'] : "";
     }
-    public function set_extra_value($name, $value) {
+    public function setExtraValue($name, $value) {
       $this->_extra[$name] = $value;
     }
     public function getE($name) {
       return $this->_extra[$name] ?? LGSL::NONE;
     }
-    public function set_status($status) {
+    public function setStatus($status) {
       $this->_base['status'] = (int) $status;
     }
-    public function get_status() {
+    public function getStatus() {
       if ($this->_base['pending']) {
         return self::PENDING;
       }
@@ -1021,46 +1033,46 @@
       return self::OFFLINE;
     }
 		public function isOnline() {
-			$s = $this->get_status();
+			$s = $this->getStatus();
 			return $s === self::PASSWORDED || $s === self::ONLINE;
 		}
     public function trimError() {
       unset($this->_extra['_error']);
     }
 		public function queryLocation() {
-      return LGSL::locationCode($this->get_ip());
+      return LGSL::locationCode($this->getIp());
 		}
-		public function sort_player_fields() {
-			//------------------------------------------------------------------------------------------------------------+
-			// THIS CONTROLS HOW THE PLAYER FIELDS ARE DISPLAYED
-
+		public function sortPlayerFields() {
 				$fields_show  = ["name", "score", "kills", "deaths", "team", "ping", "bot", "time"]; // ORDERED FIRST
 				$fields_hide  = ["teamindex", "pid", "pbguid"]; // REMOVED
 				$fields_other = TRUE; // FALSE TO ONLY SHOW FIELDS IN $fields_show
-
 				$fields_list = [];
 
-				if ($this->get_players_count('active') == 0) { return $fields_list; }
-
-				foreach ($this->get_players() as $player)
-				{
-					foreach ($player as $field => $value)
-					{
+				if ($this->getPlayersCount() == 0) { return $fields_list; }
+				foreach ($this->getPlayersArray() as $player)	{
+					foreach ($player as $field => $value)	{
 						if ($value === "") { continue; }
 						if (in_array($field, $fields_list)) { continue; }
 						if (in_array($field, $fields_hide)) { continue; }
 						$fields_list[] = $field;
 					}
 				}
-
 				$fields_show = array_intersect($fields_show, $fields_list);
-
 				if ($fields_other == FALSE) { return $fields_show; }
-
 				$fields_list = array_diff($fields_list, $fields_show);
-
 				return array_merge($fields_show, $fields_list);
 		}
+    // temporary compability
+    function lgsl_live_query($a) {return $this->queryLive($a);}
+    function get_status() {return $this->getStatus();}
+    function get_name() {return $this->getName();}
+    function get_ip() {return $this->getIp();}
+    function get_c_port() {return $this->getConnectionPort();}
+    function get_game() {return $this->getGame();}
+    function get_map() {return $this->getMap();}
+    function get_players_count($a) {return $this->getPlayersCount();}
+    function get_software_link() {return $this->getConnectionLink();}
+    function to_array() {return $this->toArray();}
   }
   class Image {
     static function makeImage($src, $width, $height) {
@@ -1096,87 +1108,35 @@
       exit();
     }
   }
-
-//------------------------------------------------------------------------------------------------------------+
-
-  function lgsl_file_path()
-  {
-    // GET THE LGSL_CLASS.PHP PATH
-
-    $lgsl_path = __FILE__;
-
-    // SHORTEN TO JUST THE FOLDERS AND ADD TRAILING SLASH
-
-    $lgsl_path = dirname($lgsl_path)."/";
-
-    // CONVERT WINDOWS BACKSLASHES TO FORWARDSLASHES
-
-    $lgsl_path = str_replace("\\", "/", $lgsl_path);
-
-    return $lgsl_path;
+  class Timestamp {
+    const SERVER = "s";
+    const PLAYERS = "p";
+    const EXTRAS = "e";
+    const INDEXES = [
+      Timestamp::SERVER => 0,
+      Timestamp::PLAYERS => 1,
+      Timestamp::EXTRAS => 2
+    ];
+    private $timestamps = [];
+    function __construct($timestamps = "0_0_0") {
+      $this->parse($timestamps);
+    }
+    function get($code) {
+      return (int) $this->timestamps[Timestamp::INDEXES[$code]];
+    }
+    function parse($timestamps) {
+      $this->timestamps = explode("_", $timestamps);
+    }
+    function set($types, $timestamp) {
+      $types = str_split($types, 1);
+      foreach ($types as $type) {
+        $this->timestamps[Timestamp::INDEXES[$type]] = $timestamp;
+      }
+    }
+    function toString() {
+      return implode("_", $this->timestamps);
+    }
   }
-
-//------------------------------------------------------------------------------------------------------------+
-
-  function lgsl_url_path()
-  {
-    // CHECK IF PATH HAS BEEN SET IN CONFIG
-
-    global $lgsl_config;
-
-    if ($lgsl_config['url_path'])
-    {
-      return $lgsl_config['url_path'];
-    }
-
-    // USE FULL DOMAIN PATH TO AVOID ALIAS PROBLEMS
-
-    $host_path  = (!isset($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) != "on") ? "http://" : "https://";
-    $host_path .= $_SERVER['HTTP_HOST'] ?? "";
-
-    // GET FULL PATHS ( EXTRA CODE FOR WINDOWS AND IIS - NO DOCUMENT_ROOT - BACKSLASHES - DOUBLESLASHES - ETC )
-
-    if ($_SERVER['DOCUMENT_ROOT'])
-    {
-      $base_path = LGSL::realpath($_SERVER['DOCUMENT_ROOT']);
-      $base_path = str_replace("\\", "/", $base_path);
-      $base_path = str_replace("//", "/", $base_path);
-    }
-    else
-    {
-      $file_path = $_SERVER['SCRIPT_NAME'];
-      $file_path = str_replace("\\", "/", $file_path);
-      $file_path = str_replace("//", "/", $file_path);
-
-      $base_path = $_SERVER['PATH_TRANSLATED'];
-      $base_path = str_replace("\\", "/", $base_path);
-      $base_path = str_replace("//", "/", $base_path);
-      $base_path = substr($base_path, 0, -strlen($file_path));
-    }
-
-    $lgsl_path = dirname(LGSL::realpath(__FILE__));
-    $lgsl_path = str_replace("\\", "/", $lgsl_path);
-
-    // REMOVE ANY TRAILING SLASHES
-
-    if (substr($base_path, -1) == "/") { $base_path = substr($base_path, 0, -1); }
-    if (substr($lgsl_path, -1) == "/") { $lgsl_path = substr($lgsl_path, 0, -1); }
-
-    // USE THE DIFFERENCE BETWEEN PATHS
-
-    if (substr($lgsl_path, 0, strlen($base_path)) == $base_path)
-    {
-      $url_path = substr($lgsl_path, strlen($base_path));
-
-      return "$host_path$url_path/";
-    }
-
-    return "/#LGSL_PATH_PROBLEM#{$base_path}#{$lgsl_path}#/";
-  }
-
-//------------------------------------------------------------------------------------------------------------+
-//------------------------------------------------------------------------------------------------------------+
-
   } // END OF DOUBLE LOAD PROTECTION
 
 //------------------------------------------------------------------------------------------------------------+
@@ -1184,14 +1144,14 @@
 
   global $lgsl_file_path, $lgsl_url_path, $lgsl_config;
 
-  $lgsl_file_path = lgsl_file_path();
+  $lgsl_file_path = LGSL::filePath();
 
   require "{$lgsl_file_path}lgsl_config.php";
   require "{$lgsl_file_path}lgsl_protocol.php";
 
   $auth   = md5(($_SERVER['REMOTE_ADDR'] ?? "").md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
   $cookie = $_COOKIE['lgsl_admin_auth'] ?? "";
-  $lgsl_url_path = lgsl_url_path();
+  $lgsl_url_path = LGSL::urlPath();
 
   if (isset($_GET['lgsl_debug']) and $auth === $cookie)
   {

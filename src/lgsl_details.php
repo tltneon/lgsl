@@ -25,13 +25,13 @@
   $lgsl_server_port = $_GET["port"] ?? "";
 
   $server = new Server(["ip" => $lgsl_server_ip, "c_port" => $lgsl_server_port, "id" => $lgsl_server_id]);
-  $server->lgsl_cached_query();
+  $server->queryCached();
 
-  if ($server->isvalid()) {
-    $title .= " | {$server->get_name()}";
-    $fields = $server->sort_player_fields();
-    //$server = lgsl_sort_players($server->get_players());
-    //$server = lgsl_sort_extras($server->get_extras());
+  if ($server->isValid()) {
+    $title .= " | {$server->getName()}";
+    $fields = $server->sortPlayerFields();
+    //$server = lgsl_sort_players($server->getPlayersArray());
+    //$server = lgsl_sort_extras($server->getExtrasArray());
 
     $output .= "
     <div style='margin:auto; text-align:center'>
@@ -41,55 +41,55 @@
   // SHOW THE STANDARD INFO
 
     $output .= "
-      <div id='servername_{$server->get_status()}'> {$server->get_name()} </div>
+      <div id='servername_{$server->getStatus()}'> {$server->getName()} </div>
       <div class='details_info'>
         <div class='details_info_column'>
-          <a id='gamelink' href='{$server->get_software_link()}'>{$lang->get('slk')}</a>
+          <a id='gamelink' href='{$server->getConnectionLink()}'>{$lang->get('slk')}</a>
           <div class='details_info_row'>
             <div class='details_info_scolumn'>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('sts')}:</div><div class='details_info_ceil'>{$lang->get($server->get_status())}</div></div>
+                <div class='details_info_ceil'>{$lang->get('sts')}:</div><div class='details_info_ceil'>{$lang->get($server->getStatus())}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('adr')}:</div><div class='details_info_ceil'>{$server->get_ip()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('adr')}:</div><div class='details_info_ceil'>{$server->getIp()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('cpt')}:</div><div class='details_info_ceil'>{$server->get_c_port()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('cpt')}:</div><div class='details_info_ceil'>{$server->getConnectionPort()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('qpt')}:</div><div class='details_info_ceil'>{$server->get_q_port()}</div></div></div>
+                <div class='details_info_ceil'>{$lang->get('qpt')}:</div><div class='details_info_ceil'>{$server->getQueryPort()}</div></div></div>
             <div class='details_info_scolumn'>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('typ')}:</div><div class='details_info_ceil'>{$server->get_type()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('typ')}:</div><div class='details_info_ceil'>{$server->getType()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('gme')}:</div><div class='details_info_ceil'>{$server->get_game()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('gme')}:</div><div class='details_info_ceil'>{$server->getGame()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('map')}:</div><div class='details_info_ceil'>{$server->get_map()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('map')}:</div><div class='details_info_ceil'>{$server->getMap()}</div></div>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('plr')}:</div><div class='details_info_ceil'>{$server->get_players_count()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('plr')}:</div><div class='details_info_ceil'>{$server->getPlayersCountFormatted()}</div></div>
             </div>
           </div>
           <div class='details_info_row'>
             <div class='details_info_scolumn'>
               <div class='details_info_srow'>
-                <div class='details_info_ceil'>{$lang->get('mod')}:</div><div class='details_info_ceil'>{$server->get_mode()}</div></div>
+                <div class='details_info_ceil'>{$lang->get('mod')}:</div><div class='details_info_ceil'>{$server->getMode()}</div></div>
                 <div class='details_info_srow'>
-                  <div class='details_info_ceil'>{$lang->get('lst')}:</div><div class='details_info_ceil'>{$server->get_timestamp()}</div></div></div>
+                  <div class='details_info_ceil'>{$lang->get('lst')}:</div><div class='details_info_ceil'>{$server->getTimestampFormatted(Timestamp::SERVER)}</div></div></div>
              
           </div>
         </div>
-        <div class='details_info_column zone{$server->get_zone()}' style='background-image: url({$server->get_map_image()});'>
-          <i class='details_password_image zone{$server->get_zone()}' style='background-image: url({$server->map_password_image()});' title='{$lang->get('map')}: {$server->get_map()}'></i>
-					<i class='details_location_image flag f{$server->getLocation()}' title='{$server->location_text()}'></i>
-          <i class='details_game_image' style='background-image: url({$server->add_url_path($server->game_icon())});' title='{$server->text_type_game()}'></i>
+        <div class='details_info_column zone{$server->getZone()}' style='background-image: url({$server->getMapImage()});'>
+          <i class='details_password_image zone{$server->getZone()}' style='background-image: url({$server->mapPasswordImage()});' title='{$lang->get('map')}: {$server->getMap()}'></i>
+					<i class='details_location_image flag f{$server->getLocation()}' title='{$server->getLocationFormatted()}'></i>
+          <i class='details_game_image' style='background-image: url({$server->addUrlPath($server->getGameIcon())});' title='{$server->getGameFormatted()}'></i>
         </div>
       </div>
       <div class='spacer'></div>";
 
-    $g = "ip={$server->get_ip()}&port={$server->get_c_port()}";
+    $g = "ip={$server->getIp()}&port={$server->getConnectionPort()}";
     if ($lgsl_config['history']) {
-      $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server->get_name()}' style='border-radius: 6px;' id='chart' /></div>";
+      $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server->getName()}' style='border-radius: 6px;' id='chart' /></div>";
     }
 
-		$p = str_replace('src/', '', lgsl_url_path()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
-		$framespace = max(0, min(6, $server->get_players_count('active'))) * 8.8;
+		$p = str_replace('src/', '', LGSL::urlPath()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
+		$framespace = max(0, min(6, $server->getPlayersCount('active'))) * 8.8;
 		$output .= "
         <details>
           <summary style='margin-bottom: 12px;'>
@@ -101,7 +101,7 @@
 						if (extension_loaded('gd')) {
               for ($i = 1; $i < 4; $i++) {
                 $output .= "
-                <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t={$i}' alt='{$server->get_name()}'/></div>
+                <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t={$i}' alt='{$server->getName()}'/></div>
                 <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t={$i}[/img][/url]</textarea><br /><br />";
               }
 						} else {
@@ -110,7 +110,7 @@
 					}
 					
 					$output .= "
-						<iframe src='src/lgsl_zone.php?{$g}' alt='{$server->get_name()}' style='border: 0; display: block; background: white;width: 200px;height: calc(275px + {$framespace}px);margin: auto;'></iframe><br />
+						<iframe src='src/lgsl_zone.php?{$g}' alt='{$server->getName()}' style='border: 0; display: block; background: white;width: 200px;height: calc(275px + {$framespace}px);margin: auto;'></iframe><br />
             <textarea onClick='this.select();'><iframe src='{$p}src/lgsl_zone.php?{$g}'></iframe></textarea>
           </div>
         </details>
@@ -139,10 +139,10 @@
     $output .= "
     <div id='details_playerlist'>";
 
-    if ($server->get_players_count('active') == 0 || count($server->get_players()) == 0) {
+    if ($server->getPlayersCount('active') == 0 || count($server->getPlayersArray()) == 0) {
       $output .= "<div class='noinfo'>{$lang->get('npi')}</div>";
     } else {
-      $players = $server->get_players();
+      $players = $server->getPlayersArray();
       $output .= "
       <table class='players_table'>
         <thead>
@@ -183,10 +183,10 @@
   //------------------------------------------------------------------------------------------------------------+
   // SHOW THE SETTINGS
 
-    if (count($server->get_extras()) == 0) {
+    if (count($server->getExtrasArray()) == 0) {
       $output .= "<div class='noinfo'>{$lang->get('nei')} </div>";
     } else {
-      $extras = $server->get_extras();
+      $extras = $server->getExtrasArray();
       $hide_options = count($extras) > 40;
       if ($hide_options) {
          $output .= "
@@ -251,12 +251,12 @@
 			\"@type\": \"Action\",
 			\"@id\": \"Action\",
 			\"name\": \"Connect to server\",
-			\"url\": \"{$server->get_software_link()}\"
+			\"url\": \"{$server->getConnectionLink()}\"
 		},
-		\"description\": \"{$server->get_name()} | game: {$server->get_game()} | ip: {$server->get_ip()}:{$server->get_c_port()} | status: {$lang->get($server->get_status())} | players: {$server->get_players_count()}\",
+		\"description\": \"{$server->getName()} | game: {$server->getGame()} | ip: {$server->getIp()}:{$server->getConnectionPort()} | status: {$lang->get($server->getStatus())} | players: {$server->getPlayersCount()}\",
 		\"identifier\": \"{$lgsl_server_id}\",
-		\"name\": \"{$server->get_name()}\",
-		\"playersOnline\": \"{$server->get_players_count("active")}\",
+		\"name\": \"{$server->getName()}\",
+		\"playersOnline\": \"{$server->getPlayersCount("active")}\",
 		\"url\": \"$_SERVER[HTTP_REFERER]\"
 	}
 	</script>

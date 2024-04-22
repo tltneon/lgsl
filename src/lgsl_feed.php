@@ -22,17 +22,17 @@
 // VALIDATE REQUEST
 
   if (!$type && !$ip && $lgsl_config['api']) {
-    $servers = Database::get_servers_group(['request' => $request]);
+    $servers = Database::getServersGroup(['request' => $request]);
     $result = [];
     foreach ($servers as $server) {
       $result[] = [
-        'name' => $server->get_name(),
-        'ip' => $server->get_ip(),
-        'port' => $server->get_c_port(),
-        'game' => $server->get_game(),
-        'map' => $server->get_map(),
-        'players' => $server->get_players_count('active'),
-        'maxplayers' => $server->get_players_count('max'),
+        'name' => $server->getName(),
+        'ip' => $server->getIp(),
+        'port' => $server->getConnectionPort(),
+        'game' => $server->getGame(),
+        'map' => $server->getMap(),
+        'players' => $server->getPlayersCount(),
+        'maxplayers' => $server->getPlayersMaxCount(),
         'online' => $server->isOnline()
       ];
     }
@@ -80,13 +80,13 @@
 // QUERY SERVER
 
   $server = new Server(["type" => $type, "ip" => $ip, "c_port" => $c_port, "q_port" => $q_port, "s_port" => $s_port]);
-  $server->lgsl_cached_query($request);
+  $server->queryCached($request);
 
 //------------------------------------------------------------------------------------------------------------+
 // ADD THE FEED PROVIDER
 
-  $server->set_extra_value('_feed_', "http://{$_SERVER['HTTP_HOST']}");
-  $server->set_extra_value('_lgsl_', LGSL::VERSION);
+  $server->setExtraValue('_feed_', "http://{$_SERVER['HTTP_HOST']}");
+  $server->setExtraValue('_lgsl_', LGSL::VERSION);
 
 //------------------------------------------------------------------------------------------------------------+
 // FEED USAGE LOGGING - 'logs' FOLDER MUST BE MANUALLY CREATED AND SET AS WRITABLE
@@ -111,7 +111,7 @@
 //------------------------------------------------------------------------------------------------------------+
 // SERIALIZED OUTPUT
 
-  $server = $server->to_array();
+  $server = $server->toArray();
   if (!$xml) {
     if (($format == 3 || $format == 4) && function_exists("json_encode")) {
       if ($format == 4 && function_exists("gzcompress")) { exit("_F4_".base64_encode(gzcompress(json_encode($server)))."_F4_"); }

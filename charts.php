@@ -2,7 +2,7 @@
   namespace tltneon\LGSL;
 
   function findMax(&$server) {
-    $history = $server->get_history();
+    $history = $server->getHistoryArray();
     $max = 1;
     if (count($history) > 0) {
       foreach ($history as $item) {
@@ -31,11 +31,11 @@
   $ip = $_GET['ip'] ?? null;
   $port = (int) ($_GET['port'] ?? null);
   $server = new Server(["ip" => $ip, "c_port" => $port, "id" => $s]);
-  $server->lgsl_cached_query("cs");
+  $server->queryCached("cs");
   if (!$server) {
     Image::makeImageError($w, $h, $lgsl_config['text']['mid']);
   }
-  $max = $server->get_players_count('max') > 0 ? $server->get_players_count('max') : findMax($server);
+  $max = $server->getPlayersMaxCount() > 0 ? $server->getPlayersMaxCount() : findMax($server);
   $x0 = 30;
   $y0 = 20;
   global $lgsl_config;
@@ -44,7 +44,7 @@
   $yStep = (int) ($max > 32 ? 9 : 100 / $max) + 1;
 
   $s = $x = $y = [];
-  $history = $server->get_history();
+  $history = $server->getHistoryArray();
   $avg = 0; $avgc = 0;
   foreach ($history as $key) {
     if (time() - $key['t'] > $period * 1000) {
@@ -113,12 +113,12 @@
 		}
 	}
 
-  $game_id = Image::makeImage($server->game_icon('src/'), 16, 16); // create game icon
+  $game_id = Image::makeImage($server->getGameIcon('src/'), 16, 16); // create game icon
   imagecopy($im, $game_id, 7, 2, 0, 0, 16, 16);             // place game icon
 
   $font = dirname(__FILE__) . '/src/other/cousine.ttf';
-	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim($server->get_name(false)));
-	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $server->get_address()));
+	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim($server->getName(false)));
+	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $server->getAddress()));
 	imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
   imagettftext($im, 6, 0, $w - 110, $h-3, $black, $font, "Shows last {$lgsl_config['history_hours']} hours");
 
