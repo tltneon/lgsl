@@ -81,7 +81,7 @@
     $str = Date("H:i", time() - $period + (int) ($i * round($xStep / $scaleX, 1)));
     imagestring($im, 1, (($x0 + $xStep * $i) - 6), $maxY + 2, $str, $black);
   }
-  imagestring($im, 1, $x0 - 6, $maxY + 2, $str, $black);
+  imagestring($im, 1, $x0 - 6, $maxY + 2, Date("H:i", time() - $period), $black);
 
   if (count($history) > 0) {
     $ySteps = ($maxY-$y0) / $yStep - 1;
