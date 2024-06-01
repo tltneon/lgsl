@@ -2248,12 +2248,15 @@
       ];
       if ($ver) { $this->fetch(); }
       $buffer = $this->fetch("{$param[$ver][0]}{$this->_server->get_c_port()}\n"); // select virtualserver
-      if (!$buffer) return $this::WITH_ERROR;		
+      if (!$buffer) return $this::WITH_ERROR;
       if (strtoupper($buffer->get(-4, -2)) != 'OK') { return $this::WITH_ERROR; }
       
       $getPackets = function($message) {
         $buffer = $this->fetch($message);
-        if (!$buffer || $buffer->get(0, 5) === 'error') { return $this::WITH_ERROR; }
+        if (!$buffer || $buffer->get(0, 5) === 'error') {
+          $this->_data['e']['error'] = $buffer->getAll();
+          return $this::WITH_ERROR;
+        }
         while (strtoupper($buffer->get(-4, -2)) != 'OK') {
           $part = $this->read();
           if ($part && $part->get(0, 5) != 'error') { $buffer->add($part); } else { break; }
@@ -2262,6 +2265,7 @@
       };
 
       $buffer = $getPackets("{$param[$ver][1]}\n"); // request serverinfo
+      if ($buffer === $this::WITH_ERROR) { return $this::WITH_ERROR; }
       while ($val = $buffer->cutString(7 + 7 * $ver, $param[$ver][2])) {
         $key = Helper::lgslCutString($val, 0, '='); $items[$key] = $val;
       }
