@@ -60,7 +60,7 @@
   $lgsl_config['text']['spe'] = "旁观";
   $lgsl_config['text']['pag'] = "页";
   $lgsl_config['text']['bak'] = "返回服务器列表";
-  $lgsl_config['text']['mpg'] = "首页";
+  $lgsl_config['text']['mpg'] = "返回首页";
   /* admin section */
   $lgsl_config['text']['tzn'] = "m/d/Y h:i:sA";
   $lgsl_config['text']['umn'] = "用户名";
@@ -83,7 +83,8 @@
   $lgsl_config['text']['crl'] = "当fsockopen被禁用作为备用方式";
   $lgsl_config['text']['mbs'] = "用于正确显示UTF-8编码的服务器和玩家名称";
   $lgsl_config['text']['bz2'] = "用于显示超过一定大小的源服务器设置";
-  $lgsl_config['text']['gd2'] = "Mod图像所需";
+  $lgsl_config['text']['gd2'] = "Mod图像所依赖";
+  $lgsl_config['text']['frt'] = "报表所依赖";
   $lgsl_config['text']['zli'] = "America's Army 3 所需";
 
 //------------------------------------------------------------------------------------------------------------+
