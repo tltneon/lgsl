@@ -872,7 +872,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"mysld": "连接 <span style='color: red;'>失败</span>: mysqli扩展未激活。",
 				"table": "LGSL <span style='color: red;'>数据表未创建</span>: 数据库名称有误或数据表已被创建。",
 				"cretd": "数据表 <span style='color: green;'>成功</span> 创建! 请进入第2步。",
-				"check": "Check requirements",
+				"check": "检查依赖",
 			}
 		};
 		return t[locale][key];
