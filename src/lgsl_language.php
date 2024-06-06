@@ -17,8 +17,8 @@
         private string $lang;
         private array $strings;
         function __construct(string $lang = null) {
+            global $lgsl_config;
             if (!$lang) {
-                global $lgsl_config;
                 if (isset($lgsl_config['language'])) {
                     $lang = $lgsl_config['language'];
                 } else {

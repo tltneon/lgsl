@@ -11,7 +11,7 @@
 
   require "lgsl_class.php";
   require "lgsl_language.php";
-  $lang = new Lang($_COOKIE['lgsl_lang']);
+  $lang = new Lang($_COOKIE['lgsl_lang'] ?? Lang::EN);
   global $output, $server, $title;
 
 //------------------------------------------------------------------------------------------------------------+
