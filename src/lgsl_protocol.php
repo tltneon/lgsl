@@ -2222,12 +2222,16 @@
     }
   }
   class Query33 extends Query { // TeamSpeak 1 / 3 / TeaSpeak
+    private $error = "";
     public function read($length = 4096) {
       return $this->_fp->read($length);
     }
     public function fetch($packet = "", $length = 4096) {
       $this->_fp->write($packet);
       return $this->read($length);
+    }
+    public function addError($msg) {
+      $this->error .= $msg . "\n";
     }
     public function process() {
       $buffer = $this->fetch();
@@ -2248,13 +2252,18 @@
       ];
       if ($ver) { $this->fetch(); }
       $buffer = $this->fetch("{$param[$ver][0]}{$this->_server->get_c_port()}\n"); // select virtualserver
-      if (!$buffer) return $this::WITH_ERROR;
-      if (strtoupper($buffer->get(-4, -2)) != 'OK') { return $this::WITH_ERROR; }
+      if (!$buffer) {
+        return $this::WITH_ERROR;
+      }
+      if (strtoupper($buffer->get(-4, -2)) != 'OK') { 
+        $this->_data['e']['error'] = "No server with port {$this->_server->get_c_port()}";
+        return $this::WITH_ERROR;
+      }
       
       $getPackets = function($message) {
         $buffer = $this->fetch($message);
         if (!$buffer || $buffer->get(0, 5) === 'error') {
-          $this->_data['e']['error'] = $buffer->getAll();
+          $this->addError($buffer->getAll());
           return $this::WITH_ERROR;
         }
         while (strtoupper($buffer->get(-4, -2)) != 'OK') {
@@ -2265,74 +2274,87 @@
       };
 
       $buffer = $getPackets("{$param[$ver][1]}\n"); // request serverinfo
-      if ($buffer === $this::WITH_ERROR) { return $this::WITH_ERROR; }
+      if ($buffer === $this::WITH_ERROR) {
+        $this->addError("No privilleges to retrieve server info");
+      } else {
       while ($val = $buffer->cutString(7 + 7 * $ver, $param[$ver][2])) {
         $key = Helper::lgslCutString($val, 0, '='); $items[$key] = $val;
       }
-      if (!isset($items['name'])) return $this::WITH_ERROR;
-      $this->_data['s']['name']         = $ver ? Helper::lgslUnescape($items['name']) : $items['name'];
-      $this->_data['s']['players']      = (int) ($items[$ver ? 'clientsonline' : 'currentusers']);
-      $this->_data['s']['playersmax']   = (int) ($items[$ver ? 'maxclients' : 'maxusers']);
-      $this->_data['s']['password']     = (int) ($items[$ver ? 'flag_password' : 'password']);
-      $this->_data['e']['platform']     = $items['platform'];
-      $this->_data['e']['motd']         = Helper::lgslParseColor($ver ? Helper::lgslUnescape($items['welcomemessage']) : $items['welcomemessage'], 'bbcode');
-      $this->_data['e']['uptime']       = Helper::lgslTime($items['uptime']);
-      $this->_data['e']['banner']       = Helper::lgslUnescape($items['hostbanner_url']);
-      $this->_data['e']['channelscount']= $items[$ver ? 'channelsonline' : 'currentchannels'];
-      if ($ver) { $this->_data['e']['version'] = Helper::lgslUnescape($items['version']); }
+        if (!isset($items['name'])) return $this::WITH_ERROR;
+        $this->_data['s']['name']         = $ver ? Helper::lgslUnescape($items['name']) : $items['name'];
+        $this->_data['s']['players']      = (int) ($items[$ver ? 'clientsonline' : 'currentusers']);
+        $this->_data['s']['playersmax']   = (int) ($items[$ver ? 'maxclients' : 'maxusers']);
+        $this->_data['s']['password']     = (int) ($items[$ver ? 'flag_password' : 'password']);
+        $this->_data['e']['platform']     = $items['platform'];
+        $this->_data['e']['motd']         = Helper::lgslParseColor($ver ? Helper::lgslUnescape($items['welcomemessage']) : $items['welcomemessage'], 'bbcode');
+        $this->_data['e']['uptime']       = Helper::lgslTime($items['uptime']);
+        $this->_data['e']['banner']       = Helper::lgslUnescape($items['hostbanner_url']);
+        $this->_data['e']['channelscount']= $items[$ver ? 'channelsonline' : 'currentchannels'];
+        if ($ver) { $this->_data['e']['version'] = Helper::lgslUnescape($items['version']); }
+      }
 
-      if ($this->need('p') && $this->_data['s']['players'] > 0) {
+      if ($this->need('p') && ($this->_data['s']['players'] ?? 0) > 0) {
         $buffer = $getPackets("{$param[$ver][3]}\n"); // request playerlist
 
-        $i = 0;
-        if ($ver) {
-          while ($items = $buffer->cutString(0, '|')) {
-            Helper::lgslCutString($items, 0, 'e='); $name = Helper::lgslCutString($items, 0, ' ');
-            if (substr($name, 0, 15) === 'Unknown\sfrom\s') { continue; }
-            $this->_data['p'][$i]['name'] = Helper::lgslUnescape($name); Helper::lgslCutString($items, 0, 'ry');
-            $this->_data['p'][$i]['country'] = substr($items, 0, 1) === '=' ? substr($items, 1, 2) : ''; $i++;
-          }
+        if ($buffer === $this::WITH_ERROR) {
+          $this->addError("No privilleges to retrieve player list");
         } else {
-          $buffer->skip(89, 4);
-          while ($items = $buffer->cutString(0, "\r\n")) {
-            $items = explode("\t", $items);
-            $this->_data['p'][$i]['name'] = substr($items[14], 1, -1);
-            $this->_data['p'][$i]['ping'] = $items[7];
-            $this->_data['p'][$i]['time'] = Helper::lgslTime($items[8]); $i++;
+          $i = 0;
+          if ($ver) {
+            while ($items = $buffer->cutString(0, '|')) {
+              Helper::lgslCutString($items, 0, 'e='); $name = Helper::lgslCutString($items, 0, ' ');
+              if (substr($name, 0, 15) === 'Unknown\sfrom\s') { continue; }
+              $this->_data['p'][$i]['name'] = Helper::lgslUnescape($name); Helper::lgslCutString($items, 0, 'ry');
+              $this->_data['p'][$i]['country'] = substr($items, 0, 1) === '=' ? substr($items, 1, 2) : ''; $i++;
+            }
+          } else {
+            $buffer->skip(89, 4);
+            while ($items = $buffer->cutString(0, "\r\n")) {
+              $items = explode("\t", $items);
+              $this->_data['p'][$i]['name'] = substr($items[14], 1, -1);
+              $this->_data['p'][$i]['ping'] = $items[7];
+              $this->_data['p'][$i]['time'] = Helper::lgslTime($items[8]); $i++;
+            }
           }
         }
       }
 
       if ($this->need('e') && $ver) {
         $buffer = $getPackets("{$param[$ver][4]}\n"); // request channellist
-        $lvl = [];
-        $channels = "<style>.gray{color:gray;}</style><div style='text-align: left !important;'>";
-        while ($items = $buffer->cutString(0, '|')) {
-          $cid = str_pad(Helper::lgslCutString($items, 4, ' '), 5, '0', STR_PAD_LEFT);
-          $pid = str_pad(Helper::lgslCutString($items, 4, ' '), 5, '0', STR_PAD_LEFT);
-          Helper::lgslCutString($items, 0, 'e=');
-          $name = Helper::lgslCutString($items, 0, ' ');
-          $chars = "";
-          if ((int) $pid == 0) {
-            $lvl = [$cid];
-          } else {
-            $i = count($lvl)-1;
-            while ($i > -1) {
-              if ($lvl[$i] == $pid) {
-                $lvl = array_slice($lvl, 0, $i+1);
-                $lvl[] = $cid;
-                $chars = str_repeat("|--", $i+1);
-                break;
-              }
-              $i--;
-            }
-            if ($i == -1)
+        if ($buffer === $this::WITH_ERROR) {
+          $this->addError("No privilleges to retrieve channel list");
+        } else {
+          $lvl = [];
+          $channels = "<style>.gray{color:gray;}</style><div style='text-align: left !important;'>";
+          while ($items = $buffer->cutString(0, '|')) {
+            $cid = str_pad(Helper::lgslCutString($items, 4, ' '), 5, '0', STR_PAD_LEFT);
+            $pid = str_pad(Helper::lgslCutString($items, 4, ' '), 5, '0', STR_PAD_LEFT);
+            Helper::lgslCutString($items, 0, 'e=');
+            $name = Helper::lgslCutString($items, 0, ' ');
+            $chars = "";
+            if ((int) $pid == 0) {
               $lvl = [$cid];
+            } else {
+              $i = count($lvl)-1;
+              while ($i > -1) {
+                if ($lvl[$i] == $pid) {
+                  $lvl = array_slice($lvl, 0, $i+1);
+                  $lvl[] = $cid;
+                  $chars = str_repeat("|--", $i+1);
+                  break;
+                }
+                $i--;
+              }
+              if ($i == -1)
+                $lvl = [$cid];
+            }
+            $channels .= "<span class='gray'>{$chars}</span> " . preg_replace("/(\[\*?[clr]? ?spacer\d{0,10}\])/", "", Helper::lgslUnescape($name)) . "\n";
           }
-          $channels .= "<span class='gray'>{$chars}</span> " . preg_replace("/(\[\*?[clr]? ?spacer\d{0,10}\])/", "", Helper::lgslUnescape($name)) . "\n";
+          $this->_data['e']['channels'] = "{$channels}</div>";
         }
-        $this->_data['e']['channels'] = "{$channels}</div>";
       }
+      if ($this->error)
+        $this->_data['e']['error'] = $this->error;
       return $this::SUCCESS;
     }
   }
