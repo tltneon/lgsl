@@ -13,7 +13,7 @@
 
   require "lgsl_class.php";
   require "lgsl_language.php";
-  $lang = new Lang($_COOKIE['lgsl_lang']);
+  $lang = new Lang($_COOKIE['lgsl_lang'] ?? Lang::EN);
 
   if (!function_exists("fsockopen") && !$lgsl_config['feed']['method']) {
     if (LGSL::isEnabled("curl")) {
