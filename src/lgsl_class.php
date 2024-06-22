@@ -629,6 +629,7 @@
 		public const OFFLINE = "nrs";
 		public const PASSWORDED = "pwd";
 		public const PENDING = "pen";
+		public const ERROR = "err";
     private $_base;
     private $_extra = [];
     private $_other;
@@ -971,6 +972,7 @@
     public function getStatusIcon($path = '') {
       switch ($this->getStatus()) {
         case self::PENDING: return "{$path}other/icon_unknown.gif";
+        case self::ERROR: return "{$path}other/icon_unknown.gif";
         case self::OFFLINE: return "{$path}other/icon_no_response.gif";
         case self::PASSWORDED: return "{$path}other/icon_online_password.gif";
 				default: return "{$path}other/icon_online.gif";
@@ -983,16 +985,16 @@
     public function getLocation() {
       return $this->_other['location'] ?? "XX";
     }
-    public function getTimestamp($type = 's') {
+    public function getTimestamp($type = Timestamp::SERVER) {
 			return $this->_server['cache_time']->get($type);
     }
-    public function getTimestampFormatted($type = 's') {
+    public function getTimestampFormatted($type = Timestamp::SERVER) {
 			$time = $this->getTimestamp($type);
-      if ($time > 0) {
         global $lgsl_config;
+      if ($time > 0) {
         return Date($lgsl_config['text']['tzn'], $time);
       }
-      return 'not queried';
+      return $lgsl_config['text']['pen'];
     }
     public function setTimestamp($type, $time) {
       $this->_server['cache_time']->set($type, $time);
@@ -1003,9 +1005,9 @@
     public function checkTimestamps($request = "") {
       global $lgsl_config;
       $needed = "";
-      if (LGSL::requestHas($request, "s") && time() > ($this->getTimestamp(Timestamp::SERVER) + $lgsl_config['cache_time'])) { $needed .= "s"; }
-      if (LGSL::requestHas($request, "e") && time() > ($this->getTimestamp(Timestamp::EXTRAS) + $lgsl_config['cache_time'])) { $needed .= "e"; }
-      if (LGSL::requestHas($request, "p") && time() > ($this->getTimestamp(Timestamp::PLAYERS) + $lgsl_config['cache_time'])) { $needed .= "p"; }
+      foreach ([Timestamp::SERVER, Timestamp::EXTRAS, Timestamp::PLAYERS] as $stamp) {
+        if (LGSL::requestHas($request, $stamp) && time() > ($this->getTimestamp($stamp) + $lgsl_config['cache_time'])) { $needed .= $stamp; }
+      }
       return $needed;
     }
     public function getZone() {
@@ -1026,6 +1028,9 @@
       }
       if ($this->_server['password']) {
         return self::PASSWORDED;
+      }
+      if (isset($this->_extra['_error'])) {
+        return self::ERROR;
       }
       if ($this->_base['status']) {
         return self::ONLINE;

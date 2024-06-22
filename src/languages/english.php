@@ -20,6 +20,7 @@
   $lgsl_config['text']['nei'] = "NO EXTRA INFO";
   $lgsl_config['text']['ehs'] = "Setting";
   $lgsl_config['text']['ehv'] = "Value";
+  $lgsl_config['text']['err'] = "ERROR";
   $lgsl_config['text']['onl'] = "ONLINE";
   $lgsl_config['text']['onp'] = "ONLINE WITH PASSWORD";
   $lgsl_config['text']['nrs'] = "NO RESPONSE";

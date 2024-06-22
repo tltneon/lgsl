@@ -376,7 +376,6 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
       if ($isNew) {
         $row = ['type' => $this->lastType, 'ip' => '', 'c_port' => '', 'q_port' => '', 's_port' => '', 'zone' => 0, 'disabled' => '', 'comment' => ''];
       }
-      $zone_list = [0,2,3];
       $isDisabled = function($check) {
         return $check ? 'readonly onclick="return false;" style="background: #777; cursor: not-allowed;"' : '';
       };

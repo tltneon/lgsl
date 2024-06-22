@@ -55,7 +55,7 @@
     </tr>";
 
   foreach ($server_list as $server) {
-    $lastupd = $server->getTimestamp(Timestamp::SERVER);
+    $lastupd = $server->getTimestampFormatted(Timestamp::SERVER);
     $gamelink= LGSL::buildLink($uri, ["game" => $server->getGame()]);
 
     $output .= "

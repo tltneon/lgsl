@@ -3044,19 +3044,19 @@
 		public function readRaw($length = 4096) {
       if ($this->_isHttp()) {
 				$result = curl_exec($this->_stream);
+        $resultStatus = curl_getinfo($this->_stream, CURLINFO_HTTP_CODE);
+        if ($resultStatus != 200) {
+          $err = "Request failed: HTTP status code {$resultStatus}";
+        }
 				if (curl_errno($this->_stream)) {
+          $msg = "{$err}<br>" . curl_error($this->_stream);
           if ($this->_server) {
-            $this->_server->setExtraValue('_error', 'Couldn\'t send request: ' . curl_error($this->_stream));
+            $this->_server->setExtraValue('_error', $msg);
             $this->_server->setStatus(false);
             return false;
           } else {
-            return 'Couldn\'t send request: ' . curl_error($this->_stream);
+            return $msg;
           }
-				} else {
-					$resultStatus = curl_getinfo($this->_stream, CURLINFO_HTTP_CODE);
-					if ($resultStatus != 200) {
-						$this->_server->setExtraValue('_error', "Request failed: HTTP status code: {$resultStatus}");
-					}
 				}
         return $result;
       } else {
