@@ -990,7 +990,7 @@
     }
     public function getTimestampFormatted($type = Timestamp::SERVER) {
 			$time = $this->getTimestamp($type);
-        global $lgsl_config;
+      global $lgsl_config;
       if ($time > 0) {
         return Date($lgsl_config['text']['tzn'], $time);
       }
@@ -1001,6 +1001,28 @@
     }
     public function getTimestamps() {
       return $this->_server['cache_time']->toString();
+    }
+    public function getAdditionalData(): array {
+      $json = json_decode(str_replace("&quot;", '"', $this->_other['comment']), true);
+      try {
+        if (json_last_error() > 0) {
+          throw new \Exception('JSON decode error code '. json_last_error() . " for server {$this->getId()}");
+        }
+        return $json;
+      } catch (\Exception $e) {
+        return [0 => $json, 1 => $e->getMessage()];
+      }
+    }
+    public function setAdditionalData($data) : null {
+      $json = json_encode($this->_other['comment']);
+      try {
+        if (json_last_error() > 0) {
+          throw new \Exception();
+        }
+        $this->_other['comment'] = $json;
+      } catch (\Exception $e) {
+        $this->_other['comment'] = $data;
+      }
     }
     public function checkTimestamps($request = "") {
       global $lgsl_config;

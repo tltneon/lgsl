@@ -57,7 +57,7 @@
              $_POST['form_s_port']  [$form_key],
              $_POST['form_zone']    [$form_key],
              $_POST['form_disabled'][$form_key],
-             $_POST['form_comment'] [$form_key]) = explode(":", "{$form_line}:::::::");
+             $_POST['form_comment'] [$form_key]) = explode(":", "{$form_line}", 8);
       }
     }
 
@@ -328,7 +328,7 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
           <td>[ S Port ]                       </td>
           <td>[ Zone ]                         </td>
           <td>[ {$lgsl_config['text']['dsb']} ]</td>
-          <td>[ Comment ]                      </td>
+          <td>[ Comment | Additional Data ]    </td>
         </tr>";
 
       $result = $db->get_all();

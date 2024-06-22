@@ -100,6 +100,7 @@
     const OPENTTD = "openttd";
     const PAINKILLER = "painkiller";
     const PALWORLD = "palworld";
+    const PALWORLDDIRECT = "palworlddirect";
     const PLAINSIGHT = "plainsight";
     const PREY = "prey";
     const QUAKEWORLD = "quakeworld";
@@ -179,6 +180,7 @@
         self::ECO           => self::HTTP,
         self::FIVEM         => self::HTTP,
         self::PALWORLD      => self::HTTP,
+        self::PALWORLDDIRECT=> self::HTTP,
         self::RAGEMP        => self::HTTP,
         self::SCUM          => self::HTTP,
         self::TERRARIA      => self::HTTP,
@@ -274,6 +276,7 @@
         self::OPENTTD       => ["Query22", "Open Transport Tycoon Deluxe"],
         self::PAINKILLER    => ["Query08", "PainKiller"],
         self::PALWORLD      => ["Query51", "Palworld"],
+        self::PALWORLDDIRECT=> ["Query55", "Palworld Direct"],
         self::PLAINSIGHT    => ["Query32", "Plain Sight"],
         self::PREY          => ["Query10", "Prey"],
         self::QUAKEWORLD    => ["Query07", "Quake World"],
@@ -2883,6 +2886,25 @@
       return $this::SUCCESS;
     }
   }
+  class Query55 extends QueryJSON { // Palworld Direct
+    public function process() {
+      $cred = $this->_server->getAdditionalData();
+      if (empty($cred['login']) || empty($cred['password'])) {
+        $this->_data['e']['_error'] = "No login or password presented";
+        return $this::WITH_ERROR;
+      }
+      $auth = base64_encode("{$cred['login']}:{$cred['password']}");
+      $this->_fp->setOpt(CURLOPT_HTTPHEADER, ['Accept: application/json', "Authorization: Basic {$auth}"]);
+      $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/v1/api/settings");
+      if (!$buffer) return $this::NO_RESPOND;
+      $this->_data['s']['name'] = $buffer['ServerName'];
+      $this->_data['s']['password'] = 0;
+      $this->_data['s']['players'] = 0;
+      $this->_data['s']['playersmax'] = $buffer['ServerPlayerMaxNum'];
+      $this->_data['e']['description'] = isset($buffer['ServerDescription']) ? $buffer['ServerDescription'] : "";
+      return $this::SUCCESS;
+    }
+  }
   
   class QueryTest extends Query {
     public function process() {
@@ -3057,7 +3079,7 @@
           } else {
             return $msg;
           }
-				}
+				} 
         return $result;
       } else {
         return fread($this->_stream, $length);
@@ -3085,6 +3107,9 @@
 		}
 		public function &getStream() {
 			return $this->_stream;
+		}
+		public function setOpt($name, $value) {
+			curl_setopt($this->_stream, $name, $value);
 		}
 		public function close() {
 			if (!$this->_stream) return;
