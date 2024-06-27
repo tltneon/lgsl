@@ -1013,7 +1013,7 @@
         return [0 => $json, 1 => $e->getMessage()];
       }
     }
-    public function setAdditionalData($data) : null {
+    public function setAdditionalData($data): void {
       $json = json_encode($this->_other['comment']);
       try {
         if (json_last_error() > 0) {
@@ -1089,17 +1089,6 @@
 				$fields_list = array_diff($fields_list, $fields_show);
 				return array_merge($fields_show, $fields_list);
 		}
-    // temporary compability
-    function lgsl_live_query($a) {return $this->queryLive($a);}
-    function get_status() {return $this->getStatus();}
-    function get_name() {return $this->getName();}
-    function get_ip() {return $this->getIp();}
-    function get_c_port() {return $this->getConnectionPort();}
-    function get_game() {return $this->getGame();}
-    function get_map() {return $this->getMap();}
-    function get_players_count($a) {return $this->getPlayersCount();}
-    function get_software_link() {return $this->getConnectionLink();}
-    function to_array() {return $this->toArray();}
   }
   class Image {
     static function makeImage($src, $width, $height) {
@@ -1180,41 +1169,28 @@
   $cookie = $_COOKIE['lgsl_admin_auth'] ?? "";
   $lgsl_url_path = LGSL::urlPath();
 
-  if (isset($_GET['lgsl_debug']) and $auth === $cookie)
-  {
-    echo "<details>
-            <summary style='margin-bottom: 12px;'>
-              Open debug infos
-            </summary>
-            <hr /><pre>".print_r($_SERVER, TRUE)."</pre>
-            <hr />#d0# ".__FILE__."
-            <hr />#d1# ".@realpath(__FILE__)."
-            <hr />#d2# ".dirname(__FILE__)."
-            <hr />#d3# {$lgsl_file_path}
-            <hr />#d4# {$_SERVER['DOCUMENT_ROOT']}
-            <hr />#d5# ".@realpath($_SERVER['DOCUMENT_ROOT'])."
-            <hr />#d6# {$lgsl_url_path}
-            <hr />#c0# {$lgsl_config['url_path']}
-            <hr />#c1# {$lgsl_config['no_realpath']}
-            <hr />#c2# {$lgsl_config['feed']['method']}
-            <hr />#c3# {$lgsl_config['feed']['url']}
-            <hr />#c4# {$lgsl_config['cache_time']}
-            <hr />#c5# {$lgsl_config['live_time']}
-            <hr />#c6# {$lgsl_config['timeout']}
-            <hr />#c7# {$lgsl_config['cms']}
-            <hr />
-          </details>
-          <select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"src/styles/\" + this.value + \".css\"'>
-            <option value='breeze_style'>breeze_style</option>
-            <option value='classic_style'>classic_style</option>
-            <option value='cards_style'>cards_style</option>
-            <option value='disc_ff_style'>disc_ff_style</option>
-            <option value='material_style'>material_style</option>
-            <option value='ogp_style'>ogp_style</option>
-            <option value='parallax_style'>parallax_style</option>
-            <option value='wallpaper_style'>wallpaper_style</option>
-            <option value='darken_style'>darken_style</option>
-          </select>";
-  }
 
-//------------------------------------------------------------------------------------------------------------+
+  if (isset($_GET['lgsl_debug']) and $auth === $cookie) {
+    $output = "<details>
+    <summary style='margin-bottom: 12px;'>
+      Open debug infos
+    </summary>";
+    $debugInfo = [
+      's0' => "<pre>".print_r($_SERVER, TRUE)."</pre>", 'd0' => __FILE__, 'd1' => @realpath(__FILE__), 'd2' => dirname(__FILE__), 'd3' => $lgsl_file_path, 'd4' => $_SERVER['DOCUMENT_ROOT'], 
+      'd5' => @realpath($_SERVER['DOCUMENT_ROOT']), 'd6' => $lgsl_url_path, 'c0' => $lgsl_config['url_path'], 'c1' => $lgsl_config['no_realpath'], 'c2' => $lgsl_config['feed']['method'], 
+      'c3' => $lgsl_config['feed']['url'], 'c4' => $lgsl_config['cache_time'], 'c5' => $lgsl_config['live_time'], 'c6' => $lgsl_config['timeout'], 'c7' => $lgsl_config['cms']
+    ];
+    $langs = ['breeze_style', 'classic_style', 'cards_style', 'disc_ff_style', 'material_style', 'ogp_style', 'parallax_style', 'wallpaper_style', 'darken_style'];
+    foreach ($debugInfo as $code => $info) {
+      $output .= "<hr />#{$code}# {$info}";
+    }
+    $output .= "<hr />
+    </details>
+    <select onchange='javascript:document.querySelector(\"link[rel=stylesheet]\").href = \"src/styles/\" + this.value + \".css\"'>";
+    foreach ($langs as $lang) {
+      $output .= "<option value='{$lang}'>{$lang}</option>";
+    }
+    $output .= "
+    </select>";
+  }
+  
