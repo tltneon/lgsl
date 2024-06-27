@@ -1,11 +1,7 @@
 <?php
 	namespace tltneon\LGSL;
-	//------------------------------------------------------------------------------------------------------------+
-		header("Content-Type:text/html; charset=utf-8");
-	//------------------------------------------------------------------------------------------------------------+
-	
+	header("Content-Type:text/html; charset=utf-8");	
 	require('src/lgsl_class.php');
-	
 
 	$db_type = empty($_POST["db_type"]) ? "mysql" : $_POST["db_type"];
 	$db_server = empty($_POST["server"]) ? "localhost" : $_POST["server"];
@@ -165,7 +161,6 @@
 		$conf = json_decode($_POST['_config'], true);
 		if (empty($lgsl_database)) {
 			file_put_contents('install.php', 666);
-			//chmod('install.php', 666);
 			chmod('src/lgsl_config.php', 666);
 			function type($var) {
 				if (gettype($var) == "Array") return $var;
@@ -315,15 +310,7 @@
 			<div>
 <?php
 //------------------------------------------------------------------------------------------------------------+
-	$loc = array_reduce(["AD","AE","AF","AG","AI","AL","AM","AN","AO","AR","AS","AT","AU","AW","AX","AZ","BA","BB","BD","BE","BF","BG","BH","BI","BJ","BM","BN",
-		"BO","BR","BS","BT","BV","BW","BY","BZ","CA","CC","CD","CF","CG","CH","CI","CK","CL","CM","CN","CO","CR","CS","CU","CV","CX","CY","CZ",
-		"DE","DJ","DK","DM","DO","DZ","EC","EE","EG","EH","ER","ES","ET","EU","FI","FJ","FK","FM","FO","FR","GA","GB","GD","GE","GF","GH","GI",
-		"GL","GM","GN","GP","GQ","GR","GS","GT","GU","GW","GY","HK","HM","HN","HR","HT","HU","ID","IE","IL","IN","IO","IQ","IR","IS","IT","JM",
-		"JO","JP","KE","KG","KH","KI","KM","KN","KP","KR","KW","KY","KZ","LA","LB","LC","LI","LK","LR","LS","LT","LU","LV","LY","MA","MC","MD",
-		"ME","MG","MH","MK","ML","MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ","NA","NC","NE","NF","NG","NI","NL","NO",
-		"NP","NR","NU","NZ","OFF","OM","PA","PE","PF","PG","PH","PK","PL","PM","PN","PR","PS","PT","PW","PY","QA","RE","RO","RS","RU","RW","SA",
-		"SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","SO","SR","ST","SV","SY","SZ","TC","TD","TF","TG","TH","TJ","TK","TL","TM",
-		"TN","TO","TR","TT","TV","TW","TZ","UA","UG","UM","US","UY","UZ","VA","VC","VE","VG","VI","VN","VU","WF","WS","YE","YT","ZA","ZM","ZW"],
+	$loc = array_reduce(LGSL::locationsCodes(),
 		function($a, $b) {
 			return "{$a}<option value='{$b}'>{$b}</option>";
 		});
@@ -347,7 +334,7 @@
 			$output .= check('FSOCKOPEN', function_exists("fsockopen") && fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3), 'mainly used for querying');
 			$output .= check('CURL', LGSL::isEnabled("curl"), 'optional: for some games');
 			$output .= check('BZ2', function_exists("bzdecompress"), 'optional: for some games');
-			$output .= check('GD', function_exists("gd"), 'optional: for charts & userbars');
+			$output .= check('GD', LGSL::isEnabled("gd"), 'optional: for charts & userbars');
 		}
 
 	$output .= "	

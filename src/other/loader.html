@@ -30,7 +30,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", reloadLocale);
   function reloadLocale() {
-    let lang =
+    let lang = !document.cookie ? "english" :
     document.cookie
       .split(';')
       .map(v => v.split('='))

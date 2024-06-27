@@ -416,14 +416,14 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
       ["href" => "http://php.net/curl", "name" => "CURL", "test" => LGSL::isEnabled("curl"), "desc" => "crl"],
       ["href" => "http://php.net/mbstring", "name" => "MBSTRING", "test" => function_exists("mb_convert_encoding"), "desc" => "mbs"],
       ["href" => "http://php.net/bzip2", "name" => "BZIP2", "test" => function_exists("bzdecompress"), "desc" => "bz2"],
-      ["href" => "http://php.net/gd2", "name" => "GD", "test" => extension_loaded("gd"), "desc" => "gd2"],
+      ["href" => "http://php.net/gd", "name" => "GD", "test" => LGSL::isEnabled("gd"), "desc" => "gd2"],
       ["href" => "http://php.net/zlib", "name" => "ZLIB", "test" => function_exists("gzuncompress"), "desc" => "zli"],
     ];
     $output = "";
     foreach ($funcs as $func) {
       $output .= "
       <tr>
-        <td> <a href='{$func['href']}'>{$func['name']}</a> </td>
+        <td> <a href='{$func['href']}' target='_blank'>{$func['name']}</a> </td>
         <td> {$lgsl_config['text']['enb']}: ".($func['test'] ? $lgsl_config['text']['yes'] : $lgsl_config['text']['nno'])." </td>
         <td> ( {$lgsl_config['text'][$func['desc']]} ) </td>
       </tr>

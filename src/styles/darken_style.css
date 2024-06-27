@@ -118,6 +118,7 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .status_icon_pen { width: 14px; height: 14px; background-color: gray; display: inline-block; border: 1px solid black; }
 .status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; }
 .status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; }
+.status_icon_err { width: 14px; height: 14px; background-color: rgb(126, 124, 0); display: inline-block; border: 1px solid black; }
 img.game_icon { width: 16px;border-radius: 2px; }
 
 #server_list_table { margin:auto; width:90%; border-radius: 12px; margin-top:30px; }

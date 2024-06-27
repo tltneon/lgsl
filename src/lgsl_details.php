@@ -98,7 +98,7 @@
           <div>";
 					
 					if ($lgsl_config['image_mod']) {
-						if (extension_loaded('gd')) {
+						if (LGSL::isEnabled("gd")) {
               for ($i = 1; $i < 4; $i++) {
                 $output .= "
                 <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t={$i}' alt='{$server->getName()}'/></div>

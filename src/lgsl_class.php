@@ -188,10 +188,11 @@
 		static public function isEnabled($func) {
 			switch ($func) {
         case "curl": return function_exists('curl_init') && function_exists('curl_setopt') && function_exists('curl_exec');
+        case "gd": return extension_loaded('gd');
       }
 		}
-		static public function locationCoords($code) {
-      $a = array_search($code, [
+    static public function locationsCodes($sort = true) {
+      $arr = [
         "AD","AE","AF","AG","AI","AL","AM","AN","AO","AR","AS","AT","AU","VG",
         "AW","AX","AZ","BA","BB","BD","BE","BF","BG","BH","BI","BJ","BM","VI",
         "BN","BO","BR","BS","BT","BV","BW","BY","BZ","CA","CC","CD","CF","VN",
@@ -209,7 +210,15 @@
         "PY","QA","RE","RO","RS","RU","RW","SA","SB","SC","SD","SE","SG","",
         "SH","SI","SJ","SK","SL","SM","SN","SO","SR","ST","SV","SY","SZ","",
         "TC","TD","TF","TG","TH","TJ","TK","TL","TM","TN","TO","TR","TT","",
-        "TV","TW","TZ","UA","UG","UK","UM","US","UY","UZ","VA","VC","VE"]);
+        "TV","TW","TZ","UA","UG","UK","UM","US","UY","UZ","VA","VC","VE"];
+      if ($sort) {
+        sort($arr);
+        return array_filter($arr, fn($value) => !is_null($value) && $value !== '');
+      }
+      return $arr;
+    }
+		static public function locationCoords($code) {
+      $a = array_search($code, self::locationsCodes(false));
       return [$a % 14 * 16, floor($a / 14) * 11];
 		}
     static public function normalizeString($string) {
