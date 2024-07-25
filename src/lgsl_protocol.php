@@ -448,11 +448,11 @@
         if (class_exists($query)) {
           $status = (new $query($this->_server, $this->_lgsl_fp, $this->_lgsl_need))->execute();
         } else {
-          $this->_server->setExtraValue('_error', "LGSL PROBLEM: FUNCTION DOES NOT EXIST FOR TYPE {$this->_server->getType()}");
+          $this->_server->addOption('_error', "LGSL PROBLEM: FUNCTION DOES NOT EXIST FOR TYPE {$this->_server->getType()}");
           $this->updateTimestamps();
         }
 			} else {
-        $this->_server->setExtraValue('_error', 'Can\'t establish the connection to server.');
+        $this->_server->addOption('_error', 'Can\'t establish the connection to server.');
 				$this->updateTimestamps();
       }
       $this->_server->setStatus($status);
@@ -463,9 +463,9 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
 	abstract class Query {
-    protected const NO_RESPOND = 0;
-    protected const SUCCESS = 1;
-    protected const WITH_ERROR = 2;
+    const NO_RESPOND = 0;
+    const SUCCESS = 1;
+    const WITH_ERROR = 2;
     protected $_server, $_fp, $_need;
     protected $_data = ['s' => [], 'e' => [], 'p' => []];
     protected $separatedPackets = false;
@@ -487,17 +487,17 @@
     public function execute(): int {
       $time = microtime(true);
       $status = $this->process();
-      if ($this->separatedPackets) {
+      if ($status === $this::SUCCESS && $this->separatedPackets) {
         if ($this->_need['e']) $status |= $this->process();
         if ($this->_need['p']) $status |= $this->process();
       }
       $this->_data['o']['time_execution'] = $time - microtime(true);
       if ($status !== $this::NO_RESPOND) {
         if ($status === $this::SUCCESS) {
-          $this->_server->trimError();
+          $this->_server->removeOption("_error");
         }
         if ($status === $this::WITH_ERROR) {
-          $this->_data['e']['_error'] = $this->_data['e']['_error'] ?? "Probably protocol mistake";
+          $this->_server->addOption("_error", "Probably protocol mistake: " . static::class);
         }
         $this->_server->updateValues($this->_data);
       }
@@ -2438,9 +2438,11 @@
       if (isset($buffer['inviter'])) {
         $this->_data['e']['inviter'] = "{$buffer['inviter']['username']}#{$buffer['inviter']['discriminator']}";
       }
+      $this->need('s');
+      $this->need('e');
 
       if ($this->need('p')) {
-        $buffer = $this->fetch("https://discordapp.com/api/guilds/{$this->_server->getE('id')}/widget.json");
+        $buffer = $this->fetch("https://discordapp.com/api/guilds/{$this->_server->getOption('id')}/widget.json");
 
         if (isset($buffer['code']) and $buffer['code'] == 0) {
           $this->_data['e']['_error_fetching_users'] = $buffer['message'];
@@ -3093,8 +3095,8 @@
       } else {
         $this->_stream = @fsockopen("{$this->_protocol}://{$server->getIp()}", $server->getQueryPort(), $errno, $errstr, 1);
         if (!$this->_stream) {
-          $server->setExtraValue('_error', $errstr);
-          $server->setStatus(false);
+          $server->addOption('_error', $errstr);
+          $server->setStatus(Server::OFFLINE);
           return false;
         }
         stream_set_timeout($this->_stream, $lgsl_config['timeout'], $lgsl_config['timeout'] ? 0 : 500000);
@@ -3112,8 +3114,8 @@
 				if (curl_errno($this->_stream)) {
           $msg = "{$err}<br>" . curl_error($this->_stream);
           if ($this->_server) {
-            $this->_server->setExtraValue('_error', $msg);
-            $this->_server->setStatus(false);
+            $this->_server->addOption('_error', $msg);
+            $this->_server->setStatus(Server::OFFLINE);
             return false;
           } else {
             return $msg;

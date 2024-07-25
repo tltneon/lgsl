@@ -85,8 +85,8 @@
 //------------------------------------------------------------------------------------------------------------+
 // ADD THE FEED PROVIDER
 
-  $server->setExtraValue('_feed_', "http://{$_SERVER['HTTP_HOST']}");
-  $server->setExtraValue('_lgsl_', LGSL::VERSION);
+  $server->setOption('_feed_', "http://{$_SERVER['HTTP_HOST']}");
+  $server->setOption('_lgsl_', LGSL::VERSION);
 
 //------------------------------------------------------------------------------------------------------------+
 // FEED USAGE LOGGING - 'logs' FOLDER MUST BE MANUALLY CREATED AND SET AS WRITABLE

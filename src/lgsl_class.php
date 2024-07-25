@@ -688,6 +688,7 @@
     public function queryLive($request = 'seph') {
       if ($request === "h") return;
       $this->queried();
+      $this->removeOption("_error");
       $protocol = new Protocol($this, $request);
       $protocol->query();
 
@@ -1044,11 +1045,21 @@
     public function getZone() {
       return isset($this->_other['zone']) ? $this->_other['zone'] : "";
     }
-    public function setExtraValue($name, $value) {
+    public function addOption($name, $value) {
+      if (isset($this->_extra[$name])) {
+        $this->_extra[$name] .= "\n{$value}";
+      } else {
+        $this->setOption($name, $value);
+      }
+    }
+    public function setOption($name, $value) {
       $this->_extra[$name] = $value;
     }
-    public function getE($name) {
+    public function getOption($name) {
       return $this->_extra[$name] ?? LGSL::NONE;
+    }
+    public function removeOption($name) {
+      unset($this->_extra['_error']);
     }
     public function setStatus($status) {
       $this->_base['status'] = (int) $status;
@@ -1060,7 +1071,7 @@
       if ($this->_server['password']) {
         return self::PASSWORDED;
       }
-      if (isset($this->_extra['_error'])) {
+      if ($this->_base['status'] === Query::WITH_ERROR && isset($this->_extra['_error'])) {
         return self::ERROR;
       }
       if ($this->_base['status']) {
@@ -1072,9 +1083,6 @@
 			$s = $this->getStatus();
 			return $s === self::PASSWORDED || $s === self::ONLINE;
 		}
-    public function trimError() {
-      unset($this->_extra['_error']);
-    }
 		public function queryLocation() {
       return LGSL::locationCode($this->getIp());
 		}
