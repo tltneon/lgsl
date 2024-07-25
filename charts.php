@@ -13,7 +13,6 @@
   }
 
   // SETTINGS
-
   $w = 400;
   $h = 150;
   $im = @imagecreate($w, $h);
@@ -24,7 +23,6 @@
   $red = imagecolorallocate($im, 255, 0, 0);
 
   // MAIN SECTION
-
   header("Content-Type: image/png");
   require "src/lgsl_class.php";
   $s = (int) ($_GET['s'] ?? null);
@@ -40,7 +38,7 @@
   $y0 = 20;
   global $lgsl_config;
   $period = 3600 * $lgsl_config['history_hours'];
-  $xStep = 30;
+  $xStep = 33.99;
   $yStep = (int) ($max > 32 ? 9 : 100 / $max) + 1;
 
   $s = $x = $y = [];
@@ -68,20 +66,22 @@
   $scaleY = ($maxY - $y0) / $max;
 
   // DRAW AXIS
-
   imageline($im, $x0, $maxY, $maxX, $maxY, $black);
   imageline($im, $x0, $y0, $x0, $maxY, $black);
   imageantialias($im, true);
 
   // DRAW GRID
-
   $xSteps = ($maxX - $x0) / $xStep - 1;
+  $timeFormat = "H:i";
+  if ($lgsl_config['history_hours'] > 24) {
+    $timeFormat = "d.m";
+  }
+  imagestring($im, 1, $x0 - 6, $maxY + 2, Date($timeFormat, time() - $period), $black);
   for ($i = 1; $i < $xSteps + 1; $i++) {
     imageline($im, $x0 + $xStep * $i, $y0, $x0 + $xStep * $i, $maxY - 1, $gray);
-    $str = Date("H:i", time() - $period + (int) ($i * round($xStep / $scaleX, 1)));
+      $str = Date($timeFormat, time() - $period + (int) ($i * round($xStep / $scaleX, 1)));
     imagestring($im, 1, (($x0 + $xStep * $i) - 6), $maxY + 2, $str, $black);
   }
-  imagestring($im, 1, $x0 - 6, $maxY + 2, Date("H:i", time() - $period), $black);
 
   if (count($history) > 0) {
     $ySteps = ($maxY-$y0) / $yStep - 1;
@@ -100,7 +100,6 @@
   // imagestring($im, 1, 3, $y0 - 3, $server['s']['playersmax'], $black);
 
   // DRAW GRAPH
-
   imagesetthickness($im, 3);
 	if (count($x) == 1) {
 		imagefilledellipse($im, (int) ($x0 + $x[0] * $scaleX), (int) ($maxY - $y[0] * $scaleY), 6, 6, $green);
@@ -120,7 +119,11 @@
 	imagettftext($im, 7, 0, 28, 8, $black, $font, $lgsl_config['text']['nam'] . ": " . trim($server->getName(false)));
 	imagettftext($im, 6, 0, 27, 17, $black, $font, $lgsl_config['text']['adr'] . ": " . str_replace('https://', '', $server->getAddress()));
 	imagettftext($im, 6, 0, $w - 52, 17, $black, $font, date($lgsl_config['text']['tzn']));
-  imagettftext($im, 6, 0, $w - 110, $h-3, $black, $font, "Shows last {$lgsl_config['history_hours']} hours");
+  $strShowsLast = "{$lgsl_config['history_hours']} hours";
+  if ($lgsl_config['history_hours'] > 24) {
+    $strShowsLast = $lgsl_config['history_hours'] / 24 . " days";
+  }
+  imagettftext($im, 6, 0, $w - 110, $h-3, $black, $font, "Shows last {$strShowsLast}");
 
   $s = (isset($_SERVER['HTTPS']) ? 's' : '');
   header("Link: <http{$s}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}>; rel=\"canonical\"");
