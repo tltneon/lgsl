@@ -22,7 +22,7 @@
           $this->assertIsArray($server->toArray());
 
           if ($server->getStatus() === LGSL\Server::OFFLINE) {
-            $this->assertSame($server->getGame(), PROTOCOL::TEST);
+            $this->assertSame($server->getGame(), LGSL\PROTOCOL::TEST);
           } else {
             $this->assertSame($server->getGame(), "test_game");
           }

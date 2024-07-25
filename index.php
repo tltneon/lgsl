@@ -5,7 +5,8 @@
 
   require ("src/lgsl_config.php");
   require ("src/lgsl_language.php");
-  $lang = new tltneon\LGSL\Lang($_COOKIE['lgsl_lang'] ?? tltneon\LGSL\Lang::EN);
+  $_COOKIE['lgsl_lang'] = $_COOKIE['lgsl_lang'] ?? tltneon\LGSL\Lang::EN;
+  $lang = new tltneon\LGSL\Lang($_COOKIE['lgsl_lang']);
 	if (empty($lgsl_config['installed'])) header("Location: install.php");
   global $output, $title;
 
