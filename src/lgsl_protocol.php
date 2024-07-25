@@ -149,6 +149,7 @@
     const VCMP = "vcmp";
     const VIETCONG = "vietcong";
     const VIETCONG2 = "vietcong2";
+    const VINTAGESTORY = "vintagestory";
     const WINDWARD = "windward";
     const WOLFET = "wolfet";
     const WOLFRTCW = "wolfrtcw";
@@ -188,6 +189,7 @@
         self::TS            => self::TCP,
         self::TS3           => self::TCP,
         self::TEASPEAK      => self::TCP,
+        self::VINTAGESTORY  => self::TCP,
         self::WINDWARD      => self::TCP,
         self::WOW           => self::TCP
       ];
@@ -325,6 +327,7 @@
         self::VCMP          => ["Query12", "Vice City Multiplayer"],
         self::VIETCONG      => ["Query03", "Vietcong"],
         self::VIETCONG2     => ["Query09", "Vietcong 2"],
+        self::VINTAGESTORY  => ["Query56", "Vintage Story"],
         self::WINDWARD      => ["Query49", "Windward"],
         self::WOLFET        => ["Query02", "Wolfenstein: Enemy Territory"],
         self::WOLFRTCW      => ["Query02", "Wolfenstein: Return To Castle Wolfenstein"],
@@ -406,6 +409,7 @@
         self::UT3           => [0,     7777,  6500],
         self::VIETCONG      => [10000, 5425,  15425],
         self::VIETCONG2     => [0,     5001,  19967],
+        self::VINTAGESTORY  => [0,     42420, 42420],
         self::WOW           => [0,     3724,  8085],
       ];
       if (!isset($types[$type])) {
@@ -2902,6 +2906,41 @@
       $this->_data['s']['players'] = 0;
       $this->_data['s']['playersmax'] = $buffer['ServerPlayerMaxNum'];
       $this->_data['e']['description'] = isset($buffer['ServerDescription']) ? $buffer['ServerDescription'] : "";
+      return $this::SUCCESS;
+    }
+  }
+  class Query56 extends QuerySocket { // Vintage Story
+    public function process() {
+      $this->need('s');
+      $this->need('e');
+      $this->need('p');
+      $buffer = $this->fetch("\x00\x00\x00\x10\x08\x21\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00");
+      if (!$buffer) return $this::NO_RESPOND;
+      $version = file_get_contents('https://api.vintagestory.at/lateststable.txt');
+      $packets = [
+        "\x00\x00\x00\x3E\x12\x3C\x0A\x06{$version}\x12\x04\x4C\x47\x53\x4C\x1A\x01\x31\x32\x17\x74\x6C\x74\x6E\x65\x6F\x6E\x2E\x67\x69\x74\x68\x75\x62\x2E\x63\x6F\x6D\x2F\x6C\x67\x73\x6C\x38\x20\x4A\x06{$version}\x52\x06{$version}",
+        "\x00\x00\x00\x10\x08\x02\x32\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00"
+      ];
+      $buffer = $this->fetch($packets[0]);
+      if (preg_match_all("/\d{1,3}\.\d{1,3}\.\d{1,3}/", $buffer->getAll(), $vers, 0, 4)) {
+        $this->_data['e']['version'] = $vers[0][1];
+        return $this::WITH_ERROR;
+      }
+      $buffer = $this->fetch($packets[1]);
+      if (!$buffer || $buffer->length() < 60) {
+        $buffer = $this->fetch($packets[1]);
+      }
+      if (!$buffer || $buffer->length() === 0) return $this::WITH_ERROR;
+      $buffer->cutString(0, "\x1a");
+      $this->_data['s']['name'] = $buffer->cutByte($buffer->cutByteOrd());
+      $buffer->skip(30);
+      $this->_data['s']['mode'] = $buffer->cutByte($buffer->cutByteOrd());
+      for ($i = 0; $i < 3; $i++) {
+        $buffer->skip(2);
+        $this->_data['e']["mode{$i}"] = $buffer->cutByte($buffer->cutByteOrd());
+      }
+      $this->_data['e']['settings'] = str_replace("\x05", ";", $buffer->cutString());
+      $this->_data['e']['version'] = $version; 
       return $this::SUCCESS;
     }
   }
