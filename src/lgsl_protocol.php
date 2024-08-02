@@ -141,6 +141,7 @@
     const TS3 = "ts3";
     const TEASPEAK = "teaspeak";
     const WARSOW = "warsow";
+    const UNVANQUISHED = "unvanquished";
     const URBANTERROR = "urbanterror";
     const UT = "ut";
     const UT2003 = "ut2003";
@@ -319,6 +320,7 @@
         self::TS3           => ["Query33", "Teamspeak 3"],
         self::TEASPEAK      => ["Query33", "Teaspeak"],
         self::WARSOW        => ["Query02", "Warsow"],
+        self::UNVANQUISHED  => ["Query02", "Unvanquished"],
         self::URBANTERROR   => ["Query02", "UrbanTerror"],
         self::UT            => ["Query03", "Unreal Tournament"],
         self::UT2003        => ["Query13", "Unreal Tournament 2003"],
@@ -593,7 +595,7 @@
 
       if (!empty($this->_data['e']['hostname']))    { $this->_data['s']['name'] = $this->_data['e']['hostname']; }
       if (!empty($this->_data['e']['sv_hostname'])) { $this->_data['s']['name'] = Helper::lgslParseColor($this->_data['e']['sv_hostname'], "1"); }
-      if (isset($this->_data['e']['protocol'])) {
+      if (isset($this->_data['e']['protocol']) && $this->_server->getType() !== PROTOCOL::UNVANQUISHED) {
 				$games = ['1' => 'IW6', '2' => 'H1', '6' => 'IW3', '7' => 'T7', '20604' => 'IW5', '151' => 'IW4', '101' => 'T4'];
 				$this->_data['s']['game'] = $games[$this->_data['e']['protocol']];
       }
