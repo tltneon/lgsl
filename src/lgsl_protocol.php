@@ -575,17 +575,18 @@
 
   class Query02 extends QuerySocket { // 
     public function process() {
-      $isMoh = strpos($this->_server->getType(), "moh") !== FALSE; // mohaa_ mohaab_ mohaas_ mohpa_
+      $type = $this->_server->getType();
+      $isMoh = strpos($type, "moh") !== FALSE; // mohaa_ mohaab_ mohaas_ mohpa_
       $mohSymbol = $isMoh ? "\x02" : "";
-      if     ($this->_server->getType() === PROTOCOL::QUAKE2)       { $this->_fp->write("\xFF\xFF\xFF\xFFstatus");        }
-      elseif ($this->_server->getType() === PROTOCOL::CALLOFDUTYIW) { $this->_fp->write("\xFF\xFF\xFF\xFFgetinfo LGSL");  }
+      if     ($type === PROTOCOL::QUAKE2)       { $this->_fp->write("\xFF\xFF\xFF\xFFstatus");        }
+      elseif ($type === PROTOCOL::CALLOFDUTYIW) { $this->_fp->write("\xFF\xFF\xFF\xFFgetinfo LGSL");  }
       else { $this->_fp->write("\xFF\xFF\xFF\xFF{$mohSymbol}getstatus"); }
 
       $buffer = $this->_fp->read();
       if (!$buffer) { return $this::NO_RESPOND; }
 
       $part = explode("\n", $buffer->getAll());  // SPLIT INTO PARTS: HEADER/SETTINGS/PLAYERS/FOOTER
-      if ($this->_server->getType() !== PROTOCOL::CALLOFDUTYIW) {
+      if ($type !== PROTOCOL::CALLOFDUTYIW) {
         array_pop($part);              // REMOVE FOOTER WHICH IS EITHER NULL OR "\challenge\"
       }
       $item = explode("\\", $part[1]); // SPLIT PART INTO ITEMS
@@ -603,12 +604,20 @@
 
       if (!empty($this->_data['e']['hostname']))    { $this->_data['s']['name'] = $this->_data['e']['hostname']; }
       if (!empty($this->_data['e']['sv_hostname'])) { $this->_data['s']['name'] = Helper::lgslParseColor($this->_data['e']['sv_hostname'], "1"); }
-      if (isset($this->_data['e']['protocol']) && $this->_server->getType() !== PROTOCOL::UNVANQUISHED) {
-				$games = ['1' => 'IW6', '2' => 'H1', '6' => 'IW3', '7' => 'T7', '20604' => 'IW5', '151' => 'IW4', '101' => 'T4'];
-				$this->_data['s']['game'] = $games[$this->_data['e']['protocol']];
+      if (isset($this->_data['e']['protocol']) && $type !== PROTOCOL::UNVANQUISHED) {
+        if ($type === PROTOCOL::CALLOFDUTYIW) {
+          $games = ['1' => 'IW6', '2' => 'H1', '6' => 'IW3', '7' => 'T7', '20604' => 'IW5', '151' => 'IW4', '101' => 'T4'];
+        }
+				$this->_data['s']['game'] = $games[$this->_data['e']['protocol']] ?? "Unknown {$this->_data['e']['protocol']}";
       }
       if (isset($this->_data['e']['gamename'])) { $this->_data['s']['game'] = $this->_data['e']['gamename']; }
-      if (isset($this->_data['e']['g_gametype'])) { $this->_data['s']['mode'] = $this->_data['e']['g_gametype']; }
+      if (isset($this->_data['e']['g_gametype'])) {
+        if ($type === PROTOCOL::URBANTERROR) {
+          $games = ["0" => "Free for All", "1" => "Last Man Standing", "3" => "Team Deathmatch", "4" => "Team Survivor", "5" => "Follow the Leader",
+          "6" => "Capture and Hold", "7" => "Capture the Flag", "8" => "Bomb Mode", "9" => "Jump", "10" => "Freeze Tag", "11" => "Gun Game"];
+        }
+        $this->_data['s']['mode'] = $games[$this->_data['e']['g_gametype']] ?? $this->_data['e']['g_gametype'];
+      }
       if (isset($this->_data['e']['mapname']))  { $this->_data['s']['map']  = $this->_data['e']['mapname']; }
       $this->_data['s']['players'] = empty($part['2']) ? 0 : count($part) - 2;
       if (isset($this->_data['e']['maxclients']))    { $this->_data['s']['playersmax'] = $this->_data['e']['maxclients']; } // QUAKE 2
@@ -621,12 +630,12 @@
       array_shift($part); // REMOVE SETTING
 
       $fieldType = "other";
-      if (strpos($this->_server->getType(), "mohpa") !== FALSE) {
+      if (strpos($type, "mohpa") !== FALSE) {
         $fieldType = "mohpa";
       } elseif ($isMoh) {
         $fieldType = "moh";
-      } elseif (in_array($this->_server->getType(), [PROTOCOL::NEXUIZ, PROTOCOL::WARSOW])) {
-        $fieldType = $this->_server->getType();
+      } elseif (in_array($type, [PROTOCOL::NEXUIZ, PROTOCOL::WARSOW])) {
+        $fieldType = $type;
       }
       $fieldsList = [
         PROTOCOL::NEXUIZ => ["pattern" => "/(.*) (.*) (.*)\"(.*)\"/U", "fields" => [1=>"score", 2=>"ping", 3=>"team", 4=>"name"]],
