@@ -893,6 +893,7 @@
         Protocol::TITANFALL2    => "northstar://server@{IP}",
         Protocol::TS3           => "ts3server://{IP}?port={C_PORT}",
         Protocol::TEASPEAK      => "ts3server://{IP}?port={C_PORT}",
+        Protocol::URBANTERROR   => "urt://{IP}:{S_PORT}",
         Protocol::UNVANQUISHED  => "unv://{IP}:{C_PORT}",
         Protocol::WARSOW        => "warsow://{IP}:{C_PORT}",
         Protocol::WOW           => "javascript:prompt('Put it into your realm list:', 'set realmlist {IP}')"];
