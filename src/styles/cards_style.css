@@ -98,7 +98,7 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .contry_link {  position: absolute; margin-top: -18px; margin-left: -20px; }
 .contry_icon { border:none; width: 16px; height: 16px; }
 a.details_icon { width: 100%; height: 32px; display: inline-block; background: url(../other/magnifier.svg) no-repeat center center; background-size: contain; }
-.status_icon_onl, .status_icon_nrs, .status_icon_onp {
+.status_icon_onl, .status_icon_nrs, .status_icon_pwd {
 	width: 48px;
 	height: 48px;
 	display: inline-block;
@@ -107,7 +107,7 @@ a.details_icon { width: 100%; height: 32px; display: inline-block; background: u
 .details_icon { background-image: url(../other/icon_details.gif) !important; }
 .status_icon_onl { background-image: url(../other/icon_online.gif) !important; }
 .status_icon_nrs { background-image: url(../other/icon_no_response.gif) !important; }
-.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; }
+.status_icon_pwd { background-image: url(../other/icon_online_password.gif) !important; }
 .status_icon_pen { width: 14px; height: 14px; background-color: gray; display: inline-block; border: 1px solid black; }
 img.game_icon { width: 42px; border: 3px solid black; }
 a.details_icon:before { content: 'Details'; font-size: 1.3em; color: black; }
@@ -203,7 +203,7 @@ input[type='text']:focus, input[type='number']:focus, input[type='password']:foc
 	td.details_cell,
 	.map_cell,
 	div.servername_nolink,
-	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
+	.status_icon_nrs, .status_icon_onl, .status_icon_pwd {
     display: none;
 	}
 	.servername_cell { padding: 0px; }

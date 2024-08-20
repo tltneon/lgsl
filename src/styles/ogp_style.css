@@ -119,7 +119,7 @@ a.details_icon:hover { background-color: #c0e0ec; }
 .status_icon_onl, .status_icon_nrs { width: 15px; height: 15px; display: inline-block; border: 1px solid black; border-radius: 2px; }
 .status_icon_onl { background-color: #8ee683; }
 .status_icon_nrs { background-color: #f1abab; }
-.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; background-size: cover; }
+.status_icon_pwd { background-image: url(../other/icon_online_password.gif) !important; width: 16px; height: 16px; display: inline-block; background-size: cover; }
 .status_icon_pen { width: 14px; height: 14px; background-color: gray; display: inline-block; border: 1px solid black; }
 img.game_icon { width: 16px; border-radius: 2px; }
 
@@ -178,7 +178,7 @@ div.servername_link { display: none; }
 	td.details_cell,
 	.map_cell,
 	div.servername_nolink,
-	.status_icon_nrs, .status_icon_onl, .status_icon_onp {
+	.status_icon_nrs, .status_icon_onl, .status_icon_pwd {
 		display: none;
 	}
 	img.game_icon { width: 48px; }

@@ -98,15 +98,15 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .contry_icon { border:none; width: 16px; height: 16px; }
 .game_icon { border:none; width: 32px; height: 32px; border-radius: 2px; }
 .details_icon,
-.status_icon_onp { width: 32px; height: 32px; display: inline-block; background-size: cover; }
+.status_icon_pwd { width: 32px; height: 32px; display: inline-block; background-size: cover; }
 .details_icon { background-image: url(../other/icon_details.gif) !important; }
 .status_icon_nrs,
 .status_icon_onl,
-.status_icon_onp,
+.status_icon_pwd,
 .status_icon_pen { width: 28px;height: 28px; border: 2px solid black; display: inline-block; }
 .status_icon_onl { background: #8ee683; }
 .status_icon_nrs { background: #f1abab; }
-.status_icon_onp { background-image: url(../other/icon_online_password.gif) !important; }
+.status_icon_pwd { background-image: url(../other/icon_online_password.gif) !important; }
 .status_icon_pen { background-color: gray; }
 
 #server_list_table { margin:auto; width: 100%; border-radius: 12px; margin-top:30px; border-collapse: collapse; }
@@ -154,7 +154,7 @@ div.servername_nolink { display: none; }
 	div.servername_nolink,
 	.status_icon_nrs,
 	.status_icon_onl,
-	.status_icon_onp { display: none; }
+	.status_icon_pwd { display: none; }
 
 	div.servername_link a { color: #d5f2ff; }
 	div.servername_link { display: block; }

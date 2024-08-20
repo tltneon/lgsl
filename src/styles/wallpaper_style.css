@@ -111,7 +111,7 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .contry_icon { border:none; width: 16px; height: 16px; }
 .game_icon { width: 28px; height: 28px; border-radius: 10px; border: 1px solid black; margin: 5px; border-radius: 12px; }
 a.details_icon { background-image: url(../other/icon_details.gif) !important; width: 32px; height: 32px; display: inline-block; background-size: cover; }
-.status_icon_onl, .status_icon_nrs, .status_icon_onp, .status_icon_pen
+.status_icon_onl, .status_icon_nrs, .status_icon_pwd, .status_icon_pen
 { background: #f1abab;
   width: 36px;
   height: 36px;
@@ -123,7 +123,7 @@ a.details_icon { background-image: url(../other/icon_details.gif) !important; wi
 }
 .status_icon_onl { background: #72ff60; }
 .status_icon_nrs { background: #ff6565; }
-.status_icon_onp { background: #fdb94a; }
+.status_icon_pwd { background: #fdb94a; }
 .status_icon_pen { background-color: gray; }
 
 #server_list_table { margin:auto; width: 100%; border-radius: 12px; margin-top:30px; border-collapse: collapse; }

@@ -158,9 +158,9 @@ div[id^="servername"] { margin:auto; text-align:center; font-weight:bold; paddin
 .contry_icon { border:none; width: 16px; height: 16px; }
 .status_icon_onl { background-color: #8ee683; }
 .status_icon_nrs { background-color: #f1abab; }
-.status_icon_onp { background-color: #f8bc85; }
+.status_icon_pwd { background-color: #f8bc85; }
 .status_icon_pen { background-color: gray; }
-.status_icon_onl, .status_icon_nrs, .status_icon_onp, .status_icon_pen {
+.status_icon_onl, .status_icon_nrs, .status_icon_pwd, .status_icon_pen {
 	width: 0.25rem;
 	height: 3rem;
 	display: inline-block;
