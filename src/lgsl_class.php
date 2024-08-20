@@ -835,7 +835,7 @@
       return (int) ($this->_server['players'] == 0 || $this->_server['playersmax'] == 0 ? 0 : floor($this->_server['players']/$this->_server['playersmax']*100));
     }
     public function getPlayersCountFormatted() {
-      if ($this->getPlayersCount() && $this->getPlayersMaxCount()) {
+      if ($this->getPlayersMaxCount()) {
         if ($this->getPlayersCount() > 9999) {
           return $this->getPlayersCount();
         } else {

@@ -491,14 +491,15 @@
       $status = $this->process();
       if ($status === $this::SUCCESS) {
         if ($this->separatedPackets) {
-        if ($this->_need['e']) $status |= $this->process();
-        if ($this->_need['p']) $status |= $this->process();
+          if ($this->_need['e']) $status |= $this->process();
+          if ($this->_need['p']) $status |= $this->process();
         } else {
           $this->_need = [
             's' => false,
             'e' => false,
             'p' => false
           ];
+          $this->_server->setTimestamp("sep", time());
         }
       }
       $this->_data['o']['time_execution'] = $time - microtime(true);
