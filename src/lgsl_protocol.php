@@ -612,6 +612,7 @@
 				$this->_data['s']['game'] = $games[$this->_data['e']['protocol']] ?? "Unknown {$this->_data['e']['protocol']}";
       }
       if (isset($this->_data['e']['gamename'])) { $this->_data['s']['game'] = $this->_data['e']['gamename']; }
+      if (isset($this->_data['e']['gm'])) { $this->_data['s']['mode'] = $this->_data['e']['gm']; }
       if (isset($this->_data['e']['g_gametype'])) {
         if ($type === PROTOCOL::URBANTERROR) {
           $games = ["0" => "Free for All", "1" => "Last Man Standing", "3" => "Team Deathmatch", "4" => "Team Survivor", "5" => "Follow the Leader",
