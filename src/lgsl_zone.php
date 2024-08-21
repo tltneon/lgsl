@@ -14,17 +14,19 @@
   $port = (int) ($_GET['port'] ?? 0);
   if (!isset($lgsl_zone_number) && !$ip && !$port) { exit("LGSL PROBLEM: $lgsl_zone_number NOT SET"); }
   $background = $_GET['bg'] ?? '#FFF';
-  $font = $_GET['font'] ?? '#000';
+  $text = $_GET['text'] ?? '#000';
   $link = $_GET['link'] ?? '#0000ED';
 
   require "lgsl_class.php";
+  require "lgsl_language.php";
+  $lang = new Lang($_COOKIE['lgsl_lang'] ?? Lang::EN);
 
   $zone_width = "{$lgsl_config['zone']['width']}px";
   $zone_grid  = $lgsl_config['grid'][$lgsl_zone_number] ?? 1;
   $zone_count = 0;
   $output = '';
 
-  $request     = empty($lgsl_config['players'][$lgsl_zone_number]) ? "s" : "sp";
+  $request = empty($lgsl_config['players'][$lgsl_zone_number]) ? "s" : "sp";
   if ($lgsl_zone_number) {
     $server_list = Database::getServersGroup(["request"=>$request, "zone"=>$lgsl_zone_number]);
   } else {
@@ -42,10 +44,11 @@
   <style>
     html {
       background-color: $background;
-      color: $font
+      color: $text
     }
     a {
       color: $link;
+      text-decoration:none;
     }
     .sidebarserver * {
       scrollbar-width: thin;
@@ -69,7 +72,7 @@
       border: none;
     }
 
-    .marquee{
+    .marquee {
       width:100%;
       white-space:nowrap;
       overflow:hidden;
@@ -103,14 +106,14 @@
 
       $marquee = strlen($server->getName()) > 25 ? "class='on'" : "";
       $output .= "
-      <td style='vertical-align:top; text-align:center'>
+      <td style='vertical-align:top;'>
 
-        <table style='width:{$zone_width}; margin:auto; text-align:center' cellpadding='0' cellspacing='2'>
+        <table style='width:{$zone_width}; margin:auto; text-align:center;' cellpadding='0' cellspacing='2'>
 
           <tr>
-            <td title='{$lgsl_config['text']['slk']}' style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
-                <a href='{$server->getConnectionLink()}' style='text-decoration:none'>
+            <td title='{$lang->get('slk')}' style='padding:0px;'>
+              <div style='width:{$zone_width}; white-space:nowrap; overflow:hidden;'>
+                <a href='{$server->getConnectionLink()}'>
                   {$server->getAddress()}
                 </a>
               </div>
@@ -118,24 +121,24 @@
           </tr>
 
           <tr>
-            <td title='{$server->getName()}' style='padding:0px; text-align:center'>
-              <div class='marquee' style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
+            <td title='{$server->getName()}' style='padding:0px;'>
+              <div class='marquee' style='width:{$zone_width}; white-space:nowrap; overflow:hidden;'>
                 <span {$marquee}>{$server->getName()}</span>
               </div>
             </td>
           </tr>
 
           <tr>
-            <td style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; padding:0px; position:relative'>
+            <td style='padding:0px;'>
+              <div style='width:{$zone_width}; padding:0px; position:relative'>
                 <a href='".LGSL::link($server->getIp(), $server->getConnectionPort())."' target='_blank'>
-                  <img alt='' src='{$server->getMapImage()}'          title='{$lgsl_config['text']['vsd']}' style='vertical-align:middle; width: 100%; border-radius: 4px;' />
-                  <img alt='' src='{$server->mapPasswordImage()}' title='{$lgsl_config['text']['vsd']}' style='position:absolute; z-index:2; bottom:2px; right:2px;' />
-                  <img alt='' src='{$server->addUrlPath($server->getGameIcon())}'          title='{$server->getGameFormatted()}'     style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;' />
+                  <img alt='' src='{$server->getMapImage()}'      title='{$lang->get('vsd')}' style='vertical-align:middle; width: 100%; border-radius: 4px;'>
+                  <img alt='' src='{$server->mapPasswordImage()}' title='{$lang->get('vsd')}' style='position:absolute; z-index:2; bottom:2px; right:2px;'>
+                  <img alt='' src='{$server->addUrlPath($server->getGameIcon())}' title='{$server->getGameFormatted()}' style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;'>
                   ";
                   if ($lgsl_config['locations'])
                   $output .= "
-                  <img alt='' class='details_location_image flag f{$server->getLocation()}' title='{$server->getLocationFormatted()}'      style='position:absolute; z-index:2; top:2px; right:2px;' />
+                  <img alt='' class='details_location_image flag f{$server->getLocation()}' title='{$server->getLocationFormatted()}' style='position:absolute; z-index:2; top:2px; right:2px;'>
                   ";
                   $output .= "
                 </a>
@@ -144,8 +147,8 @@
           </tr>
 
           <tr>
-            <td title='{$server->getMap()}' style='padding:0px; text-align:center'>
-              <div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; white-space:nowrap; overflow:hidden; text-align:center'>
+            <td title='{$lang->get('map')}: {$server->getMap()}' style='padding:0px;'>
+              <div style='width:{$zone_width}; white-space:nowrap; overflow:hidden;'>
                 {$server->getMap()}
               </div>
             </td>
@@ -158,22 +161,22 @@
           $output .= "
           <tr>
             <td style='border-radius: 4px;'>
-              <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
+              <span style='padding:1px; float:left'> {$lang->get('zpl')} </span>
               <span style='padding:1px; float:right'> {$server->getPlayersCountFormatted()} </span>";
               $players = $server->getPlayersArray();
               if (count($players) > 0) {
-                $output .= "<div style='left:0px; right:0px; top:0px; bottom:0px; width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
+                $output .= "<div style='width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
 
                 foreach ($players as $player) {
                   $output .= "
-                  <div style='left:0px; right:0px; top:0px; bottom:0px; padding:1px; white-space:nowrap; overflow:hidden; text-align:left' title='{$player['name']}'> {$player['name']} </div>";
+                  <div style='padding:1px; white-space:nowrap; overflow:hidden; text-align:left' title='{$player['name']}'> {$player['name']} </div>";
                 }
 
                 $output .= "</div";
               } else {
                 $inner_width = $server->getPlayersPercent();
                 $output .="
-                <br />
+                <br>
                 <div style='margin-top: 5px; border: 1px solid #555555; background-color: #222222; height: 4px;'>
                   <div style='width: $inner_width%; background-color: #ff8400; height: 4px;'></div>
                 </div>";
@@ -185,7 +188,7 @@
           $output .= "
           <tr>
             <td style='padding:0px; border:1px solid; border-radius: 4px;'>
-              <span style='padding:1px; float:left'> {$lgsl_config['text']['zpl']} </span>
+              <span style='padding:1px; float:left'> {$lang->get('zpl')} </span>
               <span style='padding:1px; float:right'> {$server->getPlayersCount()} </span>
             </td>
           </tr>";

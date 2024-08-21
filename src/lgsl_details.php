@@ -109,9 +109,10 @@
 						}
 					}
 					
+          $iframeLink = "src/lgsl_zone.php?{$g}&bg=transparent&text=white&link=yellow";
 					$output .= "
-						<iframe src='src/lgsl_zone.php?{$g}' alt='{$server->getName()}' style='border: 0; display: block; background: white;width: 200px;height: calc(275px + {$framespace}px);margin: auto;'></iframe><br />
-            <textarea onClick='this.select();'><iframe src='{$p}src/lgsl_zone.php?{$g}'></iframe></textarea>
+						<iframe src='{$iframeLink}' alt='{$server->getName()}' style='border: 1px dotted gray; display: block; width: 200px; height: calc(275px + {$framespace}px); margin: auto;'></iframe><br />
+            <textarea onClick='this.select();'><iframe src='{$p}{$iframeLink}'></iframe></textarea>
           </div>
         </details>
         <div class='spacer'></div>

@@ -5,12 +5,11 @@
 
   require ("src/lgsl_config.php");
   require ("src/lgsl_language.php");
-  $_COOKIE['lgsl_lang'] = $_COOKIE['lgsl_lang'] ?? tltneon\LGSL\Lang::EN;
-  $lang = new tltneon\LGSL\Lang($_COOKIE['lgsl_lang']);
+  $lang = new tltneon\LGSL\Lang($_COOKIE['lgsl_lang'] ?? tltneon\LGSL\Lang::EN);
 	if (empty($lgsl_config['installed'])) header("Location: install.php");
   global $output, $title;
 
-  function load_page($file) {
+  function loadPage($file) {
     global $lgsl_config;
     if ($lgsl_config['preloader']) {
       $loader = @file_get_contents('src/other/loader.html');
@@ -55,9 +54,9 @@
   $s = $_GET['s'] ?? null;
   $ip = $_GET['ip'] ?? null;
   $port = $_GET['port'] ?? null;
-  if ($s === "add")                     { $output = load_page("add");     $title .= " | {$lang->get("aas")}";}
-  elseif ((int) $s > 0 || $ip && $port) { $output = load_page("details");                                    }
-  else                                  { $output = load_page("list");                                       }
+  if ($s === "add")                     { $output = loadPage("add");     $title .= " | {$lang->get("aas")}";}
+  elseif ((int) $s > 0 || $ip && $port) { $output = loadPage("details");                                    }
+  else                                  { $output = loadPage("list");                                       }
 //------------------------------------------------------------------------------------------------------------+
 ?>
 <!DOCTYPE html>

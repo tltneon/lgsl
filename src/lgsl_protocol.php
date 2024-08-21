@@ -603,12 +603,9 @@
         }
       }
 
-      if (!empty($this->_data['e']['hostname']))    { $this->_data['s']['name'] = $this->_data['e']['hostname']; }
-      if (!empty($this->_data['e']['sv_hostname'])) { $this->_data['s']['name'] = Helper::lgslParseColor($this->_data['e']['sv_hostname'], "1"); }
-      if (isset($this->_data['e']['protocol']) && $type !== PROTOCOL::UNVANQUISHED) {
-        if ($type === PROTOCOL::CALLOFDUTYIW) {
-          $games = ['1' => 'IW6', '2' => 'H1', '6' => 'IW3', '7' => 'T7', '20604' => 'IW5', '151' => 'IW4', '101' => 'T4'];
-        }
+      $this->_data['s']['name'] = $this->_data['e']['hostname'] ?? $this->_data['e']['sv_hostname'] ?? LGSL::NONE;
+      if (isset($this->_data['e']['protocol']) && $type === PROTOCOL::CALLOFDUTYIW) {
+        $games = ['1' => 'IW6', '2' => 'H1', '6' => 'IW3', '7' => 'T7', '20604' => 'IW5', '151' => 'IW4', '101' => 'T4'];
 				$this->_data['s']['game'] = $games[$this->_data['e']['protocol']] ?? "Unknown {$this->_data['e']['protocol']}";
       }
       if (isset($this->_data['e']['gamename'])) { $this->_data['s']['game'] = $this->_data['e']['gamename']; }
@@ -620,13 +617,10 @@
         }
         $this->_data['s']['mode'] = $games[$this->_data['e']['g_gametype']] ?? $this->_data['e']['g_gametype'];
       }
-      if (isset($this->_data['e']['mapname']))  { $this->_data['s']['map']  = $this->_data['e']['mapname']; }
+      $this->_data['s']['map'] = $this->_data['e']['mapname'] ?? LGSL::NONE;
       $this->_data['s']['players'] = empty($part['2']) ? 0 : count($part) - 2;
-      if (isset($this->_data['e']['maxclients']))    { $this->_data['s']['playersmax'] = $this->_data['e']['maxclients']; } // QUAKE 2
-      if (isset($this->_data['e']['sv_maxclients'])) { $this->_data['s']['playersmax'] = $this->_data['e']['sv_maxclients']; }
-      if (isset($this->_data['e']['pswrd']))      { $this->_data['s']['password'] = $this->_data['e']['pswrd']; } // CALL OF DUTY
-      if (isset($this->_data['e']['needpass']))   { $this->_data['s']['password'] = $this->_data['e']['needpass']; } // QUAKE 2
-      if (isset($this->_data['e']['g_needpass'])) { $this->_data['s']['password'] = (int) $this->_data['e']['g_needpass']; }
+      $this->_data['s']['playersmax'] = $this->_data['e']['maxclients'] ?? $this->_data['e']['sv_maxclients'] ?? 0;
+      $this->_data['s']['password'] = $this->_data['e']['pswrd'] ?? $this->_data['e']['needpass'] ?? (int) $this->_data['e']['g_needpass'] ?? 0;
 
       array_shift($part); // REMOVE HEADER
       array_shift($part); // REMOVE SETTING
