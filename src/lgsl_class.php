@@ -724,7 +724,9 @@
 			$this->_other = array_merge($this->_other, $data['o'] ?? []);
 			$this->_server = array_merge($this->_server, $data['s'] ?? []);
       if ($this->isOnline()) {
-        $this->_players = array_merge($this->_players, $data['p'] ?? []);
+        if (is_array($data['p']) && count($data['p']) > 0) {
+          $this->_players = $data['p'];
+        }
       } else {
 			  $this->_players = [];
       }
