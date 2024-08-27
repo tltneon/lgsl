@@ -89,14 +89,20 @@
           }
         }
       ?>
-      <select name='language' onChange='changeLang(event)'>
       <?php
-        foreach (tltneon\LGSL\Lang::list() as $lang) {
-          $select = $_COOKIE['lgsl_lang'] === $lang ? "selected": "";
-          echo "<option {$select}>{$lang}</option>";
-        }
+      if ($lgsl_config['select_lang']) {
       ?>
-      </select>
+        <select name='language' onChange='changeLang(event)'>
+        <?php
+          foreach (tltneon\LGSL\Lang::list() as $lang) {
+            $select = $_COOKIE['lgsl_lang'] === $lang ? "selected": "";
+            echo "<option {$select}>{$lang}</option>";
+          }
+        ?>
+        </select>
+      <?php
+      }
+      ?>
     </div>
     <a id="adminlink" href="admin.php"></a>
 

@@ -221,6 +221,7 @@
 	\$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay
 	\$lgsl_config['cms']           = 'sa';                // sets which CMS specific code to use
 	\$lgsl_config['disabled_types']= false; // allow to exclude some protocols (games) from list. usage: ['disabled_types']= ['halflifewon', 'test'];
+	\$lgsl_config['select_lang']   = {$conf['select_lang']};      // allow to select language for users
 	\$lgsl_config['language']      = '{$conf['language']}'; // sets LGSL language
 	include('languages/{$conf['language']}.php');        // loads LGSL language
 ?>";
@@ -495,6 +496,10 @@
 				<input type='checkbox' name='hide_offline' onChange='changeCheckbox(event)' />
 			</p>
 			<p>
+				<l k='sella'></l>:
+				<input type='checkbox' name='select_lang' onChange='changeCheckbox(event)' />
+			</p>
+			<p>
 				<l k='pubad'></l>:
 				<select type='text' name='public_add' onChange='changeValue(event)' />
 					<option value='0' style='color: red;'>Disabled</option>
@@ -569,7 +574,8 @@ document.addEventListener("reloadLocale", reloadLocale);
 		public_add: false,
 		totals: false,
 		locations: false,
-    	preloader: false
+    	preloader: false,
+    	select_lang: false
 	}
 	function changeValue(event, options = {}) {
 		if (options.styleChanged) {

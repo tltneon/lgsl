@@ -149,6 +149,7 @@
   $lgsl_config['pagination_lim']= 15;        // limit per page
   $lgsl_config['preloader']     = true;      // true=using ajax to faster loading page
   $lgsl_config['disabled_types']= false;     // allow to exclude some protocols (games) from list. usage: $lgsl_config['disabled_types']= ['warsowold', 'halflifewon', 'test'];
+  $lgsl_config['select_lang']   = true;      // allow to select language for users
 
 //------------------------------------------------------------------------------------------------------------+
 //[ TRANSLATION ]
