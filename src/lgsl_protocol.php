@@ -957,7 +957,6 @@
           $this->_data['p'][$player_key]['time']  = Helper::lgslTime($buffer->cutByteUnpack(4, "f"));
           $player_key ++;
         }
-        var_dump($this->_data['p']);
         $this->need('p');
       } elseif ($response_type === "E") { // SOURCE AND HALF-LIFE 1 RULES
         $buffer->skip(2);
