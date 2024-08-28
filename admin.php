@@ -1,5 +1,4 @@
 <?php
-//------------------------------------------------------------------------------------------------------------+
   require "src/lgsl_config.php";
 
   if (empty($lgsl_config['admin']['user']) || empty($lgsl_config['admin']['pass'])) {
@@ -18,7 +17,6 @@
   }
 
   header("Content-Type:text/html; charset=utf-8");
-//------------------------------------------------------------------------------------------------------------+
 ?>
 <!DOCTYPE html>
 <html>
@@ -33,32 +31,29 @@
   <body>
     <div id='admin_page'>
       <div id='back_to_servers_list'><a href='./'><?php echo $lgsl_config['text']['bak'];?></a></div>
-
-<?php
-//------------------------------------------------------------------------------------------------------------+
-  if (defined("LGSL_ADMIN")) {
-    global $output;
-    $output = "";
-    require "src/lgsl_admin.php";
-    echo $output;
-  } else {
-    echo "
-    <div id='admin_login_page'>
-			<form method='post' action=''>
-				<table>
-					<tr><td>{$lgsl_config['text']['umn']}: </td><td><input type='text'     name='lgsl_user' value='' /></td></tr>
-					<tr><td>{$lgsl_config['text']['pwd']}: </td><td><input type='password' name='lgsl_pass' value='' /></td></tr>
-					<tr>
-						<td colspan='2'>
-							<input type='submit' name='lgsl_admin_login' value='{$lgsl_config['text']['lgn']}' />
-						</td>
-					</tr>
-				</div>
-			</form>
-    </div>";
-  }
-//------------------------------------------------------------------------------------------------------------+
-?>
+        <?php
+          if (defined("LGSL_ADMIN")) {
+            global $output;
+            $output = "";
+            require "src/lgsl_admin.php";
+            echo $output;
+          } else {
+            echo "
+            <div id='admin_login_page'>
+              <form method='post' action=''>
+                <table>
+                  <tr><td>{$lgsl_config['text']['umn']}: </td><td><input type='text'     name='lgsl_user' value=''></td></tr>
+                  <tr><td>{$lgsl_config['text']['pwd']}: </td><td><input type='password' name='lgsl_pass' value=''></td></tr>
+                  <tr>
+                    <td colspan='2'>
+                      <input type='submit' name='lgsl_admin_login' value='{$lgsl_config['text']['lgn']}'>
+                    </td>
+                  </tr>
+                </div>
+              </form>
+            </div>";
+          }
+        ?>
     </div>
   </body>
 </html>

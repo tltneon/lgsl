@@ -620,7 +620,7 @@
       $this->_data['s']['map'] = $this->_data['e']['mapname'] ?? LGSL::NONE;
       $this->_data['s']['players'] = empty($part['2']) ? 0 : count($part) - 2;
       $this->_data['s']['playersmax'] = $this->_data['e']['maxclients'] ?? $this->_data['e']['sv_maxclients'] ?? 0;
-      $this->_data['s']['password'] = $this->_data['e']['pswrd'] ?? $this->_data['e']['needpass'] ?? (int) $this->_data['e']['g_needpass'] ?? 0;
+      $this->_data['s']['password'] = (int) ($this->_data['e']['pswrd'] ?? $this->_data['e']['needpass'] ?? $this->_data['e']['g_needpass'] ?? 0);
 
       array_shift($part); // REMOVE HEADER
       array_shift($part); // REMOVE SETTING
@@ -957,6 +957,7 @@
           $this->_data['p'][$player_key]['time']  = Helper::lgslTime($buffer->cutByteUnpack(4, "f"));
           $player_key ++;
         }
+        var_dump($this->_data['p']);
         $this->need('p');
       } elseif ($response_type === "E") { // SOURCE AND HALF-LIFE 1 RULES
         $buffer->skip(2);

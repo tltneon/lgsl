@@ -309,19 +309,16 @@
 	<body>
 		<div id="container">
 			<div>
-<?php
-//------------------------------------------------------------------------------------------------------------+
-	$loc = array_reduce(LGSL::locationsCodes(),
-		function($a, $b) {
-			return "{$a}<option value='{$b}'>{$b}</option>";
-		});
-
-	$output = '
-	<h4>LGSL Installation page</h4>
-	<h6><a href="./"><l k="back"></l></a></h6>
-	<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank"><l k="owiki"></l></a></h5>
-	<div>';
-
+				<h4>LGSL Installation page</h4>
+				<h6><a href="./"><l k="back"></l></a></h6>
+				<h5><a href="https://github.com/tltneon/lgsl/wiki/How-to-install-LGSL" target="_blank"><l k="owiki"></l></a></h5>
+				<div>
+		<?php
+		$loc = array_reduce(LGSL::locationsCodes(),
+			function($a, $b) {
+				return "{$a}<option value='{$b}'>{$b}</option>";
+			});
+		$output = '';
 		if ($step == 1) {
 			$output .= '<h4><l k="check"></l></h4>';
 			
@@ -530,7 +527,6 @@
 
   echo $output;
   unset($output);
-//------------------------------------------------------------------------------------------------------------+
 ?>
 			</div>
 		</div>
