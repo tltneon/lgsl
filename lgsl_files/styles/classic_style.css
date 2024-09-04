@@ -123,7 +123,7 @@ div.servername_link {display: none;}
 #pages a {padding: 5px; background-color: #c6c6c6; font-size: 1.3em;}
 #pages span {padding: 10px;}
 
-#totals {width: fit-content; margin:auto; margin-top: 16px;}
+#totals {width: fit-content; margin:auto; margin-top: 16px; text-align:center;}
 #totals > div {width: fit-content;  background-color: #e4eaf2; padding:4px; display:inline-block;}
 
 /* */
