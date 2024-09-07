@@ -914,7 +914,7 @@
 				}
     
         // INSERT DATA INTO STATIC LINK - CONVERT SPECIAL CHARACTERS - RETURN
-        return htmlentities(str_replace(["{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}", "{GAME}"], [$this->getIp(), $this->getConnectionPort(), $this->getQueryPort(), $s_port, $this->getGame()], $link), ENT_QUOTES);
+        return htmlentities(str_replace(["{IP}", "{C_PORT}", "{Q_PORT}", "{S_PORT}", "{GAME}"], [$this->getIp(true), $this->getConnectionPort(), $this->getQueryPort(), $s_port, $this->getGame()], $link), ENT_QUOTES);
     }
 		public function addUrlPath($path = '') {
       global $lgsl_url_path;
