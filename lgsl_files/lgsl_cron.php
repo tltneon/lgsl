@@ -2,7 +2,7 @@
 
  /*----------------------------------------------------------------------------------------------------------\
  |                                                                                                            |
- |                      [ LIVE GAME SERVER LIST ] [ © RICHARD PERRY FROM GREYCUBE.COM ]                       |
+ |                      [ LIVE GAME SERVER LIST ] [ ï¿½ RICHARD PERRY FROM GREYCUBE.COM ]                       |
  |                                                                                                            |
  |    Released under the terms and conditions of the GNU General Public License Version 3 (http://gnu.org)    |
  |                                                                                                            |
@@ -32,6 +32,7 @@
   $mysql_query  = "SELECT `type`,`ip`,`c_port`,`q_port`,`s_port` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `disabled`=0 ORDER BY `cache_time` ASC";
   $mysql_result = mysqli_query($lgsl_database, $mysql_query) or die(mysqli_error($lgsl_database));
 
+  if (ob_get_level() == 0) ob_start();
   while($mysql_row = mysqli_fetch_array($mysql_result))
   {
     echo str_pad(lgsl_timer("taken"),  8,  " ").":".
@@ -43,10 +44,10 @@
 
     lgsl_query_cached($mysql_row['type'], $mysql_row['ip'], $mysql_row['c_port'], $mysql_row['q_port'], $mysql_row['s_port'], $request);
 
-    flush();
     ob_flush();
+    flush();
   }
-
+ob_end_flush();
 //------------------------------------------------------------------------------------------------------------+
 
   echo "\r\nFINISHED</pre>";
