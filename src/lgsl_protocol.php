@@ -501,6 +501,14 @@
           ];
           $this->_server->setTimestamp("sep", time());
         }
+        $this->_data['o']['conn_tries'] = 0;
+      } else {
+        $this->_data['o']['conn_tries'] = $this->_server->getConnectionTries() + 1;
+        if ($this->_data['o']['conn_tries'] > 4) {
+          $this->_server->setTimestamp("sep", time());
+          $this->_data['o']['conn_tries'] = 5;
+        }
+        $this->_server->updateValues($this->_data);
       }
       $this->_data['o']['time_execution'] = $time - microtime(true);
       if ($status !== $this::NO_RESPOND) {
@@ -511,6 +519,8 @@
           $this->_server->addOption("_error", "Probably protocol mistake: " . static::class);
         }
         $this->_server->updateValues($this->_data);
+      } else {
+        $this->_server->addOption("_error", "Successful ping but no correct answer");
       }
       return $status;
     }
