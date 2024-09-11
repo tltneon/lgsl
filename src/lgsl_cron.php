@@ -24,6 +24,7 @@
   $db_query  = "SELECT `type`,`ip`,`c_port`,`q_port`,`s_port` FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE `disabled`= 0 ORDER BY `cache_time` ASC;";
   $db_result = $db->query($db_query);
 
+  if (ob_get_level() == 0) ob_start();
   foreach ($db_result as $db_row) {
     echo str_pad(LGSL::timer("taken"),  8,  " ").":".
          str_pad($db_row['type'],   15, " ").":".
@@ -35,8 +36,9 @@
     $server = new Server(["type" => $db_row['type'], "ip" => $db_row['ip'], "c_port" => $db_row['c_port'], "q_port" => $db_row['q_port']]);
     $server->queryCached($request);
 
-    flush();
     ob_flush();
+    flush();
   }
+  ob_end_flush();
 
   echo "\r\nFINISHED</pre>";
