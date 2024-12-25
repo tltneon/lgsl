@@ -208,7 +208,7 @@
         </tr>";
 
       foreach ($server['e'] as $field => $value) {
-        $value = preg_replace('/((https*:\/\/|https*:\/\/www\.|www\.)[\w\d\.\-\/=$?​]*)/i', "<a href='$1' target='_blank'>$1</a>", html_entity_decode($value));
+        $value = preg_replace('/((https*:\/\/|https*:\/\/www\.|www\.)[\w\d\.\-\/=$?​]*)/i', "<a href='$1' target='_blank'>$1</a>", htmlentities($value, ENT_QUOTES, 'UTF-8'));
         $output .= "
         <tr><td> {$field} </td><td> {$value} </td></tr>";
       }
