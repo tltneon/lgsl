@@ -16,7 +16,7 @@
         const TR = "turkish";
         private string $lang;
         private array $strings;
-        function __construct(string $lang = null) {
+        function __construct(?string $lang = null) {
             global $lgsl_config;
             if (!$lang) {
                 if (isset($lgsl_config['language'])) {

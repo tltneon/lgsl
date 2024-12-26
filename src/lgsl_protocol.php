@@ -3036,7 +3036,7 @@
 		public function length(): int {
 			return strlen($this->_string);
 		}
-		public function skip(int $left, int $right = null): void {
+		public function skip(int $left, ?int $right = null): void {
       if ($right) {
         $this->set(substr($this->_string, $left, -$right));
       } else {
