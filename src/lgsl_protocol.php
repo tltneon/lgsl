@@ -2558,14 +2558,38 @@
     }
   }
   /* Query 41-50 */
-  class Query41 extends QueryStatus {  // Satisfactory
-    protected $packets = ["\x00\x00\xd6\x9c\x28\x25\x00\x00\x00\x00"];
-    public function postProcess(&$buffer) {
-      $buffer->skip(11);
-      $version = $buffer->cutByteUnpack(1, "H*");
-      $version = $buffer->cutByteUnpack(1, "H*") . $version;
-      $version = $buffer->cutByteUnpack(1, "H*") . $version;
-      $this->_data['e']['version'] = hexdec($version);
+  class Query41 extends QuerySocket {  // Satisfactory
+    public function process() {
+      $protocolMagic = 0xF6D5;
+      $messageType = 0; // Poll Server State
+      $protocolVersion = 1;
+      $terminatorByte = 0x1;
+      $cookie = microtime(true) * 1000000;
+
+      $message = pack('vCCP', $protocolMagic, $messageType, $protocolVersion, $cookie) . chr($terminatorByte);
+      $buffer = $this->fetch($message);
+      if (!$buffer) return $this::NO_RESPOND;
+
+      $this->_data['e']['responseProtocolMagic'] = unpack('v', $buffer->cutByte(2))[1];
+      $this->_data['e']['responseType'] = unpack('C', $buffer->cutByte())[1];
+      $this->_data['e']['responseProtocolVersion'] = unpack('C', $buffer->cutByte())[1];
+      $this->_data['e']['responseCookie'] = unpack('P', $buffer->cutByte(8))[1];
+      $serverState = unpack('C', $buffer->cutByte())[1];
+      $this->_data['e']['serverNetCL'] = unpack('V', $buffer->cutByte(4))[1];
+      $this->_data['e']['serverFlags'] = unpack('P', $buffer->cutByte(8))[1];
+      $this->_data['e']['numSubStates'] = unpack('C', $buffer->cutByte())[1];
+      $buffer->skip($this->_data['e']['numSubStates'] * 3); // Each SubState is 3 bytes (1 byte for SubStateId and 2 bytes for SubStateVersion)
+      $serverNameLength = unpack('v', $buffer->cutByte(2))[1];
+      $this->_data['s']['name'] = $buffer->cutByte($serverNameLength);
+
+      $serverStateDescriptions = [
+        0 => 'Offline',
+        1 => 'Idle',
+        2 => 'Loading',
+        3 => 'Playing'
+      ];
+      $this->_data['e']['state'] = $serverStateDescriptions[$serverState];
+      return $this::SUCCESS;
     }
   }
   class Query42 extends QuerySocket {  // Factorio
