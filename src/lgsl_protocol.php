@@ -614,8 +614,9 @@
         }
       }
 
-      $this->_data['s']['name'] = $this->_data['e']['hostname'] ?? $this->_data['e']['sv_hostname'] ?? LGSL::NONE;
-      if (isset($this->_data['e']['sv_hostname'])) { $this->_data['e']['sv_hostname'] = strtolower(Helper::lgslHtmlColor($this->_data['e']['sv_hostname'], "1", true)); }
+      $this->_data['s']['name'] = Helper::lgslHtmlColor($this->_data['e']['hostname'] ?? $this->_data['e']['sv_hostname'] ?? LGSL::NONE, "1", true);
+      $this->_data['o']['colored_name'] = $this->_data['e']['hostname'] ?? $this->_data['e']['sv_hostname'] ?? LGSL::NONE;
+      if (isset($this->_data['e']['sv_hostname'])) { $this->_data['e']['sv_hostname'] = $this->_data['s']['name']; }
       if (isset($this->_data['e']['protocol']) && $type === PROTOCOL::CALLOFDUTYIW) {
         $games = ['1' => 'IW6', '2' => 'H1', '6' => 'IW3', '7' => 'T7', '20604' => 'IW5', '151' => 'IW4', '101' => 'T4'];
 				$this->_data['s']['game'] = $games[$this->_data['e']['protocol']] ?? "Unknown {$this->_data['e']['protocol']}";
@@ -2414,7 +2415,8 @@
     public function process() {
       $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/dynamic.json");
       if (!$buffer) return $this::NO_RESPOND;
-      $this->_data['s']['name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem', false);
+      $this->_data['s']['name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem');
+      $this->_data['o']['colored_name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem', false);
       $this->_data['s']['players'] = $buffer['clients'];
       $this->_data['s']['playersmax'] = $buffer['sv_maxclients'];
       $this->_data['s']['map'] = $buffer['mapname'];

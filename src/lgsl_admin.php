@@ -11,8 +11,8 @@
 
   if (!defined("LGSL_ADMIN")) { header('HTTP/1.0 404 Not Found'); exit(); }
 
-  require "lgsl_class.php";
-  require "lgsl_language.php";
+  require_once "lgsl_class.php";
+  require_once "lgsl_language.php";
   $lang = new Lang($_COOKIE['lgsl_lang'] ?? Lang::EN);
 
   if (!function_exists("fsockopen") && !$lgsl_config['feed']['method']) {

@@ -460,8 +460,10 @@
         $server['e'] = $cache['e'];
         $server['p'] = $cache['p'];
         if (isset($cache['h'])) $server['h'] = $cache['h'];
-        if (isset($cache['o']['location'])) $server['o']['location'] = $cache['o']['location'];
-        if (isset($cache['o']['conn_tries'])) $server['o']['conn_tries'] = $cache['o']['conn_tries'];
+        foreach (['location', 'conn_tries', 'colored_name'] as $i) {
+          if (isset($cache['o'][$i])) 
+            $server['o'][$i] = $cache['o'][$i];
+        }
         $server['s']['cache_time'] = new Timestamp($data['cache_time']);
       }
       return $server;
@@ -678,7 +680,8 @@
       $this->_other = [
         "zone" => null,
         "comment" => '',
-        'conn_tries' => 0
+        'conn_tries' => 0,
+        'colored_name' => null
       ];
     }
     
@@ -700,11 +703,11 @@
       $protocol = new Protocol($this, $request);
       $protocol->query();
 
-      global $lgsl_config;
-      if ($lgsl_config['history'] && LGSL::requestHas($request, "h") && !$this->isPending()) {
+      $config = new Config();
+      if ($config['history'] && LGSL::requestHas($request, "h") && !$this->isPending()) {
         $last = end($this->_history);
         if (!$last || time() - $last['t'] >= 60 * 15) { // RECORD IF 15 MINS IS PASSED
-          $history_limit = $lgsl_config['history_hours'] * 3600;
+          $history_limit = $config['history_hours'] * 3600;
           foreach ($this->_history as $key => $value) {
             if (time() - $this->_history[$key]['t'] > $history_limit) { // NOT OLDER THAN $lgsl_config['history_hours'] HOURS
               unset($this->_history[$key]);
@@ -721,7 +724,7 @@
         }
       }
 
-      if ($lgsl_config['locations'] && empty($this->_other['location'])) {
+      if ($config['locations'] && empty($this->_other['location'])) {
         $this->_other['location'] = $this->queryLocation();
       }
     }
@@ -821,15 +824,15 @@
       if ($this->isPending()) {
 				return LGSL::NONE;
       }
-      $name = Helper::lgslHtmlColor($this->_server['name'], true);
 			if ($htmlSafe) {
-        $name = preg_replace('/([\x{0001F000}-\x{0001FAFF}])/mu', '', $name);
+        $name = preg_replace('/([\x{0001F000}-\x{0001FAFF}])/mu', '', $this->_server['name']);
 				return htmlspecialchars($name, ENT_QUOTES);
 			}				
-      return $name;
+      return $this->_server['name'];
     }
     public function getColoredName() {
-      return Helper::lgslHtmlColor($this->_server['name']);
+      if (isset($this->_other['colored_name'])) return Helper::lgslHtmlColor($this->_other['colored_name']);
+      return $this->_server['name'];
     }
     public function setName($name) {
       $this->_server['name'] = $name;
@@ -1199,8 +1202,8 @@
 
   $lgsl_file_path = LGSL::filePath();
 
-  require "{$lgsl_file_path}lgsl_config.php";
-  require "{$lgsl_file_path}lgsl_protocol.php";
+  require_once "{$lgsl_file_path}lgsl_config.php";
+  require_once "{$lgsl_file_path}lgsl_protocol.php";
 
   $auth   = md5(($_SERVER['REMOTE_ADDR'] ?? "").md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
   $cookie = $_COOKIE['lgsl_admin_auth'] ?? "";

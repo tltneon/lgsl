@@ -1,5 +1,5 @@
 <?php
-  require "src/lgsl_config.php";
+  require_once "src/lgsl_config.php";
 
   if (empty($lgsl_config['admin']['user']) || empty($lgsl_config['admin']['pass'])) {
     exit($lgsl_config['text']['aum']);
