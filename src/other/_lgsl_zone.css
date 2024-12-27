@@ -1,0 +1,71 @@
+.sidebarserver * {
+  scrollbar-width: thin;
+  scrollbar-color: black gray;
+}
+
+.sidebarserver *::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+.sidebarserver *::-webkit-scrollbar-track {
+  background: gray;
+}
+.sidebarserver *::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 5px;
+  border: 3px solid gray;
+}
+
+.sidebarserver img {
+  border: none;
+}
+
+.marquee {
+  width:100%;
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+.marquee span.on {
+  display:inline-block;
+  animation: marquee 10s infinite linear alternate;
+}
+.sidebarserver table:hover .marquee span.on {
+  animation: marquee 4s infinite linear alternate;
+}
+
+.center {
+  text-align: center;
+  margin:auto;
+}
+.p0 {
+  padding: 0px;
+}
+.p1 {
+  padding: 1px;
+}
+.nooverflow {
+  white-space:nowrap;
+  overflow:hidden;
+}
+.z2 {
+  z-index: 2;
+}
+.abs {
+  position: absolute;
+}
+.t2 {
+  top: 2px;
+}
+.r2 {
+  right: 2px;
+}
+.l2 {
+  left: 2px;
+}
+.b2 {
+  bottom: 2px;
+}
+.rounded {
+  border-radius: 4px;
+}

@@ -11,11 +11,16 @@
     }
     return $max + 1;
   }
+  require "src/lgsl_class.php";
+  if (!LGSL::isEnabled("gd")) {
+    echo 'No GD ';
+    exit;
+  }
 
   // SETTINGS
   $w = 400;
   $h = 150;
-  $im = @imagecreate($w, $h);
+  $im = @\imagecreate($w, $h);
   $white = imagecolorallocate($im, 255, 255, 255);
   $gray = imagecolorallocate($im, 225, 225, 225);
   $black = imagecolorallocate($im, 0, 0, 0);
@@ -24,7 +29,6 @@
 
   // MAIN SECTION
   header("Content-Type: image/png");
-  require "src/lgsl_class.php";
   $s = (int) ($_GET['s'] ?? null);
   $ip = $_GET['ip'] ?? null;
   $port = (int) ($_GET['port'] ?? null);
@@ -78,9 +82,10 @@
   }
   imagestring($im, 1, $x0 - 6, $maxY + 2, Date($timeFormat, time() - $period), $black);
   for ($i = 1; $i < $xSteps + 1; $i++) {
-    imageline($im, $x0 + $xStep * $i, $y0, $x0 + $xStep * $i, $maxY - 1, $gray);
-      $str = Date($timeFormat, time() - $period + (int) ($i * round($xStep / $scaleX, 1)));
-    imagestring($im, 1, (($x0 + $xStep * $i) - 6), $maxY + 2, $str, $black);
+    $calcX = (int) ($x0 + $xStep * $i);
+    imageline($im, $calcX, $y0, $calcX, $maxY - 1, $gray);
+    $str = Date($timeFormat, time() - $period + (int) ($i * round($xStep / $scaleX, 1)));
+    imagestring($im, 1, ($calcX - 6), $maxY + 2, $str, $black);
   }
 
   if (count($history) > 0) {

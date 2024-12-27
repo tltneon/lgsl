@@ -224,6 +224,9 @@
     static public function normalizeString($string) {
       return preg_replace("/[^a-z0-9_]/", "_", strtolower($string));
     }
+    static public function showWarning($message) {
+      trigger_error($message, E_USER_WARNING);
+    }
   }
 //------------------------------------------------------------------------------------------------------------+
   class Database {
@@ -517,7 +520,11 @@
     public $_id = 'rowid';
 		public function connect() {
 			global $lgsl_file_path, $lgsl_config;
-			$this->_connection = new \SQLite3("$lgsl_file_path/{$lgsl_config['db']['db']}.db");
+      try {
+        $this->_connection = new \SQLite3("$lgsl_file_path/{$lgsl_config['db']['db']}.db");
+      } catch (\Error $e) {
+        throw new \Exception("Failed to connect to SQLite database: {$e->getMessage()}");
+      }
 		}
 		public function get_error() {
 			if ($this->_connection->lastErrorCode())
@@ -810,7 +817,7 @@
     public function getExtrasArray() {
       return $this->_extra ?? [];
     }
-    public function getName($html = true) {
+    public function getName($html = false) {
       if ($this->isPending()) {
 				return LGSL::NONE;
       }
@@ -1218,3 +1225,25 @@
     $output .= "
     </select>";
   }
+  function shutdown() {
+    $e = error_get_last();
+    if ($e) {
+      if ($e['type'] === E_ERROR) {
+        $msg = isset($e['message']) ? $e['message'] : '';
+        $msg = str_replace(array('Uncaught Exception:','Stack trace:')
+                      ,array('<b>Uncaught Exception:</b><br />',
+                                '<b>Stack trace:</b>'),$msg);
+        $msg = preg_replace('/[a-z0-9_\-]*\.php/i','$1<u>$0</u>',$msg);
+        $msg = preg_replace('/[0-9]/i','$1<em>$0</em>',$msg);
+        $msg = preg_replace('/[\(\)#\[\]\':]/i','$1<ss>$0</ss>',$msg);
+
+        echo "<style>
+          u{color:#ed6;text-decoration:none;} b{color:#ddd;letter-spacing:1px;} em{color:#cfc;font-style:normal;} ss{color:white;}
+          h2{letter-spacing:1px;font-size:1.5rem;color:#b8b;margin-top:0;} br{margin-bottom:1.8rem;}
+          .prettyphp{margin:3rem auto;line-height:1.4em;padding:2rem;background:#ffffff1a;font-size:1.1rem;border-radius:0.5rem;max-width:1000px;font-family:monospace;}
+          </style>
+          <div class='prettyphp'><h2>Fatal PHP error</h2><div>".nl2br($msg)."</div></div>";
+      }
+    }
+  }
+  register_shutdown_function('tltneon\LGSL\shutdown');

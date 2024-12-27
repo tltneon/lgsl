@@ -94,6 +94,9 @@
       ?>
         <select name='language' onChange='changeLang(event)'>
         <?php
+          if (!isset($_COOKIE['lgsl_lang'])) {
+            $_COOKIE['lgsl_lang'] = tltneon\LGSL\Lang::EN;
+          }
           foreach (tltneon\LGSL\Lang::list() as $lang) {
             $select = $_COOKIE['lgsl_lang'] === $lang ? "selected": "";
             echo "<option {$select}>{$lang}</option>";

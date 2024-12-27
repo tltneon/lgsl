@@ -24,7 +24,7 @@
   $zone_width = "{$lgsl_config['zone']['width']}px";
   $zone_grid  = $lgsl_config['grid'][$lgsl_zone_number] ?? 1;
   $zone_count = 0;
-  $output = '';
+  $output = "<link rel='stylesheet' href='other/_lgsl_zone.css' type='text/css' />";
 
   $request = empty($lgsl_config['players'][$lgsl_zone_number]) ? "s" : "sp";
   if ($lgsl_zone_number) {
@@ -36,7 +36,7 @@
   //$server_list = lgsl_sort_servers($server_list);
 
   if (!$server_list) {
-    $output .= "<div style='margin:auto; text-align:center'>NO SERVERS IN ZONE {$lgsl_zone_number}</div>"; return;
+    $output .= "<div class='center'>NO SERVERS IN ZONE {$lgsl_zone_number}</div>"; return;
   }
 
   $output .= "
@@ -50,48 +50,12 @@
       color: $link;
       text-decoration:none;
     }
-    .sidebarserver * {
-      scrollbar-width: thin;
-      scrollbar-color: black gray;
-    }
-
-    .sidebarserver *::-webkit-scrollbar {
-      height: 12px;
-      width: 12px;
-    }
-    .sidebarserver *::-webkit-scrollbar-track {
-      background: gray;
-    }
-    .sidebarserver *::-webkit-scrollbar-thumb {
-      background-color: black;
-      border-radius: 5px;
-      border: 3px solid gray;
-    }
-
-    .sidebarserver img {
-      border: none;
-    }
-
-    .marquee {
-      width:100%;
-      white-space:nowrap;
-      overflow:hidden;
-    }
-
-    .marquee span.on {
-      display:inline-block;
-      animation: marquee 10s infinite linear alternate;
-    }
-    .sidebarserver table:hover .marquee span.on {
-      animation: marquee 4s infinite linear alternate;
-    }
-
     @keyframes marquee{
       0%{transform: translateX(15px);}
       100%{transform: translateX(calc(-100% + {$zone_width} - 15px));}
     }
   </style>
-  <table cellpadding='0' cellspacing='0' style='width:100%; margin:auto; text-align:center' class='sidebarserver'>
+  <table cellpadding='0' cellspacing='0' style='width:100%;' class='sidebarserver center'>
     <tr>";
 
     foreach ($server_list as $server) {
@@ -105,14 +69,18 @@
       $zone_count ++;
 
       $marquee = strlen($server->getName()) > 25 ? "class='on'" : "";
+      $location = "";
+      if ($lgsl_config['locations']) {
+        $location = "<img class='details_location_image flag f{$server->getLocation()} abs z2 t2 r2' title='{$server->getLocationFormatted()}' alt=''>";
+      }
       $output .= "
       <td style='vertical-align:top;'>
 
-        <table style='width:{$zone_width}; margin:auto; text-align:center;' cellpadding='0' cellspacing='2'>
+        <table style='width:{$zone_width};' cellpadding='0' cellspacing='2' class='center'>
 
           <tr>
-            <td title='{$lang->get('slk')}' style='padding:0px;'>
-              <div style='width:{$zone_width}; white-space:nowrap; overflow:hidden;'>
+            <td class='p0' title='{$lang->get('slk')}'>
+              <div class='nooverflow' style='width:{$zone_width};'>
                 <a href='{$server->getConnectionLink()}'>
                   {$server->getAddress()}
                 </a>
@@ -121,34 +89,29 @@
           </tr>
 
           <tr>
-            <td title='{$server->getName()}' style='padding:0px;'>
-              <div class='marquee' style='width:{$zone_width}; white-space:nowrap; overflow:hidden;'>
+            <td class='p0' title='{$server->getName()}'>
+              <div class='marquee nooverflow' style='width:{$zone_width};'>
                 <span {$marquee}>{$server->getName()}</span>
               </div>
             </td>
           </tr>
 
           <tr>
-            <td style='padding:0px;'>
-              <div style='width:{$zone_width}; padding:0px; position:relative'>
+            <td class='p0'>
+              <div class='p0' style='width:{$zone_width}; position:relative'>
                 <a href='".LGSL::link($server->getIp(), $server->getConnectionPort())."' target='_blank'>
-                  <img alt='' src='{$server->getMapImage()}'      title='{$lang->get('vsd')}' style='vertical-align:middle; width: 100%; border-radius: 4px;'>
-                  <img alt='' src='{$server->mapPasswordImage()}' title='{$lang->get('vsd')}' style='position:absolute; z-index:2; bottom:2px; right:2px;'>
-                  <img alt='' src='{$server->addUrlPath($server->getGameIcon())}' title='{$server->getGameFormatted()}' style='position:absolute; z-index:2; top:2px; left:2px; width: 24px; border-radius: 4px;'>
-                  ";
-                  if ($lgsl_config['locations'])
-                  $output .= "
-                  <img alt='' class='details_location_image flag f{$server->getLocation()}' title='{$server->getLocationFormatted()}' style='position:absolute; z-index:2; top:2px; right:2px;'>
-                  ";
-                  $output .= "
+                  <img class='rounded' src='{$server->getMapImage()}' title='{$lang->get('vsd')}' style='vertical-align:middle; width: 100%;' alt=''>
+                  <img class='abs z2 b2 r2' src='{$server->mapPasswordImage()}' title='{$lang->get('vsd')}' alt=''>
+                  <img class='abs z2 t2 l2 rounded' src='{$server->addUrlPath($server->getGameIcon())}' title='{$server->getGameFormatted()}' style='width: 24px;' alt=''>
+                  {$location}
                 </a>
               </div>
             </td>
           </tr>
 
           <tr>
-            <td title='{$lang->get('map')}: {$server->getMap()}' style='padding:0px;'>
-              <div style='width:{$zone_width}; white-space:nowrap; overflow:hidden;'>
+            <td class='p0' title='{$lang->get('map')}: {$server->getMap()}'>
+              <div class='nooverflow' style='width:{$zone_width};'>
                 {$server->getMap()}
               </div>
             </td>
@@ -160,16 +123,16 @@
 
           $output .= "
           <tr>
-            <td style='border-radius: 4px;'>
-              <span style='padding:1px; float:left'> {$lang->get('zpl')} </span>
-              <span style='padding:1px; float:right'> {$server->getPlayersCountFormatted()} </span>";
+            <td class='p0 rounded'>
+              <span class='p1' style='float:left'> {$lang->get('zpl')} </span>
+              <span class='p1' style='float:right'> {$server->getPlayersCountFormatted()} </span>";
               $players = $server->getPlayersArray();
               if (count($players) > 0) {
                 $output .= "<div style='width:{$zone_width}; height:{$zone_height}; border-top: 1px solid #8080807a; overflow: overlay; text-align:left'>";
 
                 foreach ($players as $player) {
                   $output .= "
-                  <div style='padding:1px; white-space:nowrap; overflow:hidden; text-align:left' title='{$player['name']}'> {$player['name']} </div>";
+                  <div class='nooverflow p1' style='text-align:left' title='{$player['name']}'> {$player['name']} </div>";
                 }
 
                 $output .= "</div";
@@ -187,9 +150,9 @@
         } else {
           $output .= "
           <tr>
-            <td style='padding:0px; border:1px solid; border-radius: 4px;'>
-              <span style='padding:1px; float:left'> {$lang->get('zpl')} </span>
-              <span style='padding:1px; float:right'> {$server->getPlayersCount()} </span>
+            <td class='p0 rounded' style='border:1px solid;'>
+              <span class='p1' style='float:left'> {$lang->get('zpl')} </span>
+              <span class='p1' style='float:right'> {$server->getPlayersCount()} </span>
             </td>
           </tr>";
         }

@@ -34,6 +34,7 @@ input[type="checkbox" i] {
 #topmenu {padding: 1em; border-bottom: 2px dashed black;}
 #topmenu > li {display: inline-block;padding: 0px 10px;}
 #topmenu > li:before {content: '► ';}
+.flag {transform: translateY(-2px);}
 
 /* add */
 .addserver_table { margin: auto; }
