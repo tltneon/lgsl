@@ -173,6 +173,7 @@
 			}
 			$config = 
 "<?php
+	namespace tltneon\LGSL;
 	global \$lgsl_config; \$lgsl_config = [];
 	/* */
 	\$lgsl_config['installed'] = true;
@@ -224,6 +225,32 @@
 	\$lgsl_config['select_lang']   = {$conf['select_lang']};      // allow to select language for users
 	\$lgsl_config['language']      = '{$conf['language']}'; // sets LGSL language
 	include('languages/{$conf['language']}.php');        // loads LGSL language
+	class Config implements \ArrayAccess {
+		private \$config;
+		public function __construct() {
+			\$this->loadConfig();
+		}
+
+		private function loadConfig() {
+			global \$lgsl_config;
+			\$this->config = \$lgsl_config;
+		}
+
+		public function offsetExists(mixed \$offset): bool {
+			return isset(\$this->config[\$offset]);
+		}
+
+		public function offsetGet(mixed \$offset): mixed {
+			return \$this->config[\$offset] ?? null;
+		}
+		public function offsetSet(mixed \$offset, mixed \$value): void {
+			\$this->config[\$offset] = \$value;
+		}
+
+		public function offsetUnset(mixed \$offset): void {
+			unset(\$this->config[\$offset]);
+		}
+		}
 ?>";
 			file_put_contents('src/lgsl_config.php', $config);
 			unlink('install.php');

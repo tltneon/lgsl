@@ -3219,8 +3219,7 @@
 //------------------------------------------------------------------------------------------------------------+
   class Helper {
     static function lgslHtmlColor($string, $removeColors = false) {
-      global $lgsl_config;
-      if ($lgsl_config['remove_colors'] || $removeColors) {
+      if ((new Config())->offsetGet('remove_colors') || $removeColors) {
         return preg_replace('/##([0-9a-fA-F]{6})/', "", $string);
       }
       $outputText = preg_replace_callback('/##([0-9a-fA-F]{6})([0-9a-zA-Z !@$%&-*+|\/\.]+)?/', function($matches) {
@@ -3237,8 +3236,7 @@
       }, $string);
     }
     static function lgslParseColor($string, $type, $needRemove = true) {
-      global $lgsl_config;
-      $needRemove &= !$lgsl_config['remove_colors'];
+      $needRemove &= !(new Config())->offsetGet('remove_colors');
       switch ($type) {
         case "2": return preg_replace("/\^[\x20-\x7E]/", "", $string);
         case "doomskulltag": return preg_replace("/\\x1c./", "", $string);

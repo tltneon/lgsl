@@ -1249,6 +1249,19 @@
           </style>
           <div class='prettyphp'><h2>Fatal PHP error</h2><div>".nl2br($msg)."</div></div>";
       }
+      if ($e['type'] === E_WARNING) {
+        $msg = isset($e['message']) ? "{$e['message']} in {$e['file']} on line {$e['line']}" : '';
+        $msg = preg_replace('/[a-z0-9_\-]*\.php/i','$1<u>$0</u>',$msg);
+        $msg = preg_replace('/[0-9]/i','$1<em>$0</em>',$msg);
+        $msg = preg_replace('/[\(\)#\[\]\':]/i','$1<ss>$0</ss>',$msg);
+
+        echo "<style>
+          u{color:#ed6;text-decoration:none;} b{color:#ddd;letter-spacing:1px;} em{color:#cfc;font-style:normal;} ss{color:white;}
+          h2{letter-spacing:1px;font-size:1.5rem;color:#b8b;margin-top:0;} br{margin-bottom:1.8rem;}
+          .prettyphp{margin:3rem auto;line-height:1.4em;padding:2rem;background:#ffffff1a;font-size:1.1rem;border-radius:0.5rem;max-width:1000px;font-family:monospace;}
+          </style>
+          <div class='prettyphp'><h2>PHP warning</h2><div>".nl2br($msg)."</div></div>";
+      }
     }
   }
   register_shutdown_function('tltneon\LGSL\shutdown');

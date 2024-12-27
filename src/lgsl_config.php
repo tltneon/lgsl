@@ -1,5 +1,5 @@
 <?php
-
+  namespace tltneon\LGSL;
 //------------------------------------------------------------------------------------------------------------+
 //[ PREPARE CONFIG - DO NOT CHANGE OR MOVE THIS ]
 
@@ -171,3 +171,30 @@
   // Chinese_simplified language: "languages/chinese_simplified.php"      // Nanfei
 
 //------------------------------------------------------------------------------------------------------------+
+
+class Config implements \ArrayAccess {
+  private $config;
+  public function __construct() {
+    $this->loadConfig();
+  }
+
+  private function loadConfig() {
+    global $lgsl_config;
+    $this->config = $lgsl_config;
+  }
+
+  public function offsetExists(mixed $offset): bool {
+    return isset($this->config[$offset]);
+  }
+
+  public function offsetGet(mixed $offset): mixed {
+    return $this->config[$offset] ?? null;
+  }
+  public function offsetSet(mixed $offset, mixed $value): void {
+    $this->config[$offset] = $value;
+  }
+
+  public function offsetUnset(mixed $offset): void {
+    unset($this->config[$offset]);
+  }
+}

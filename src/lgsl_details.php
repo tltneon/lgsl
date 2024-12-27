@@ -89,7 +89,7 @@
     }
 
 		$p = str_replace('src/', '', LGSL::urlPath()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
-		$framespace = max(0, min(6, $server->getPlayersCount('active'))) * 8.8;
+		$framespace = max(0, min(6, $server->getPlayersCount('active'))) * 8.85;
 		$output .= "
         <details>
           <summary style='margin-bottom: 12px;'>
