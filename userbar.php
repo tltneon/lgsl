@@ -93,7 +93,7 @@
       $game_id = @Image::makeImage($server->getGameIcon('src/'), 32, 32);                          // create game icon
       imagecopy($im, $game_id, 16, 16, 0, 0, 32, 32);                             // place game icon
 
-      imagettftext($im, 10, 0, 62,  19, $color_nm, $font, /* name     */  $server->getName(false));
+      imagettftext($im, 10, 0, 62,  19, $color_nm, $font, /* name     */  $server->getName(true));
       imagettftext($im, 8,  0, 62,  32, $color_ip, $font, /* ip&port  */  str_replace('https://', '', $link));
       imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$server->getMap()}");
       imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server->getPlayersCount()}{$max}");

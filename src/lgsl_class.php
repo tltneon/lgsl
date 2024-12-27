@@ -817,14 +817,19 @@
     public function getExtrasArray() {
       return $this->_extra ?? [];
     }
-    public function getName($html = false) {
+    public function getName($htmlSafe = false) {
       if ($this->isPending()) {
 				return LGSL::NONE;
       }
-			if ($html) {
-				return htmlspecialchars($this->_server['name'], ENT_QUOTES);
+      $name = Helper::lgslHtmlColor($this->_server['name'], true);
+			if ($htmlSafe) {
+        $name = preg_replace('/([\x{0001F000}-\x{0001FAFF}])/mu', '', $name);
+				return htmlspecialchars($name, ENT_QUOTES);
 			}				
-      return $this->_server['name'];
+      return $name;
+    }
+    public function getColoredName() {
+      return Helper::lgslHtmlColor($this->_server['name']);
     }
     public function setName($name) {
       $this->_server['name'] = $name;

@@ -589,8 +589,8 @@
       $type = $this->_server->getType();
       $isMoh = strpos($type, "moh") !== FALSE; // mohaa_ mohaab_ mohaas_ mohpa_
       $mohSymbol = $isMoh ? "\x02" : "";
-      if     ($type === PROTOCOL::QUAKE2)       { $this->_fp->write("\xFF\xFF\xFF\xFFstatus");        }
-      elseif ($type === PROTOCOL::CALLOFDUTYIW) { $this->_fp->write("\xFF\xFF\xFF\xFFgetinfo LGSL");  }
+      if     ($type === PROTOCOL::QUAKE2)       { $this->_fp->write("\xFF\xFF\xFF\xFFstatus");       }
+      elseif ($type === PROTOCOL::CALLOFDUTYIW) { $this->_fp->write("\xFF\xFF\xFF\xFFgetinfo LGSL"); }
       else { $this->_fp->write("\xFF\xFF\xFF\xFF{$mohSymbol}getstatus"); }
 
       $buffer = $this->_fp->read();
@@ -607,13 +607,15 @@
 
         $s = 1;
         if ($item[0]) $s = 0; // IW4 HAS NO EXTRA "\"
+        global $lgsl_config;
         for ($i = $s; $i < count($item); $i += 2) { // SKIP EVEN KEYS
-          $data_key               = strtolower(Helper::lgslParseColor($item[$i], "1"));
-          $this->_data['e'][$data_key] = Helper::lgslParseColor($item[$i+1], "1");
+          $data_key = strtolower(Helper::lgslParseColor($item[$i], "1"));
+          $this->_data['e'][$data_key] = Helper::lgslParseColor($item[$i+1], "1", false);
         }
       }
 
       $this->_data['s']['name'] = $this->_data['e']['hostname'] ?? $this->_data['e']['sv_hostname'] ?? LGSL::NONE;
+      if (isset($this->_data['e']['sv_hostname'])) { $this->_data['e']['sv_hostname'] = strtolower(Helper::lgslHtmlColor($this->_data['e']['sv_hostname'], "1", true)); }
       if (isset($this->_data['e']['protocol']) && $type === PROTOCOL::CALLOFDUTYIW) {
         $games = ['1' => 'IW6', '2' => 'H1', '6' => 'IW3', '7' => 'T7', '20604' => 'IW5', '151' => 'IW4', '101' => 'T4'];
 				$this->_data['s']['game'] = $games[$this->_data['e']['protocol']] ?? "Unknown {$this->_data['e']['protocol']}";
@@ -2412,7 +2414,7 @@
     public function process() {
       $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/dynamic.json");
       if (!$buffer) return $this::NO_RESPOND;
-      $this->_data['s']['name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem');
+      $this->_data['s']['name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem', false);
       $this->_data['s']['players'] = $buffer['clients'];
       $this->_data['s']['playersmax'] = $buffer['sv_maxclients'];
       $this->_data['s']['map'] = $buffer['mapname'];
@@ -3132,7 +3134,10 @@
 		public function open(&$server = null) {
       global $lgsl_config;
 			if ($this->_isHttp()) {
-        if (!LGSL::isEnabled("curl")) return false;
+        if (!LGSL::isEnabled("curl")) {
+          LGSL::showWarning("Curl is not enabled");
+          return false;
+        }
         $this->_stream = curl_init('');
         curl_setopt($this->_stream, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($this->_stream, CURLOPT_SSL_VERIFYPEER, 0);
@@ -3213,12 +3218,38 @@
 //------------------------------------------------------------------------------------------------------------+
 //------------------------------------------------------------------------------------------------------------+
   class Helper {
-    static function lgslParseColor($string, $type) {
+    static function lgslHtmlColor($string, $removeColors = false) {
+      global $lgsl_config;
+      if ($lgsl_config['remove_colors'] || $removeColors) {
+        return preg_replace('/##([0-9a-fA-F]{6})/', "", $string);
+      }
+      $outputText = preg_replace_callback('/##([0-9a-fA-F]{6})([0-9a-zA-Z !@$%&-*+|\/\.]+)?/', function($matches) {
+        $text = $matches[2] ?? '';
+        return "<span style='color: #{$matches[1]};'>{$text}</span>";
+      }, $string);
+      return $outputText;
+    }
+    static function lgslColorParser($string, $pattern, &$colors) {
+      return preg_replace_callback($pattern, function($matches) use (&$colors) {
+        $code = $matches[1];
+        $text = $matches[2] ?? '';
+        return "##{$colors[$code]}{$text}";
+      }, $string);
+    }
+    static function lgslParseColor($string, $type, $needRemove = true) {
+      global $lgsl_config;
+      $needRemove &= !$lgsl_config['remove_colors'];
       switch ($type) {
         case "2": return preg_replace("/\^[\x20-\x7E]/", "", $string);
         case "doomskulltag": return preg_replace("/\\x1c./", "", $string);
         case "farcry": return preg_replace("/\\$\d/", "", $string);
-        case "fivem": return preg_replace("/\^\d/", "", $string);
+        case "fivem": 
+          if ($needRemove) {
+            return preg_replace("/\^\d/", "", $string);
+          }
+          $colors = ['0' => '888888', '1' => 'ff0000', '2' => 'b5dfb7', '3' => 'DDCC00', '4' => 'd3eafd', '5' => '00eeee', '6' => 'DD55DD', '7' => 'fffff0', '8' => 'ffcbbb', '9' => '808080'];
+          $pattern = '/\^(\d{1})([0-9a-zA-Z !@$%&-*+|\/\.]+)?/';
+          return Helper::lgslColorParser($string, $pattern, $colors);
         case "painkiller": return preg_replace("/#./", "", $string);
         case "swat4": return preg_replace("/\[c=......\]/Usi", "", $string);
         case "minecraft": return preg_replace("/(§.)/S", "", $string);
@@ -3226,18 +3257,24 @@
 				case "bbcode": return preg_replace('/\[[^\]]+\]/', '', $string);
 				
         case "1":
-          $string = preg_replace("/\^x.../", "", $string);
-          $string = preg_replace("/\^./",    "", $string);
+          if ($needRemove) {
+            $string = preg_replace("/\^x.../", "", $string);
+            $string = preg_replace("/\^./",    "", $string);
 
-          $string_length = strlen($string);
-          for ($i=0; $i<$string_length; $i++) {
-            $char = ord($string[$i]);
-            if ($char > 160) { $char = $char - 128; }
-            if ($char > 126) { $char = 46; }
-            if ($char == 16) { $char = 91; }
-            if ($char == 17) { $char = 93; }
-            if ($char  < 32) { $char = 46; }
-            $string[$i] = chr($char);
+            $string_length = strlen($string);
+            for ($i=0; $i<$string_length; $i++) {
+              $char = ord($string[$i]);
+              if ($char > 160) { $char = $char - 128; }
+              if ($char > 126) { $char = 46; }
+              if ($char == 16) { $char = 91; }
+              if ($char == 17) { $char = 93; }
+              if ($char  < 32) { $char = 46; }
+              $string[$i] = chr($char);
+            }
+          } else {
+            $colors = ['0' => '888888', '1' => 'ff0000', '2' => '00ff00', '3' => 'DDCC00', '4' => '3377EE', '5' => '00eeee', '6' => 'DD55DD', '7' => 'ffffff', '9' => '808080'];
+            $pattern = '/\^(\d{1})([0-9a-zA-Z !@$%&-*+|\/\.]+)?/';
+            return Helper::lgslColorParser($string, $pattern, $colors);
           }
         break;
 

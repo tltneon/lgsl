@@ -76,11 +76,11 @@
 
       <td title='{$server->getName()}' class='servername_cell'>
         <div class='servername_nolink'>
-          {$server->getName()}
+          {$server->getColoredName()}
         </div>
         <div class='servername_link'>
           <a href='".LGSL::link($server->getIp(), $server->getConnectionPort())."'>
-            {$server->getName()}
+            {$server->getColoredName()}
           </a>
         </div>
       </td>

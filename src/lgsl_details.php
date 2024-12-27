@@ -41,7 +41,7 @@
   // SHOW THE STANDARD INFO
 
     $output .= "
-      <div id='servername_{$server->getStatus()}'> {$server->getName()} </div>
+      <div id='servername_{$server->getStatus()}'> {$server->getColoredName()} </div>
       <div class='details_info'>
         <div class='details_info_column'>
           <a id='gamelink' href='{$server->getConnectionLink()}'>{$lang->get('slk')}</a>
