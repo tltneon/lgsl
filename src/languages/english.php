@@ -61,6 +61,8 @@
   $lgsl_config['text']['kil'] = "Kills";
   $lgsl_config['text']['squ'] = "Squad";
   $lgsl_config['text']['ski'] = "Skill";
+  $lgsl_config['text']['mes'] = "Mesh";
+  $lgsl_config['text']['fac'] = "Face";
   $lgsl_config['text']['xp']  = "XP";
   $lgsl_config['text']['key'] = "Key";
   $lgsl_config['text']['spe'] = "Spectator";

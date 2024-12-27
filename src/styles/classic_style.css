@@ -29,6 +29,7 @@ a:active { color:#7500c0; }
 .annotation { text-align: center; background-color: #e4eaf2; padding-top:17px; padding-bottom:17px; }
 
 /* details */
+summary { cursor: pointer; }
 .players_table { margin: auto; border-spacing: 2px 4px; }
 .settings_table { margin: auto; border-spacing: 2px 4px; max-width: 600px; }
 .players_table tr, .settings_table tr { white-space:nowrap; table-layout:fixed; }

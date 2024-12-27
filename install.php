@@ -223,6 +223,7 @@
 	\$lgsl_config['cms']           = 'sa';                // sets which CMS specific code to use
 	\$lgsl_config['disabled_types']= false; // allow to exclude some protocols (games) from list. usage: ['disabled_types']= ['halflifewon', 'test'];
 	\$lgsl_config['select_lang']   = {$conf['select_lang']};      // allow to select language for users
+	\$lgsl_config['remove_colors'] = true;      // remove colors from the server name
 	\$lgsl_config['language']      = '{$conf['language']}'; // sets LGSL language
 	include('languages/{$conf['language']}.php');        // loads LGSL language
 	class Config implements \ArrayAccess {

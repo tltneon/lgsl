@@ -322,7 +322,7 @@
         self::WARSOW        => ["Query02", "Warsow"],
         self::UNVANQUISHED  => ["Query02", "Unvanquished"],
         self::URBANTERROR   => ["Query02", "UrbanTerror"],
-        self::UT            => ["Query03", "Unreal Tournament"],
+        self::UT            => ["Query03", "Unreal Tournament 99"],
         self::UT2003        => ["Query13", "Unreal Tournament 2003"],
         self::UT2004        => ["Query13", "Unreal Tournament 2004"],
         self::UT3           => ["Query11", "Unreal Tournament 3"],
@@ -2428,10 +2428,11 @@
 
       if ($this->need('p')) {
         $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/players.json");
-
-        foreach($buffer as $key => $value) {
-          $this->_data['p'][$key]['name'] = $value['name'];
-          $this->_data['p'][$key]['ping'] = $value['ping'];
+        if ($buffer) {
+          foreach ($buffer as $key => $value) {
+            $this->_data['p'][$key]['name'] = $value['name'];
+            $this->_data['p'][$key]['ping'] = $value['ping'];
+          }
         }
       }
       return $this::SUCCESS;
@@ -3164,6 +3165,7 @@
       if ($this->_isHttp()) {
 				$result = curl_exec($this->_stream);
         $resultStatus = curl_getinfo($this->_stream, CURLINFO_HTTP_CODE);
+        $err = "";
         if ($resultStatus != 200) {
           $err = "Request failed: HTTP status code {$resultStatus}";
         }

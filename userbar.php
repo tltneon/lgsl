@@ -84,6 +84,7 @@
       $time = date(str_replace([':S', ':s', '/Y', '/y'], '', $lgsl_config['text']['tzn']));
 
       switch ($server->getStatus()) {
+        case Server::ERROR:
         case Server::ONLINE: { $stat = $stat_on; break; }
         case Server::OFFLINE: { $stat = $stat_of; break; }
         case Server::PENDING: { $stat = $stat_pn; break; }
@@ -126,6 +127,7 @@
       $time = date(str_replace([':S', ':s', '/Y', '/y'], '', $lgsl_config['text']['tzn']));
 
       switch ($server->getStatus()) {
+        case Server::ERROR:
         case Server::ONLINE: { $stat = $stat_on; break; }
         case Server::OFFLINE: { $stat = $stat_of; break; }
         case Server::PENDING: { $stat = $stat_pn; break; }
