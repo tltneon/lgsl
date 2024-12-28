@@ -1515,8 +1515,8 @@
       $buffer_s->skip(5);
       $this->_data['e']['hostport']   = $buffer_s->cutByteUnpack(4, "S");
       $buffer_s->skip(4);
-      $this->_data['s']['name']       = $buffer_s->cutString(1);
-      $this->_data['s']['map']        = $buffer_s->cutString(1);
+      $this->_data['s']['name']       = Helper::lgslParseColor($buffer_s->cutString(1), "ut2003", true);
+      $this->_data['s']['map']        = Helper::lgslParseColor($buffer_s->cutString(1), "ut2003", true);
       $this->_data['s']['mode']       = $buffer_s->cutString(1);
       $this->_data['s']['players']    = $buffer_s->cutByteUnpack(4, "S");
       $this->_data['s']['playersmax'] = $buffer_s->cutByteUnpack(4, "S");
@@ -1524,8 +1524,12 @@
       //---------------------------------------------------------+
 
       while ($buffer_e && $buffer_e[0] != "\x00") {
-        $item_key   = strtolower(Helper::lgslCutString($buffer_e, 1));
-        $item_value = Helper::lgslCutString($buffer_e, 1);
+        $item_key = strtolower(Helper::lgslCutString($buffer_e, 1));
+        if (Helper::lgslCutByte($buffer_e, 1) == "\x00") {
+          $item_value = LGSL::NONE;
+        } else {
+          $item_value = Helper::lgslCutString($buffer_e);
+        }
 
         $item_key   = str_replace("\x1B\xFF\xFF\x01", "", $item_key);   // REMOVE MOD
         $item_value = str_replace("\x1B\xFF\xFF\x01", "", $item_value); // GARBAGE
@@ -1548,9 +1552,10 @@
         $this->_data['p'][$player_key]['ping']  = Helper::lgslUnpack(Helper::lgslCutByte($buffer_p, 4), "S");
         $this->_data['p'][$player_key]['score'] = Helper::lgslUnpack(Helper::lgslCutByte($buffer_p, 4), "s");
         $tmp                               = Helper::lgslCutString($buffer_p, 4);
-
+        if (strlen($tmp) > 3) {
             if ($tmp[3] == "\x20") { $this->_data['p'][$player_key]['team'] = 1; }
         elseif ($tmp[3] == "\x40") { $this->_data['p'][$player_key]['team'] = 2; }
+        }
 
         $player_key ++;
       }
@@ -3243,6 +3248,7 @@
       $needRemove &= !(new Config())->offsetGet('remove_colors');
       switch ($type) {
         case "2": return preg_replace("/\^[\x20-\x7E]/", "", $string);
+        case "ut2003": return preg_replace("/[^\x20-\x7E]/", "", $string);
         case "doomskulltag": return preg_replace("/\\x1c./", "", $string);
         case "farcry": return preg_replace("/\\$\d/", "", $string);
         case "fivem": 
