@@ -20,7 +20,7 @@
   $uri = $_SERVER['REQUEST_URI'];
 
   if ($lgsl_config['preloader']) {
-    $uri = $_SERVER['HTTP_REFERER'];
+    $uri = htmlspecialchars($_SERVER['HTTP_REFERER'], ENT_QUOTES, 'UTF-8');
   }
 
   $server_list = lgsl_query_group(array("type" => $type, "game" => $game, "page" => $page));
