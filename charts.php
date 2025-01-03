@@ -13,7 +13,8 @@
   }
   require "src/lgsl_class.php";
   if (!LGSL::isEnabled("gd")) {
-    echo 'No GD ';
+    throw new \Exception("No GD");
+    echo 'No GD';
     exit;
   }
 

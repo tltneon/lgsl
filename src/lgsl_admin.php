@@ -127,6 +127,14 @@
     }
     $stream->write("https://api.github.com/repos/tltneon/lgsl/releases/latest");
     $buffer2 = $stream->readJson();
+    if (isset($buffer1["message"]) || isset($buffer2["message"])) {
+      $output .= "
+      <div class='tt' style='padding: 10px;'>
+        {$buffer1["message"]}<br>{$buffer2["message"]}
+      </div>
+      " . lgslReturnButtons();
+      return;
+    }
 
     $blocks = [
       ["Latest commit (LGSL7)", $buffer1["commit"]["commit"]["message"], date($lgsl_config['text']['tzn'], strtotime($buffer1["commit"]["commit"]["author"]["date"])), "https://github.com/tltneon/lgsl/archive/refs/heads/lgsl7.zip", $buffer1["commit"]["html_url"]],
