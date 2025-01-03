@@ -237,11 +237,6 @@
         self::DH2005        => ["Query09", "Deer Hunter 2005"],
         self::ECO           => ["Query40", "ECO"],
         self::FACTORIO      => ["Query42", "Factorio"],
-        self::HAD2          => ["Query03", "Hidden and Dangerous 2"],
-        self::HALFLIFE      => ["Query05", "Half-Life Steam Protocol (CS 1.6, etc)"],
-        self::HALFLIFEWON   => ["Query05", "Half-Life WON Protocol [OLD] (CS 1.5)"],
-        self::HALO          => ["Query03", "Halo"],
-        self::IL2           => ["Query03", "IL-2 Sturmovik"],
         self::FARCRY        => ["Query08", "Far Cry"],
         self::FEAR          => ["Query09", "F.E.A.R."],
         self::FIVEM         => ["Query35", "FiveM / RedM"],
@@ -256,6 +251,11 @@
         self::GRAW          => ["Query06", "Ghost Recon: Advanced Warfighter"],
         self::GRAW2         => ["Query09", "Ghost Recon: Advanced Warfighter 2"],
         self::GTAC          => ["Query45", "GTA Connected"],
+        self::HAD2          => ["Query03", "Hidden and Dangerous 2"],
+        self::HALFLIFE      => ["Query05", "Half-Life Steam Protocol (CS 1.6, etc)"],
+        self::HALFLIFEWON   => ["Query05", "Half-Life WON Protocol [OLD] (CS 1.5)"],
+        self::HALO          => ["Query03", "Halo"],
+        self::IL2           => ["Query03", "IL-2 Sturmovik"],
         self::JEDIKNIGHT2   => ["Query02", "JediKnight 2: Jedi Outcast"],
         self::JEDIKNIGHTJA  => ["Query02", "JediKnight: Jedi Academy"],
         self::JC2MP         => ["Query06", "Just Cause 2 Multiplayer"],
@@ -1515,8 +1515,10 @@
       $buffer_s->skip(5);
       $this->_data['e']['hostport']   = $buffer_s->cutByteUnpack(4, "S");
       $buffer_s->skip(4);
-      $this->_data['s']['name']       = Helper::lgslParseColor($buffer_s->cutString(1), "ut2003", true);
-      $this->_data['s']['map']        = Helper::lgslParseColor($buffer_s->cutString(1), "ut2003", true);
+      
+      $this->_data['o']['colored_name'] = substr(Helper::lgslParseColor($buffer_s->cutString(1), "ut2003", false), 1);
+      $this->_data['s']['name']       = Helper::lgslHtmlColor($this->_data['o']['colored_name'], true);
+      $this->_data['s']['map']        = Helper::lgslParseColor($buffer_s->cutString(1), "ut2003");
       $this->_data['s']['mode']       = $buffer_s->cutString(1);
       $this->_data['s']['players']    = $buffer_s->cutByteUnpack(4, "S");
       $this->_data['s']['playersmax'] = $buffer_s->cutByteUnpack(4, "S");
@@ -3231,7 +3233,7 @@
       if ((new Config())->offsetGet('remove_colors') || $removeColors) {
         return preg_replace('/##([0-9a-fA-F]{6})/', "", $string);
       }
-      $outputText = preg_replace_callback('/##([0-9a-fA-F]{6})([0-9a-zA-Z !@$%&-*+|\/\.]+)?/', function($matches) {
+      $outputText = preg_replace_callback('/##([0-9a-fA-F]{6})([0-9a-zA-Z !@$%&-*+|\/\.>]+)?/', function($matches) {
         $text = $matches[2] ?? '';
         return "<span style='color: #{$matches[1]};'>{$text}</span>";
       }, $string);
@@ -3248,7 +3250,20 @@
       $needRemove &= !(new Config())->offsetGet('remove_colors');
       switch ($type) {
         case "2": return preg_replace("/\^[\x20-\x7E]/", "", $string);
-        case "ut2003": return preg_replace("/[^\x20-\x7E]/", "", $string);
+        case "ut2003":
+          if ($needRemove) {
+            return preg_replace("/\x1B([\x00-\xFF]{3})/", "", $string);
+          }
+          $outputText = preg_replace_callback('/\x1B([\x00-\xFF]{3})([0-9a-zA-Z !@$%&-*+|\/\.>]+)?/', function($matches) {
+            $hexColor = "";
+            $numericValues = array_map('ord', str_split($matches[1]));
+            foreach ($numericValues as $value) {
+              $hexColor .= str_pad(dechex($value), 2, "0", STR_PAD_LEFT);
+            }
+            $text = $matches[2] ?? '';
+            return "##{$hexColor}{$text}";
+          }, $string);
+          return $outputText;
         case "doomskulltag": return preg_replace("/\\x1c./", "", $string);
         case "farcry": return preg_replace("/\\$\d/", "", $string);
         case "fivem": 
