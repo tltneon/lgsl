@@ -478,16 +478,18 @@
   abstract class DBWrapper {
 		protected $_connection;
     public $_id = 'id';
+    public function tableName() {
+      $config = new Config();
+      return "{$config['db']['prefix']}{$config['db']['table']}";
+    }
 		public function select_db() {}
 		public function set_charset($c) {}
 		public function execute($c) {}
 		public function clear() {
-			global $lgsl_config;
-			$this->execute("TRUNCATE TABLE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
+			$this->execute("TRUNCATE TABLE `{$this->tableName()}`;");
 		}
 		public function get_all() {
-			global $lgsl_config;
-			$t = $this->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
+			$t = $this->query("SELECT * FROM `{$this->tableName()}`;");
 			return $t->fetch_all();
 		}
   }
@@ -534,8 +536,7 @@
 			return null;
 		}
 		public function clear() {
-			global $lgsl_config;
-			$this->execute("DELETE FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`;");
+			$this->execute("DELETE FROM `{$this->tableName()}`;");
 		}
 		public function escape_string($string) {
 			return $this->_connection->escapeString($string);
@@ -565,8 +566,7 @@
 		}
 		public function clear() {
 			parent::clear();
-			global $lgsl_config;
-			$this->execute("ALTER SEQUENCE {$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}_id_seq RESTART WITH 1;");
+			$this->execute("ALTER SEQUENCE {$this->tableName()}_id_seq RESTART WITH 1;");
 		}
 		public function escape_string($string = "") {
 			return pg_escape_string($this->_connection, $string);
@@ -1236,36 +1236,25 @@
   }
   function shutdown() {
     $e = error_get_last();
-    if ($e) {
+    if ($e && isset($e['type'])) {
+      $typeName = "errName {$e['type']}";
       if ($e['type'] === E_ERROR) {
         $msg = isset($e['message']) ? $e['message'] : '';
-        $msg = str_replace(array('Uncaught Exception:','Stack trace:')
-                      ,array('<b>Uncaught Exception:</b><br />',
-                                '<b>Stack trace:</b>'),$msg);
-        $msg = preg_replace('/[a-z0-9_\-]*\.php/i','$1<u>$0</u>',$msg);
-        $msg = preg_replace('/[0-9]/i','$1<em>$0</em>',$msg);
-        $msg = preg_replace('/[\(\)#\[\]\':]/i','$1<ss>$0</ss>',$msg);
-
-        echo "<style>
-          u{color:#ed6;text-decoration:none;} b{color:#ddd;letter-spacing:1px;} em{color:#cfc;font-style:normal;} ss{color:white;}
-          h2{letter-spacing:1px;font-size:1.5rem;color:#b8b;margin-top:0;} br{margin-bottom:1.8rem;}
-          .prettyphp{margin:3rem auto;line-height:1.4em;padding:2rem;background:#ffffff1a;font-size:1.1rem;border-radius:0.5rem;max-width:1000px;font-family:monospace;}
-          </style>
-          <div class='prettyphp'><h2>Fatal PHP error</h2><div>".nl2br($msg)."</div></div>";
-      }
-      if ($e['type'] === E_WARNING) {
+        $msg = str_replace(['Uncaught Exception:','Stack trace:'], ['<b>Uncaught Exception:</b><br>','<b>Stack trace:</b>'], $msg);
+        $typeName = "Fatal PHP error";
+      } else if ($e['type'] === E_WARNING) {
         $msg = isset($e['message']) ? "{$e['message']} in {$e['file']} on line {$e['line']}" : '';
+        $typeName = "PHP warning";
+      }
         $msg = preg_replace('/[a-z0-9_\-]*\.php/i','$1<u>$0</u>',$msg);
         $msg = preg_replace('/[0-9]/i','$1<em>$0</em>',$msg);
         $msg = preg_replace('/[\(\)#\[\]\':]/i','$1<ss>$0</ss>',$msg);
-
         echo "<style>
-          u{color:#ed6;text-decoration:none;} b{color:#ddd;letter-spacing:1px;} em{color:#cfc;font-style:normal;} ss{color:white;}
-          h2{letter-spacing:1px;font-size:1.5rem;color:#b8b;margin-top:0;} br{margin-bottom:1.8rem;}
-          .prettyphp{margin:3rem auto;line-height:1.4em;padding:2rem;background:#ffffff1a;font-size:1.1rem;border-radius:0.5rem;max-width:1000px;font-family:monospace;}
+      u {color:#ed6;text-decoration:none;} b {color:#ddd;letter-spacing:1px;} em {color:#cfc;font-style:normal;} ss {color:white;}
+      h2 {letter-spacing:1px;font-size:1.5rem;color:#b8b;margin-top:0;} br {margin-bottom:1.8rem;}
+      .prettyphp {margin:3rem auto;line-height:1.4em;padding:2rem;background:#ffffff1a;font-size:1.1rem;border-radius:0.5rem;max-width:1000px;font-family:monospace;}
           </style>
-          <div class='prettyphp'><h2>PHP warning</h2><div>".nl2br($msg)."</div></div>";
-      }
+      <div class='prettyphp'><h2>{$typeName}</h2><div>".nl2br($msg)."</div></div>";
     }
   }
   register_shutdown_function('tltneon\LGSL\shutdown');

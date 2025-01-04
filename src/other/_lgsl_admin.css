@@ -8,6 +8,10 @@
 }
 .admin-server-table table {
 	margin: auto;
+	text-align:center;
+}
+.admin-server-table th {
+	letter-spacing: -1px;
 }
 .admin-server-table td {
 	text-align:center;
@@ -23,21 +27,30 @@
 	margin: auto;
 	text-align: left;
 }
+select[name^='form_type'] {
+	width: 16rem;
+}
 textarea[name='form_list'] {
 	width: 95%;
 	height: 500px;
 	font-size: 1.2em;
 	font-family: courier new, monospace;
 }
-input[name^='form_s_port'] {
+input[name^='form_s_port'], input[name^='form_q_port'], input[name^='form_c_port'] {
 	width: 55px;
+}
+input[name^='form_comment'] {
+	width: 16rem;
+}
+#lgsl_main_buttons input{
+	margin: 10px;
 }
 .inlined {
 	display: inline-block;
 	width: 300px;
 	vertical-align: top;
 }
-.tt{
+.tt {
 	margin: auto;
 	width: 610px;
 }
@@ -81,3 +94,7 @@ div#admin_page > #protocols_list select, div#admin_page > #protocols_list input:
 div#admin_page > #protocols_list select {height: 300px !important;}
 div#admin_page > #protocols_list {text-align: right;}
 div#admin_page > #protocols_log, div#admin_page > #protocols_list {width: 49.8%;display: inline-block; vertical-align: top; font-family: monospace;}
+/* Protocols Section */
+#protocols_table { margin: auto; }
+#protocols_table td { border-bottom: 1px solid gray; font-weight: 100; }
+#protocols_table strong { text-decoration: underline; }

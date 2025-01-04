@@ -16,3 +16,11 @@ function loadDetailsSort() {
 }
 
 document.addEventListener("DOMContentLoaded", loadDetailsSort);
+
+let st = document.createElement("style");
+st.innerText = `
+.table_head th { cursor: pointer; }
+.table_head th:hover:after {
+  content: "↕";
+}`;
+document.body.appendChild(st);

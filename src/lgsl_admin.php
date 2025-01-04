@@ -164,6 +164,10 @@
       ";
     return;
   }
+  if (!empty($_POST['lgsl_wiki_games_list'])) {
+    $output .= lgslShowWikiPage();
+    return;
+  }
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -245,7 +249,7 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
           "type" => $p // protocol name from lgsl_type_list()
       ]);
       $server->queryLive("s"); // s - server info, e - extra data, p - players info
-      $log .= "[type: {$server->getType()}] " . ($server->getStatus() === Server::OFFLINE ? $lgsl_config['text'][$server->getStatus()] : "[game: {$server->getGame()}] [data: {$server->getName()} | {$server->getPlayersCount()} | {$lgsl_config['text'][$server->getStatus()]}]") ."<br>";
+      $log .= "[type: {$server->getType()}] " . ($server->getStatus() === Server::OFFLINE ? $lgsl_config['text'][$server->getStatus()] : "[game: {$server->getGame()}] [data: {$server->getName(true)} | {$server->getPlayersCount()} | {$lgsl_config['text'][$server->getStatus()]}]") ."<br>";
     }
     $log .= "<br>";
   }
@@ -267,7 +271,7 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
       </select>
       <div>Server IP: <input type='input' name='ip' value='{$_POST['ip']}'></div>
       <div>Query ports: <input type='input' name='q_port' value='" . implode(',', $_POST['q_port']) . "'></div>
-      <div>Query limit: {$lgsl_config['live_time']}s.</div>
+      <div>Query limit: {$lgsl_config['live_time']}s. per server</div>
       <input type='submit' name='lgsl_server_protocol_detection'>
     </form>
   </div>
@@ -329,12 +333,12 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
 
   $headersHtml = array_reduce([...['#'], ...$headers],
 			function($a, $b) {
-				return "{$a}<td>[ {$b} ]</td>";
+				return "{$a}<th>[ {$b} ]</th>";
 			});
   $output .= "
   <form method='post' action=''>
     <div class='admin-server-table'>
-      <table cellspacing='5' cellpadding='0'>
+      <table>
         <tr>
         " . $headersHtml . "
         </tr>";
@@ -471,14 +475,51 @@ if (!empty($_POST['lgsl_server_protocol_detection'])) {
     global $lgsl_config;
     $management = isNormal() ? $lgsl_config['text']['nrm'] : $lgsl_config['text']['avm'];
     return "
-    <table cellspacing='20' cellpadding='0' style='text-align:center;margin:auto'>
-      <tr>
-        <td><input type='submit' name='lgsl_save_1'          value='{$lgsl_config['text']['skc']}'> </td>
-        <td><input type='submit' name='lgsl_save_2'          value='{$lgsl_config['text']['srh']}'> </td>
-        <td><input type='submit' name='lgsl_map_image_paths' value='{$lgsl_config['text']['mip']}'> </td>
-        <td><input type='submit' name='lgsl_switch'          value='{$management}'> </td>
-        <td><input type='submit' name='lgsl_server_protocol_detection' value='Detect Protocol'> </td>
-        <td><input type='submit' name='lgsl_check_updates'   value='{$lgsl_config['text']['upd']}'> </td>
-      </tr>
-    </table>";
+    <div id='lgsl_main_buttons'>
+      <input type='submit' name='lgsl_save_1'          value='{$lgsl_config['text']['skc']}'>
+      <input type='submit' name='lgsl_save_2'          value='{$lgsl_config['text']['srh']}'>
+      <input type='submit' name='lgsl_map_image_paths' value='{$lgsl_config['text']['mip']}'>
+      <input type='submit' name='lgsl_switch'          value='{$management}'>
+      <input type='submit' name='lgsl_server_protocol_detection' value='Detect Protocol'>
+      <input type='submit' name='lgsl_check_updates'   value='{$lgsl_config['text']['upd']}'>
+      <input type='submit' name='lgsl_wiki_games_list' value='Games List'>
+    </div>";
+  }
+  function lgslShowWikiPage() {
+    $stream = new Stream(PROTOCOL::HTTP);
+    $stream->open();
+    $stream->write("https://raw.githubusercontent.com/wiki/tltneon/lgsl/Supported-Games,-Query-protocols,-Default-ports.md");
+    $stream->setOpt(CURLOPT_TIMEOUT, 10);
+    $markdown = $stream->readRaw();
+    $markdown = preg_replace('/^## (.*)$/m', '<h2>$1</h2>', $markdown);
+    $markdown = preg_replace('/^### (.*)$/m', '<h3>$1</h3>', $markdown);
+    $markdown = preg_replace('/^#### (.*)$/m', '<h4>$1</h4>', $markdown);
+    $markdown = preg_replace('/\*\*(.*?)\*\*/', '<strong>$1</strong>', $markdown);
+    $markdown = preg_replace('/^\* (.*)$/m', '<ul><li>$1</li></ul>', $markdown);
+    $markdown = preg_replace('/<\/ul><ul>/', '', $markdown);
+    $markdown = preg_replace('/^\d+\. (.*)$/m', '<ol><li>$1</li></ol>', $markdown);
+    $markdown = preg_replace('/<\/ol><ol>/', '', $markdown);
+
+    // Регулярное выражение для извлечения строк таблицы
+    $pattern = '/\| (.*?) \| (.*?) \| (.*?) \| (.*?) \|/';
+
+    // Применяем регулярное выражение
+    preg_match_all($pattern, $markdown, $matches, PREG_OFFSET_CAPTURE);
+    // Начало HTML-таблицы
+    $output = "<table id='protocols_table'>";
+
+    // Перебираем результаты и выводим строки в таблицу
+    foreach ($matches[1] as $index => $match) {
+        // Извлекаем значения для каждого столбца
+        $game = $match[0];
+        $queryProtocol = $matches[2][$index][0];
+        $defaultQueryPort = $matches[3][$index][0];
+
+        $output .= "<tr><td>{$game}</td><td>{$queryProtocol}</td><td>{$defaultQueryPort}</td></tr>";
+    }
+
+    // Закрытие таблицы
+    $output .= "</table>
+    <a href='https://github.com/tltneon/lgsl/wiki/Supported-Games,-Query-protocols,-Default-ports' target='_blank'>For more information visit wiki page</a>";
+    return $output . lgslReturnButtons();
   }
