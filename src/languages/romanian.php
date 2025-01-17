@@ -63,7 +63,7 @@
   $lgsl_config['text']['mpg'] = "PAGINA PRINCIPALĂ";
   
   /* admin section */
-  $lgsl_config['text']['tzn'] = "m/d/Y H:i:s";
+  $lgsl_config['text']['tzn'] = "d/m/Y H:i:s";
   $lgsl_config['text']['umn'] = "UTILIZATOR";
   $lgsl_config['text']['pwd'] = "PAROLA";
   $lgsl_config['text']['lgn'] = "Conectare";
