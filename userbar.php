@@ -96,8 +96,8 @@
 
       imagettftext($im, 10, 0, 62,  19, $color_nm, $font, /* name     */  $server->getName(true));
       imagettftext($im, 8,  0, 62,  32, $color_ip, $font, /* ip&port  */  str_replace('https://', '', $link));
-      imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$server->getMap()}");
-      imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server->getPlayersCount()}{$max}");
+      imagettftext($im, 7,  0, 154, 47, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}: {$server->getMap()}");
+      imagettftext($im, 7,  0, 62,  48, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}: {$server->getPlayersCount()}{$max}");
       imagettftext($im, 7,  0, 62,  59, $color_tm, $font, /* game     */  ucfirst($server->getGame()));
       imagettftext($im, 7,  0, 238, 59, $color_tm, $font, /* updated  */  "upd:{$time} /{$server->getGame()}");
 
@@ -212,11 +212,11 @@
       imagecopy($im, $on_id, 7, 2, 0, 0, 16, 16);                                 // place status icon
       imagecopy($im, $game_id, 25, 2, 0, 0, 16, 16);                              // place game icon
 
-      imagettftext($im, 7, 0, 43,  17, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}:{$map}");
+      imagettftext($im, 7, 0, 43,  17, $color_mp, $font, /* map      */  "{$lgsl_config['text']['map']}: {$map}");
       imagettftext($im, 7, 0, 43,  9,  $color_ip, $font, /* ip&port  */  str_replace('https://', '', $link));
       imagettftext($im, 8, 0, 156, 9,  $color_nm, $font, /* name     */  $server->getName(false));
-      imagettftext($im, 7, 0, 156, 17, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}:{$server->getPlayersCount()}{$max}");
-      imagettftext($im, 5, 0, 238, 18, $color_tm, $font, /* updated  */  "upd:{$time} /{$server->getGame()}");
+      imagettftext($im, 7, 0, 156, 17, $color_pl, $font, /* players  */  "{$lgsl_config['text']['plr']}: {$server->getPlayersCount()}{$max}");
+      imagettftext($im, 5, 0, 238, 18, $color_tm, $font, /* updated  */  "upd: {$time} / {$server->getGame()}");
     }
   }
 
