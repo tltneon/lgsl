@@ -1,0 +1,98 @@
+<?php
+
+//------------------------------------------------------------------------------------------------------------+
+
+  global $lgsl_config;
+
+  $lgsl_config['text']['ttl'] = "רשימת שרתים - LGSL";
+  $lgsl_config['text']['vsd'] = "לחץ כדי לראות פרטי שרת";
+  $lgsl_config['text']['slk'] = "התחברות לשרת דרך סטים";
+  $lgsl_config['text']['sts'] = "מצב שרת";
+  $lgsl_config['text']['adr'] = "כתובת אייפי";
+  $lgsl_config['text']['cpt'] = "פורט להתחברות";
+  $lgsl_config['text']['qpt'] = "פורט לשאילתות";
+  $lgsl_config['text']['typ'] = "סוג";
+  $lgsl_config['text']['gme'] = "משחק";
+  $lgsl_config['text']['map'] = "מפה";
+  $lgsl_config['text']['plr'] = "שחקנים";
+  $lgsl_config['text']['dtl'] = "אודות";
+  $lgsl_config['text']['npi'] = "אין מידע אודות שחקנים";
+  $lgsl_config['text']['nei'] = "אין מידע נוסף";
+  $lgsl_config['text']['ehs'] = "הגדרה";
+  $lgsl_config['text']['ehv'] = "ערך";
+  $lgsl_config['text']['err'] = "שגיאה";
+  $lgsl_config['text']['onl'] = "מחובר";
+  $lgsl_config['text']['onp'] = "מחובר עם סיסמא";
+  $lgsl_config['text']['nrs'] = "אין תגובה";
+  $lgsl_config['text']['pen'] = "מחכה לעדכון";
+  $lgsl_config['text']['zpl'] = "שחקנים:";
+  $lgsl_config['text']['mid'] = "איידי שחקן שגוי";
+  $lgsl_config['text']['nnm'] = "--";
+  $lgsl_config['text']['nmp'] = "--";
+  $lgsl_config['text']['tns'] = "שרתים";
+  $lgsl_config['text']['tnp'] = "שחקנים";
+  $lgsl_config['text']['bot'] = "בוט";
+  $lgsl_config['text']['tmp'] = "מקסימום שחקנים";
+  $lgsl_config['text']['asd'] = "האפשרות להוסיף שרתים על ידי צד שלישי כבויה";
+  $lgsl_config['text']['awm'] = "איזור זה מאפשר לך לבדוק ולהוסיף שרתים מגיבים לרשימת השרתים";
+  $lgsl_config['text']['ats'] = "בדיקת זמינות שרת";
+  $lgsl_config['text']['aaa'] = "השרת כבר ברשימת השרתים אך צריך אימות על ידי מנהל";
+  $lgsl_config['text']['aan'] = "השרת כבר נמצא ברשימת השרתים";
+  $lgsl_config['text']['anr'] = "אין תגובה - וודא שהכנסת את הפרטים הנכונים";
+  $lgsl_config['text']['ada'] = "השרת נוסף בהצלחה אבל ממתין לאישור מנהל";
+  $lgsl_config['text']['adn'] = "השרת נוסף בהצלחה";
+  $lgsl_config['text']['asc'] = "הצלחה - בבקשה וודא שזהו השרת הנכון";
+  $lgsl_config['text']['aas'] = "הוסף שרת";
+  $lgsl_config['text']['loc'] = "מיקום:";
+  $lgsl_config['text']['cts'] = "לחץ כאן כדי להציג באנרים";
+  $lgsl_config['text']['ctb'] = "לחץ כדי להציג פרטים אודות השרת";
+  $lgsl_config['text']['mod'] = "מצב";
+  $lgsl_config['text']['lst'] = "עודכן לאחרונה";
+  $lgsl_config['text']['nam'] = "שם";
+  $lgsl_config['text']['gam'] = "משחק";
+  $lgsl_config['text']['sta'] = "סטטוס";
+  $lgsl_config['text']['sco'] = "ניקוד";
+  $lgsl_config['text']['tim'] = "זמן";
+  $lgsl_config['text']['tea'] = "קבוצה";
+  $lgsl_config['text']['cou'] = "מדינה";
+  $lgsl_config['text']['pin'] = "זמן תגובה";
+  $lgsl_config['text']['dea'] = "כמות מיתות";
+  $lgsl_config['text']['hea'] = "בריאות";
+  $lgsl_config['text']['kil'] = "כמות הריגות";
+  $lgsl_config['text']['squ'] = "קבוצה";
+  $lgsl_config['text']['ski'] = "מיומנות";
+  $lgsl_config['text']['mes'] = "רשת";
+  $lgsl_config['text']['fac'] = "פנים";
+  $lgsl_config['text']['xp']  = "נקודות ניסיון";
+  $lgsl_config['text']['key'] = "מפתח";
+  $lgsl_config['text']['spe'] = "צופה";
+  $lgsl_config['text']['pag'] = "עמוד";
+  $lgsl_config['text']['bak'] = "חזרה לרשימת שרתים";
+  $lgsl_config['text']['mpg'] = "חזרה לעמוד ראשי";
+  $lgsl_config['text']['isp'] = "עמוד התקנה";
+  /* admin section */
+  $lgsl_config['text']['tzn'] = "d/m/Y h:i:sA";
+  $lgsl_config['text']['umn'] = "שם משתמש";
+  $lgsl_config['text']['pwd'] = "סיסמא";
+  $lgsl_config['text']['lgn'] = "התחברות";
+  $lgsl_config['text']['skc'] = "שמור שינויים - שמירת זיכרון מטמון";
+  $lgsl_config['text']['srh'] = "שמור שינויים - מחיקת זיכרון מטמון";
+  $lgsl_config['text']['mip'] = "נתיב לאייקונים של מפות";
+  $lgsl_config['text']['avm'] = "ניהול מתקדם";
+  $lgsl_config['text']['nrm'] = "ניהול רגיל";
+  $lgsl_config['text']['upd'] = "עדכונים";
+  $lgsl_config['text']['yes'] = "כן";
+  $lgsl_config['text']['nno'] = "לא";
+  $lgsl_config['text']['enb'] = "מופעל";
+  $lgsl_config['text']['dsb'] = "מושבת";
+  $lgsl_config['text']['aum'] = "שם משתמש או סיסמא חסרים בקונפיג המערכת";
+  $lgsl_config['text']['apc'] = "סיסמאת המנהל צריכה להיות שונה מהסיסמא הברירת מחדל";
+  $lgsl_config['text']['faq'] = "- To remove a server, delete the IP, then click Save.<br /><br />- Leave the query port blank to have LGSL try to fill it in for you.<br /><br />- Software port is only needed for a few games so it being set 0 is normal.<br /><br />- Edit the lgsl_config.php to set the style and other options.<br /><br />- Keep your LGSL up to date.";
+  $lgsl_config['text']['fso'] = "נדרש על מנת לבקש שאילתות מהשרת";
+  $lgsl_config['text']['crl'] = "משומש עבור פיד כאשר הפונקציה fsockopen כבויה";
+  $lgsl_config['text']['mbs'] = "משומש עבור הצגה נכונה של שם שרת ושמות שחקנים בפורמט UTF-8";
+  $lgsl_config['text']['bz2'] = "משומש עבור הצגת הגדרות של שרת סורס מעל גודל מסויים";
+  $lgsl_config['text']['gd2'] = "נדרש עבור Image Mod";
+  $lgsl_config['text']['zli'] = "נדרש עבור America's Army 3";
+
+//------------------------------------------------------------------------------------------------------------+

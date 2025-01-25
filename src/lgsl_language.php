@@ -8,6 +8,7 @@
         const EN = "english";
         const FR = "french";
         const GE = "german";
+        const HB = "hebrew";
         const KO = "korean";
         const RO = "romanian";
         const RU = "russian";
@@ -33,7 +34,10 @@
             if (empty($this->strings[$code])) return "#LGSL_NO_STRING# {$code} for {$this->lang}";
             return $this->strings[$code];
         }
+        public function isRtl() {
+            return in_array($this->lang, [self::HB]);
+        }
         static function list() {
-            return [self::AR, self::BG, self::CN, self::CZ, self::EN, self::FR, self::GE, self::KO, self::RO, self::RU, self::SL, self::SP, self::TR];
+            return [self::AR, self::BG, self::CN, self::CZ, self::EN, self::FR, self::GE, self::HB, self::KO, self::RO, self::RU, self::SL, self::SP, self::TR];
         }
     }

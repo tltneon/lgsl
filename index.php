@@ -60,7 +60,7 @@
 //------------------------------------------------------------------------------------------------------------+
 ?>
 <!DOCTYPE html>
-<html>
+<html <?php echo ($lang->isRtl() ? "dir='rtl'" : ""); ?>>
   <head>
     <title><?php echo $title; ?></title>
     <link rel="icon" href="src/other/favicon.ico" type="image/x-icon">
