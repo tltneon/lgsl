@@ -166,7 +166,7 @@
 				if (gettype($var) == "Array") return $var;
 				if ($var === true) return 'true';
 				if ($var === false) return 'false';
-				return "$var";
+				return "\"$var\"";
 			}
 			foreach ($conf as $key => $value) {
 				$conf[$key] = type($conf[$key]);
@@ -459,6 +459,7 @@
 					<option value='korean'>한국어</option>
 					<option value='romanian'>Română</option>
 					<option value='chinese_simplified'>简体中文</option>
+					<option value='hebrew'>עִבְרִית</option>
 					<option value='help' style='color: green;'>!Help to translate LGSL!</option>
 				</select>
 			</p>
