@@ -916,6 +916,7 @@
         $this->_data['s']['map']         = $buffer->cutString();
         $this->_data['s']['game']        = $buffer->cutString();
         $this->_data['e']['description'] = $buffer->cutString();
+        if (trim($this->_data['e']['description']) == "Counter-Strike 2") $this->_data['s']['game'] = 'cs2';
         if (!$isOldProtocol) {
         $this->_data['e']['appid']       = $buffer->cutByteUnpack(2, "S");
         }
