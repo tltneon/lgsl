@@ -166,7 +166,7 @@
 				if (gettype($var) == "Array") return $var;
 				if ($var === true) return 'true';
 				if ($var === false) return 'false';
-				return "\"$var\"";
+				return "$var";
 			}
 			foreach ($conf as $key => $value) {
 				$conf[$key] = type($conf[$key]);
@@ -174,58 +174,60 @@
 			$config = 
 "<?php
 	namespace tltneon\LGSL;
-	global \$lgsl_config; \$lgsl_config = [];
-	/* */
-	\$lgsl_config['installed'] = true;
-	\$lgsl_config['feed']['method'] = 0;
-	\$lgsl_config['feed']['url'] = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\";
-	\$lgsl_config['style'] = '{$conf['style']}'; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, materials_style.css
-	\$lgsl_config['scripts'] = {$conf['scripts']};
-	\$lgsl_config['locations'] = {$conf['locations']};
-	\$lgsl_config['list']['totals'] = {$conf['totals']};
-	\$lgsl_config['sort']['servers'] = \"{$conf['sort_servers_by']}\";	// OPTIONS: id  type  zone  players  status
-	\$lgsl_config['sort']['players'] = \"{$conf['sort_players_by']}\";	// OPTIONS: name  score
-	\$lgsl_config['zone']['width'] = \"160\"; // images will be cropped unless also resized to match
-	\$lgsl_config['zone']['line_size'] = \"19\";  // player box height is this number multiplied by player names
-	\$lgsl_config['zone']['height'] = \"100\"; // player box height limit
-	\$lgsl_config['grid']     = [1,1,1,1,1,1,1,1,1,1];
-	\$lgsl_config['players']  = [1,1,1,1,1,1,1,1,1,1];
-	\$lgsl_config['random']   = [0,0,0,0,0,0,0,0,0,0];
-	\$lgsl_config['hide_offline'] = [{$conf['hide_offline']},0,0,0,0,0,0,0,0,0];
-	\$lgsl_config['title'] = ['Live Game Server List', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server'];
-	\$lgsl_config['admin']['user'] = \"{$conf['lgsl_user']}\";
-	\$lgsl_config['admin']['pass'] = \"{$conf['lgsl_password']}\";
-	\$lgsl_config['db']['type']    = \"{$conf['db_type']}\";
-	\$lgsl_config['db']['server']  = \"{$conf['db_server']}\";
-	\$lgsl_config['db']['user']    = \"{$conf['db_user']}\";
-	\$lgsl_config['db']['pass']    = \"{$conf['db_password']}\";
-	\$lgsl_config['db']['db']      = \"{$conf['db_database']}\";
-	\$lgsl_config['db']['table']   = \"{$conf['db_table']}\";
-	\$lgsl_config['db']['prefix']  = \"{$conf['db_prefix']}\";
-	\$lgsl_config['image_mod']     = {$conf['image_mod']};
-	\$lgsl_config['preloader']     = {$conf['preloader']};   // true=using ajax to faster loading page
-	\$lgsl_config['pagination_mod']= {$conf['page_mod']};   // true = using pagination
-	\$lgsl_config['pagination_lim']= {$conf['page_lim']};   // limit per page
-	\$lgsl_config['direct_index']  = 0;                     // 1=link to index.php instead of the folder
-	\$lgsl_config['no_realpath']   = 0;                     // 1=do not use the realpath function
-	\$lgsl_config['url_path']      = '';                  // full url to /src/ for when auto detection fails
-	\$lgsl_config['management']    = 0;                     // 1=show advanced management in the admin by default
-	\$lgsl_config['host_to_ip']    = 0;                     // 1=show the servers ip instead of its hostname
-	\$lgsl_config['public_add']    = {$conf['public_add']}; // 1=servers require approval OR 2=servers shown instantly
-	\$lgsl_config['public_feed']   = 0;                     // 1=feed requests can add new servers to your list
-	\$lgsl_config['cache_time']    = {$conf['cache_time']}; // seconds=time before a server needs updating
-	\$lgsl_config['autoreload']    = {$conf['autoreload']}; // 1=reloads page when cache_time is passed
-	\$lgsl_config['history']       = {$conf['history']};    // 1=record server history
-	\$lgsl_config['history_hours'] = 24;
-	\$lgsl_config['live_time']     = 3;                     // seconds=time allowed for updating servers per page load
-	\$lgsl_config['timeout']       = 0;                     // 1=gives more time for servers to respond but adds loading delay
-	\$lgsl_config['retry_offline'] = 0;                     // 1=repeats query when there is no response but adds loading delay
-	\$lgsl_config['cms']           = 'sa';                // sets which CMS specific code to use
-	\$lgsl_config['disabled_types']= false; // allow to exclude some protocols (games) from list. usage: ['disabled_types']= ['halflifewon', 'test'];
-	\$lgsl_config['select_lang']   = {$conf['select_lang']};      // allow to select language for users
-	\$lgsl_config['remove_colors'] = true;      // remove colors from the server name
-	\$lgsl_config['language']      = '{$conf['language']}'; // sets LGSL language
-	include('languages/{$conf['language']}.php');        // loads LGSL language
+	global \$lgsl_config; 
+	\$lgsl_config = [
+		'installed' => true,
+		'feed' => ['method' => 0, 'url' => \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"],
+		'style' => '{$conf['style']}', // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, materials_style.css
+		'scripts' => '{$conf['scripts']}',
+		'locations' => '{$conf['locations']}',
+		'list' => ['totals' => {$conf['totals']}],
+		'sort' => [
+			'servers' => \"{$conf['sort_servers_by']}\", // OPTIONS: id  type  zone  players  status
+			'players' => \"{$conf['sort_players_by']}\" // OPTIONS: name  score
+		],
+		'zone' => ['width' => \"160\", 'line_size' => \"19\", 'height' => \"100\"],
+		'grid' => [1,1,1,1,1,1,1,1,1,1],
+		'players' => [1,1,1,1,1,1,1,1,1,1],
+		'random' => [0,0,0,0,0,0,0,0,0,0],
+		'hide_offline' => [{$conf['hide_offline']},0,0,0,0,0,0,0,0,0],
+		'title' => ['Live Game Server List', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server', 'Server'],
+		'admin' => ['user' => \"{$conf['lgsl_user']}\", 'pass' => \"{$conf['lgsl_password']}\"],
+		'db' => [
+			'type' => \"{$conf['db_type']}\",
+			'server' => \"{$conf['db_server']}\",
+			'user' => \"{$conf['db_user']}\",
+			'pass' => \"{$conf['db_password']}\",
+			'db' => \"{$conf['db_database']}\",
+			'table' => \"{$conf['db_table']}\",
+			'prefix' => \"{$conf['db_prefix']}\",
+		],
+		'image_mod' => {$conf['image_mod']},
+		'preloader' => {$conf['preloader']}, // true=using ajax to faster loading page
+		'pagination_mod' => {$conf['page_mod']}, // true=enable pagination
+		'pagination_lim' => {$conf['page_lim']}, // limit per page
+		'direct_index' => 0, // 1=link to index.php instead of the folder
+		'no_realpath' => 0, // 1=do not use the realpath function
+		'url_path' => '', // full url to /src/ for when auto detection fails
+		'management' => 0, // 1=show advanced management in the admin by default
+		'host_to_ip' => 0, // 1=show the servers ip instead of its hostname
+		'public_add' => {$conf['public_add']}, // 1=servers require approval OR 2=servers shown instantly
+		'public_feed' => 0, // 1=feed requests can add new servers to your list
+		'cache_time' => {$conf['cache_time']}, // seconds=time before a server needs updating
+		'autoreload' => {$conf['autoreload']}, // 1=reloads page when cache_time is passed
+		'history' => {$conf['history']}, // 1=record server history
+		'history_hours' => 24, // record X last hours
+		'live_time' => 3, // seconds=time allowed for updating servers per page load
+		'timeout' => 0, // 1=gives more time for servers to respond but adds loading delay
+		'retry_offline' => 0, // 1=repeats query when there is no response but adds loading delay
+		'cms' => 'sa', // sets which CMS specific code to use
+		'disabled_types' => false, // allow to exclude some protocols (games) from list. usage: ['disabled_types']= ['halflifewon', 'test'];
+		'select_lang' => {$conf['select_lang']}, // allow to select language for users
+		'remove_colors' => {$conf['remove_colors']}, // remove colors from the server name
+		'language' => '{$conf['language']}', // sets LGSL language
+	];
+	include('languages/{$conf['language']}.php'); // loads LGSL language
+
 	class Config implements \ArrayAccess {
 		private \$config;
 		public function __construct() {
@@ -251,8 +253,8 @@
 		public function offsetUnset(mixed \$offset): void {
 			unset(\$this->config[\$offset]);
 		}
-		}
-?>";
+	}
+";
 			file_put_contents('src/lgsl_config.php', $config);
 			unlink('install.php');
 			exit('done');
@@ -525,6 +527,11 @@
 				<l k='sella'></l>:
 				<input type='checkbox' name='select_lang' onChange='changeCheckbox(event)' />
 			</p>
+			</p>
+			<p>
+				<l k='remco'></l>:
+				<input type='checkbox' name='remove_colors' onChange='changeCheckbox(event)' />
+			</p>
 			<p>
 				<l k='pubad'></l>:
 				<select type='text' name='public_add' onChange='changeValue(event)' />
@@ -600,7 +607,8 @@ document.addEventListener("reloadLocale", reloadLocale);
 		totals: false,
 		locations: false,
     	preloader: false,
-    	select_lang: false
+    	select_lang: false,
+    	remove_colors: false,
 	}
 	function changeValue(event, options = {}) {
 		if (options.styleChanged) {
@@ -687,7 +695,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 	}
 
 	function l(key) {
-		let t = {
+		const t = {
 			"english": {
 				"tablc": "LGSL table created <span style='color: green;'>successfully</span>.",
 				"filli": "You need to fill inputs (<span style='color:red'>step 1</span>) correctly.",
@@ -697,6 +705,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"after": "After you make config, replace it into src/lgsl_config.php",
 				"selst": "Select style",
 				"sella": "Select language",
+				"remco": "Remove colors",
 				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
