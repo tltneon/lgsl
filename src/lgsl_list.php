@@ -12,7 +12,7 @@
 //------------------------------------------------------------------------------------------------------------+
 
   require "lgsl_class.php";
-  require "lgsl_language.php";
+  require_once "lgsl_language.php";
   $lang = new Lang($_COOKIE['lgsl_lang'] ?? Lang::EN);
   global $output;
   $config = new Config();

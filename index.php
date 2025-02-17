@@ -4,7 +4,7 @@
   header("Content-Type:text/html; charset=utf-8");
 
   require ("src/lgsl_config.php");
-  require ("src/lgsl_language.php");
+  require_once ("src/lgsl_language.php");
   $lang = new tltneon\LGSL\Lang($_COOKIE['lgsl_lang'] ?? tltneon\LGSL\Lang::EN);
 	if (empty($lgsl_config['installed'])) header("Location: install.php");
   global $output, $title;
@@ -44,7 +44,7 @@
       </script>
       {$loader}";
     } else {
-      $GLOBALS['lgsl_server_id'] = (int) $_GET['s'];
+      $GLOBALS['lgsl_server_id'] = (int) ($_GET['s'] ?? 0);;
       require("src/lgsl_{$file}.php");
       return $output;
     }
