@@ -981,8 +981,8 @@
       return "#LGSL_DEFAULT_IMAGES_MISSING#";
     }
     public function getGameFormatted() {
-      global $lgsl_config;
-      return "[ {$lgsl_config['text']['typ']}: {$this->getType()} ] [ {$lgsl_config['text']['gme']}: {$this->getGame()} ]";
+      $config = new Config();
+      return "[ {$config['text']['typ']}: {$this->getType()} ] [ {$config['text']['gme']}: {$this->getGame()} ]";
     }
     public function getGameIcon($path = '') {
       $type = LGSL::normalizeString($this->getType());
@@ -1001,17 +1001,18 @@
       return "{$path}other/icon_unknown.gif";
     }
     public function getStatusIcon($path = '') {
+      $path .= 'other/';
       switch ($this->getStatus()) {
-        case self::PENDING: return "{$path}other/icon_unknown.gif";
-        case self::ERROR: return "{$path}other/icon_unknown.gif";
-        case self::OFFLINE: return "{$path}other/icon_no_response.gif";
-        case self::PASSWORDED: return "{$path}other/icon_online_password.gif";
-				default: return "{$path}other/icon_online.gif";
+        case self::PENDING: return "{$path}icon_unknown.gif";
+        case self::ERROR: return "{$path}icon_unknown.gif";
+        case self::OFFLINE: return "{$path}icon_no_response.gif";
+        case self::PASSWORDED: return "{$path}icon_online_password.gif";
+				default: return "{$path}icon_online.gif";
       }
     }
     public function getLocationFormatted() {
-      global $lgsl_config;
-      return "{$lgsl_config['text']['loc']} {$this->getLocation()}";
+      $config = new Config();
+      return "{$config['text']['loc']} {$this->getLocation()}";
     }
     public function getLocation() {
       return $this->_other['location'] ?? "XX";
@@ -1021,11 +1022,11 @@
     }
     public function getTimestampFormatted($type = Timestamp::SERVER) {
 			$time = $this->getTimestamp($type);
-      global $lgsl_config;
+      $config = new Config();
       if ($time > 0) {
-        return Date($lgsl_config['text']['tzn'], $time);
+        return Date($config['text']['tzn'], $time);
       }
-      return $lgsl_config['text']['pen'];
+      return $config['text']['pen'];
     }
     public function setTimestamp($type, $time) {
       $this->_server['cache_time']->set($type, $time);
@@ -1056,10 +1057,9 @@
       }
     }
     public function checkTimestamps($request = "") {
-      global $lgsl_config;
       $needed = "";
       foreach ([Timestamp::SERVER, Timestamp::EXTRAS, Timestamp::PLAYERS] as $stamp) {
-        if (LGSL::requestHas($request, $stamp) && time() > ($this->getTimestamp($stamp) + $lgsl_config['cache_time'])) { $needed .= $stamp; }
+        if (LGSL::requestHas($request, $stamp) && time() > ($this->getTimestamp($stamp) + (new Config())['cache_time'])) { $needed .= $stamp; }
       }
       return $needed;
     }
