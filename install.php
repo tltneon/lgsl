@@ -179,8 +179,8 @@
 		'installed' => true,
 		'feed' => ['method' => 0, 'url' => \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"],
 		'style' => '{$conf['style']}', // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, materials_style.css
-		'scripts' => '{$conf['scripts']}',
-		'locations' => '{$conf['locations']}',
+		'scripts' => {$conf['scripts']},
+		'locations' => {$conf['locations']},
 		'list' => ['totals' => {$conf['totals']}],
 		'sort' => [
 			'servers' => \"{$conf['sort_servers_by']}\", // OPTIONS: id  type  zone  players  status

@@ -3296,7 +3296,7 @@
               $string[$i] = chr($char);
             }
           } else {
-            $colors = ['0' => '888888', '1' => 'ff0000', '2' => '00ff00', '3' => 'DDCC00', '4' => '3377EE', '5' => '00eeee', '6' => 'DD55DD', '7' => 'ffffff', '9' => '808080'];
+            $colors = ['0' => '888888', '1' => 'ff0000', '2' => '00ff00', '3' => 'DDCC00', '4' => '3377EE', '5' => '00eeee', '6' => 'DD55DD', '7' => 'ffffff', '8' => '808080', '9' => '808080'];
             $pattern = '/\^(\d{1})([0-9a-zA-Z !@$%&-*+|\/\.]+)?/';
             return Helper::lgslColorParser($string, $pattern, $colors);
           }
