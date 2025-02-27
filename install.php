@@ -363,6 +363,7 @@
 			$output .= check('CURL', LGSL::isEnabled("curl"), 'optional: for some games');
 			$output .= check('BZ2', function_exists("bzdecompress"), 'optional: for some games');
 			$output .= check('GD', LGSL::isEnabled("gd"), 'optional: for charts & userbars');
+			$output .= check('SQLite', extension_loaded('sqlite3'), 'optional: alt db');
 		}
 
 	$output .= "	
@@ -480,6 +481,7 @@
 				<l k='sorts'></l>:
 				<select type='text' name='sort_servers_by' onChange='changeValue(event)' />
 					<option value='id'>ID</option>
+					<option value='ip'>IP</option>
 					<option value='type'>Type</option>
 					<option value='zone'>Zone</option>
 					<option value='players'>Players</option>

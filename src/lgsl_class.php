@@ -369,7 +369,7 @@
     }
     
     static function getServersGroup($options = []) {
-      global $lgsl_config;
+      $lgsl_config = new Config();
       $db = LGSL::db();
 
       $ip           = isset($options['ip'])           ? $options['ip']                   : (int) $lgsl_config['pagination_lim'];
@@ -385,7 +385,7 @@
       $page         = empty($options['page'])         ? ""                               : "LIMIT {$limit} OFFSET " . strval($limit*((int)$options['page'] - 1));
       $status       = empty($options['status'])       ? ""                               : 1;
       $order        = empty($options['order'])        ? ""                               : $options['order'];
-      $sort         = empty($options['sort'])         ? ""                               : (in_array($options['sort'], ['ip', 'name', 'map', 'players']) ? $options['sort'] : "");
+      $sort         = empty($options['sort'])         ? $lgsl_config['sort']['servers']  : (in_array($options['sort'], ['ip', 'name', 'map', 'players']) ? $options['sort'] : "");
       $server_limit = empty($options['limit'])        ? ""                               : $lgsl_config['pagination_lim'];
       $server_limit = empty($random)                  ? $server_limit                    : $random;
 
