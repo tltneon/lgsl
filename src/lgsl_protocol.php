@@ -954,7 +954,7 @@
           }
           if ((substr(rtrim($this->_data['s']['game']), -2) === 'c=')) { // EURO TRUCK SIMULATOR 2 & American Truck Simulator
             $this->_data['s']['game'] = 'ets2';
-            $this->_data['s']['map'] = substr($server['s']['map'], 0, -4);
+            $this->_data['s']['map'] = substr($this->_data['s']['map'], 0, -4);
             if ($this->_data['s']['map'] == '/map/usa') {
               $this->_data['s']['game'] = 'ats';
             }
