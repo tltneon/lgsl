@@ -952,6 +952,13 @@
             preg_match('/mp\d{1,3}/', $this->_data['e']['tags'], $e);
             $this->_data['s']['playersmax'] = substr($e[0], 2);
           }
+          if ((substr(rtrim($this->_data['s']['game']), -2) === 'c=')) { // EURO TRUCK SIMULATOR 2 & American Truck Simulator
+            $this->_data['s']['game'] = 'ets2';
+            $this->_data['s']['map'] = substr($server['s']['map'], 0, -4);
+            if ($this->_data['s']['map'] == '/map/usa') {
+              $this->_data['s']['game'] = 'ats';
+            }
+          }
         }
         
         $mode = explode('_', $this->_data['s']['map'])[0];
