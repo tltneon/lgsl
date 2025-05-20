@@ -66,6 +66,7 @@
   $lgsl_config['text']['xp']  = "XP";
   $lgsl_config['text']['key'] = "Key";
   $lgsl_config['text']['spe'] = "Spectator";
+  $lgsl_config['text']['isb'] = "Bot";
   $lgsl_config['text']['pag'] = "Page";
   $lgsl_config['text']['bak'] = "BACK TO SERVERS LIST";
   $lgsl_config['text']['mpg'] = "TO MAIN PAGE";

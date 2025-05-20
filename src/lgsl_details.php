@@ -83,7 +83,7 @@
       </div>
       <div class='spacer'></div>";
 
-    $g = "ip={$server->getIp()}&port={$server->getConnectionPort()}";
+    $g = "ip={$server->getIp()}&port={$server->getConnectionPort()}&cacheonly";
     if ($lgsl_config['history']) {
       $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server->getName()}' style='border-radius: 6px;' id='chart' /></div>";
     }
@@ -263,6 +263,4 @@
 	</script>
 	";
 
-if ($lgsl_config['preloader']) {
-  echo $output;
-}
+  LGSL::preloader($output);

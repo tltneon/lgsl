@@ -1,11 +1,11 @@
+const cache = [];
 async function imageExists(image_url, el) {
-	var http = new XMLHttpRequest();
-	http.open('HEAD', image_url, true);
-  http.onload = () => {
-    if (http.status !== 404)
-      el.src = image_url;
-  };
-	http.send();
+  if (cache.includes(image_url)) return el.src = image_url;
+  const http = new XMLHttpRequest();
+  http.open('HEAD', image_url, true);
+  http.onload = () => { if (http.status !== 404) el.src = image_url; }
+  http.send();
+  cache.push(image_url);
 }
 
 function loadPreview() {
@@ -13,7 +13,7 @@ function loadPreview() {
   if (cells) {
     cells.forEach((a, b) => {
       let map = a.innerHTML.trim();
-      if(map !== '-' && map !== '--'){
+      if (map !== '--') {
         let el = document.createElement('img');
         imageExists(a.getAttribute('data-path'), el);
         el.style.width = '250px';

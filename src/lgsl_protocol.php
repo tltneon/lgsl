@@ -400,6 +400,7 @@
         self::STARWARSRC    => [0,     7777,  11138],
         self::SWAT4         => [1,     10780, 10781],
         self::TERRARIA      => [101,   7777,  7878],
+        self::TEEWORLDS     => [0,     8303,  8303],
         self::TITANFALL2    => [0,     1,     1],
         self::TRIBESV       => [1,     7777,  7778],
         self::TS            => [0,     8767,  51234],
@@ -440,9 +441,15 @@
       return $list[$type] ?? "err";
     }
 		public function updateTimestamps() {
-			$this->_server->setTimestamp("sep", time());
+			$this->_server->setTimestamp("sep");
 		}
     public function query() {
+      $data = $this->_server->getAdditionalData();
+      if (isset($data['alwaysOnline'])) {
+        $this->updateTimestamps();
+        $this->_server->setName($this->_server->getType() . " server");
+        return $this->_server->setStatus(Query::SUCCESS);
+      }
       $protocol = $this->lgslConnectionType($this->_server->getType());
 			$this->_lgsl_fp = new Stream($protocol);
 			if ($status = $this->_lgsl_fp->open($this->_server)) {
@@ -480,7 +487,7 @@
     public function need($key): bool {
       if ($this->_need[$key]) {
         $this->_need[$key] = false;
-        $this->_server->setTimestamp($key, time());
+        $this->_server->setTimestamp($key);
         return true;
       }
       return false;
@@ -499,18 +506,18 @@
             'e' => false,
             'p' => false
           ];
-          $this->_server->setTimestamp("sep", time());
+          $this->_server->setTimestamp("sep");
         }
         $this->_data['o']['conn_tries'] = 0;
       } else {
         $this->_data['o']['conn_tries'] = $this->_server->getConnectionTries() + 1;
         if ($this->_data['o']['conn_tries'] > 4) {
-          $this->_server->setTimestamp("sep", time());
+          $this->_server->setTimestamp("sep");
           $this->_data['o']['conn_tries'] = 5;
         }
         $this->_server->updateValues($this->_data);
       }
-      $this->_data['o']['time_execution'] = $time - microtime(true);
+      $this->_data['o']['time_execution'] = microtime(true) - $time;
       if ($status !== $this::NO_RESPOND) {
         if ($status === $this::SUCCESS) {
           $this->_server->removeOption("_error");
@@ -971,11 +978,14 @@
         $buffer->skip(1);
         $player_key = 0;
         while ($buffer->length() > 4) {
-          $buffer->skip(1);
+          $userid = $buffer->cutByte();
           $this->_data['p'][$player_key]['name']  = $buffer->cutString();
           if (strlen($this->_data['p'][$player_key]['name']) === 0) $this->_data['p'][$player_key]['name']  = "*unknown*";
           $this->_data['p'][$player_key]['score'] = $buffer->cutByteUnpack(4, "l");
-          $this->_data['p'][$player_key]['time']  = Helper::lgslTime($buffer->cutByteUnpack(4, "f"));
+          $this->_data['p'][$player_key]['time']  = Helper::lgslTime($time = $buffer->cutByteUnpack(4, "f"));
+          if ($userid > 127 || $time > 86400) { // isBot or isSpectator
+            $this->_data['p'][$player_key]['name'] = "[BOT] {$this->_data['p'][$player_key]['name']}";
+          }
           $player_key ++;
         }
         $this->need('p');
@@ -2413,14 +2423,20 @@
       $buffer = $this->fetch("https://cdn.rage.mp/master/");
       if (!$buffer) return $this::NO_RESPOND;
       if ($value = $buffer["{$this->_server->getIp()}:{$this->_server->get_c_port()}"]) {
-        $this->_data['s']['name']       = $value['name'];
-        $this->_data['s']['map']        = "RageMP";
-        $this->_data['s']['players']    = $value['players'];
-        $this->_data['s']['playersmax'] = $value['maxplayers'];
-        $this->_data['e']['url']        = $value['url'];
-        $this->_data['e']['peak']       = $value['peak'];
-        $this->_data['s']['mode']       = $value['gamemode'];
-        $this->_data['e']['lang']       = $value['lang'];
+        $this->_data = [
+          's' => [
+            'name' => $value['name'],
+            'players' => $value['players'],
+            'playersmax' => $value['maxplayers'],
+            'map' => 'RageMP',
+            'mode' => $value['gamemode'],
+          ],
+          'e' => [
+            'url' => $value['url'],
+            'peak' => $value['peak'],
+            'lang' => $value['lang'],
+          ]
+        ];
         return $this::SUCCESS;
       }
       return $this::NO_RESPOND;
@@ -2430,23 +2446,32 @@
     public function process() {
       $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/dynamic.json");
       if (!$buffer) return $this::NO_RESPOND;
-      $this->_data['s']['name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem');
-      $this->_data['o']['colored_name'] = Helper::lgslParseColor($buffer['hostname'], 'fivem', false);
-      $this->_data['s']['players'] = $buffer['clients'];
-      $this->_data['s']['playersmax'] = $buffer['sv_maxclients'];
-      $this->_data['s']['map'] = $buffer['mapname'];
-      if ($this->_data['s']['map'] == 'redm-map-one') {
-        $this->_data['s']['game'] = 'redm';
-      }
-      $this->_data['s']['mode'] = $buffer['gametype'];
-      $this->_data['e']['version'] = $buffer['iv'];
+      $this->_data = [
+        's' => [
+          'name' => Helper::lgslParseColor($buffer['hostname'], 'fivem'),
+          'players' => $buffer['clients'],
+          'playersmax' => $buffer['sv_maxclients'],
+          'map' => $buffer['mapname'],
+          'game' => ($buffer['mapname'] == 'redm-map-one' ? 'redm' : 'fivem'),
+          'mode' => $buffer['gametype'],
+        ],
+        'e' => [
+          'version' => $buffer['iv']
+        ],
+        'p' => array_fill(0, $buffer['clients'], null),
+        'o' => [
+          'colored_name' => Helper::lgslParseColor($buffer['hostname'], 'fivem', false)
+        ]
+      ];
 
-      if ($this->need('p')) {
+      if ($this->need('p') && $buffer['clients'] > 0) {
         $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/players.json");
         if ($buffer) {
           foreach ($buffer as $key => $value) {
-            $this->_data['p'][$key]['name'] = $value['name'];
-            $this->_data['p'][$key]['ping'] = $value['ping'];
+            $this->_data['p'][$key] = [
+              'name' => $value['name'],
+              'ping' => $value['ping']
+            ];
           }
         }
       }
@@ -2461,28 +2486,33 @@
         $this->_data['e']['_error_fetching_info'] = $buffer['message'];
         return $this::NO_RESPOND;
       }
-      $this->_data['s']['name'] = $buffer['guild']['name'];
-      $this->_data['s']['players'] = $buffer['approximate_presence_count'];
-      $this->_data['s']['playersmax'] = $buffer['approximate_member_count'];
-      $this->_data['e']['id'] = $buffer['guild']['id'];
-      $this->_data['e']['expires_at'] = $buffer['expires_at'] ?? LGSL::NONE;
-      $this->_data['e']['members'] = $buffer['approximate_member_count'];
-      $this->_data['e']['premium_subscriptions'] = $buffer['guild']['premium_subscription_count'];
-      if($buffer['guild']['description']) {
-        $this->_data['e']['description'] = $buffer['guild']['description'];
-      }
+      $description = $buffer['guild']['description'] ?? LGSL::NONE;
       if (isset($buffer['guild']['welcome_screen'])) {
-        if ($buffer['guild']['welcome_screen']['description']) $this->_data['e']['description'] = $buffer['guild']['welcome_screen']['description'];
+        if ($buffer['guild']['welcome_screen']['description']) $description = $buffer['guild']['welcome_screen']['description'];
         if ($buffer['guild']['welcome_screen']['welcome_channels'])
-        $this->_data['e']['welcome_channels'] = array_reduce($buffer['guild']['welcome_screen']['welcome_channels'], function($a, $c) {
+        $welcome_channels = array_reduce($buffer['guild']['welcome_screen']['welcome_channels'], function($a, $c) {
           return "{$a}\n{$c['emoji_name']} {$c['description']}";
         }, "");
       }
-      $this->_data['e']['features'] = implode(', ', $buffer['guild']['features'] ?? []);
-      $this->_data['e']['nsfw'] = (int) $buffer['guild']['nsfw'];
-      if (isset($buffer['inviter'])) {
-        $this->_data['e']['inviter'] = "{$buffer['inviter']['username']}#{$buffer['inviter']['discriminator']}";
-      }
+      $this->_data = [
+        's' => [
+          'name' => $buffer['guild']['name'],
+          'players' => $buffer['approximate_presence_count'],
+          'playersmax' => $buffer['approximate_member_count'],
+        ],
+        'e' => [
+          'id' => $buffer['guild']['id'],
+          'expires_at' => $buffer['expires_at'] ?? LGSL::NONE,
+          'members' => $buffer['approximate_member_count'],
+          'premium_subscriptions' => $buffer['guild']['premium_subscription_count'],
+          'description' => $description,
+          'welcome_channels' => $welcome_channels ?? LGSL::NONE,
+          'features' => implode(', ', $buffer['guild']['features'] ?? []),
+          'nsfw' => (int) $buffer['guild']['nsfw'],
+          'inviter' => $buffer['inviter']['username'] ?? LGSL::NONE,
+        ],
+        'p' => [],
+      ];
       $this->need('s');
       $this->need('e');
 
@@ -2501,9 +2531,11 @@
 
         if (isset($buffer['members'])) {
           foreach ($buffer['members'] as $key => $value) {
-            $this->_data['p'][$key]['name'] = $value['username'];
-            $this->_data['p'][$key]['status'] = $value['status'];
-            $this->_data['p'][$key]['game'] = isset($value['game']) ? $value['game']['name'] : LGSL::NONE;
+            $this->_data['p'][$key] = [
+              'name' => $value['username'],
+              'status' => $value['status'],
+              'game' => isset($value['game']) ? $value['game']['name'] : LGSL::NONE
+            ];
           }
         }
       }
@@ -3303,8 +3335,8 @@
               $string[$i] = chr($char);
             }
           } else {
-            $colors = ['0' => '888888', '1' => 'ff0000', '2' => '00ff00', '3' => 'DDCC00', '4' => '3377EE', '5' => '00eeee', '6' => 'DD55DD', '7' => 'ffffff', '8' => '808080', '9' => '808080', 'a' => 'ff7f00'];
-            $pattern = '/\^([a0-9])([0-9a-zA-Z !@$%&-*+|\/\.]+)?/';
+            $colors = ['0' => '888888', '1' => 'ff0000', '2' => '00ff00', '3' => 'DDCC00', '4' => '3377EE', '5' => '00eeee', '6' => 'DD55DD', '7' => 'ffffff', '8' => '808080', '9' => '808080', 'a' => 'ff7f00', 'd' => '007fff', 'g' => 'ccffcc', 'i' => 'ff0033', 'n' => 'FFFFBF', 'o' => 'ffff7f'];
+            $pattern = '/\^([adgino0-9])([0-9a-zA-Z !@$%&-*+|\/\.]+)?/';
             return Helper::lgslColorParser($string, $pattern, $colors);
           }
         break;

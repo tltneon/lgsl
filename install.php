@@ -183,7 +183,7 @@
 		'locations' => {$conf['locations']},
 		'list' => ['totals' => {$conf['totals']}],
 		'sort' => [
-			'servers' => \"{$conf['sort_servers_by']}\", // OPTIONS: id  type  zone  players  status
+			'servers' => \"{$conf['sort_servers_by']}\", // OPTIONS: id  ip  type  zone  players  status
 			'players' => \"{$conf['sort_players_by']}\" // OPTIONS: name  score
 		],
 		'zone' => ['width' => \"160\", 'line_size' => \"19\", 'height' => \"100\"],
@@ -216,8 +216,8 @@
 		'cache_time' => {$conf['cache_time']}, // seconds=time before a server needs updating
 		'autoreload' => {$conf['autoreload']}, // 1=reloads page when cache_time is passed
 		'history' => {$conf['history']}, // 1=record server history
-		'history_hours' => 24, // record X last hours
-		'live_time' => 3, // seconds=time allowed for updating servers per page load
+		'history_hours' => {$conf['history_hours']}, // record X last hours
+		'live_time' => {$conf['live_time']}, // seconds=time allowed for updating servers per page load
 		'timeout' => 0, // 1=gives more time for servers to respond but adds loading delay
 		'retry_offline' => 0, // 1=repeats query when there is no response but adds loading delay
 		'cms' => 'sa', // sets which CMS specific code to use
@@ -514,12 +514,20 @@
 				<input type='checkbox' name='autoreload' onChange='changeCheckbox(event)' />
 			</p>
 			<p>
-				Time before a server needs updating:
+				<l k='timup'></l>:
 				<input type='number' min='0' max='3600' value='60' onChange='vars.cache_time = event.target.value' />
+			</p>
+			<p>
+				<l k='timal'></l>:
+				<input type='number' min='1' max='27' value='3' onChange='vars.live_time = event.target.value' />
 			</p>
 			<p>
 				Enable server tracking (history) <a href='https://github.com/tltneon/lgsl/wiki/features#pagination' target='_blank' class='hinfolink'>?</a>:
 				<input type='checkbox' name='history' onChange='changeCheckbox(event)' />
+			</p>
+			<p>
+				Record X last hours as history:
+				<input type='number' min='1' max='96' value='24' onChange='vars.history_hours = event.target.value' />
 			</p>
 			<p>
 				<l k='hideo'></l>:
@@ -603,7 +611,9 @@ document.addEventListener("reloadLocale", reloadLocale);
 		page_lim: 15,
 		autoreload: false,
 		history: false,
+		history_hours: 24,
 		cache_time: 60,
+		live_time: 3,
 		hide_offline: false,
 		public_add: false,
 		totals: false,
@@ -705,9 +715,9 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"coutd": "LGSL <span style='color: red;'>couldn't take data from most of game servers</span> due to UDP upflow is blocked on your hosting.",
 				"remem": "Remember to remove the install.php after install LGSL!",
 				"after": "After you make config, replace it into src/lgsl_config.php",
-				"selst": "Select style",
-				"sella": "Select language",
-				"remco": "Remove colors",
+				"selst": "Allow selecting style per user",
+				"sella": "Allow selecting language per user",
+				"remco": "Remove colors from server name",
 				"selsc": "Select scripts",
 				"sorts": "Sort servers by",
 				"sortp": "Sort players by",
@@ -729,6 +739,8 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
         "check": "Check requirements",
+        		"timup": "Time before a server needs updating",
+        		"timal": "Time allowed for updating servers per page load (do not exceed max_execution_time in PHP.ini)",
 			},
 			"russian": {
 				"back": "< Назад",

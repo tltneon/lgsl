@@ -34,7 +34,7 @@
   $ip = $_GET['ip'] ?? null;
   $port = (int) ($_GET['port'] ?? null);
   $server = new Server(["ip" => $ip, "c_port" => $port, "id" => $s]);
-  $server->queryCached("cs");
+  $server->queryCached("s" . (isset($_GET['cacheonly']) ? "c" : ""));
   if (!$server) {
     Image::makeImageError($w, $h, $lgsl_config['text']['mid']);
   }

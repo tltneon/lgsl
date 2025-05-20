@@ -25,8 +25,7 @@
   $zone_grid  = $lgsl_config['grid'][$lgsl_zone_number] ?? 1;
   $zone_count = 0;
   $output = "<link rel='stylesheet' href='other/_lgsl_zone.css' type='text/css' />";
-
-  $request = empty($lgsl_config['players'][$lgsl_zone_number]) ? "s" : "sp";
+  $request = (isset($_GET['cacheonly']) ? "c" : "") . (empty($lgsl_config['players'][$lgsl_zone_number]) ? "s" : "sp");
   if ($lgsl_zone_number) {
     $server_list = Database::getServersGroup(["request"=>$request, "zone"=>$lgsl_zone_number]);
   } else {
@@ -166,6 +165,4 @@
     </tr>
   </table>";
 
-if ($lgsl_config['preloader']) {
-  echo $output;
-}
+  LGSL::preloader($output);

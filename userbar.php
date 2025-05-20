@@ -44,8 +44,8 @@
   }
 
 	require "src/lgsl_class.php";
-  $query = "cs";
-  $bar   = (int) ($_GET['t'] ?? 1);
+  $query = "s" . (isset($_GET['cacheonly']) ? "c" : "");
+  $bar = (int) ($_GET['t'] ?? 1);
   if ($bar === 3) { $query .= "p"; }
   $s = isset($_GET['s']) ? (int) $_GET['s'] : null;
   $ip = isset($_GET['ip']) ? $_GET['ip'] : null;

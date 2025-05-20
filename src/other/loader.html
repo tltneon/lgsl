@@ -8,6 +8,7 @@
   <div class='bar bar7'></div>
   <div class='bar bar8'></div>
   <div class='center' id="text"></div>
+  <div class='center' id="timer">00.000</div>
 </div>
 <style>
   .middle {top: 25%;left: 50%;transform: translate(-50%, -50%);position: absolute;}
@@ -46,5 +47,25 @@
     if (el) {
       el.innerText = langs[lang] ?? langs["english"];
     }
+
+    let startTime = performance.now();
+    let stopped = false;
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const seconds = String(totalSeconds % 60).padStart(2, '0');
+      const milliseconds = String(Math.floor(ms % 1000)).padStart(3, '0');
+      return `${seconds}.${milliseconds}`;
+    }
+    function update() {
+      if (stopped) return;
+      const timerEl = document.getElementById('timer');
+      if (!timerEl) {stopped = true; return;}
+      const now = performance.now();
+      const elapsed = now - startTime;
+      timerEl.textContent = formatTime(elapsed);
+      requestAnimationFrame(update);
+    }
+
+    requestAnimationFrame(update);
   }
 </script>

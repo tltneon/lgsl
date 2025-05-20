@@ -227,6 +227,9 @@
     static public function showWarning($message) {
       trigger_error($message, E_USER_WARNING);
     }
+    static public function preloader($out) {
+      if ((new Config())['preloader']) echo $out; // print as is
+    }
   }
 //------------------------------------------------------------------------------------------------------------+
   class Database {
@@ -686,9 +689,10 @@
     }
     
     public function queryCached($request = 'seph') {
-      $request = "{$request}c"; // cached by default
+      //$request = "{$request}c"; // cached by default
       $db = LGSL::db();
       $db->loadServer($this);
+      if (LGSL::requestHas($request, "c")) return; // don't do query when only cache needed
       $needed = $this->checkTimestamps($request);
       if (LGSL::requestHas($request, "h")) { $needed .= "h"; }
       if ($needed) {
@@ -879,6 +883,7 @@
     public function getConnectionLink() {
       $lgsl_software_link = [
         Protocol::ALTV          => "altv://connect/{IP}:{C_PORT}",
+        Protocol::ARKASCENDED   => "steam://connect/{IP}:{C_PORT}",
         Protocol::ARMA3         => "steam://connect/{IP}:{C_PORT}",
         Protocol::CALLOFDUTYIW  => "javascript:prompt('Put it into console:', 'connect {IP}:{C_PORT}')",
         Protocol::CALLOFDUTY4   => "cod4://{IP}:{S_PORT}",
@@ -1028,7 +1033,8 @@
       }
       return $config['text']['pen'];
     }
-    public function setTimestamp($type, $time) {
+    public function setTimestamp($type, $time = null) {
+      if (!$time) $time = time();
       $this->_server['cache_time']->set($type, $time);
     }
     public function getTimestamps() {
@@ -1236,7 +1242,7 @@
   }
   function shutdown() {
     $e = error_get_last();
-    if ($e && isset($e['type'])) {
+    if ($e && isset($e['type']) && in_array($e['type'], [E_ERROR, E_WARNING])) {
       $typeName = "errName {$e['type']}";
       if ($e['type'] === E_ERROR) {
         $msg = isset($e['message']) ? $e['message'] : '';
