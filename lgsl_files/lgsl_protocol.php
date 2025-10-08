@@ -4471,7 +4471,7 @@
     // auth
     curl_setopt($lgsl_fp, CURLOPT_POST, 1);
     curl_setopt($lgsl_fp, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($lgsl_fp, CURLOPT_HTTPHEADER, ['Authorization: Basic ' . base64_encode("{$user_id}:{$user_secret}"), 'Accept-Encoding: deflate, gzip', 'Content-Type: application/x-www-form-urlencoded']);
+    curl_setopt($lgsl_fp, CURLOPT_HTTPHEADER, ['Authorization: Basic ' . base64_encode("{$user_id}:{$user_secret}"), 'Content-Type: application/x-www-form-urlencoded']);
     $external_auth_add = "";
     if ($grant_type == "external_auth") {
       curl_setopt($lgsl_fp, CURLOPT_POSTFIELDS, "deviceModel=PC");
