@@ -108,8 +108,8 @@
     "quake2"        => "Quake 2",
     "quake3"        => "Quake 3",
     "quake4"        => "Quake 4",
-    "rallym"        => "Rally Masters",
     "ragemp"        => "Rage:MP",
+    "rallym"        => "Rally Masters",
     "ravenshield"   => "Raven Shield",
     "redorchestra"  => "Red Orchestra",
     "rfactor"       => "RFactor",
@@ -265,8 +265,8 @@
     "quake2"        => "02",
     "quake3"        => "02",
     "quake4"        => "10",
-    "rallym"        => "03",
     "ragemp"        => "34",
+    "rallym"        => "03",
     "ravenshield"   => "04",
     "redorchestra"  => "13",
     "rfactor"       => "16",
@@ -530,10 +530,10 @@
       case "mta"           : $c_to_q = 123;   $c_def = 22003;   $q_def = 22126;   $c_to_s = 0;   break;
       case "painkiller"    : $c_to_q = 123;   $c_def = 3455;    $q_def = 3578;    $c_to_s = 0;   break;
       case "ragemp"        : $c_to_q = 0;     $c_def = 22005;   $q_def = 22005;   $c_to_s = 0;   break;
+      case "rallym"        : $c_to_q = 0;     $c_def = 16666;   $q_def = 16666;   $c_to_s = 0;   break;
       case "ravenshield"   : $c_to_q = 1000;  $c_def = 7777;    $q_def = 8777;    $c_to_s = 0;   break;
       case "redorchestra"  : $c_to_q = 1;     $c_def = 7758;    $q_def = 7759;    $c_to_s = 0;   break;
       case "rfactor"       : $c_to_q = -100;  $c_def = 34397;   $q_def = 34297;   $c_to_s = 0;   break;
-      case "rallym"        : $c_to_q = 0;     $c_def = 14567;   $q_def = 23000;   $c_to_s = 0;   break;
       case "serioussam"    : $c_to_q = 1;     $c_def = 25600;   $q_def = 25601;   $c_to_s = 0;   break;
       case "soldat"        : $c_to_q = 123;   $c_def = 23073;   $q_def = 23196;   $c_to_s = 0;   break;
       case "sf"            : $c_to_q = 0;     $c_def = 7777;    $q_def = 15777;   $c_to_s = 0;   break;
@@ -989,7 +989,7 @@
 
 //---------------------------------------------------------+
 
-    if (isset($server['e']['mapname']) || $server['b']['type'] == "rallym")
+    if (isset($server['e']['mapname']) || $server['b']['type'] == "")
     {
       $server['s']['map'] = $server['e']['mapname'];
 
@@ -4772,7 +4772,7 @@ function lgsl_unescape($text) {
       break;
 
       case "minecraft":
-        $string = preg_replace("/[ §]\w/S", "", $string);
+        $string = preg_replace("/[�§]\w/S", "", $string);
       break;
 
       case "factorio":
