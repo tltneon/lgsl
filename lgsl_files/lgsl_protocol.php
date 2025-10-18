@@ -989,7 +989,7 @@
 
 //---------------------------------------------------------+
 
-    if (isset($server['e']['mapname']) || $server['b']['type'] == "")
+    if (isset($server['e']['mapname']) || $server['b']['type'] == "rallym")
     {
       $server['s']['map'] = $server['e']['mapname'];
 
