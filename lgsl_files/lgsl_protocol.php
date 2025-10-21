@@ -989,21 +989,18 @@
 
 //---------------------------------------------------------+
 
-    if (isset($server['e']['mapname']) || $server['b']['type'] == "rallym")
-    {
-      $server['s']['map'] = $server['e']['mapname'];
+    if (!empty($server['e']['mapname']))    { $server['s']['map'] = $server['e']['mapname']; }
 
-      if (!empty($server['e']['hostname']))    { $server['s']['name'] = $server['e']['hostname']; }
-      if (!empty($server['e']['sv_hostname'])) { $server['s']['name'] = $server['e']['sv_hostname']; }
+    if (!empty($server['e']['hostname']))    { $server['s']['name'] = $server['e']['hostname']; }
+    if (!empty($server['e']['sv_hostname'])) { $server['s']['name'] = $server['e']['sv_hostname']; }
 
-      if (isset($server['e']['password']))   { $server['s']['password']   = $server['e']['password']; }
-      if (isset($server['e']['numplayers'])) { $server['s']['players']    = $server['e']['numplayers']; }
-      if (isset($server['e']['maxplayers'])) { $server['s']['playersmax'] = $server['e']['maxplayers']; }
+    if (isset($server['e']['password']))   { $server['s']['password']   = $server['e']['password']; }
+    if (isset($server['e']['numplayers'])) { $server['s']['players']    = $server['e']['numplayers']; }
+    if (isset($server['e']['maxplayers'])) { $server['s']['playersmax'] = $server['e']['maxplayers']; }
 
-      if (!empty($server['e']['gamename']))                                   { $server['s']['game'] = $server['e']['gamename']; }
-      if (!empty($server['e']['gameid']) && empty($server['e']['gamename']))  { $server['s']['game'] = $server['e']['gameid']; }
-      if (!empty($server['e']['gameid']) && $server['b']['type'] == "bf1942") { $server['s']['game'] = $server['e']['gameid']; }
-    }
+    if (!empty($server['e']['gamename']))                                   { $server['s']['game'] = $server['e']['gamename']; }
+    if (!empty($server['e']['gameid']) && empty($server['e']['gamename']))  { $server['s']['game'] = $server['e']['gameid']; }
+    if (!empty($server['e']['gameid']) && $server['b']['type'] == "bf1942") { $server['s']['game'] = $server['e']['gameid']; }
 
 //---------------------------------------------------------+
 
