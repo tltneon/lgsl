@@ -409,6 +409,7 @@
     "quake3"        => "qtracker://{IP}:{S_PORT}?game=Quake3&action=show",
     "quake4"        => "qtracker://{IP}:{S_PORT}?game=Quake4&action=show",
     "ragemp"        => "rage://v/connect?ip={IP}:{C_PORT}",
+    "rallym"        => "javascript:prompt('Put this on Add Server:', '{IP}:{C_PORT}')",
     "ravenshield"   => "http://en.wikipedia.org/wiki/Tom_Clancy's_Rainbow_Six_3",
     "redorchestra"  => "steam://connect/{IP}:{C_PORT}",
     "rfactor"       => "rfactor://{IP}:{C_PORT}",
