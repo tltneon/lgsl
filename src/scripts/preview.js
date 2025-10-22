@@ -1,11 +1,10 @@
-const cache = [];
+const cache = {};
 async function imageExists(image_url, el) {
-  if (cache.includes(image_url)) return el.src = image_url;
-  const http = new XMLHttpRequest();
-  http.open('HEAD', image_url, true);
-  http.onload = () => { if (http.status !== 404) el.src = image_url; }
-  http.send();
-  cache.push(image_url);
+  if (!!cache[image_url]) return el.src = image_url;
+  const image = new Image();
+  image.onload = () => { el.src = image_url; }
+  image.src = image_url;
+  cache[image_url] = image;
 }
 
 function loadPreview() {

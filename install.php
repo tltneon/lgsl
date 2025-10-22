@@ -148,8 +148,11 @@
 						}
 					}
 				}
-			} catch (Error $e) {
-				var_dump($e);
+			} catch (\Error $e) {
+				printf($e->getMessage() . '<br>');
+				printf('<l k="mysld"></l>');
+			} catch (\Exception $e) {
+				printf($e->getMessage() . '<br>');
 				printf('<l k="mysld"></l>');
 			}
 		}
@@ -324,8 +327,10 @@
 			}
 			.badge {
 				border-radius: 4px;
-				display: inline;
+				display: inline-block;
 				padding: 1px 4px;
+				margin: 1px;
+				cursor: help;
 			}
 			.bg-red {
 				background: red;
@@ -353,17 +358,18 @@
 			$output .= '<h4><l k="check"></l></h4>';
 			
 			function check($name, $bool, $hint = '') {
-				if ($bool) return "<p class='badge bg-green'>$name</p>";
+				if ($bool) return "<p class='badge bg-green' title='$hint'>$name</p>";
 				return "<p class='badge bg-red' title='$hint'>$name</p>";
 			}
 			
-			$output .= check('MySQL', function_exists("mysqli_connect"), 'used for mysql db');
-			$output .= check('PHP 7.1', version_compare(PHP_VERSION, "7.1.0") >= 0, 'errors may occurs if PHP < 7.1');
+			$output .= check('PHP 7.1+', version_compare(PHP_VERSION, "7.1.0") >= 0, 'LGSL7 works only with PHP 7.1+');
 			$output .= check('FSOCKOPEN', function_exists("fsockopen") && fsockopen("udp://127.0.0.1", 13, $errno, $errstr, 3), 'mainly used for querying');
+			$output .= check('MySQL', function_exists("mysqli_connect"), 'used for mysql/mariadb db');
 			$output .= check('CURL', LGSL::isEnabled("curl"), 'optional: for some games');
 			$output .= check('BZ2', function_exists("bzdecompress"), 'optional: for some games');
 			$output .= check('GD', LGSL::isEnabled("gd"), 'optional: for charts & userbars');
-			$output .= check('SQLite', extension_loaded('sqlite3'), 'optional: alt db');
+			$output .= check('SQLite', extension_loaded('sqlite3'), 'optional: alternative db');
+			$output .= check('PostgreSQL', extension_loaded('pdo_pgsql'), 'optional: alternative db');
 		}
 
 	$output .= "	
@@ -469,10 +475,10 @@
 
 			<p>
 				<l k='selsc'></l> <a href='https://github.com/tltneon/lgsl/wiki/scripts' target='_blank' class='hinfolink'>?</a>:
-				<br /><input type='checkbox' id='parallax.js' name='scripts' onChange='changeCheckbox(event)' /> parallax (for Parallax Style)
-				<br /><input type='checkbox' id='preview.js' name='scripts' onChange='changeCheckbox(event)' /> map preview (on server list)
-				<br /><input type='checkbox' id='refresh.js' name='scripts' onChange='changeCheckbox(event)' /> refresh (manually refresh server status)
-				<br /><input type='checkbox' id='flag-icon.js' name='scripts' onChange='changeCheckbox(event)' /> flag-icon (replacing with svg)
+				<br /><input type='checkbox' id='parallax.js' name='scripts' onChange='changeCheckbox(event)' /> <label for='parallax.js'>parallax (for Parallax Style)</label>
+				<br /><input type='checkbox' id='preview.js' name='scripts' onChange='changeCheckbox(event)' /> <label for='preview.js'>map preview (on server list)</label>
+				<br /><input type='checkbox' id='refresh.js' name='scripts' onChange='changeCheckbox(event)' /> <label for='refresh.js'>refresh (manually refresh server status)</label>
+				<br /><input type='checkbox' id='flag-icon.js' name='scripts' onChange='changeCheckbox(event)' /> <label for='flag-icon.js'>flag-icon (replacing with svg)</label>
 			</p>
 
 			<hr />
@@ -519,7 +525,7 @@
 			</p>
 			<p>
 				<l k='timal'></l>:
-				<input type='number' min='1' max='27' value='3' onChange='vars.live_time = event.target.value' />
+				<input type='number' min='1' max='". (ini_get('max_execution_time') ?? 0) ."' value='3' onChange='vars.live_time = event.target.value' />
 			</p>
 			<p>
 				Enable server tracking (history) <a href='https://github.com/tltneon/lgsl/wiki/features#pagination' target='_blank' class='hinfolink'>?</a>:
@@ -735,7 +741,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"updat": "Update table",
 				"skips": "Skip step",
 				"filla": "You need to fill required* inputs.",
-				"mysld": "Connect <span style='color: red;'>failed</span>: mysqli extension doesn't active.",
+				"mysld": "Connect <span style='color: red;'>failed</span>: DB extension is not active (in PHP.INI).",
 				"table": "LGSL <span style='color: red;'>table wasn't created</span>: wrong database name or table already exists.",
 				"cretd": "Table <span style='color: green;'>successfully</span> created! Get to Step 2.",
         "check": "Check requirements",

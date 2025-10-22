@@ -18,6 +18,7 @@ body
 a:link, a:visited { text-decoration:none; color:#0088DD; }
 a:hover{ color:#adcef1; }
 a:active{ color:#adcef1; }
+summary {cursor: pointer;}
 textarea {
  	background-color: #282828;
   color: white;

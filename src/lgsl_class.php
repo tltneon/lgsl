@@ -419,19 +419,19 @@
       return $output;
     }
     static public function getStatistics() {
-      global $lgsl_config;
+      $config = (new Config());
       $db = LGSL::db();
-
-      $query  = "SELECT COUNT(*) as servers, SUM(players) as players, SUM(playersmax) as playersmax, SUM(STATUS) as servers_online, COUNT(*)-SUM(status) as servers_offline FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE disabled = 0;";
+      $count_discord = $config['count_discord'] ? '' : " AND game <> 'discord'";
+      $query  = "SELECT COUNT(*) as servers, SUM(players) as players, SUM(playersmax) as playersmax, SUM(STATUS) as servers_online, COUNT(*)-SUM(status) as servers_offline FROM `{$config['db']['prefix']}{$config['db']['table']}` WHERE disabled = 0{$count_discord};";
       return $db->query($query, true);
     }
 
     function saveServer(&$server) {
-      global $lgsl_config;
+      $config = (new Config());
       $packed_cache = $this->escape_string(base64_encode(serialize($server->toArray())));
       $status = (int) $server->isOnline();
       $this->execute("
-        UPDATE `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}`
+        UPDATE `{$config['db']['prefix']}{$config['db']['table']}`
         SET `status`='{$status}',
             `cache`='{$packed_cache}',
             `cache_time`='{$server->getTimestamps()}',
@@ -555,10 +555,14 @@
 	}
 	class PostgresWrapper extends DBWrapper {
 		public function connect() {
+      try {
 			global $lgsl_config;
 			$dbname = $lgsl_config['db']['db'] ? "dbname={$lgsl_config['db']['db']}" : "";
 			$password = $lgsl_config['db']['pass'] ? "password={$lgsl_config['db']['pass']}" : "";
 			$this->_connection = \pg_connect("host={$lgsl_config['db']['server']} port=5432 {$dbname} user={$lgsl_config['db']['user']} {$password}");
+      } catch (\Error $e) {
+        throw new \Exception("Failed to connect to PostgreSQL database: {$e->getMessage()}");
+      }
 		}
 		public function get_error() {
 			if (!$this->_connection) return "Not connected";
@@ -1114,6 +1118,7 @@
 			return $s === self::PASSWORDED || $s === self::ONLINE;
 		}
 		public function queryLocation() {
+      if ($this->getType() === Protocol::DISCORD) return 'XX';
       return LGSL::locationCode($this->getIp());
 		}
 		public function sortPlayerFields() {

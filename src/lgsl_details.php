@@ -83,9 +83,9 @@
       </div>
       <div class='spacer'></div>";
 
-    $g = "ip={$server->getIp()}&port={$server->getConnectionPort()}&cacheonly";
+    $g = "ip={$server->getIp()}&port={$server->getConnectionPort()}";
     if ($lgsl_config['history']) {
-      $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}' alt='{$server->getName()}' style='border-radius: 6px;' id='chart' /></div>";
+      $output .= "<div style='overflow-x: auto;'><img src='charts.php?{$g}&cacheonly' alt='{$server->getName()}' style='border-radius: 6px;' id='chart' /></div>";
     }
 
 		$p = str_replace('src/', '', LGSL::urlPath()) . ($lgsl_config["direct_index"] ? 'index.php' : '');
@@ -101,7 +101,7 @@
 						if (LGSL::isEnabled("gd")) {
               for ($i = 1; $i < 4; $i++) {
                 $output .= "
-                <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t={$i}' alt='{$server->getName()}'/></div>
+                <div style='overflow-x: auto;'><img src='userbar.php?{$g}&t={$i}&cacheonly' alt='{$server->getName()}'/></div>
                 <textarea onClick='this.select();'>[url={$p}?{$g}][img]{$p}userbar.php?{$g}&t={$i}[/img][/url]</textarea><br /><br />";
               }
 						} else {
@@ -111,7 +111,7 @@
 					
           $iframeLink = "src/lgsl_zone.php?{$g}&bg=transparent&text=white&link=yellow";
 					$output .= "
-						<iframe src='{$iframeLink}' alt='{$server->getName()}' style='border: 1px dotted gray; display: block; width: 200px; height: calc(275px + {$framespace}px); margin: auto;'></iframe><br />
+						<iframe src='{$iframeLink}&cacheonly' alt='{$server->getName()}' style='border: 1px dotted gray; display: block; width: 200px; height: calc(275px + {$framespace}px); margin: auto;'></iframe><br />
             <textarea onClick='this.select();'><iframe src='{$p}{$iframeLink}'></iframe></textarea>
           </div>
         </details>

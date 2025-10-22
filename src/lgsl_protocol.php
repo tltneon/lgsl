@@ -199,7 +199,7 @@
     static public function lgslProtocolWithoutPort($type) {
       return in_array($type, [self::DISCORD, self::TITANFALL2]);
     }
-    static public function lgslList($type = null) {
+    static public function lgslList($type = '') {
       $list = [
         self::AARMY         => ["Query09", "Americas Army"],
         self::ALTV          => ["Query53", "Alt:V"],
@@ -553,7 +553,7 @@
       // auth
       curl_setopt($ch, CURLOPT_POST, 1);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-      curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Basic ' . base64_encode("{$this->user_id}:{$this->user_secret}"), 'Accept-Encoding: deflate, gzip', 'Content-Type: application/x-www-form-urlencoded']);
+      curl_setopt($ch, CURLOPT_HTTPHEADER, ['Authorization: Basic ' . base64_encode("{$this->user_id}:{$this->user_secret}"), 'Content-Type: application/x-www-form-urlencoded']);
       $external_auth_add = "";
       if ($this->grant_type == "external_auth") {
         curl_setopt($ch, CURLOPT_POSTFIELDS, "deviceModel=PC");

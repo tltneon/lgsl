@@ -9,7 +9,7 @@
  \-----------------------------------------------------------------------------------------------------------*/
 
   global $lgsl_config, $lgsl_zone_number;
-  $lgsl_zone_number = $_GET['zone'] ?? null;
+  $lgsl_zone_number = $_GET['zone'] ?? '';
   $ip = $_GET['ip'] ?? null;
   $port = (int) ($_GET['port'] ?? 0);
   if (!isset($lgsl_zone_number) && !$ip && !$port) { exit("LGSL PROBLEM: $lgsl_zone_number NOT SET"); }

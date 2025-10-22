@@ -13,8 +13,8 @@
   }
   require "src/lgsl_class.php";
   if (!LGSL::isEnabled("gd")) {
-    throw new \Exception("No GD");
-    echo 'No GD';
+    throw new \Exception("GD library is disabled (in PHP.INI)");
+    echo "GD library is disabled (in PHP.INI)";
     exit;
   }
 

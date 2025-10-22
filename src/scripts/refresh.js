@@ -4,6 +4,7 @@ const lng = {                 //
     owp: 'ONLINE WITH PASSWORD',
     onl: 'ONLINE',
     off: 'OFFLINE',
+    nor: 'NO RESPONSE',
     lst: 'Last update',
     que: 'Server last query',
     err: 'HTTP Error',
@@ -26,15 +27,19 @@ async function refreshData(type = 'source', ip, c_port, q_port) {
     status = JSON.parse(atob(status.slice(4, -4)));
     let details = document.querySelectorAll(".details_info .details_info_srow .details_info_ceil:nth-child(2)");
     // reload main info
-    details[0].innerText = (status.b.status === 1
-                          ? (status.s.password === 1
-                              ? `${lng[language].owp}`
-                              : `${lng[language].onl}`)
-                          : `${lng[language].off}`);
+    details[0].innerText = (status.s.playersmax > 0 ?
+                            status.b.status === 1
+                            ? (status.s.password === 1
+                                ? `${lng[language].owp}`
+                                : `${lng[language].onl}`)
+                            : `${lng[language].off}`
+                          : `${lng[language].nor}`);
     details[6].innerText = status.s.map;
-    details[7].innerText = `${status.s.players} / ${status.s.playersmax}`;
+    details[7].innerText = status.s.playersmax > 0 ? `${status.s.players} / ${status.s.playersmax}` : '--';
     document.querySelector('[id^=servername]').innerText = status.s.name;
-    el.innerText = `${lng[language].lst}: ` + (new Date()).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }) + `\n${lng[language].que}: ` + (new Date(Number(status.s.cache_time[0] + '000'))).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }) + " ";
+    console.dir(status);
+    lastQuery = `\n${lng[language].que}: ` + ((new Date(Number(status.s.cache_time[0] + '000'))).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }) === 'Invalid Date' ? "Now" : (new Date(Number(status.s.cache_time[0] + '000'))).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }));
+    el.innerText = `${lng[language].lst}: ` + (new Date()).toLocaleString(lng[language].loc, { timeZone: lng[language].zon }) + `${lastQuery} `;
     el.appendChild(a);
     // reload chart if it exists
     if (document.querySelector('#chart'))
