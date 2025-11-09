@@ -109,6 +109,7 @@
     "quake3"        => "Quake 3",
     "quake4"        => "Quake 4",
     "ragemp"        => "Rage:MP",
+    "rallym"        => "Rally Masters",
     "ravenshield"   => "Raven Shield",
     "redorchestra"  => "Red Orchestra",
     "rfactor"       => "RFactor",
@@ -265,6 +266,7 @@
     "quake3"        => "02",
     "quake4"        => "10",
     "ragemp"        => "34",
+    "rallym"        => "03",
     "ravenshield"   => "04",
     "redorchestra"  => "13",
     "rfactor"       => "16",
@@ -407,6 +409,7 @@
     "quake3"        => "qtracker://{IP}:{S_PORT}?game=Quake3&action=show",
     "quake4"        => "qtracker://{IP}:{S_PORT}?game=Quake4&action=show",
     "ragemp"        => "rage://v/connect?ip={IP}:{C_PORT}",
+    "rallym"        => "javascript:prompt('Put this on Add Server:', '{IP}:{C_PORT}')",
     "ravenshield"   => "http://en.wikipedia.org/wiki/Tom_Clancy's_Rainbow_Six_3",
     "redorchestra"  => "steam://connect/{IP}:{C_PORT}",
     "rfactor"       => "rfactor://{IP}:{C_PORT}",
@@ -528,6 +531,7 @@
       case "mta"           : $c_to_q = 123;   $c_def = 22003;   $q_def = 22126;   $c_to_s = 0;   break;
       case "painkiller"    : $c_to_q = 123;   $c_def = 3455;    $q_def = 3578;    $c_to_s = 0;   break;
       case "ragemp"        : $c_to_q = 0;     $c_def = 22005;   $q_def = 22005;   $c_to_s = 0;   break;
+      case "rallym"        : $c_to_q = 0;     $c_def = 16666;   $q_def = 16666;   $c_to_s = 0;   break;
       case "ravenshield"   : $c_to_q = 1000;  $c_def = 7777;    $q_def = 8777;    $c_to_s = 0;   break;
       case "redorchestra"  : $c_to_q = 1;     $c_def = 7758;    $q_def = 7759;    $c_to_s = 0;   break;
       case "rfactor"       : $c_to_q = -100;  $c_def = 34397;   $q_def = 34297;   $c_to_s = 0;   break;
@@ -954,6 +958,7 @@
         {
           // SEPERATE TEAM NAMES
           if ($match[1] == "teamname") { $server['t'][$match[2]]['name'] = $value; continue; }
+          if ($match[1] == "team") { $server['t'][$match[2]]['name'] = $value; continue; }
 
           // CONVERT TO LGSL STANDARD
           if     ($match[1] == "player")     { $match[1] = "name";  }
@@ -985,21 +990,18 @@
 
 //---------------------------------------------------------+
 
-    if (isset($server['e']['mapname']))
-    {
-      $server['s']['map'] = $server['e']['mapname'];
+    if (!empty($server['e']['mapname']))    { $server['s']['map'] = $server['e']['mapname']; }
 
-      if (!empty($server['e']['hostname']))    { $server['s']['name'] = $server['e']['hostname']; }
-      if (!empty($server['e']['sv_hostname'])) { $server['s']['name'] = $server['e']['sv_hostname']; }
+    if (!empty($server['e']['hostname']))    { $server['s']['name'] = $server['e']['hostname']; }
+    if (!empty($server['e']['sv_hostname'])) { $server['s']['name'] = $server['e']['sv_hostname']; }
 
-      if (isset($server['e']['password']))   { $server['s']['password']   = $server['e']['password']; }
-      if (isset($server['e']['numplayers'])) { $server['s']['players']    = $server['e']['numplayers']; }
-      if (isset($server['e']['maxplayers'])) { $server['s']['playersmax'] = $server['e']['maxplayers']; }
+    if (isset($server['e']['password']))   { $server['s']['password']   = $server['e']['password']; }
+    if (isset($server['e']['numplayers'])) { $server['s']['players']    = $server['e']['numplayers']; }
+    if (isset($server['e']['maxplayers'])) { $server['s']['playersmax'] = $server['e']['maxplayers']; }
 
-      if (!empty($server['e']['gamename']))                                   { $server['s']['game'] = $server['e']['gamename']; }
-      if (!empty($server['e']['gameid']) && empty($server['e']['gamename']))  { $server['s']['game'] = $server['e']['gameid']; }
-      if (!empty($server['e']['gameid']) && $server['b']['type'] == "bf1942") { $server['s']['game'] = $server['e']['gameid']; }
-    }
+    if (!empty($server['e']['gamename']))                                   { $server['s']['game'] = $server['e']['gamename']; }
+    if (!empty($server['e']['gameid']) && empty($server['e']['gamename']))  { $server['s']['game'] = $server['e']['gameid']; }
+    if (!empty($server['e']['gameid']) && $server['b']['type'] == "bf1942") { $server['s']['game'] = $server['e']['gameid']; }
 
 //---------------------------------------------------------+
 
