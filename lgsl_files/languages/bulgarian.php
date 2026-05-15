@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -30,6 +30,7 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "Общо сървъри";
   $lgsl_config['text']['tnp'] = "Общо играчи";
+  $lgsl_config['text']['bot'] = "бот";
   $lgsl_config['text']['tmp'] = "Общо слотове";
   $lgsl_config['text']['asd'] = "ПУБЛИЧНОТО ДОБАВЯНЕ НА СЪРВЪРИТЕ Е ОТКРИТО";
   $lgsl_config['text']['awm'] = "НАСТОЯЩАТА ОБЛАСТ Ви позволява да изпробвате и след това да добавяте онлайн списъци със сървъри за игри";
@@ -43,6 +44,7 @@
   $lgsl_config['text']['aas'] = "Добавяне на сървър";
   $lgsl_config['text']['loc'] = "Местоположение:";
   $lgsl_config['text']['cts'] = "Click to show server banners";
+  $lgsl_config['text']['ctb'] = "Щракнете, за да покажете настройките на сървъра";
   $lgsl_config['text']['lst'] = "Last update";
   $lgsl_config['text']['nam'] = "Name";
   $lgsl_config['text']['gam'] = "Game";
@@ -54,9 +56,34 @@
   $lgsl_config['text']['pin'] = "Ping";
   $lgsl_config['text']['dea'] = "Deaths";
   $lgsl_config['text']['hea'] = "Health";
+  $lgsl_config['text']['ski'] = "Умение";
+  $lgsl_config['text']['spe'] = "Наблюдател";
   $lgsl_config['text']['pag'] = "Page";
   $lgsl_config['text']['bak'] = "ОБРАТНО КЪМ СПИСЪКА НА СЪРВЪРИТЕ";
   $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
+  $lgsl_config['text']['fse'] = "Търсене на сървър или адрес";
+  $lgsl_config['text']['fam'] = "Всички карти";
+  $lgsl_config['text']['fmd'] = "Всички режими";
+  $lgsl_config['text']['fgm'] = "Всички игри";
+  $lgsl_config['text']['fty'] = "Всички типове";
+  $lgsl_config['text']['fpl'] = "Всички играчи";
+  $lgsl_config['text']['fpw'] = "С играчи";
+  $lgsl_config['text']['fhs'] = "Има свободни места";
+  $lgsl_config['text']['ffu'] = "Пълни";
+  $lgsl_config['text']['fem'] = "Празни";
+  $lgsl_config['text']['fno'] = "Няма сървъри, отговарящи на избраните филтри.";
+  $lgsl_config['text']['apn'] = "Админ панел";
+  $lgsl_config['text']['apd'] = "Управлявайте сървъри, карти, актуализации и настройки на LGSL.";
+  $lgsl_config['text']['asm'] = "Управление на сървъри";
+  $lgsl_config['text']['lgo'] = "Изход";
+  $lgsl_config['text']['fot'] = "Списък с игрови сървъри на живо";
+  $lgsl_config['text']['fod'] = "Лек PHP/MySQL браузър за игрови сървъри с многопротоколни заявки, изображения на карти, списъци с играчи, исторически графики и локализиран интерфейс.";
+  $lgsl_config['text']['fom'] = "Темата Modern добавя responsive карти, филтри, мобилна навигация и преработени админ страници.";
+  $lgsl_config['text']['fol'] = "GPL-3.0 лиценз";
+
+
+
+
   /* admin section */
   $lgsl_config['text']['tzn'] = "d.m.Y H:i:s";
   $lgsl_config['text']['umn'] = "USERNAME";
@@ -80,6 +107,7 @@
   $lgsl_config['text']['mbs'] = "Used to show UTF-8 server and player names correctly";
   $lgsl_config['text']['bz2'] = "Used to show Source server settings over a certain size";
   $lgsl_config['text']['gd2'] = "Required for Image Mod";
+  $lgsl_config['text']['frt'] = "Необходимо за графики";
   $lgsl_config['text']['zli'] = "Required for America's Army 3";
 
 //------------------------------------------------------------------------------------------------------------+

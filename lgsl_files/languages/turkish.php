@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -30,7 +30,8 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "Sunucular";
   $lgsl_config['text']['tnp'] = "Oyuncular";
-  $lgsl_config['text']['tmp'] = "Azami. Oyuncu Sayısı";
+  $lgsl_config['text']['bot'] = "bot";
+  $lgsl_config['text']['tmp'] = "Azami Oyuncu Sayısı";
   $lgsl_config['text']['asd'] = "SUNUCULARIN ORTAK EKLENMESİ DEVRE DIŞI";
   $lgsl_config['text']['awm'] = "BU ALAN TEST ETMENİZE VE SONRA ÇEVRİMİÇİ OYUN SUNUCULARINI LİSTEYE EKLEMEYE İZİN VERİR";
   $lgsl_config['text']['ats'] = "Test Sunucusu";
@@ -39,10 +40,11 @@
   $lgsl_config['text']['anr'] = "YANIT YOK - DOĞRU DETAYLARI GİRDİĞİNİZDEN EMİN OLUN";
   $lgsl_config['text']['ada'] = "YÖNETİCİ ONAYI İÇİN SUNUCU EKLENDİ";
   $lgsl_config['text']['adn'] = "SUNUCU EKLENDİ";
-  $lgsl_config['text']['asc'] = "BAŞARI - LÜTFEN DOĞRU SUNUCUSU ONAYLANMASINI BEKLEYİN";
+  $lgsl_config['text']['asc'] = "BAŞARILI - LÜTFEN DOĞRU SUNUCU OLDUĞUNU ONAYLAYIN";
   $lgsl_config['text']['aas'] = "Sunucuyu Ekle";
   $lgsl_config['text']['loc'] = "Lokasyon:";
   $lgsl_config['text']['cts'] = "Sunucu Tanıtım Görsellerini göstermek için tıklayın";
+  $lgsl_config['text']['ctb'] = "Sunucu ayarlarını göstermek için tıklayın";
   $lgsl_config['text']['lst'] = "Son Güncelleme";
   $lgsl_config['text']['nam'] = "Adı";
   $lgsl_config['text']['gam'] = "Oyun";
@@ -52,11 +54,36 @@
   $lgsl_config['text']['tea'] = "Takım";
   $lgsl_config['text']['cou'] = "Ülke";
   $lgsl_config['text']['pin'] = "Gecikme";
-  $lgsl_config['text']['dea'] = "Deaths";
-  $lgsl_config['text']['hea'] = "Health";
+  $lgsl_config['text']['dea'] = "Ölüm";
+  $lgsl_config['text']['hea'] = "Sağlık";
+  $lgsl_config['text']['ski'] = "Yetenek";
+  $lgsl_config['text']['spe'] = "İzleyici";
   $lgsl_config['text']['pag'] = "Sayfa";
   $lgsl_config['text']['bak'] = "SUNUCU LİSTESİNE GERİ DÖN";
   $lgsl_config['text']['mpg'] = "ANA SAYFA'YA DÖN";
+  $lgsl_config['text']['fse'] = "Sunucu veya adres ara";
+  $lgsl_config['text']['fam'] = "Tüm haritalar";
+  $lgsl_config['text']['fmd'] = "Tüm modlar";
+  $lgsl_config['text']['fgm'] = "Tüm oyunlar";
+  $lgsl_config['text']['fty'] = "Tüm türler";
+  $lgsl_config['text']['fpl'] = "Tüm oyuncu durumları";
+  $lgsl_config['text']['fpw'] = "Oyuncusu olanlar";
+  $lgsl_config['text']['fhs'] = "Boş slotu olanlar";
+  $lgsl_config['text']['ffu'] = "Dolu";
+  $lgsl_config['text']['fem'] = "Boş";
+  $lgsl_config['text']['fno'] = "Seçilen filtrelere uygun sunucu yok.";
+  $lgsl_config['text']['apn'] = "Admin Paneli";
+  $lgsl_config['text']['apd'] = "Sunucuları, haritaları, güncellemeleri ve LGSL ayarlarını yönetin.";
+  $lgsl_config['text']['asm'] = "Sunucu yönetimi";
+  $lgsl_config['text']['lgo'] = "Çıkış yap";
+  $lgsl_config['text']['fot'] = "Canlı Oyun Sunucu Listesi";
+  $lgsl_config['text']['fod'] = "Çoklu protokol sorgulama, harita görselleri, oyuncu listeleri, geçmiş grafikleri ve yerelleştirilmiş arayüz sunan hafif PHP/MySQL oyun sunucu tarayıcısı.";
+  $lgsl_config['text']['fom'] = "Modern tema responsive kartlar, filtreler, mobil menü ve yenilenmiş admin sayfaları ekler.";
+  $lgsl_config['text']['fol'] = "GPL-3.0 lisanslı";
+
+
+
+
   /* admin section */
   $lgsl_config['text']['tzn'] = "m/d/Y h:i:sA";
   $lgsl_config['text']['umn'] = "KULLANICI ADI";
@@ -80,6 +107,7 @@
   $lgsl_config['text']['mbs'] = "UTF-8 sunucu ve oyuncu adlarını doğru göstermek için kullanılır";
   $lgsl_config['text']['bz2'] = "Belirli bir boyutun üzerindeki Kaynak sunucu ayarlarını göstermek için kullanılır";
   $lgsl_config['text']['gd2'] = "Görüntü Modu için gerekli";
+  $lgsl_config['text']['frt'] = "Grafikler için gerekli";
   $lgsl_config['text']['zli'] = "America's Army 3 için gerekli";
 
 //------------------------------------------------------------------------------------------------------------+

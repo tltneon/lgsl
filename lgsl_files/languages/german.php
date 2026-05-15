@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -30,6 +30,7 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "Server";
   $lgsl_config['text']['tnp'] = "Spieler";
+  $lgsl_config['text']['bot'] = "Bot";
   $lgsl_config['text']['tmp'] = "Max Spieler";
   $lgsl_config['text']['asd'] = "ÖFFENTLICHES HINZUFÜGEN VON SERVERN IS DEAKTIVIERT";
   $lgsl_config['text']['awm'] = "DIESER BEREICH DIENT ZUM TESTEN UM ONLINE GAMES IM NACHHINEIN IN DIE LISTE HINZUZUFÜGEN";
@@ -43,6 +44,7 @@
   $lgsl_config['text']['aas'] = "Server hinzufügen";
   $lgsl_config['text']['loc'] = "Standort:";
   $lgsl_config['text']['cts'] = "Klicke um Server Banner zu zeigen";
+  $lgsl_config['text']['ctb'] = "Klicken, um Servereinstellungen anzuzeigen";
   $lgsl_config['text']['lst'] = "Last update";
   $lgsl_config['text']['nam'] = "Name";
   $lgsl_config['text']['gam'] = "Game";
@@ -54,9 +56,34 @@
   $lgsl_config['text']['pin'] = "Ping";
   $lgsl_config['text']['dea'] = "Tode";
   $lgsl_config['text']['hea'] = "Health";
+  $lgsl_config['text']['ski'] = "Fähigkeit";
+  $lgsl_config['text']['spe'] = "Zuschauer";
   $lgsl_config['text']['pag'] = "Page";
   $lgsl_config['text']['bak'] = "ZURÜCK ZUR SERVERLISTE";
   $lgsl_config['text']['mpg'] = "ZURÜCK ZUR STARTSEITE";
+  $lgsl_config['text']['fse'] = "Server oder Adresse suchen";
+  $lgsl_config['text']['fam'] = "Alle Karten";
+  $lgsl_config['text']['fmd'] = "Alle Modi";
+  $lgsl_config['text']['fgm'] = "Alle Spiele";
+  $lgsl_config['text']['fty'] = "Alle Typen";
+  $lgsl_config['text']['fpl'] = "Alle Spieler";
+  $lgsl_config['text']['fpw'] = "Mit Spielern";
+  $lgsl_config['text']['fhs'] = "Freie Slots";
+  $lgsl_config['text']['ffu'] = "Voll";
+  $lgsl_config['text']['fem'] = "Leer";
+  $lgsl_config['text']['fno'] = "Keine Server entsprechen den gewählten Filtern.";
+  $lgsl_config['text']['apn'] = "Adminbereich";
+  $lgsl_config['text']['apd'] = "Server, Karten, Updates und LGSL-Einstellungen verwalten.";
+  $lgsl_config['text']['asm'] = "Serververwaltung";
+  $lgsl_config['text']['lgo'] = "Abmelden";
+  $lgsl_config['text']['fot'] = "Live-Spieleserverliste";
+  $lgsl_config['text']['fod'] = "Leichter PHP/MySQL-Spieleserver-Browser mit Multi-Protokoll-Abfragen, Kartenbildern, Spielerlisten, Verlaufsgrafiken und lokalisierter Oberfläche.";
+  $lgsl_config['text']['fom'] = "Das Modern-Theme ergänzt responsive Karten, Filter, mobile Navigation und neu gestaltete Adminseiten.";
+  $lgsl_config['text']['fol'] = "GPL-3.0-lizenziert";
+
+
+
+
   /* admin section */
   $lgsl_config['text']['tzn'] = "Y-m-d H:i:s";
   $lgsl_config['text']['umn'] = "BENUTZERNAME";
@@ -80,6 +107,7 @@
   $lgsl_config['text']['mbs'] = "Wird verwendet, um UTF-8-Server- und Spielernamen korrekt anzuzeigen";
   $lgsl_config['text']['bz2'] = "Wird verwendet, um Source Server Einstellungen über einer bestimmten Größe anzuzeigen";
   $lgsl_config['text']['gd2'] = "Erforderlich für Image Mod";
+  $lgsl_config['text']['frt'] = "Für Diagramme erforderlich";
   $lgsl_config['text']['zli'] = "Erforderlich für America's Army 3";
 
 //------------------------------------------------------------------------------------------------------------+

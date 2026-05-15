@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -61,6 +61,29 @@
   $lgsl_config['text']['pag'] = "页";
   $lgsl_config['text']['bak'] = "返回服务器列表";
   $lgsl_config['text']['mpg'] = "返回首页";
+  $lgsl_config['text']['fse'] = "搜索服务器或地址";
+  $lgsl_config['text']['fam'] = "所有地图";
+  $lgsl_config['text']['fmd'] = "所有模式";
+  $lgsl_config['text']['fgm'] = "所有游戏";
+  $lgsl_config['text']['fty'] = "所有类型";
+  $lgsl_config['text']['fpl'] = "所有玩家";
+  $lgsl_config['text']['fpw'] = "有玩家";
+  $lgsl_config['text']['fhs'] = "有空位";
+  $lgsl_config['text']['ffu'] = "已满";
+  $lgsl_config['text']['fem'] = "空服";
+  $lgsl_config['text']['fno'] = "没有符合所选筛选条件的服务器。";
+  $lgsl_config['text']['apn'] = "管理面板";
+  $lgsl_config['text']['apd'] = "管理服务器、地图、更新和 LGSL 设置。";
+  $lgsl_config['text']['asm'] = "服务器管理";
+  $lgsl_config['text']['lgo'] = "退出登录";
+  $lgsl_config['text']['fot'] = "实时游戏服务器列表";
+  $lgsl_config['text']['fod'] = "轻量级 PHP/MySQL 游戏服务器浏览器，支持多协议查询、地图图片、玩家列表、历史图表和本地化界面。";
+  $lgsl_config['text']['fom'] = "Modern 主题加入响应式卡片、筛选器、移动导航和重新设计的管理页面。";
+  $lgsl_config['text']['fol'] = "GPL-3.0 许可";
+
+
+
+
   /* admin section */
   $lgsl_config['text']['tzn'] = "m/d/Y h:i:sA";
   $lgsl_config['text']['umn'] = "用户名";

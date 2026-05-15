@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -61,6 +61,29 @@
   $lgsl_config['text']['pag'] = "Page";
   $lgsl_config['text']['bak'] = "BACK TO SERVERS LIST";
   $lgsl_config['text']['mpg'] = "TO MAIN PAGE";
+  $lgsl_config['text']['fse'] = "Search server or address";
+  $lgsl_config['text']['fam'] = "All maps";
+  $lgsl_config['text']['fmd'] = "All modes";
+  $lgsl_config['text']['fgm'] = "All games";
+  $lgsl_config['text']['fty'] = "All types";
+  $lgsl_config['text']['fpl'] = "All players";
+  $lgsl_config['text']['fpw'] = "With players";
+  $lgsl_config['text']['fhs'] = "Has slots";
+  $lgsl_config['text']['ffu'] = "Full";
+  $lgsl_config['text']['fem'] = "Empty";
+  $lgsl_config['text']['fno'] = "No servers match the selected filters.";
+  $lgsl_config['text']['apn'] = "Admin Panel";
+  $lgsl_config['text']['apd'] = "Manage servers, maps, updates, and LGSL settings.";
+  $lgsl_config['text']['asm'] = "Server management";
+  $lgsl_config['text']['lgo'] = "Logout";
+  $lgsl_config['text']['fot'] = "Live Game Server List";
+  $lgsl_config['text']['fod'] = "A lightweight PHP/MySQL game server browser with multi-protocol querying, map images, player lists, history charts, and localized UI.";
+  $lgsl_config['text']['fom'] = "Modern theme adds responsive cards, filters, mobile navigation, and redesigned admin pages.";
+  $lgsl_config['text']['fol'] = "GPL-3.0 licensed";
+
+
+
+
   /* admin section */
   $lgsl_config['text']['tzn'] = "m/d/Y h:i:sA";
   $lgsl_config['text']['umn'] = "USERNAME";

@@ -112,6 +112,10 @@
 
     $lgsl_database  = mysqli_connect($lgsl_config['db']['server'], $lgsl_config['db']['user'], $lgsl_config['db']['pass']) or die(mysqli_error($lgsl_database));
     $lgsl_select_db = mysqli_select_db($lgsl_database, $lgsl_config['db']['db']) or die(mysqli_error($lgsl_database));
+    if (function_exists("mysqli_set_charset") && !@mysqli_set_charset($lgsl_database, "utf8mb4"))
+    {
+      @mysqli_set_charset($lgsl_database, "utf8");
+    }
   }
 
 //------------------------------------------------------------------------------------------------------------+
@@ -813,19 +817,11 @@
   {
     if ($word_wrap) { $string = lgsl_word_wrap($string, $word_wrap); }
 
-    if ($xml_feed != FALSE)
-    {
-      $string = htmlspecialchars($string, ENT_QUOTES);
-    }
-    elseif (function_exists("mb_convert_encoding"))
-    {
-      $string = htmlspecialchars($string, ENT_QUOTES);
-      $string = @mb_convert_encoding($string, "HTML-ENTITIES", "UTF-8");
-    }
-    else
-    {
-      $string = htmlentities($string, ENT_QUOTES, "UTF-8");
-    }
+    $flags = ENT_QUOTES;
+    if (defined("ENT_SUBSTITUTE")) { $flags = $flags | ENT_SUBSTITUTE; }
+    if ($xml_feed != FALSE && defined("ENT_XML1")) { $flags = $flags | ENT_XML1; }
+
+    $string = htmlspecialchars($string, $flags, "UTF-8");
 
     if ($word_wrap) { $string = lgsl_word_wrap($string); }
 
@@ -1102,6 +1098,7 @@ function lgsl_lang($code) { // FOR PREVENTING WARNINGS
             <option value='cards_style'>cards_style</option>
             <option value='disc_ff_style'>disc_ff_style</option>
             <option value='material_style'>material_style</option>
+            <option value='modern_style'>modern_style</option>
             <option value='ogp_style'>ogp_style</option>
             <option value='parallax_style'>parallax_style</option>
             <option value='wallpaper_style'>wallpaper_style</option>

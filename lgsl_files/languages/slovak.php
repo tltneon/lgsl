@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 // Slovak Language
@@ -31,6 +31,7 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "Servery";
   $lgsl_config['text']['tnp'] = "Hrači";
+  $lgsl_config['text']['bot'] = "bot";
   $lgsl_config['text']['tmp'] = "Max. Hráčov";
   $lgsl_config['text']['asd'] = "Prídavanie serverov je zakázané";
   $lgsl_config['text']['awm'] = "Táto oblasť ti dovoluje otestovať a následne pridať server herný server do zoznamu";
@@ -44,6 +45,7 @@
   $lgsl_config['text']['aas'] = "Pridať Server";
   $lgsl_config['text']['loc'] = "Umiestnenie:";
   $lgsl_config['text']['cts'] = "Klikni pre zobrazenie serverových banerov";
+  $lgsl_config['text']['ctb'] = "Kliknutím zobrazíte nastavenia servera";
   $lgsl_config['text']['lst'] = "Naposledy aktualizované";
   $lgsl_config['text']['nam'] = "Meno";
   $lgsl_config['text']['gam'] = "Hra";
@@ -55,9 +57,34 @@
   $lgsl_config['text']['pin'] = "Odozva";
   $lgsl_config['text']['dea'] = "Smrte";
   $lgsl_config['text']['hea'] = "Zdravie";
+  $lgsl_config['text']['ski'] = "Zručnosť";
+  $lgsl_config['text']['spe'] = "Divák";
   $lgsl_config['text']['pag'] = "Strana";
   $lgsl_config['text']['bak'] = "Spať na zoznam Serverov";
   $lgsl_config['text']['mpg'] = "NA HLAVNÚ STRÁNKU";
+  $lgsl_config['text']['fse'] = "Hľadať server alebo adresu";
+  $lgsl_config['text']['fam'] = "Všetky mapy";
+  $lgsl_config['text']['fmd'] = "Všetky módy";
+  $lgsl_config['text']['fgm'] = "Všetky hry";
+  $lgsl_config['text']['fty'] = "Všetky typy";
+  $lgsl_config['text']['fpl'] = "Všetci hráči";
+  $lgsl_config['text']['fpw'] = "S hráčmi";
+  $lgsl_config['text']['fhs'] = "Voľné sloty";
+  $lgsl_config['text']['ffu'] = "Plné";
+  $lgsl_config['text']['fem'] = "Prázdne";
+  $lgsl_config['text']['fno'] = "Žiadne servery nezodpovedajú vybraným filtrom.";
+  $lgsl_config['text']['apn'] = "Administračný panel";
+  $lgsl_config['text']['apd'] = "Spravujte servery, mapy, aktualizácie a nastavenia LGSL.";
+  $lgsl_config['text']['asm'] = "Správa serverov";
+  $lgsl_config['text']['lgo'] = "Odhlásiť";
+  $lgsl_config['text']['fot'] = "Živý zoznam herných serverov";
+  $lgsl_config['text']['fod'] = "Ľahký PHP/MySQL prehliadač herných serverov s multi-protokolovým dopytovaním, obrázkami máp, zoznamami hráčov, historickými grafmi a lokalizovaným rozhraním.";
+  $lgsl_config['text']['fom'] = "Moderná téma pridáva responzívne karty, filtre, mobilnú navigáciu a prepracované administračné stránky.";
+  $lgsl_config['text']['fol'] = "Licencia GPL-3.0";
+
+
+
+
   /* admin section */
   $lgsl_config['text']['tzn'] = "d.m.Y H:i:s";
   $lgsl_config['text']['umn'] = "Použivatelské meno";
@@ -81,6 +108,7 @@
   $lgsl_config['text']['mbs'] = "Used to show UTF-8 server and player names correctly";
   $lgsl_config['text']['bz2'] = "Používa sa na zobrazenie Source Server nastavenia nad určitú veľkosť";
   $lgsl_config['text']['gd2'] = "Vyžadovaný pre Image Mod";
+  $lgsl_config['text']['frt'] = "Vyžadované pre grafy";
   $lgsl_config['text']['zli'] = "Vyžadovaný pre America's Army 3";
 
 //------------------------------------------------------------------------------------------------------------+

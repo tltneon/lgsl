@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -30,6 +30,7 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "الخوادم";
   $lgsl_config['text']['tnp'] = "اللاعبين";
+  $lgsl_config['text']['bot'] = "بوت";
   $lgsl_config['text']['tmp'] = "الحد الأقصى للاعبين";
   $lgsl_config['text']['asd'] = "تم تعطيل الإضافة العامة للخوادم";
   $lgsl_config['text']['awm'] = "تسمح لك هذه المنطقة بالاختبار ثم إضافة خوادم الألعاب المتصلة إلى القائمة";
@@ -43,6 +44,7 @@
   $lgsl_config['text']['aas'] = "إضافة خادم";
   $lgsl_config['text']['loc'] = "الموقع:";
   $lgsl_config['text']['cts'] = "Click to show server banners";
+  $lgsl_config['text']['ctb'] = "انقر لإظهار إعدادات الخادم";
   $lgsl_config['text']['lst'] = "Last update";
   $lgsl_config['text']['nam'] = "Name";
   $lgsl_config['text']['gam'] = "Game";
@@ -54,9 +56,34 @@
   $lgsl_config['text']['pin'] = "Ping";
   $lgsl_config['text']['dea'] = "Deaths";
   $lgsl_config['text']['hea'] = "Health";
+  $lgsl_config['text']['ski'] = "مهارة";
+  $lgsl_config['text']['spe'] = "متفرج";
   $lgsl_config['text']['pag'] = "Page";
   $lgsl_config['text']['bak'] = "رجوع إلى قائمة الخوادم";
   $lgsl_config['text']['mpg'] = "إلى الصفحة الرئيسية";
+  $lgsl_config['text']['fse'] = "ابحث عن خادم أو عنوان";
+  $lgsl_config['text']['fam'] = "كل الخرائط";
+  $lgsl_config['text']['fmd'] = "كل الأطوار";
+  $lgsl_config['text']['fgm'] = "كل الألعاب";
+  $lgsl_config['text']['fty'] = "كل الأنواع";
+  $lgsl_config['text']['fpl'] = "كل اللاعبين";
+  $lgsl_config['text']['fpw'] = "بها لاعبون";
+  $lgsl_config['text']['fhs'] = "بها أماكن شاغرة";
+  $lgsl_config['text']['ffu'] = "ممتلئ";
+  $lgsl_config['text']['fem'] = "فارغ";
+  $lgsl_config['text']['fno'] = "لا توجد خوادم تطابق عوامل التصفية المحددة.";
+  $lgsl_config['text']['apn'] = "لوحة الإدارة";
+  $lgsl_config['text']['apd'] = "إدارة الخوادم والخرائط والتحديثات وإعدادات LGSL.";
+  $lgsl_config['text']['asm'] = "إدارة الخوادم";
+  $lgsl_config['text']['lgo'] = "تسجيل الخروج";
+  $lgsl_config['text']['fot'] = "قائمة خوادم الألعاب المباشرة";
+  $lgsl_config['text']['fod'] = "متصفح خوادم ألعاب خفيف مبني على PHP/MySQL مع استعلامات متعددة البروتوكولات وصور خرائط وقوائم لاعبين ومخططات تاريخ وواجهة مترجمة.";
+  $lgsl_config['text']['fom'] = "يضيف قالب Modern بطاقات متجاوبة وفلاتر وتنقلاً للجوال وصفحات إدارة معاد تصميمها.";
+  $lgsl_config['text']['fol'] = "مرخص GPL-3.0";
+
+
+
+
   /* admin section */
   $lgsl_config['text']['tzn'] = "d/m/Y H:i:s";
   $lgsl_config['text']['umn'] = "اسم االمستخدم";
@@ -80,6 +107,7 @@
   $lgsl_config['text']['mbs'] = "Used to show UTF-8 server and player names correctly";
   $lgsl_config['text']['bz2'] = "Used to show Source server settings over a certain size";
   $lgsl_config['text']['gd2'] = "Required for Image Mod";
+  $lgsl_config['text']['frt'] = "مطلوب للرسوم البيانية";
   $lgsl_config['text']['zli'] = "Required for America's Army 3";
 
 //------------------------------------------------------------------------------------------------------------+
