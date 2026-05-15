@@ -3,6 +3,14 @@
 		header("Content-Type:text/html; charset=utf-8");
 	//------------------------------------------------------------------------------------------------------------+
 
+	function lgsl_install_html($value) {
+		return htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+	}
+
+	function lgsl_install_js($value) {
+		return json_encode($value, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP);
+	}
+
 	$mysql_server = empty($_POST["server"]) ? "localhost" : $_POST["server"];
 	$mysql_user = empty($_POST["login"]) ? "" : $_POST["login"];
 	$mysql_password = empty($_POST["password"]) ? "" : $_POST["password"];
@@ -13,6 +21,8 @@
 	if (isset($_POST["_createtables"])){
 		if (empty($_POST["server"]) || empty($_POST["login"]) || empty($_POST["database"]) || empty($_POST["table"])){
 			echo('<l k="filli"></l>');
+		} elseif (!preg_match('/^[A-Za-z0-9_]+$/', $mysql_table)) {
+			echo('<l k="table"></l>');
 		} else {
 			try {
 				mysqli_report(MYSQLI_REPORT_ERROR);
@@ -21,9 +31,9 @@
 				if (!$lgsl_database) {
 					printf("Connect <span style='color: red;'>failed</span>: wrong mysql server, username or password (%s)\n", mysqli_connect_error());
 				} else {
-					$lgsl_select_db = mysqli_select_db($lgsl_database, $_POST["database"]);
+					$lgsl_select_db = mysqli_select_db($lgsl_database, $mysql_database);
 					if (mysqli_query($lgsl_database, "
-						CREATE TABLE `".$_POST["table"]."` (
+						CREATE TABLE `".$mysql_table."` (
 
 							`id`         INT     (11)  NOT NULL auto_increment,
 							`type`       VARCHAR (50)  NOT NULL DEFAULT '',
@@ -40,7 +50,7 @@
 
 							PRIMARY KEY (`id`)
 
-						) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;") === TRUE){
+						) ENGINE=MyISAM CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;") === TRUE){
 							printf("");
 							$installed = "disabled";
 						}
@@ -154,23 +164,23 @@
 	<form method="post" action="?">
 		<p>
 			MySQL Server*:
-			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.$mysql_server.'" '.$installed.'>
+			<input type="text" name="server" onChange="vars.mysql_server = event.target.value" value="'.lgsl_install_html($mysql_server).'" '.$installed.'>
 		</p>
 		<p>
 			MySQL Login*:
-			<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.$mysql_user.'" '.$installed.'>
+			<input type="text" name="login" onChange="vars.mysql_user = event.target.value" value="'.lgsl_install_html($mysql_user).'" '.$installed.'>
 		</p>
 		<p>
 			MySQL Password:
-			<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.$mysql_password.'" '.$installed.'>
+			<input type="password" name="password" onChange="vars.mysql_password = event.target.value" value="'.lgsl_install_html($mysql_password).'" '.$installed.'>
 		</p>
 		<p>
 			MySQL Database*:
-			<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.$mysql_database.'" '.$installed.'>
+			<input type="text" name="database" onChange="vars.mysql_database = event.target.value" value="'.lgsl_install_html($mysql_database).'" '.$installed.'>
 		</p>
 		<p>
 			MySQL Table*:
-			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.$mysql_table.'" '.$installed.'>
+			<input type="text" name="table" onChange="vars.mysql_table = event.target.value" value="'.lgsl_install_html($mysql_table).'" '.$installed.'>
 		</p>
 		<input type="hidden" name="_createtables" value="1">
 		<button type="submit" '.$installed.'>
@@ -199,6 +209,7 @@
 		<l k="selst"></l>:
 		<select type="text" name="style" onChange="changeValue(event, {styleChanged: true})">
 			<option value="darken_style.css">Darken</option>
+			<option value="modern_style.css">Modern</option>
 			<option value="ogp_style.css">OGP</option>
 			<option value="material_style.css">Material Design</option>
 			<option value="breeze_style.css">Breeze</option>
@@ -236,6 +247,7 @@
 		<br><input type="checkbox" id="preview.js" name="scripts" onChange="changeCheckbox(event)"> map preview (on server list)
 		<br><input type="checkbox" id="refresh.js" name="scripts" onChange="changeCheckbox(event)"> refresh (manually refresh server status)
 		<br><input type="checkbox" id="flag-icon.js" name="scripts" onChange="changeCheckbox(event)"> flag-icon (replacing with svg)
+		<br><input type="checkbox" id="modern.js" name="scripts" onChange="changeCheckbox(event)"> modern UI enhancements (for Modern Style)
 	</p>
 
 	<hr>
@@ -300,6 +312,10 @@
 		<input type="checkbox" name="totals" onChange="changeCheckbox(event)">
 	</p>
 	<p>
+		Enable server list filters:
+		<input type="checkbox" name="filters" checked onChange="changeCheckbox(event)">
+	</p>
+	<p>
 		<l k="showl"></l>:
 		<select type="text" name="locations" onChange="changeValue(event)">
 			<option value="0" style="color: red;">Disabled</option>
@@ -338,11 +354,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 	}
 	var locale = "english";
 	let vars = {
-		mysql_server: "<?php echo $mysql_server; ?>",
-		mysql_user: "<?php echo $mysql_user; ?>",
-		mysql_password: "<?php echo $mysql_password; ?>",
-		mysql_database: "<?php echo $mysql_database; ?>",
-		mysql_table: "<?php echo $mysql_table; ?>",
+		mysql_server: <?php echo lgsl_install_js($mysql_server); ?>,
+		mysql_user: <?php echo lgsl_install_js($mysql_user); ?>,
+		mysql_password: <?php echo lgsl_install_js($mysql_password); ?>,
+		mysql_database: <?php echo lgsl_install_js($mysql_database); ?>,
+		mysql_table: <?php echo lgsl_install_js($mysql_table); ?>,
 		lgsl_user: "",
 		lgsl_password: "",
 		//
@@ -360,6 +376,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 		hide_offline: false,
 		public_add: false,
 		totals: false,
+		filters: true,
 		locations: false,
     	preloader: false
 	}
@@ -373,6 +390,10 @@ document.addEventListener("reloadLocale", reloadLocale);
 			if(event.target.value == "parallax_style.css"){
 				vars["scripts"]["parallax.js"] = true;
 				document.querySelector("input[id='parallax.js']").checked = true;
+			}
+			if(event.target.value == "modern_style.css"){
+				vars["scripts"]["modern.js"] = true;
+				document.querySelector("input[id='modern.js']").checked = true;
 			}
 			document.getElementsByTagName("link")[0].href = `lgsl_files/styles/${event.target.value}`;
 		}
@@ -411,10 +432,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 		"global $lgsl_config; $lgsl_config = array(); \n" +
 		"$lgsl_config['feed']['method'] = 0; \n" +
 		"$lgsl_config['feed']['url'] = \"http://www.greycube.co.uk/lgsl/feed/lgsl_files/lgsl_feed.php\"; \n" +
-		"$lgsl_config['style'] = \""+ vars.style +"\"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, materials_style.css \n" +
+		"$lgsl_config['style'] = \""+ vars.style +"\"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, material_style.css, cards_style.css, modern_style.css \n" +
 		"$lgsl_config['scripts'] = ["+ slist +"]; \n" +
 		"$lgsl_config['locations'] = "+ vars.locations +"; \n" +
 		"$lgsl_config['list']['totals'] = "+ vars.totals +"; \n" +
+		"$lgsl_config['list']['filters'] = "+ vars.filters +"; \n" +
 		"$lgsl_config['sort']['servers'] = \""+ vars.sort_servers_by +"\";	// OPTIONS: id  type  zone  players  status \n" +
 		"$lgsl_config['sort']['players'] = \""+ vars.sort_players_by +"\";	// OPTIONS: name  score \n" +
 		"$lgsl_config['zone']['width'] = \"160\"; // images will be cropped unless also resized to match \n" +
@@ -760,11 +782,11 @@ document.addEventListener("reloadLocale", reloadLocale);
 			},
 			"turkish": {
 				"tablc": "LGSL tablosu oluşturuldu <span style='color: green;'>Başarıyla Tamamlandı!</span>.",
-				"filli": "Girişleri doldurmanız gerekiyor (<span style='color:red'>1'inci Adımı</span>) Kontrol Ediniz.",
+				"filli": "Girişleri doğru doldurmanız gerekiyor (<span style='color:red'>1. adım</span>).",
 				"consu": "Bağlantı <span style='color: green;'>Başarıyla</span> kuruldu, LGSL oyun sunucularından veri alabilir.",
 				"coutd": "LGSL <span style='color: red;'>Barındırma işleminizde UDP yukarı akışı engellendiğinden</span> oyun sunucularının çoğundan veri alınamadı.",
 				"remem": "LGSL'yi kurduktan sonra install.php'yi kaldırmayı unutmayın!",
-				"after": "Yapılandırmayı yaptıktan sonra, onu lgsl_files/lgsl_config.php olarak değiştirin",
+				"after": "Yapılandırmayı oluşturduktan sonra lgsl_files/lgsl_config.php dosyasının içeriğini bununla değiştirin.",
 				"selst": "Stil seçin",
 				"sella": "Dilinizi Seçin",
 				"selsc": "Script'leri Seçin",
@@ -776,16 +798,16 @@ document.addEventListener("reloadLocale", reloadLocale);
 				"showt": "Toplamları göster",
 				"showl": "Konumları göster",
 				"step1": "Adım 1: LGSL Tablolarını Kurun",
-				"step2": "2. Adım: LGSL'yi Yapılandırma",
+				"step2": "Adım 2: LGSL'yi Yapılandırın",
 				"back": "< Geri Git",
 				"owiki": "Çevrimiçi Wiki: Nasıl Yapılır?",
 				"gener": "Yapılandırma oluştur",
 				"creat": "Tablo oluştur",
-				"filla": "Gerekli* girişleri doldurmanız gerekir (adım 1 veya 2).",
-				"mysld": "Bağlantı <span style='color: red;'>failed</span>: Hatalı <span style='color: red;'>Bağlantı Başarısız</span>: mysqli uzantısı etkin değil.",
+				"filla": "Gerekli* alanları doldurmanız gerekir (adım 1 veya 2).",
+				"mysld": "Bağlantı <span style='color: red;'>başarısız</span>: mysqli uzantısı etkin değil.",
 				"table": "LGSL <span style='color: red;'>tablo oluşturulmadı</span>: yanlış veritabanı adı veya tablo zaten var.",
-				"cretd": "Tablo <span style='color: green;'>Başarıyla Oluşturuldu!</span> Oluşturuldu! 2'inci adıma geçin",
-				"check": "Check requirements",
+				"cretd": "Tablo <span style='color: green;'>başarıyla</span> oluşturuldu! 2. adıma geçin.",
+				"check": "Gereksinimleri kontrol et",
 			},
 			"romanian": {
 				"tablc": "Tabelul LGSL a fost creat cu <span style='color: green;'>success</span>.",

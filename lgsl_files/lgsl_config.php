@@ -14,8 +14,8 @@
 //------------------------------------------------------------------------------------------------------------+
 //[ ADDITIONAL FILES ]
 
-  $lgsl_config['style'] = "darken_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, material_style.css, cards_style.css
-  $lgsl_config['scripts'] = [];
+  $lgsl_config['style'] = "modern_style.css"; // options: breeze_style.css, darken_style.css, classic_style.css, ogp_style.css, parallax_style.css, disc_ff_style.css, material_style.css, cards_style.css, modern_style.css
+  $lgsl_config['scripts'] = ["modern.js"];
 
 //------------------------------------------------------------------------------------------------------------+
 //[ SHOW LOCATION FLAGS: 0=OFF 1=GEO-IP "GB"=MANUALLY SET COUNTRY CODE FOR SPEED ]
@@ -26,6 +26,7 @@
 //[ SHOW TOTAL SERVERS AND PLAYERS AT BOTTOM OF LIST: 0=OFF 1=ON ]
 
   $lgsl_config['list']['totals'] = 0;
+  $lgsl_config['list']['filters'] = true;
 
 //------------------------------------------------------------------------------------------------------------+
 //[ SORTING OPTIONS ]
@@ -107,14 +108,14 @@
 //[ STAND-ALONE VERSION: LGSL ADMIN LOGON ]
 
   $lgsl_config['admin']['user'] = "lgsladmin";
-  $lgsl_config['admin']['pass'] = "changeme";
+  $lgsl_config['admin']['pass'] = "localtest";
 
 //------------------------------------------------------------------------------------------------------------+
 //[ DATABASE SETTINGS: FOR STAND-ALONE OR TO OVERRIDE CMS DEFAULTS ]
 
   $lgsl_config['db']['server'] = "localhost";
   $lgsl_config['db']['user']   = "root";
-  $lgsl_config['db']['pass']   = "";
+  $lgsl_config['db']['pass']   = "usbw";
   $lgsl_config['db']['db']     = "lgsl";
   $lgsl_config['db']['table']  = "lgsl";
 
@@ -158,9 +159,9 @@
   // Bulgarian language: "languages/bulgarian.php"  // Neon
   // Slovak language: "languages/slovak.php"        // KristianP26
   // Arabic language: "languages/arabic.php"        // lamjed001
-  // Turkish language: "languages/turkish.php"      // izmoxkawaii
+  // Turkish language: "languages/turkish.php"      // IGNRexI
   // Romanian language: "languages/romanian.php"    // BaxAndrei
-  // Korean language: "languages/korean.php"        // izmoxkawaii
+  // Korean language: "languages/korean.php"        // IGNRexI
   // Chinese_simplified language: "languages/chinese_simplified.php"      // Nanfei
 
 //------------------------------------------------------------------------------------------------------------+

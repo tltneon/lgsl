@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -30,6 +30,7 @@
   $lgsl_config['text']['nmp'] = "--";
   $lgsl_config['text']['tns'] = "서버";
   $lgsl_config['text']['tnp'] = "플레이어";
+  $lgsl_config['text']['bot'] = "봇";
   $lgsl_config['text']['tmp'] = "맥스. 선수 수";
   $lgsl_config['text']['asd'] = "서버 파트너 추가가 꺼져 있습니다.";
   $lgsl_config['text']['awm'] = "이 필드를 사용하면 테스트 한 다음 온라인 게임 서버를 목록에 추가 할 수 있습니다.";
@@ -43,6 +44,7 @@
   $lgsl_config['text']['aas'] = "서버 추가";
   $lgsl_config['text']['loc'] = "위치 지역:";
   $lgsl_config['text']['cts'] = "서버 프로모션 이미지를 보려면 클릭하세요.";
+  $lgsl_config['text']['ctb'] = "서버 설정을 보려면 클릭하세요";
   $lgsl_config['text']['lst'] = "마지막 업데이트";
   $lgsl_config['text']['nam'] = "이름";
   $lgsl_config['text']['gam'] = "경기";
@@ -54,9 +56,34 @@
   $lgsl_config['text']['pin'] = "지연(Ping)";
   $lgsl_config['text']['dea'] = "Deaths";
   $lgsl_config['text']['hea'] = "Health";
+  $lgsl_config['text']['ski'] = "실력";
+  $lgsl_config['text']['spe'] = "관전자";
   $lgsl_config['text']['pag'] = "페이지";
   $lgsl_config['text']['bak'] = "서버 목록으로 돌아 가기";
   $lgsl_config['text']['mpg'] = "홈페이지로 돌아 가기";
+  $lgsl_config['text']['fse'] = "서버 또는 주소 검색";
+  $lgsl_config['text']['fam'] = "모든 맵";
+  $lgsl_config['text']['fmd'] = "모든 모드";
+  $lgsl_config['text']['fgm'] = "모든 게임";
+  $lgsl_config['text']['fty'] = "모든 유형";
+  $lgsl_config['text']['fpl'] = "모든 플레이어";
+  $lgsl_config['text']['fpw'] = "플레이어 있음";
+  $lgsl_config['text']['fhs'] = "빈 슬롯 있음";
+  $lgsl_config['text']['ffu'] = "가득 참";
+  $lgsl_config['text']['fem'] = "비어 있음";
+  $lgsl_config['text']['fno'] = "선택한 필터와 일치하는 서버가 없습니다.";
+  $lgsl_config['text']['apn'] = "관리자 패널";
+  $lgsl_config['text']['apd'] = "서버, 맵, 업데이트 및 LGSL 설정을 관리합니다.";
+  $lgsl_config['text']['asm'] = "서버 관리";
+  $lgsl_config['text']['lgo'] = "로그아웃";
+  $lgsl_config['text']['fot'] = "라이브 게임 서버 목록";
+  $lgsl_config['text']['fod'] = "다중 프로토콜 조회, 맵 이미지, 플레이어 목록, 기록 차트, 현지화 UI를 제공하는 가벼운 PHP/MySQL 게임 서버 브라우저입니다.";
+  $lgsl_config['text']['fom'] = "Modern 테마는 반응형 카드, 필터, 모바일 내비게이션, 새 관리자 페이지를 추가합니다.";
+  $lgsl_config['text']['fol'] = "GPL-3.0 라이선스";
+
+
+
+
   /* admin section */
   $lgsl_config['text']['tzn'] = "m/d/Y h:i:sA";
   $lgsl_config['text']['umn'] = "사용자 이름";
@@ -80,6 +107,7 @@
   $lgsl_config['text']['mbs'] = "UTF-8은 서버 및 플레이어 이름을 올바르게 표시하는 데 사용됩니다.";
   $lgsl_config['text']['bz2'] = "특정 크기 이상의 소스 서버 설정을 표시하는 데 사용됩니다.";
   $lgsl_config['text']['gd2'] = "디스플레이 모드에 필요";
+  $lgsl_config['text']['frt'] = "차트에 필요";
   $lgsl_config['text']['zli'] = "미국 육군 3에 필요";
 
 //------------------------------------------------------------------------------------------------------------+

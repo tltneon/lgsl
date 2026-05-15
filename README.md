@@ -8,7 +8,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/fork)
 [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/archive/master.zip)
 [![Packagist](https://img.shields.io/packagist/l/tltneon/lgsl?style=for-the-badge)](https://github.com/tltneon/lgsl/blob/master/LICENSE)
-# LGSL v6.2.1 (Live Game Server List)
+# LGSL v6.2.2 (Live Game Server List)
 Based-off LGSL v5.8 (stand-alone version) from www.greycube.com.
 
 This is almost original version of LGSL with [new features](https://github.com/tltneon/lgsl#changelog) and working on PHP 5.4+ and MySQL 5.5+ or MariaDB 5.5+.
@@ -26,6 +26,22 @@ Feel free to make [pull request](https://github.com/tltneon/lgsl)! Also you can 
 ![lgsl Server List on mobile device](https://i.imgur.com/oui8Nya.png)
 
 ## [Changelog](https://github.com/tltneon/lgsl/wiki/Changelog)
+#### v6.2.2
+- **Added Modern responsive theme**
+  - Responsive server cards, modern desktop list layout, mobile hamburger navigation, polished profile/admin dropdowns, and redesigned footer.
+- **Added Modern theme UI enhancements script**
+  - Mobile labels, animated player bars, filter controls, profile dropdown behavior, and progressive row animation.
+- **Added server-list filters**
+  - Search, map, mode, game, protocol/type, and player occupancy filters.
+  - Filter options use LGSL's existing protocol/game metadata from `lgsl_protocol.php`.
+- **Redesigned Modern admin experience**
+  - New admin header, profile dropdown, hero area, content shell, and improved management forms/tables.
+- **Improved localization coverage**
+  - Added missing filter, footer, and admin labels across bundled language files.
+- **Improved UTF-8 handling**
+  - Added UTF-8 friendly database/connection handling and safer HTML output for Unicode server names.
+- **Minor security and installer improvements**
+  - Hardened installer output/table handling and admin cookie flags.
 #### v6.2.1
 - **Added Euro Truck Simulator 2, American Truck Simulator, Mumble, ECO, Cryofall, GTA / Mafia Connected, Sonic Robo Blast 2 support**
 - **Minor fixes**

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 //------------------------------------------------------------------------------------------------------------+
 
@@ -61,6 +61,29 @@
   $lgsl_config['text']['pag'] = "Pagina";
   $lgsl_config['text']['bak'] = "ÎNAPOI LA LISTA CU SERVERE";
   $lgsl_config['text']['mpg'] = "PAGINA PRINCIPALĂ";
+  $lgsl_config['text']['fse'] = "Caută server sau adresă";
+  $lgsl_config['text']['fam'] = "Toate hărțile";
+  $lgsl_config['text']['fmd'] = "Toate modurile";
+  $lgsl_config['text']['fgm'] = "Toate jocurile";
+  $lgsl_config['text']['fty'] = "Toate tipurile";
+  $lgsl_config['text']['fpl'] = "Toți jucătorii";
+  $lgsl_config['text']['fpw'] = "Cu jucători";
+  $lgsl_config['text']['fhs'] = "Cu sloturi libere";
+  $lgsl_config['text']['ffu'] = "Plin";
+  $lgsl_config['text']['fem'] = "Gol";
+  $lgsl_config['text']['fno'] = "Niciun server nu corespunde filtrelor selectate.";
+  $lgsl_config['text']['apn'] = "Panou de administrare";
+  $lgsl_config['text']['apd'] = "Gestionează servere, hărți, actualizări și setări LGSL.";
+  $lgsl_config['text']['asm'] = "Administrare servere";
+  $lgsl_config['text']['lgo'] = "Deconectare";
+  $lgsl_config['text']['fot'] = "Listă live de servere de joc";
+  $lgsl_config['text']['fod'] = "Browser ușor de servere de joc PHP/MySQL cu interogare multi-protocol, imagini de hărți, liste de jucători, grafice istorice și interfață localizată.";
+  $lgsl_config['text']['fom'] = "Tema Modern adaugă carduri responsive, filtre, navigare mobilă și pagini admin reproiectate.";
+  $lgsl_config['text']['fol'] = "Licență GPL-3.0";
+
+
+
+
   
   /* admin section */
   $lgsl_config['text']['tzn'] = "m/d/Y H:i:s";
@@ -85,6 +108,7 @@
   $lgsl_config['text']['mbs'] = "Necesar pentru a afișa corect numele serverelor sau ale jucătorilor care folosesc caractere UTF-8";
   $lgsl_config['text']['bz2'] = "Necesar pentru a afișa setarile unui server Source când se depășeste limita permisă";
   $lgsl_config['text']['gd2'] = "Necesar pentru a genera imagini ale serverelor";
+  $lgsl_config['text']['frt'] = "Necesar pentru grafice";
   $lgsl_config['text']['zli'] = "Necesar pentru jocul America's Army 3";
 
 //------------------------------------------------------------------------------------------------------------+

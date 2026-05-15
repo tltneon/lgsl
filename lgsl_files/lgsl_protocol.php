@@ -4569,7 +4569,7 @@ function lgsl_unescape($text) {
 
     if (empty($host['host']) || empty($host['path'])) { exit("LGSL FEED PROBLEM: INVALID URL"); }
 
-    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=6.2.1";
+    $host_query = "?type={$server['b']['type']}&ip={$server['b']['ip']}&c_port={$server['b']['c_port']}&q_port={$server['b']['q_port']}&s_port={$server['b']['s_port']}&request={$request}&version=6.2.2";
 
     if (function_exists("json_decode")) { $host_query .= function_exists("gzuncompress") ? "&format=4" : "&format=3"; }
     else                                { $host_query .= function_exists("gzuncompress") ? "&format=2" : "&format=1"; }
@@ -5047,7 +5047,33 @@ function lgsl_unescape($text) {
 
   function lgsl_version()
   {
-    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 6.2.1"; // little dirty trick
+    return "Powered by LGSL</a> | <a href='https://github.com/tltneon/lgsl/releases'>v 6.2.2"; // little dirty trick
+  }
+
+//------------------------------------------------------------------------------------------------------------+
+
+  function lgsl_footer()
+  {
+    global $lgsl_config;
+
+    $title   = isset($lgsl_config['text']['fot']) ? $lgsl_config['text']['fot'] : "Live Game Server List";
+    $desc    = isset($lgsl_config['text']['fod']) ? $lgsl_config['text']['fod'] : "A lightweight PHP/MySQL game server browser with multi-protocol querying, map images, player lists, history charts, and localized UI.";
+    $modern  = isset($lgsl_config['text']['fom']) ? $lgsl_config['text']['fom'] : "Modern theme adds responsive cards, filters, mobile navigation, and redesigned admin pages.";
+    $license = isset($lgsl_config['text']['fol']) ? $lgsl_config['text']['fol'] : "GPL-3.0 licensed";
+
+    return "
+    <footer class='lgsl_footer'>
+      <div>
+        <strong>{$title}</strong>
+        <p>{$desc}</p>
+        <p>{$modern}</p>
+      </div>
+      <div class='lgsl_footer_meta'>
+        <a href='https://github.com/tltneon/lgsl'>Powered by LGSL</a>
+        <a href='https://github.com/tltneon/lgsl/releases'>v 6.2.2</a>
+        <span>{$license}</span>
+      </div>
+    </footer>";
   }
 
 //------------------------------------------------------------------------------------------------------------+

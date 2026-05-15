@@ -6,6 +6,16 @@
   require ("lgsl_files/lgsl_config.php");
   global $output, $title;
 
+  $lgsl_admin_cookie = isset($_COOKIE['lgsl_admin_auth']) ? $_COOKIE['lgsl_admin_auth'] : "";
+  $lgsl_admin_auth = "";
+  $lgsl_admin_logged_in = false;
+  $lgsl_admin_user = isset($lgsl_config['admin']['user']) ? $lgsl_config['admin']['user'] : "";
+
+  if (!empty($lgsl_config['admin']['user']) && !empty($lgsl_config['admin']['pass'])) {
+    $lgsl_admin_auth = md5($_SERVER['REMOTE_ADDR'].md5($lgsl_config['admin']['user'].md5($lgsl_config['admin']['pass'])));
+    $lgsl_admin_logged_in = ($lgsl_admin_cookie === $lgsl_admin_auth);
+  }
+
   function load_page($file) {
     global $lgsl_config;
     if ($lgsl_config['preloader']) {
@@ -83,9 +93,30 @@
         if ($lgsl_config['public_add']) echo "<li><a href='?s=add'>{$lgsl_config['text']['aas']}</a></li>";   // ADD SERVER
         if (file_exists("install.php")) echo "<li><a href='./install.php'>INSTALLATION PAGE</a></li>";        // INSTALLATION PAGE
         if (isset($_GET['s']))          echo "<li><a href='./'>{$lgsl_config['text']['bak']}</a></li>";       // BACK TO SERVERS LIST
+        $admin_name = htmlspecialchars($lgsl_admin_user ? $lgsl_admin_user : "Admin", ENT_QUOTES, "UTF-8");
+        if ($lgsl_admin_logged_in) {
+          echo "
+          <li id='adminlink' class='admin_profile admin_logged_in'>
+            <button type='button' class='admin_profile_button' aria-haspopup='true' aria-expanded='false'>
+              <span class='admin_avatar' aria-hidden='true'>".strtoupper(substr($admin_name, 0, 1))."</span>
+              <span class='admin_profile_text'>{$admin_name}</span>
+            </button>
+            <div class='admin_profile_menu'>
+              <a href='admin.php'>".(isset($lgsl_config['text']['apn']) ? $lgsl_config['text']['apn'] : "Admin panel")."</a>
+              <a href='admin.php?logout=1'>".(isset($lgsl_config['text']['lgo']) ? $lgsl_config['text']['lgo'] : "Logout")."</a>
+            </div>
+          </li>";
+        } else {
+          echo "
+          <li id='adminlink' class='admin_profile admin_guest'>
+            <a href='admin.php' class='admin_profile_button'>
+              <span class='admin_avatar' aria-hidden='true'>?</span>
+              <span class='admin_profile_text'>{$lgsl_config['text']['lgn']}</span>
+            </a>
+          </li>";
+        }
       ?>
     </div>
-    <a id="adminlink" href="admin.php"></a>
 
     <div id="container">
       <?php
@@ -102,4 +133,4 @@
     ?>
   </body>
 </html>
-<!-- Powered by LGSL v6.2.1; <?php echo "Page loaded: ".round(microtime(true) - $time, 6)."s";?> -->
+<!-- Powered by LGSL v6.2.2; <?php echo "Page loaded: ".round(microtime(true) - $time, 6)."s";?> -->
