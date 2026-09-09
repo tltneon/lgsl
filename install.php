@@ -68,7 +68,7 @@
 
 								PRIMARY KEY (`id`)
 
-							) ENGINE=MyISAM CHARSET=utf8 COLLATE=utf8_unicode_ci;";
+							) ENGINE=MyISAM CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 						}
 						if ($db->execute($query) == TRUE) {
 							printf('');
@@ -700,7 +700,7 @@ document.addEventListener("reloadLocale", reloadLocale);
 				if (httpRequest.responseText === 'done') {
               		document.getElementById('container').innerHTML = 'LGSL successfully installed! lgsl_config.php rewrited & install.php was deleted.<br>Redirecting to main page.. <a href=".">Link</a>';
 					setTimeout(() => {
-						window.location = '.';
+						window.location.href = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
 					}, 1000);
 				} else {
 					alert('There was a problem with the request. Message: ' + httpRequest.responseText);

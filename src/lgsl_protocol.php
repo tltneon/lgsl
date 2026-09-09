@@ -2311,12 +2311,12 @@
         ['use port=', 'serverinfo', ' ', 'clientlist -country', 'channellist -topic']
       ];
       if ($ver) { $this->fetch(); }
-      $buffer = $this->fetch("{$param[$ver][0]}{$this->_server->get_c_port()}\n"); // select virtualserver
+      $buffer = $this->fetch("{$param[$ver][0]}{$this->_server->getConnectionPort()}\n"); // select virtualserver
       if (!$buffer) {
         return $this::WITH_ERROR;
       }
       if (strtoupper($buffer->get(-4, -2)) != 'OK') { 
-        $this->_data['e']['error'] = "No server with port {$this->_server->get_c_port()}";
+        $this->_data['e']['error'] = "No server with port {$this->_server->getConnectionPort()}";
         return $this::WITH_ERROR;
       }
       
@@ -2422,7 +2422,7 @@
     public function process() {
       $buffer = $this->fetch("https://cdn.rage.mp/master/");
       if (!$buffer) return $this::NO_RESPOND;
-      if ($value = $buffer["{$this->_server->getIp()}:{$this->_server->get_c_port()}"]) {
+      if ($value = $buffer["{$this->_server->getIp()}:{$this->_server->getConnectionPort()}"]) {
         $this->_data = [
           's' => [
             'name' => $value['name'],
@@ -2544,7 +2544,7 @@
   }
   class Query37 extends QueryJson { // SCUM
     public function process() {
-      $buffer = $this->fetch("https://api.hellbz.de/scum/api.php?address={$this->_server->getIp()}&port={$this->_server->get_c_port()}");
+      $buffer = $this->fetch("https://api.hellbz.de/scum/api.php?address={$this->_server->getIp()}&port={$this->_server->getConnectionPort()}");
       if (!$buffer || !$buffer['success'] || $buffer['servers'] == 0) return $this::NO_RESPOND;
       $this->_data['s']['name']        = $buffer['data'][0]['name'];
       $this->_data['s']['map']         = "SCUM";
@@ -2932,7 +2932,7 @@
     protected $user_id = "xyza7891muomRmynIIHaJB9COBKkwj6n";
     protected $user_secret = "PP5UGxysEieNfSrEicaD1N2Bb3TdXuD7xHYcsdUHZ7s";
     protected function filter($k) {
-      return $k['attributes']['ADDRESSBOUND_s'] === "{$this->_server->getIp()}:{$this->_server->get_c_port()}" || $k['attributes']['ADDRESSBOUND_s'] === "0.0.0.0:{$this->_server->get_c_port()}";
+      return $k['attributes']['ADDRESSBOUND_s'] === "{$this->_server->getIp()}:{$this->_server->getConnectionPort()}" || $k['attributes']['ADDRESSBOUND_s'] === "0.0.0.0:{$this->_server->getConnectionPort()}";
     }
     protected function placeData($find) {
       $this->_data['s']['name'] = $find['attributes']['CUSTOMSERVERNAME_s'];

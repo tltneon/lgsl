@@ -399,7 +399,7 @@
       if ($mode != "")   { $where[] = "`mode`='{$mode}'"; }
       if ($status != "") { $where[] = "`status`={$status}"; }
       if ($server_limit != "") { $server_limit = "LIMIT {$server_limit}"; }
-      if ($sort != "") { $sort = "ORDER BY {$options['sort']} {$order}"; }
+      if ($sort != "") { $sort = "ORDER BY {$sort} {$order}"; }
 
       $result = $db->query("SELECT * FROM `{$lgsl_config['db']['prefix']}{$lgsl_config['db']['table']}` WHERE ".implode(" AND ", $where)." {$sort} {$server_limit} {$page}");
 
@@ -1004,7 +1004,7 @@
       "icons/{$type}/{$type}.png"];
 
       foreach ($path_list as $icon_path) {
-        if (file_exists("$path$icon_path")) { return "$path$icon_path"; }
+        if (file_exists("src/$path$icon_path")) { return "$path$icon_path"; }
       }
 
       return "{$path}other/icon_unknown.gif";
