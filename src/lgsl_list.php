@@ -26,9 +26,10 @@
   $page = ($config['pagination_mod'] && isset($_GET['page']) ? (int)$_GET['page'] : 1);
 
   $uri = $_SERVER['REQUEST_URI'];
-  
-  if ($config['preloader']) {
-    $uri = $_SERVER['HTTP_REFERER'];
+  if ($lgsl_config['preloader']) {
+    $uri = htmlspecialchars($_SERVER['HTTP_REFERER'], ENT_QUOTES, 'UTF-8');
+  } else {
+    $uri = htmlspecialchars($uri, ENT_QUOTES, 'UTF-8');
   }
 
   $server_list = Database::getServersGroup(["type" => $type, "game" => $game, "mode" => $mode, "page" => $page, "sort" => $sort, "order" => $order]);

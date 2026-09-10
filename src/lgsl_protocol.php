@@ -3260,7 +3260,7 @@
 		public function close() {
 			if (!$this->_stream) return;
       if ($this->_isHttp()) {
-        curl_close($this->_stream);
+        if (PHP_VERSION_ID < 80500) curl_close($this->_stream);
       } else {
         @fclose($this->_stream);
       }
