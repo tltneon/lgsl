@@ -77,6 +77,7 @@
     const GRAW = "graw";
     const GRAW2 = "graw2";
     const GTAC = "gtac";
+    const HYTALE = "hytale";
     const JEDIKNIGHT2 = "jediknight2";
     const JEDIKNIGHTJA = "jediknightja";
     const JC2MP = "jc2mp";
@@ -181,6 +182,7 @@
         self::DISCORD       => self::HTTP,
         self::ECO           => self::HTTP,
         self::FIVEM         => self::HTTP,
+        self::HYTALE        => self::HTTP,
         self::PALWORLD      => self::HTTP,
         self::PALWORLDDIRECT=> self::HTTP,
         self::RAGEMP        => self::HTTP,
@@ -255,6 +257,7 @@
         self::HALFLIFE      => ["Query05", "Half-Life Steam Protocol (CS 1.6, etc)"],
         self::HALFLIFEWON   => ["Query05", "Half-Life WON Protocol [OLD] (CS 1.5)"],
         self::HALO          => ["Query03", "Halo"],
+        self::HYTALE        => ["Query57", "Hytale"],
         self::IL2           => ["Query03", "IL-2 Sturmovik"],
         self::JEDIKNIGHT2   => ["Query02", "JediKnight 2: Jedi Outcast"],
         self::JEDIKNIGHTJA  => ["Query02", "JediKnight: Jedi Academy"],
@@ -377,6 +380,7 @@
         self::FRONTLINES    => [2,     5476,  5478],
         self::GHOSTRECON    => [2,     2346,  2348],
         self::HAD2          => [3,     11001, 11004],
+        self::HYTALE        => [3,     5520 , 5523],
         self::KINGPIN       => [-10,   31510, 31500],
         self::KILLINGFLOOR  => [1,     7708,  7709],
         self::MINECRAFT     => [0,     25565, 25565],
@@ -3044,6 +3048,35 @@
       }
       $this->_data['e']['settings'] = str_replace("\x05", ";", $buffer->cutString());
       $this->_data['e']['version'] = $version; 
+      return $this::SUCCESS;
+    }
+  }
+  class Query57 extends QueryJSON { // Hytale Direct
+    public function process() {
+      $this->_fp->setOpt(CURLOPT_HTTPHEADER, ['Accept: application/x.hytale.nitrado.query+json;version=1']);
+      $buffer = $this->fetch("http://{$this->_server->getIp()}:{$this->_server->getQueryPort()}/Nitrado/Query");
+      print_r($buffer);
+      if (!$buffer) return $this::NO_RESPOND;
+      if (isset($buffer['Basic'])) {
+        $this->_data['s']['name'] = isset($buffer['Basic']['Name']) ? $buffer['Basic']['Name'] : "Hytale Server";
+        $this->_data['e']['version'] = isset($buffer['Basic']['Version']) ? $buffer['Basic']['Version'] : "unknown";
+        $this->_data['s']['players'] = isset($buffer['Basic']['CurrentPlayers']) ? (int)$buffer['Basic']['CurrentPlayers'] : 0;
+        $this->_data['s']['playersmax'] = isset($buffer['Basic']['MaxPlayers']) ? (int)$buffer['Basic']['MaxPlayers'] : 0;
+      }
+      if (isset($buffer['Server'])) {
+        $this->_data['s']['name'] = isset($buffer['Server']['Name']) ? $buffer['Server']['Name'] : "Hytale Server";
+        $this->_data['e']['version'] = isset($buffer['Server']['Version']) ? $buffer['Server']['Version'] : "unknown";
+        $this->_data['e']['revision'] = isset($buffer['Server']['Revision']) ? $buffer['Server']['Revision'] : "unknown";
+        $this->_data['e']['protocol'] = isset($buffer['Server']['ProtocolVersion']) ? $buffer['Server']['ProtocolVersion'] : "unknown";
+        $this->_data['s']['playersmax'] = isset($buffer['Server']['MaxPlayers']) ? (int)$buffer['Server']['MaxPlayers'] : 0;
+      }
+      if (isset($buffer['Plugins'])) {
+        $this->_data['e']['plugins'] = "";
+        foreach ($buffer['Plugins'] as $pluginName => $plugin) {
+          if ($plugin['Loaded'] && $plugin['Enabled'])
+          $this->_data['e']['plugins'] .= "$pluginName {$plugin['Version']}\n";
+        }
+      }
       return $this::SUCCESS;
     }
   }
