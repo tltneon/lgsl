@@ -1007,17 +1007,21 @@
     public function process() {
       $challenge_code = "";
       if (!in_array($this->_server->getType(), [PROTOCOL::BF2, PROTOCOL::GRAW])) {
-        $buffer = $this->fetch("\xFE\xFD\x09\x21\x21\x21\x21\xFF\xFF\xFF\x01");
+        if ($this->_server->getType() == PROTOCOL::MINECRAFT) $buffer = $this->fetch("\xFE\xFD\x09\x21\x21\x21\x21");
+        else $buffer = $this->fetch("\xFE\xFD\x00\x21\x21\x21\x21\xFF\xFF\xFF\x01");
         if (!$buffer) return $this::NO_RESPOND;
         $buffer->skip(5, 1); // REMOVE HEADER AND TRAILING NULL
-        $challenge_code = $buffer->get(0);
+        if ($this->_server->getType() == PROTOCOL::MINECRAFT) {
+          $challenge_code = (int) $buffer->getAll();
+          $challenge_code = $challenge_code ? chr(($challenge_code >> 24) & 0xFF).chr(($challenge_code >> 16) & 0xFF).chr(($challenge_code >> 8) & 0xFF).chr(($challenge_code >> 0) & 0xFF) : "";
+        } else {
+          $challenge_code = $buffer->get(0);
 
-        // IF CODE IS RETURNED ( SOME STALKER SERVERS RETURN BLANK WHERE THE CODE IS NOT NEEDED )
-        // CONVERT DECIMAL |TO| HEX AS 8 CHARACTER STRING |TO| 4 PAIRS OF HEX |TO| 4 PAIRS OF DECIMAL |TO| 4 PAIRS OF ASCII
-
-        $challenge_code = $challenge_code ? chr($challenge_code >> 24).chr($challenge_code >> 16).chr($challenge_code >> 8).chr($challenge_code >> 0) : "";
+          // IF CODE IS RETURNED ( SOME STALKER SERVERS RETURN BLANK WHERE THE CODE IS NOT NEEDED )
+          // CONVERT DECIMAL |TO| HEX AS 8 CHARACTER STRING |TO| 4 PAIRS OF HEX |TO| 4 PAIRS OF DECIMAL |TO| 4 PAIRS OF ASCII
+          $challenge_code = $challenge_code ? chr($challenge_code >> 24).chr($challenge_code >> 16).chr($challenge_code >> 8).chr($challenge_code >> 0) : "";
+        }
       }
-
       $this->_fp->write("\xFE\xFD\x00\x21\x21\x21\x21{$challenge_code}\xFF\xFF\xFF\x01");
 
       //---------------------------------------------------------+
@@ -1042,7 +1046,7 @@
         }
 
         $buffer[$packet_order] = $packet;
-        if ($this->_server->getType() == "minecraft" || $this->_server->getType() == "jc2mp") { $packet_total = 1; }
+        if (in_array($this->_server->getType(), [PROTOCOL::MINECRAFT, PROTOCOL::JC2MP])) { $packet_total = 1; }
 
       }
       while ($packet_count < $packet_total);
@@ -1105,15 +1109,17 @@
           }
         }
 
-        $plugins = explode(": ", $server['e']['plugins'], 2);
-        if ($plugins[0]) {
-          $this->_data['e']['plugins'] = $plugins[0];
-        } else {
-          $this->_data['e']['plugins'] = 'none (vanilla)';
-        }
-        if (count($plugins) == 2) {
-          while ($key = Helper::lgslCutString($plugins[1], 0, " ")) {
-            $this->_data['e'][$key] = Helper::lgslCutString($plugins[1], 0, "; ");
+        if (isset($this->_data['plugins'])) {
+          $plugins = explode(": ", $this->_data['plugins'], 2);
+          if ($plugins[0]) {
+            $this->_data['e']['plugins'] = $plugins[0];
+          } else {
+            $this->_data['e']['plugins'] = 'none (vanilla)';
+          }
+          if (count($plugins) == 2) {
+            while ($key = Helper::lgslCutString($plugins[1], 0, " ")) {
+              $this->_data['e'][$key] = Helper::lgslCutString($plugins[1], 0, "; ");
+            }
           }
         }
         $buffer->add("\x00"); // Needed to correctly terminate the players list
@@ -2634,7 +2640,6 @@ class Query41 extends QuerySocket
       $serverNetCL = $buffer->cutByteUnpack(4, "V");
       $serverFlags = $buffer->cutByteUnpack(8, "J");
       $numSubStates = $buffer->cutByteOrd();
-      $buffer->show();
       $buffer->skip(3 * $numSubStates); // Header+Cookie
       $nameLength = $buffer->cutByteUnpack(2, "v");
       if ($nameLength > 0 && $buffer->length() >= $nameLength) {
