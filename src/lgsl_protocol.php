@@ -397,7 +397,7 @@
         self::RFACTOR       => [-100,  34397, 34297],
         self::SERIOUSSAM    => [1,     25600, 25601],
         self::SOLDAT        => [123,   23073, 23196],
-        self::SF            => [0,     7777,  15777],
+        self::SF            => [0,     7777,  7777],
         self::STALKER       => [2,     5447,  5445],
         self::STALKERCOP    => [2,     5447,  5445],
         self::STALKERCS     => [2,     5447,  5445],
@@ -2614,40 +2614,47 @@
     }
   }
   /* Query 41-50 */
-  class Query41 extends QuerySocket {  // Satisfactory
-    public function process() {
-      $protocolMagic = 0xF6D5;
-      $messageType = 0; // Poll Server State
-      $protocolVersion = 1;
-      $terminatorByte = 0x1;
-      $cookie = microtime(true) * 1000000;
+class Query41 extends QuerySocket
+{
+    public function process()
+    {
+      $uid = random_int(1, PHP_INT_MAX);
+      $packet = "\xD5\xF6\x00\x01" . pack("J", $uid) . "\x01";
+      $this->_fp->write($packet);
+      $buffer = $this->_fp->read(4096);
 
-      $message = pack('vCCP', $protocolMagic, $messageType, $protocolVersion, $cookie) . chr($terminatorByte);
-      $buffer = $this->fetch($message);
-      if (!$buffer) return $this::NO_RESPOND;
+      if (!$buffer) {
+          return $this::NO_RESPOND;
+      }
+      if ($buffer->length() < 22) {
+        return $this::WITH_ERROR;
+      }
+      $buffer->skip(4+8); // Header+Cookie
+      $serverState = $buffer->cutByteOrd();
+      $serverNetCL = $buffer->cutByteUnpack(4, "V");
+      $serverFlags = $buffer->cutByteUnpack(8, "J");
+      $numSubStates = $buffer->cutByteOrd();
+      $buffer->show();
+      $buffer->skip(3 * $numSubStates); // Header+Cookie
+      $nameLength = $buffer->cutByteUnpack(2, "v");
+      if ($nameLength > 0 && $buffer->length() >= $nameLength) {
+          $name = $buffer->cutByte($nameLength);
+      } else {
+          $name = "Satisfactory Server";
+      }
 
-      $this->_data['e']['responseProtocolMagic'] = unpack('v', $buffer->cutByte(2))[1];
-      $this->_data['e']['responseType'] = unpack('C', $buffer->cutByte())[1];
-      $this->_data['e']['responseProtocolVersion'] = unpack('C', $buffer->cutByte())[1];
-      $this->_data['e']['responseCookie'] = unpack('P', $buffer->cutByte(8))[1];
-      $serverState = unpack('C', $buffer->cutByte())[1];
-      $this->_data['e']['serverNetCL'] = unpack('V', $buffer->cutByte(4))[1];
-      $this->_data['e']['serverFlags'] = unpack('P', $buffer->cutByte(8))[1];
-      $this->_data['e']['numSubStates'] = unpack('C', $buffer->cutByte())[1];
-      $buffer->skip($this->_data['e']['numSubStates'] * 3); // Each SubState is 3 bytes (1 byte for SubStateId and 2 bytes for SubStateVersion)
-      $serverNameLength = unpack('v', $buffer->cutByte(2))[1];
-      $this->_data['s']['name'] = $buffer->cutByte($serverNameLength);
+      $this->_data['s']['name'] = $name;
+      $this->_data['e']['server_state'] = $serverState;
+      $this->_data['e']['server_netcl'] = $serverNetCL;
+      $this->_data['e']['server_flags'] = $serverFlags;
+      $this->_data['e']['numSubStates'] = $numSubStates;
+      $this->_data['s']['players'] = 0;
+      $this->_data['s']['playersmax'] = 0;
 
-      $serverStateDescriptions = [
-        0 => 'Offline',
-        1 => 'Idle',
-        2 => 'Loading',
-        3 => 'Playing'
-      ];
-      $this->_data['e']['state'] = $serverStateDescriptions[$serverState];
       return $this::SUCCESS;
     }
-  }
+}
+
   class Query42 extends QuerySocket {  // Factorio
     public function process() {
       $buffer = $this->fetch("\x30");
